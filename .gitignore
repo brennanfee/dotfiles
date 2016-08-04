@@ -1,0 +1,17 @@
+#### Visual Studio Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+
+#### Visaul Studio Code
+
+#### Vim
+# Swap Files
+.*.swp
+.*.swo
+
+# Backup files
+~*
+
+#### Vim
