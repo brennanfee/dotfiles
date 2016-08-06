@@ -1,0 +1,4 @@
+# User dependent .bash_profile file
+
+# source the users bashrc if it exists
+test -f "${HOME}/.bashrc" && source "${HOME}/.bashrc"

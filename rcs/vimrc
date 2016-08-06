@@ -1,0 +1,236 @@
+scriptencoding utf-8
+if filereadable(expand("~/.vimrc.bundles"))
+  source ~/.vimrc.bundles
+endif
+
+if has("multi_byte")
+  if &termencoding == ""
+    let &termencoding = &encoding
+  endif
+  set encoding=utf-8
+  setglobal fileencoding=utf-8
+  set fileencodings=ucs-bom,utf-8,latin1
+endif
+
+let mapleader = ","
+let maplocalleader = "\\"
+
+set exrc
+set pastetoggle=<F2>
+
+set relativenumber  " set realtive numbers to show
+set number " also display the line number of the current line
+set numberwidth=5
+
+set ignorecase
+set smartcase
+
+set scrolloff=4
+set nowrap
+if &diff
+    set wrap
+endif
+
+set hlsearch
+set gdefault
+set cursorline
+set colorcolumn=80,100,120
+
+set hidden
+set confirm
+set ttyfast
+
+set tabstop=4
+set shiftwidth=4
+set softtabstop=4
+set shiftround
+set expandtab
+set smartindent
+
+set backup
+set backupdir=~/.vimscratch/backup//,$TEMP//,$TMP//
+
+set swapfile
+set directory=~/.vimscratch/swap//,$TEMP//,$TMP//
+
+set undofile
+set undodir=~/.vimscratch/undo//,$TEMP//,$TMP//
+
+set noshowmode
+
+set listchars=tab:>\ ,trail:-,extends:>,precedes:<
+if (&termencoding ==# 'utf-8' || &encoding ==# 'utf-8') && version >= 700
+  let &listchars="tab:\u25b8 ,trail:\u00b7,extends:\u00bb,precedes:\u00ab"
+endif
+set list
+
+if exists('+macmeta')
+  set macmeta
+endif
+
+set background=dark
+
+if has('gui_running')
+    set guioptions-=T
+    set guioptions-=t
+    set guioptions-=m
+    colorscheme dracula
+    if has('gui_win32') || has('gui_win64')
+        set guifont=Hasklig:h14:cANSI
+    elseif has('gui_macvim')
+        set guifont=Hasklig:h18
+    endif
+else
+    set term=xterm-256color
+    set t_Co=256
+
+    colorscheme dracula
+
+    " Setup mouse
+    set mouse=a
+endif
+
+if executable('ag')
+    " Use Ag over Grep
+    set grepprg=ag\ --vimgrep
+    let g:ackprg = 'ag --vimgrep'
+
+    " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
+    let g:ctrlp_user_command = 'ag -i -l --nocolor --nogroup --hidden -g "" "%s"'
+    " let g:ctrlp_user_command = 'dir %s /-n /b/s /a-d'
+
+    " ag is fast enough that CtrlP doesn't need to cache
+    let g:ctrlp_use_caching = 0
+endif
+
+if has('win32') || has('win64')
+    set shell=$COMSPEC
+endif
+
+let g:ctrlp_working_path_mode = 'ra'
+
+let g:EditorConfig_exclude_patterns = ['fugitive://.*']
+if has('win32') || has('win64')
+    let g:EditorConfig_exec_path = 'C:\ProgramData\chocolatey\bin\editorconfig.exe'
+    let g:EditorConfig_core_mode = 'external_command'
+endif
+
+" Leader K to grep word under cursor
+nnoremap <leader>k :grep! "\b<C-R><C-W>\b"<CR>:cw<CR><CR>
+
+" Mappings to manage VimRc
+nmap <leader>ev :e $MYVIMRC<CR>
+nmap <leader>sv :source $MYVIMRC<CR>
+
+" Mappings to use system clipboard
+nnoremap <leader>p "*p
+nnoremap <leader>P "*P
+nnoremap <leader>y "*y
+nnoremap <leader>yy "*yy
+vnoremap <leader>p "*p
+vnoremap <leader>P "*P
+vnoremap <leader>y "*y
+vnoremap <leader>yy "*yy
+
+" Lightline
+let g:lightline = {
+    \ 'colorscheme': 'jellybeans',
+    \ 'mode_map': { 'c': 'NORMAL' },
+    \ 'active': {
+    \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename' ], ['ctrlpmark'] ],
+    \   'right': [ [ 'lineinfo' ], ['percent'], [ 'fileformat', 'fileencoding', 'filetype' ] ]
+    \ },
+    \ 'component_function': {
+    \   'modified': 'LightLineModified',
+    \   'readonly': 'LightLineReadonly',
+    \   'lineinfo': 'LightLineLineInfo',
+    \   'fugitive': 'LightLineFugitive',
+    \   'filename': 'LightLineFilename',
+    \   'fileformat': 'LightLineFileformat',
+    \   'filetype': 'LightLineFiletype',
+    \   'fileencoding': 'LightLineFileencoding',
+    \   'mode': 'LightLineMode',
+    \   'ctrlpmark': 'LightLineCtrlPMark',
+    \ },
+    \ 'separator': { 'left': "\ue0b0", 'right': "\ue0b2" },
+    \ 'subseparator': { 'left': "\ue0b1", 'right': "\ue0b3" }
+    \}
+
+function! LightLineModified()
+  return &ft =~ 'help\|vimfiler\|gundo' ? '' : &modified ? '+' : &modifiable ? '' : '-'
+endfunction
+
+function! LightLineReadonly()
+  return &ft !~? 'help\|vimfiler\|gundo' && &readonly ? "\ue0a2" : ""
+endfunction
+
+function! LightLineLineInfo()
+    return "\ue0a1".' '.line('.').':'.col('.')
+endfunction
+
+function! LightLineFilename()
+  let fname = expand('%:t')
+  return fname == 'ControlP' && has_key(g:lightline, 'ctrlp_item') ? g:lightline.ctrlp_item :
+        \ fname =~ '__Gundo\|NERD_tree' ? '' :
+        \ ('' != LightLineReadonly() ? LightLineReadonly() . ' ' : '') .
+        \ ('' != fname ? fname : '[No Name]') .
+        \ ('' != LightLineModified() ? ' ' . LightLineModified() : '')
+endfunction
+
+function! LightLineFugitive()
+  try
+    if expand('%:t') !~? 'Tagbar\|Gundo\|NERD' && &ft !~? 'vimfiler' && exists('*fugitive#head')
+      let mark = "\ue0a0"  " edit here for cool mark
+      let branch = fugitive#head()
+      return branch !=# '' ? mark.' '.branch : ''
+    endif
+  catch
+  endtry
+  return ''
+endfunction
+
+function! LightLineFileformat()
+  return winwidth(0) > 70 ? &fileformat : ''
+endfunction
+
+function! LightLineFiletype()
+  return winwidth(0) > 70 ? (&filetype !=# '' ? &filetype : 'no ft') : ''
+endfunction
+
+function! LightLineFileencoding()
+  return winwidth(0) > 70 ? (&fenc !=# '' ? &fenc : &enc) : ''
+endfunction
+
+function! LightLineMode()
+  let fname = expand('%:t')
+  return fname == 'ControlP' ? 'CtrlP' :
+        \ fname =~ 'NERD_tree' ? 'NERDTree' :
+        \ winwidth(0) > 60 ? lightline#mode() : ''
+endfunction
+
+function! LightLineCtrlPMark()
+  if expand('%:t') =~ 'ControlP' && has_key(g:lightline, 'ctrlp_item')
+    call lightline#link('iR'[g:lightline.ctrlp_regex])
+    return lightline#concatenate([g:lightline.ctrlp_prev, g:lightline.ctrlp_item
+          \ , g:lightline.ctrlp_next], 0)
+  else
+    return ''
+  endif
+endfunction
+
+let g:ctrlp_status_func = {
+  \ 'main': 'CtrlPStatusFunc_1',
+  \ 'prog': 'CtrlPStatusFunc_2',
+  \ }
+
+function! CtrlPStatusFunc_1(focus, byfname, regex, prev, item, next, marked)
+  let g:lightline.ctrlp_regex = a:regex
+  let g:lightline.ctrlp_prev = a:prev
+  let g:lightline.ctrlp_item = a:item
+  let g:lightline.ctrlp_next = a:next
+  return lightline#statusline(0)
+endfunction
+
+function! CtrlPStatusFunc_2(str)
+  return lightline#statusline(0)
+endfunction

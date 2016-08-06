@@ -1,0 +1,46 @@
+scriptencoding utf-8
+if &compatible
+  set nocompatible
+end
+
+if has('vim_starting')
+    if has('win32') || has('win64')
+        set runtimepath+=$HOME/.vim,$VIM/vimfiles
+    endif
+endif
+
+call plug#begin('~/.vim/plugged')
+
+Plug 'tmhedberg/matchit'
+Plug 'tpope/vim-sensible'
+Plug 'vim-scripts/a.vim'
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-git'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-rhubarb'
+Plug 'tpope/vim-tbone'
+Plug 'tpope/vim-unimpaired'
+Plug 'tpope/vim-characterize'
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-rsi'
+Plug 'tpope/vim-eunuch'
+Plug 'wellle/targets.vim'
+Plug 'easymotion/vim-easymotion'
+Plug 'rking/ag.vim'
+Plug 'ctrlpvim/ctrlp.vim'
+Plug 'itchyny/lightline.vim'
+Plug 'editorconfig/editorconfig-vim'
+Plug 'dracula/vim', { 'dir': '~/.vim/plugged/dracula' }
+Plug 'brennanfee/vim-gui-position'
+Plug 'leafgarland/typescript-vim'
+
+if filereadable(expand("~/.vimrc.bundles.os"))
+  source ~/.vimrc.bundles.os
+endif
+
+if filereadable(expand("~/.vimrc.bundles.local"))
+  source ~/.vimrc.bundles.local
+endif
+
+call plug#end()

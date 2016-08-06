@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# User dependent .bashrc file
+
+# If not running interactively, don't do anything
+[[ "$-" != *i* ]] && return
+
+export DOTFILES="$HOME/.dotfiles"
+export DOTFILES_PRIVATE="$HOME/.dotfiles-private"
+
+test -e "${HOME}/.iterm2_shell_integration.bash" && source "${HOME}/.iterm2_shell_integration.bash"
