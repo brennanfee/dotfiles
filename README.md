@@ -38,3 +38,11 @@ A number of dotfiles support "include" files in various ways.  All of the files 
 support such a construct have been pre-configured to allow both an OS specific override as well
 as a local (host specific) override.  In all cases the order is: first the global settings, then
 the OS settings, finally the local settings.
+
+## Windows and PowerShell
+
+For Windows machines the above steps should all be performed in the bash shell provided by
+WSL.  After those steps are complete you can run the following to set up PowerShell as well.
+
+1. Open a PowerShell window and run ~/.dotfiles/windows/setup-powershell.ps1
+1. Open a separate windows as Administrator and run ~/.dotfiles/windows/setup-win-admin.ps1
