@@ -1,0 +1,7 @@
+[core]
+    autocrlf = input
+    user = Brennan Fee
+    email = bfee@expedia.com
+[user]
+    name = Brennan Fee
+    email = bfee@expedia.com

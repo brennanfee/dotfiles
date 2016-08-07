@@ -1,0 +1,19 @@
+# This is Git's global configuration file.
+[push]
+    default = simple
+[color]
+    ui = auto
+[core]
+    editor = vim
+[fetch]
+    prune = true
+[http]
+    postBuffer = 524288000
+[diff]
+    renamelimit = 0
+[merge]
+    renamelimit = 0
+[include]
+    path = ~/.gitconfig.os
+    path = ~/.gitconfig.user
+    path = ~/.gitconfig.local
