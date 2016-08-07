@@ -1,9 +1,4 @@
 #!/usr/bin/env bash
-# Terminal color escape sequences
-
-# Bash "strict" mode
-set -euo pipefail
-IFS=$'\n\t'
 
 reset="\033[0;0;0m"
 normal="\033[0;0;0m"
@@ -15,16 +10,21 @@ black="\033[30m"
 red="\033[31m"
 green="\033[32m"
 yellow="\033[33m"
-blue="\033[34m"
+blue="\033[94m"
 magenta="\033[35m"
 cyan="\033[36m"
 white="\033[37m"
+
+# Dracula colors
+pink="\033[35m"
+purple="\033[34m"
+orange="\033[91m"
 
 bold_black="\033[90m"
 bold_red="\033[91m"
 bold_green="\033[92m"
 bold_yellow="\033[93m"
-bold_blue="\033[94m"
+bold_blue="\033[34m"
 bold_magenta="\033[95m"
 bold_cyan="\033[96m"
 bold_white="\033[97m"

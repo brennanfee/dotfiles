@@ -1,9 +1,4 @@
 #!/usr/bin/env bash
-# Characters and UTF symbols
-
-# Bash "strict" mode
-set -euo pipefail
-IFS=$'\n\t'
 
 symbol_negative='✗'
 symbol_positive='✓'

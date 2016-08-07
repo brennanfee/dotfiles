@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# initialize-settings.sh - Script to set up a new machine with my dotfiles.
-
 # Bash "strict" mode
 set -euo pipefail
 IFS=$'\n\t'
+
+# initialize-settings.sh - Script to set up a new machine with my dotfiles.
 
 DOTFILES="$(dirname $(realpath $BASH_SOURCE))"
 

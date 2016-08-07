@@ -1,14 +1,55 @@
 #!/usr/bin/env bash
-# User dependent .bashrc file
 
 # If not running interactively, don't do anything
-[[ "$-" != *i* ]] && return
+if [[ "$-" != *i* ]]; then
+    return
+fi
 
 export DOTFILES="$HOME/.dotfiles"
 export DOTFILES_PRIVATE="$HOME/.dotfiles-private"
 
-# Turn on colors
-export CLICOLOR=1
-export LS_OPTIONS="-h --color=auto"
+source "$DOTFILES/bash/base-colors.bash"
+source "$DOTFILES/bash/base-functions.bash"
+source "$DOTFILES/bash/base-symbols.bash"
 
-test -e "${HOME}/.iterm2_shell_integration.bash" && source "${HOME}/.iterm2_shell_integration.bash"
+SetOsEnvironmentVariables
+
+# Loop in $DOTFILES first, then $DOTFILES_PRIVATE
+for root in "$DOTFILES/bash" "$DOTFILES_PRIVATE/bash"; do
+    # Loop in a shared folder, then OS specific, lastly distro specific for Linux
+    for base in "shared" "$OS_PRIMARY" "distros/$OS_SECONDARY"; do
+        # Options file should be first
+        source_if "$root/$base/options.bash"
+
+        # Loop over functions and completions to include
+        for folder in "functions" "completions"; do
+            if [[ -d "$root/$base/$folder" ]]; then
+                for file in $root/$base/$folder/*; do
+                    source_if "$file"
+                done
+            fi
+        done
+
+        # Source in other base files
+        for fileroot in "exports" "includes" "path" "prompt"; do
+            source_if "$root/$base/$fileroot.bash"
+        done
+
+        # Lastly the aliases directory
+        if [[ -d "$root/$base/aliases" ]]; then
+            for aliasfile in $root/$base/aliases/*; do
+                source_if "$aliasfile"
+            done
+        fi
+    done
+done
+
+# Local config, this should be last
+source_if "$HOME/.bashrc.local"
+
+unset root
+unset base
+unset folder
+unset fileroot
+unset file
+unset aliasfile

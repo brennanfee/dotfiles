@@ -1,9 +1,5 @@
 #!/usr/bin/env bash
 
-# Bash "strict" mode
-set -euo pipefail
-IFS=$'\n\t'
-
 # Function that sets two environment variables to indicate the
 # type of machine we are on.
 function SetOsEnvironmentVariables {
@@ -47,11 +43,29 @@ function SetOsEnvironmentVariables {
     fi
 }
 
+function is_mac {
+    return [[ $OS_PRIMARY == "macos" ]]
+}
+
+function is_linux {
+    return [[ $OS_PRIMARY == "linux" ]]
+}
+
+function is_windows {
+    return [[ $OS_PRIMARY == "windows" ]]
+}
+
 # Function to easily add a path (this version adds to the end)
 # http://superuser.com/a/39995
 function path_append {
   if [[ -d "$1" ]] && [[ ":$PATH:" != *":$1:"* ]]; then
       export PATH="${PATH:+"$PATH:"}$1"
+  fi
+}
+
+function manpath_append {
+  if [[ -d "$1" ]] && [[ ":$MANPATH:" != *":$1:"* ]]; then
+      export MANPATH="${MANPATH:+"$MANPATH:"}$1"
   fi
 }
 
@@ -63,7 +77,15 @@ function path_prepend {
   fi
 }
 
-# Function to make sourcing an optional item easier
+function manpath_prepend {
+  if [[ -d "$1" ]] && [[ ":$MANPATH:" != *":$1:"* ]]; then
+      export MANPATH="$1:$MANPATH"
+  fi
+}
+
+# function to make sourcing an optional item easier
 function source_if {
-    [[ -f "$1" ]] && source "$1"
+    if [[ -f "$1" ]]; then
+        source "$1"
+    fi
 }
