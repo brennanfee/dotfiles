@@ -294,13 +294,13 @@
 				<key>Alpha Component</key>
 				<real>1</real>
 				<key>Blue Component</key>
-				<real>0.72809296846389771</real>
+				<real>0.35100504755973816</real>
 				<key>Color Space</key>
 				<string>Calibrated</string>
 				<key>Green Component</key>
-				<real>0.36405956745147705</real>
+				<real>0.66525256633758545</real>
 				<key>Red Component</key>
-				<real>0.9881976842880249</real>
+				<real>0.99310135841369629</real>
 			</dict>
 			<key>Ansi 14 Color</key>
 			<dict>
@@ -424,13 +424,13 @@
 				<key>Alpha Component</key>
 				<real>1</real>
 				<key>Blue Component</key>
-				<real>0.35100504755973816</real>
+				<real>0.2662559449672699</real>
 				<key>Color Space</key>
 				<string>Calibrated</string>
 				<key>Green Component</key>
-				<real>0.66525256633758545</real>
+				<real>0.23298260569572449</real>
 				<key>Red Component</key>
-				<real>0.99310135841369629</real>
+				<real>0.9872317910194397</real>
 			</dict>
 			<key>Background Color</key>
 			<dict>
@@ -573,7 +573,7 @@
 	<key>LoadPrefsFromCustomFolder</key>
 	<true/>
 	<key>NSNavLastRootDirectory</key>
-	<string>~/.dotfiles/themes</string>
+	<string>~/.dotfiles/files/mac</string>
 	<key>NSNavPanelExpandedSizeForOpenMode</key>
 	<string>{712, 459}</string>
 	<key>NSNavPanelExpandedSizeForSaveMode</key>
@@ -605,10 +605,12 @@
 	<array/>
 	<key>NSWindow Frame NSFontPanel</key>
 	<string>416 289 981 542 0 0 1920 1057 </string>
+	<key>NSWindow Frame SUUpdateAlert</key>
+	<string>55 510 620 392 0 0 1920 1057 </string>
 	<key>NSWindow Frame SharedPreferences</key>
 	<string>309 571 796 473 0 0 1920 1057 </string>
 	<key>NSWindow Frame iTerm Window 0</key>
-	<string>154 82 1741 968 0 0 1920 1057 </string>
+	<string>166 79 1741 968 0 0 1920 1057 </string>
 	<key>New Bookmarks</key>
 	<array>
 		<dict>
@@ -686,13 +688,13 @@
 				<key>Alpha Component</key>
 				<real>1</real>
 				<key>Blue Component</key>
-				<real>0.72809296846389771</real>
+				<real>0.35100504755973816</real>
 				<key>Color Space</key>
 				<string>Calibrated</string>
 				<key>Green Component</key>
-				<real>0.36405956745147705</real>
+				<real>0.66525256633758545</real>
 				<key>Red Component</key>
-				<real>0.9881976842880249</real>
+				<real>0.99310135841369629</real>
 			</dict>
 			<key>Ansi 14 Color</key>
 			<dict>
@@ -816,13 +818,13 @@
 				<key>Alpha Component</key>
 				<real>1</real>
 				<key>Blue Component</key>
-				<real>0.35100504755973816</real>
+				<real>0.2662559449672699</real>
 				<key>Color Space</key>
 				<string>Calibrated</string>
 				<key>Green Component</key>
-				<real>0.66525256633758545</real>
+				<real>0.23298260569572449</real>
 				<key>Red Component</key>
-				<real>0.99310135841369629</real>
+				<real>0.9872317910194397</real>
 			</dict>
 			<key>BM Growl</key>
 			<true/>
@@ -1344,6 +1346,10 @@
 	</array>
 	<key>NoSyncCommandHistoryHasEverBeenUsed</key>
 	<true/>
+	<key>NoSyncDoNotWarnBeforeMultilinePaste</key>
+	<true/>
+	<key>NoSyncDoNotWarnBeforeMultilinePaste_selection</key>
+	<integer>0</integer>
 	<key>NoSyncHaveWarnedAboutIncompatibleSoftware</key>
 	<true/>
 	<key>NoSyncInstallationId</key>
@@ -1370,7 +1376,7 @@
 		<key>Button,2,1,,</key>
 		<dict>
 			<key>Action</key>
-			<string>kPasteFromSelectionPointerAction</string>
+			<string>kPasteFromClipboardPointerAction</string>
 		</dict>
 		<key>Gesture,ThreeFingerSwipeDown,,</key>
 		<dict>
@@ -1408,7 +1414,7 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2016-08-06T04:20:53Z</date>
+	<date>2016-08-19T04:22:09Z</date>
 	<key>SUSendProfileInfo</key>
 	<false/>
 	<key>TabStyle</key>
@@ -1416,7 +1422,7 @@
 	<key>UseBorder</key>
 	<false/>
 	<key>iTerm Version</key>
-	<string>3.0.5</string>
+	<string>3.0.7</string>
 	<key>kCPKSelectionViewPreferredModeKey</key>
 	<integer>0</integer>
 	<key>kCPKSelectionViewShowHSBTextFieldsKey</key>

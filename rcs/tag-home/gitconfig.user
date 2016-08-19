@@ -1,5 +1,4 @@
 [core]
-    autocrlf = input
     user = Brennan Fee
     email = github@todaytechsoft.biz
 [user]
