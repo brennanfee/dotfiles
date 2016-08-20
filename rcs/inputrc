@@ -1,0 +1,70 @@
+###### Key Mappings
+
+# Map Ctrl-A and Ctrl-e
+C-a: beginning-of-line
+C-e: end-of-line
+# Map home and end keys
+"\e[1~": beginning-of-line
+"\e[4~": end-of-line
+# Page up/down search the history
+"\e[5~": history-search-backward
+"\e[6~": history-search-forward
+# Have insert key paste from clipboard
+"\e[2~": paste-from-clipboard
+# Map the delete key to delete (I know strange)
+"\e[3~": delete-char
+DEL: delete-char
+
+#### 8-bit input/output
+
+# Enable 8-bit mode
+set meta-flag on
+set input-meta on
+
+# Turn off 8th bit stripping
+set convert-meta off
+
+# Keep the 8th bit for display
+set output-meta on
+
+###### Command completion
+
+# Ignore case
+set completion-ignore-case on
+
+# Handle hyphens and underscorse as the same for completion
+set completion-map-case on
+
+# Show all completions on tab even if there were more than one
+set show-all-if-ambiguous on
+
+# Be more intelligent when autocompleting by also looking at the text after
+# the cursor. For example, when the current line is "cd ~/src/mozil", and
+# the cursor is on the "z", pressing Tab will not autocomplete it to "cd
+# ~/src/mozillail", but to "cd ~/src/mozilla". (This is supported by the
+# Readline used by Bash 4.)
+set skip-completed-text on
+
+# Use color to indicate file type for completed files
+set colored-stats on
+
+# Allow TAB to cycle through complete options
+TAB: menu-complete
+# Shift TAB goes backwards
+"\e[Z": menu-complete-backward
+
+# 'Magic Space'
+# Insert a space character then performs a history expansion
+# in the line
+Space: magic-space
+
+###### Misc Settings
+
+# Don't ring bell on completion
+set bell-style visible
+
+# Use Vi style editing (not Emacs)
+set editing-mode vi
+
+$include ~/.inputrc.os
+$include ~/.inputrc.local
