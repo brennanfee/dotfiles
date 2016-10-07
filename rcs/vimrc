@@ -83,7 +83,9 @@ if has('gui_running')
 else
     set term=xterm-256color
     set t_Co=256
-    set termguicolors
+    if v:version >= 800
+        set termguicolors
+    endif
 
     colorscheme dracula
 endif

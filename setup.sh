@@ -32,7 +32,7 @@ else
         echo "TAGS=\"$OS_PRIMARY\"" >> "$HOME/.rcrc"
     fi
 
-    mkrc -o .rcrc
+    mkrc -o "$HOME/.rcrc"
 fi
 
 echo -e "${green}Done!  Edit the ~/.rcrc as needed then run 'rcup'${normal}"
