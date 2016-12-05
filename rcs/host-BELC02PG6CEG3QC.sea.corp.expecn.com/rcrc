@@ -1,2 +1,2 @@
 DOTFILES_DIRS="$HOME/.dotfiles/rcs $HOME/.dotfiles-local/rcs"
-TAGS="osx"
+TAGS="macos work"
