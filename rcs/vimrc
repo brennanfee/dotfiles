@@ -74,7 +74,7 @@ if has('gui_running')
     set guioptions-=T
     set guioptions-=t
     set guioptions-=m
-    colorscheme dracula
+    colorscheme darcula
     if has('gui_win32') || has('gui_win64')
         set guifont=Hasklig:h14:cANSI
     elseif has('gui_macvim')
@@ -87,7 +87,7 @@ else
         set termguicolors
     endif
 
-    colorscheme dracula
+    colorscheme darcula
 endif
 
 " Setup mouse

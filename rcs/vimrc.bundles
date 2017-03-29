@@ -32,6 +32,7 @@ Plug 'ctrlpvim/ctrlp.vim'
 Plug 'itchyny/lightline.vim'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'dracula/vim', { 'dir': '~/.vim/plugged/dracula' }
+Plug 'blueshirts/darcula'
 Plug 'brennanfee/vim-gui-position'
 Plug 'leafgarland/typescript-vim'
 

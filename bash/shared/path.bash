@@ -5,3 +5,5 @@
 path_prepend "$DOTFILES/bin"
 path_prepend "$DOTFILES_PRIVATE/bin"
 path_prepend "${HOME}/bin"
+
+path_append "$(yarn global bin)"
