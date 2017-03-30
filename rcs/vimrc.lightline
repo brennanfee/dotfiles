@@ -1,45 +1,6 @@
-" First, make a tweak to the Darcula color theme
-"hi CursorLine ctermbg=8 cterm=NONE guifg=NONE guibg=#323232 gui=NONE
-"hi Comment ctermfg=12 ctermbg=NONE cterm=NONE guifg=#619647 guibg=NONE gui=NONE
-
-" Lightline Color Scheme (Darcula)
-let s:background = [ '#2b2b2b', 0 ]
-let s:currentline = [ '#323232', 8 ]
-let s:foreground = [ '#a9b7c6', 15 ]
-
-let s:yellow = [ '#ffc66d', 3 ]
-let s:orange = [ '#cb772f', 9 ]
-let s:red = [ '#d25252', 1 ]
-let s:cyan = [ '#bed6ff', 6 ]
-let s:green = [ '#619647', 2 ]
-let s:pink = [ '#a5c25c', 5 ]
-let s:purple = [ '#9876aa', 4 ]
-let s:blue = [ '#6897bb', 12 ]
-let s:gray = [ '#7e7e7e', 7 ]
-
-let s:p = {'normal': {}, 'inactive': {}, 'insert': {}, 'replace': {}, 'visual': {}, 'tabline': {}}
-let s:p.normal.left = [ [ s:currentline, s:purple ], [ s:gray, s:background ] ]
-let s:p.normal.right = [ [ s:currentline, s:gray], [ s:gray, s:background ] ]
-let s:p.inactive.right = [ [ s:currentline, s:gray ], [ s:gray, s:currentline ] ]
-let s:p.inactive.left =  [ [ s:gray, s:currentline ], [ s:gray, s:currentline ] ]
-let s:p.insert.left = [ [ s:currentline, s:green ], [ s:foreground, s:background ] ]
-let s:p.replace.left = [ [ s:currentline, s:red ], [ s:gray, s:background ] ]
-let s:p.visual.left = [ [ s:currentline, s:pink ], [ s:gray, s:background ] ]
-let s:p.normal.middle = [ [ s:gray, s:currentline ] ]
-let s:p.inactive.middle = [ [ s:gray, s:currentline ] ]
-let s:p.tabline.left = [ [ s:gray, s:background ] ]
-let s:p.tabline.tabsel = [ [ s:currentline, s:purple ] ]
-let s:p.tabline.middle = [ [ s:gray, s:currentline ] ]
-let s:p.tabline.right = copy(s:p.normal.right)
-let s:p.normal.error = [ [ s:red, s:currentline ] ]
-let s:p.normal.warning = [ [ s:yellow, s:background ] ]
-
-let g:lightline#colorscheme#dracula#palette = lightline#colorscheme#flatten(s:p)
-
-" ------------------
 " Lightline Settings
 let g:lightline = {
-    \ 'colorscheme': 'dracula',
+    \ 'colorscheme': 'darcula',
     \ 'mode_map': { 'c': 'NORMAL' },
     \ 'active': {
     \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename' ], ['ctrlpmark'] ],
