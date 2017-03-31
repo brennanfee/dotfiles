@@ -81,7 +81,16 @@ if has('gui_running')
         set guifont=Hasklig:h18
     endif
 else
-    set term=xterm-256color
+    if has('win32') || has('win64')
+        set term=xterm
+
+        " Remap the BackSpace key
+        inoremap <Char-0x07F> <BS>
+        nnoremap <Char-0x07F> <BS>
+    else
+        set term=xterm-256color
+    endif
+
     set t_Co=256
     if v:version >= 800
         set termguicolors
@@ -93,6 +102,13 @@ endif
 " Setup mouse
 if has('mouse')
     set mouse=a
+
+    if has('win32') || has('win64')
+        inoremap <Esc>[62~ <C-X><C-E>
+        inoremap <Esc>[63~ <C-X><C-Y>
+        nnoremap <Esc>[62~ <C-E>
+        nnoremap <Esc>[63~ <C-Y>
+    endif
 endif
 
 if executable('ag')
