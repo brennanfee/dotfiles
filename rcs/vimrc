@@ -1,4 +1,9 @@
 scriptencoding utf-8
+
+" Vim 8 defaults
+unlet! skip_defaults_vim
+silent! source $VIMRUNTIME/defaults.vim
+
 if filereadable(expand("~/.vimrc.bundles"))
   source ~/.vimrc.bundles
 endif
@@ -92,7 +97,9 @@ else
     endif
 
     set t_Co=256
-    if v:version >= 800
+    if has('termguicolors')
+        let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+        let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
         set termguicolors
     endif
 
@@ -101,8 +108,6 @@ endif
 
 " Setup mouse
 if has('mouse')
-    set mouse=a
-
     if has('win32') || has('win64')
         inoremap <Esc>[62~ <C-X><C-E>
         inoremap <Esc>[63~ <C-X><C-Y>

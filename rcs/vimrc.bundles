@@ -9,32 +9,48 @@ if has('vim_starting')
     endif
 endif
 
+if has('mac')
+  let g:plug_url_format = 'git@github.com:%s.git'
+else
+  let $GIT_SSL_NO_VERIFY = 'true'
+endif
+
 call plug#begin('~/.vim/plugged')
 
 Plug 'tmhedberg/matchit'
 Plug 'tpope/vim-sensible'
-Plug 'vim-scripts/a.vim'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-git'
 Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-vinegar'
 Plug 'tpope/vim-rhubarb'
 Plug 'tpope/vim-tbone'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-characterize'
-Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-commentary', { 'on': '<Plug>Commentary' }
 Plug 'tpope/vim-rsi'
 Plug 'tpope/vim-eunuch'
+Plug 'tpope/vim-speeddating'
+Plug 'tpope/vim-abolish'
+Plug 'tpope/vim-jdaddy'
+Plug 'junegunn/gv.vim'
+Plug 'vim-scripts/a.vim'
 Plug 'wellle/targets.vim'
 Plug 'easymotion/vim-easymotion'
-Plug 'rking/ag.vim'
+Plug 'mileszs/ack.vim'
 Plug 'ctrlpvim/ctrlp.vim'
+Plug 'airblade/vim-rooter'
 Plug 'itchyny/lightline.vim'
 Plug 'editorconfig/editorconfig-vim'
-Plug 'dracula/vim', { 'dir': '~/.vim/plugged/dracula' }
 Plug 'blueshirts/darcula'
 Plug 'brennanfee/vim-gui-position'
 Plug 'leafgarland/typescript-vim'
+Plug 'quramy/tsuquyomi'
+Plug 'mhinz/vim-signify'
+Plug 'justinmk/vim-gtfo'
+Plug 'docker/docker', {'rtp': 'contrib/syntax/vim'}
+Plug 'scrooloose/syntastic', { 'on': 'SyntasticCheck' }
 
 if filereadable(expand("~/.vimrc.bundles.os"))
   source ~/.vimrc.bundles.os
