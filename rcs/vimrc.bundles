@@ -23,7 +23,6 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-git'
 Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-vinegar'
 Plug 'tpope/vim-rhubarb'
 Plug 'tpope/vim-tbone'
 Plug 'tpope/vim-unimpaired'
@@ -38,19 +37,27 @@ Plug 'junegunn/gv.vim'
 Plug 'vim-scripts/a.vim'
 Plug 'wellle/targets.vim'
 Plug 'easymotion/vim-easymotion'
+Plug 'svermeulen/vim-easyclip'
 Plug 'mileszs/ack.vim'
 Plug 'ctrlpvim/ctrlp.vim'
+Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
+Plug 'Xuyuanp/nerdtree-git-plugin', { 'on':  'NERDTreeToggle' }
 Plug 'airblade/vim-rooter'
 Plug 'itchyny/lightline.vim'
+Plug 'ap/vim-buftabline'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'blueshirts/darcula'
 Plug 'brennanfee/vim-gui-position'
 Plug 'leafgarland/typescript-vim'
 Plug 'quramy/tsuquyomi'
-Plug 'mhinz/vim-signify'
+Plug 'airblade/vim-gitgutter'
 Plug 'justinmk/vim-gtfo'
-Plug 'docker/docker', {'rtp': 'contrib/syntax/vim'}
-Plug 'scrooloose/syntastic', { 'on': 'SyntasticCheck' }
+Plug 'mattn/emmet-vim'
+Plug 'ryanoasis/vim-devicons'
+
+" Disabled
+" Plug 'docker/docker', {'rtp': 'contrib/syntax/vim'}
+" Plug 'scrooloose/syntastic', { 'on': 'SyntasticCheck' }
 
 if filereadable(expand("~/.vimrc.bundles.os"))
   source ~/.vimrc.bundles.os

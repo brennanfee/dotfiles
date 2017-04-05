@@ -39,7 +39,7 @@ endif
 set hlsearch
 set gdefault
 set cursorline
-set colorcolumn=80,100,120
+set colorcolumn=100,120
 
 set hidden
 set confirm
@@ -51,6 +51,8 @@ set softtabstop=4
 set shiftround
 set expandtab
 set smartindent
+
+set clipboard=unnamed
 
 set backup
 set backupdir=~/.vimscratch/backup//,$TEMP//,$TMP//
@@ -81,9 +83,9 @@ if has('gui_running')
     set guioptions-=m
     colorscheme darcula
     if has('gui_win32') || has('gui_win64')
-        set guifont=Hasklig:h14:cANSI
+        set guifont=Hasklug_NF:h14:cANSI
     elseif has('gui_macvim')
-        set guifont=Hasklig:h18
+        set guifont=Hasklug_NF:h16
     endif
 else
     if has('win32') || has('win64')
@@ -97,6 +99,9 @@ else
     endif
 
     set t_Co=256
+    let &t_AB="\e[48;5;%dm"
+    let &t_AF="\e[38;5;%dm"
+
     if has('termguicolors')
         let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
         let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
@@ -116,29 +121,8 @@ if has('mouse')
     endif
 endif
 
-if executable('ag')
-    " Use Ag over Grep
-    set grepprg=ag\ --vimgrep
-    let g:ackprg = 'ag --vimgrep'
-
-    " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
-    let g:ctrlp_user_command = 'ag -i -l --nocolor --nogroup --hidden -g "" "%s"'
-    " let g:ctrlp_user_command = 'dir %s /-n /b/s /a-d'
-
-    " ag is fast enough that CtrlP doesn't need to cache
-    let g:ctrlp_use_caching = 0
-endif
-
 if has('win32') || has('win64')
     set shell=$COMSPEC
-endif
-
-let g:ctrlp_working_path_mode = 'ra'
-
-let g:EditorConfig_exclude_patterns = ['fugitive://.*']
-if has('win32') || has('win64')
-    let g:EditorConfig_exec_path = 'C:\ProgramData\chocolatey\bin\editorconfig.exe'
-    let g:EditorConfig_core_mode = 'external_command'
 endif
 
 " Leader K to grep word under cursor
@@ -148,20 +132,84 @@ nnoremap <leader>k :grep! "\b<C-R><C-W>\b"<CR>:cw<CR><CR>
 nmap <leader>ev :e $MYVIMRC<CR>
 nmap <leader>sv :source $MYVIMRC<CR>
 
-" Mappings to use system clipboard
-nnoremap <leader>p "*p
-nnoremap <leader>P "*P
-nnoremap <leader>y "*y
-nnoremap <leader>yy "*yy
-vnoremap <leader>p "*p
-vnoremap <leader>P "*P
-vnoremap <leader>y "*y
-vnoremap <leader>yy "*yy
+""" PLUGIN SETTINGS
+
+" Ack.vim & Ctrl-P
+if executable('ag')
+    " Use Ag over Grep
+    let prg = &grepprg
+    set grepprg&
+    if prg ==# &grepprg
+        set grepformat=%f:%l:%c:%m
+        let &grepprg = 'ag --vimgrep --hidden $*'
+    else
+        let &grepprg = prg
+    endif
+
+    " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
+    let g:ctrlp_user_command = 'ag -l --nocolor --nogroup --hidden -g "" "%s"'
+    " let g:ctrlp_user_command = 'dir %s /-n /b/s /a-d'
+
+    " ag is fast enough that CtrlP doesn't need to cache
+    " let g:ctrlp_use_caching = 0
+
+    " Set up ack.vim plugin to use ag instead of ack
+    let g:ackprg = 'ag --vimgrep --hidden --smart-case'
+    cnoreabbrev ag Ack
+    cnoreabbrev aG Ack
+    cnoreabbrev Ag Ack
+    cnoreabbrev AG Ack
+endif
+
+let g:ctrlp_working_path_mode = 'ra'
+
+" EditorConfig
+let g:EditorConfig_exclude_patterns = ['fugitive://.*']
+if has('win32') || has('win64')
+    let g:EditorConfig_exec_path = 'C:\ProgramData\chocolatey\bin\editorconfig.exe'
+    let g:EditorConfig_core_mode = 'external_command'
+endif
+
+" NERDTree
+map <leader>t :NERDTreeToggle<CR>
+" Close window if NERDTree is the only thing open
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
+" BufTabLineColors
+hi BufTabLineFill ctermfg=NONE ctermbg=236 cterm=NONE guifg=NONE guibg=#323232 gui=NONE
+hi BufTabLineCurrent ctermfg=188 ctermbg=24 term=reverse guifg=#a9b7c6 guibg=#9876aa gui=NONE
+hi BufTabLineActive ctermfg=188 ctermbg=24 term=reverse guifg=#a9b7c6 guibg=#214283 gui=NONE
+hi BufTabLineHidden ctermfg=188 ctermbg=24 term=reverse guifg=#a9b7c6 guibg=#323232 gui=NONE
+" Make buffers behave like tabs
+nnoremap gt :bnext<CR>
+nnoremap gT :bprevious<CR>
+nnoremap gx :bdelete<CR>
+nnoremap g0 :bfirst<CR>
+nnoremap g$ :blast<CR>
+
+" Easymotion
+let g:EasyMotion_do_mapping = 0 " Disable default mappings
+let g:EasyMotion_smartcase = 1
+let g:EasyMotion_startofline = 0
+
+nmap <leader>f <Plug>(easymotion-overwin-f)
+nmap <leader>F <Plug>(easymotion-overwin-f2)
+nmap <leader>w <Plug>(easymotion-overwin-w)
+nmap <leader>W <Plug>(easymotion-bd-W)
+nmap <leader>e <Plug>(easymotion-bd-e)
+nmap <leader>E <Plug>(easymotion-bd-E)
+nmap <leader>j <Plug>(easymotion-overwin-line)
+
+" EasyClip
+let g:EasyClipUseSubstituteDefaults = 1
+nnoremap gm m
 
 " Lightline settings are sufficiently verbose so as to need their own file
 if filereadable($HOME . "/.vimrc.lightline")
   source ~/.vimrc.lightline
 endif
+
+""" END PLUGIN SETTINGS
 
 " OS specific config, this should always be next to last
 if filereadable($HOME . "/.vimrc.os")
