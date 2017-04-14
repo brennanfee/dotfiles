@@ -85,7 +85,7 @@ if has('gui_running')
     if has('gui_win32') || has('gui_win64')
         set guifont=Hasklug_NF:h14:cANSI
     elseif has('gui_macvim')
-        set guifont=Hasklug_NF:h16
+        set guifont=Hasklug\ Nerd\ Font\ Complete:h18
     endif
 else
     if has('win32') || has('win64')

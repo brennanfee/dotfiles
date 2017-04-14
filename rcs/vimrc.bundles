@@ -9,11 +9,11 @@ if has('vim_starting')
     endif
 endif
 
-if has('mac')
-  let g:plug_url_format = 'git@github.com:%s.git'
-else
-  let $GIT_SSL_NO_VERIFY = 'true'
-endif
+"if has('mac')
+  "let g:plug_url_format = 'git@github.com:%s.git'
+"else
+  "let $GIT_SSL_NO_VERIFY = 'true'
+"endif
 
 call plug#begin('~/.vim/plugged')
 
