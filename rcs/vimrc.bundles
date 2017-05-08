@@ -48,16 +48,15 @@ Plug 'ap/vim-buftabline'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'blueshirts/darcula'
 Plug 'brennanfee/vim-gui-position'
-Plug 'leafgarland/typescript-vim'
-Plug 'quramy/tsuquyomi'
 Plug 'airblade/vim-gitgutter'
 Plug 'justinmk/vim-gtfo'
 Plug 'mattn/emmet-vim'
 Plug 'ryanoasis/vim-devicons'
-
-" Disabled
-" Plug 'docker/docker', {'rtp': 'contrib/syntax/vim'}
-" Plug 'scrooloose/syntastic', { 'on': 'SyntasticCheck' }
+Plug 'sheerun/vim-polyglot'
+Plug 'christoomey/vim-tmux-navigator'
+Plug 'w0rp/ale'
+Plug 'godlygeek/tabular'
+Plug 'ntpeters/vim-better-whitespace'
 
 if filereadable(expand("~/.vimrc.bundles.os"))
   source ~/.vimrc.bundles.os
