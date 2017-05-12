@@ -14,7 +14,6 @@ endif
 "else
   "let $GIT_SSL_NO_VERIFY = 'true'
 "endif
-
 call plug#begin('~/.vim/plugged')
 
 Plug 'tmhedberg/matchit'
@@ -48,7 +47,7 @@ Plug 'ap/vim-buftabline'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'blueshirts/darcula'
 Plug 'brennanfee/vim-gui-position'
-Plug 'airblade/vim-gitgutter'
+Plug 'mhinz/vim-signify'
 Plug 'justinmk/vim-gtfo'
 Plug 'mattn/emmet-vim'
 Plug 'ryanoasis/vim-devicons'
@@ -57,6 +56,7 @@ Plug 'christoomey/vim-tmux-navigator'
 Plug 'w0rp/ale'
 Plug 'godlygeek/tabular'
 Plug 'ntpeters/vim-better-whitespace'
+Plug 'ap/vim-css-color'
 
 if filereadable(expand("~/.vimrc.bundles.os"))
   source ~/.vimrc.bundles.os

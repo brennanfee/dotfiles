@@ -5,16 +5,17 @@ unlet! skip_defaults_vim
 silent! source $VIMRUNTIME/defaults.vim
 
 if filereadable(expand("~/.vimrc.bundles"))
-  source ~/.vimrc.bundles
+    source ~/.vimrc.bundles
 endif
 
 if has("multi_byte")
-  if &termencoding == ""
-    let &termencoding = &encoding
-  endif
-  set encoding=utf-8
-  setglobal fileencoding=utf-8
-  set fileencodings=ucs-bom,utf-8,latin1
+    if &termencoding == ""
+        let &termencoding = &encoding
+    endif
+    set encoding=utf-8
+    set nobomb
+    setglobal fileencoding=utf-8
+    set fileencodings=ucs-bom,utf-8,latin1
 endif
 
 let mapleader = ","
@@ -67,7 +68,7 @@ set noshowmode
 
 set listchars=tab:>\ ,trail:-,extends:>,precedes:<
 if (&termencoding ==# 'utf-8' || &encoding ==# 'utf-8') && version >= 700
-  let &listchars="tab:\u25b8 ,trail:\u00b7,extends:\u00bb,precedes:\u00ab"
+    let &listchars="tab:\u25b8 ,trail:\u00b7,extends:\u00bb,precedes:\u00ab"
 endif
 set list
 
@@ -128,7 +129,7 @@ endif
 " Leader K to grep word under cursor
 nnoremap <leader>k :grep! "\b<C-R><C-W>\b"<CR>:cw<CR><CR>
 
-" Mappings to manage VimRc
+" Mappings to manage vimrc
 nmap <leader>evim :e $MYVIMRC<CR>
 nmap <leader>evib :e ~/.vimrc.bundles<CR>
 nmap <leader>svim :source $MYVIMRC<CR>
@@ -139,6 +140,7 @@ augroup reload_vimrc " {
     autocmd BufWritePost $MYVIMRC source $MYVIMRC
     autocmd BufWritePost ~/.vimrc.bundles source $MYVIMRC
 augroup END " }
+
 """ PLUGIN SETTINGS
 
 " Ack.vim & Ctrl-P
@@ -171,6 +173,7 @@ endif
 let g:ctrlp_working_path_mode = 'ra'
 
 " EditorConfig
+
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 if has('win32') || has('win64')
     let g:EditorConfig_exec_path = 'C:\ProgramData\chocolatey\bin\editorconfig.exe'
@@ -213,7 +216,7 @@ nnoremap gm m
 
 " Lightline settings are sufficiently verbose so as to need their own file
 if filereadable($HOME . "/.vimrc.lightline")
-  source ~/.vimrc.lightline
+    source ~/.vimrc.lightline
 endif
 
 " Tabular
@@ -228,10 +231,10 @@ endif
 
 " OS specific config, this should always be next to last
 if filereadable($HOME . "/.vimrc.os")
-  source ~/.vimrc.os
+    source ~/.vimrc.os
 endif
 
 " Local config, this should always be last
 if filereadable($HOME . "/.vimrc.local")
-  source ~/.vimrc.local
+    source ~/.vimrc.local
 endif
