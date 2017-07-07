@@ -14,12 +14,16 @@ on RCM can be found [here](https://robots.thoughtbot.com/rcm-for-rc-files-in-dot
 
 ## Setting up a machine
 
-To set up or reinstall a machine to use the dotfiles you must first install RCM.  Once installed,
+**Prerequisites: RCM and CURL.**
+
+To set up or reinstall a machine to use the dotfiles you must first install RCM and curl.  Once installed,
 clone this repo into the ~/.dotfiles directory and follow the steps below.
 
 1. Execute ~/.dotfiles/setup.sh
 1. Edit ~/.rcrc as needed for the machine you are on.  Tags may need to be changed, etc.
 1. Then simply run 'rcup'
+
+It is common to have to restart your shell after running rcup.
 
 ## dotfiles-private
 
