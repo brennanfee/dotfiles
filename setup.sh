@@ -16,6 +16,16 @@ echo ""
 echo -e "${green}Starting setup...${normal}"
 echo ""
 
+if ! command_exists rcup; then
+    echo -e "${red}RCM is not installed.  Please install it and try again.${normal}"
+    exit 1
+fi
+
+if ! command_exists curl; then
+    echo -e "${red}Curl is not installed.  Please install it and try again.${normal}"
+    exit 1
+fi
+
 rcup -f -K -d "$HOME/.dotfiles/rcs" -d "$HOME/.dotfiles-private/rcs" rcrc
 
 if [[ -f "$HOME/.rcrc" ]]; then

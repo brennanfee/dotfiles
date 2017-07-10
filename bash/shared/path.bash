@@ -6,6 +6,6 @@ path_prepend "$DOTFILES/bin"
 path_prepend "$DOTFILES_PRIVATE/bin"
 path_prepend "${HOME}/bin"
 
-if command -v yarn 2>/dev/null; then
+if command_exists yarn; then
     path_append "$(yarn global bin)"
 fi
