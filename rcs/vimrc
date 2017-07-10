@@ -3,6 +3,7 @@ scriptencoding utf-8
 " Vim 8 defaults
 unlet! skip_defaults_vim
 silent! source $VIMRUNTIME/defaults.vim
+augroup vimStartup | au! | augroup END
 
 if filereadable(expand("~/.vimrc.bundles"))
     source ~/.vimrc.bundles
@@ -135,7 +136,7 @@ nmap <leader>evib :e ~/.vimrc.bundles<CR>
 nmap <leader>svim :source $MYVIMRC<CR>
 
 " Source the vimrc if saved
-augroup reload_vimrc " {
+augroup autoreload_vimrc " {
     autocmd!
     autocmd BufWritePost $MYVIMRC source $MYVIMRC
     autocmd BufWritePost ~/.vimrc.bundles source $MYVIMRC
@@ -168,6 +169,10 @@ if executable('rg')
     cnoreabbrev aG Ack
     cnoreabbrev Ag Ack
     cnoreabbrev AG Ack
+    cnoreabbrev rg Ack
+    cnoreabbrev rG Ack
+    cnoreabbrev Rg Ack
+    cnoreabbrev RG Ack
 endif
 
 let g:ctrlp_working_path_mode = 'ra'
