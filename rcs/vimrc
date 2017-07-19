@@ -54,6 +54,8 @@ set shiftround
 set expandtab
 set smartindent
 
+set visualbell
+
 set clipboard=unnamed
 
 set backup
@@ -97,7 +99,7 @@ else
         inoremap <Char-0x07F> <BS>
         nnoremap <Char-0x07F> <BS>
     else
-        set term=xterm-256color
+        set term=screen-256color
     endif
 
     set t_Co=256
