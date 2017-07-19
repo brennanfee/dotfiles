@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+# Bash "strict" mode
+set -euo pipefail
+IFS=$'\n\t'
+
+# console-colors - Script to show the configured colors by base-colors.sh
+
+source "$DOTFILES/bash/base-colors.bash"
+
+echo ""
+echo "Console color map"
+echo ""
+echo -e "${black}██ ${normal} black"
+echo -e "${red}██ ${normal} red"
+echo -e "${green}██ ${normal} green"
+echo -e "${yellow}██ ${normal} yellow"
+echo -e "${blue}██ ${normal} blue"
+echo -e "${magenta}██ ${normal} magenta"
+echo -e "${cyan}██ ${normal} cyan"
+echo -e "${white}██ ${normal} white"
+echo ""
+echo -e "${bold_black}██ ${normal} bold_black"
+echo -e "${bold_red}██ ${normal} bold_red"
+echo -e "${bold_green}██ ${normal} bold_green"
+echo -e "${bold_yellow}██ ${normal} bold_yellow"
+echo -e "${bold_blue}██ ${normal} bold_blue"
+echo -e "${bold_magenta}██ ${normal} bold_magenta"
+echo -e "${bold_cyan}██ ${normal} bold_cyan"
+echo -e "${bold_white}██ ${normal} bold_white"
+echo ""
+echo -e "${pink}██ ${normal} pink = magenta"
+echo -e "${purple}██ ${normal} purple = bold blue"
+echo -e "${orange}██ ${normal} orange = bold red"
