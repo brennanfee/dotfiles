@@ -67,3 +67,7 @@ if [[ ! $USER_AGENT == "" ]]; then
     alias wget='wget --user-agent="$USER_AGENT"'
     alias curl='curl -A "$USER_AGENT"'
 fi
+
+if command_exists thefuck; then
+    eval $(thefuck --alias)
+fi
