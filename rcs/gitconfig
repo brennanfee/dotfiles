@@ -5,6 +5,8 @@
     ui = auto
 [core]
     editor = vim
+    eol = lf
+    autocrlf = input
 [fetch]
     prune = true
 [http]
