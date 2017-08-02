@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+export PROMPT_DIRTRIM=4
+
 if [[ -e /usr/lib/git-core/git-sh-prompt ]]; then
     source '/usr/lib/git-core/git-sh-prompt'
     GIT_PS1_SHOWDIRTYSTATE=1
