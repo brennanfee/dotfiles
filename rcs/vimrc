@@ -3,7 +3,9 @@ scriptencoding utf-8
 " Vim 8 defaults
 unlet! skip_defaults_vim
 silent! source $VIMRUNTIME/defaults.vim
-augroup vimStartup | au! | augroup END
+augroup vimStartup
+    au!
+augroup END
 
 if filereadable(expand("~/.vimrc.bundles"))
     source ~/.vimrc.bundles
