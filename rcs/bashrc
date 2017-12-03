@@ -22,7 +22,7 @@ for root in "$DOTFILES/bash" "$DOTFILES_PRIVATE/bash"; do
         source_if "$root/$base/options.bash"
 
         # Loop over functions and completions to include
-        for folder in "functions" "completions"; do
+        for folder in "functions" "completions" "other"; do
             if [[ -d "$root/$base/$folder" ]]; then
                 for file in $root/$base/$folder/*; do
                     source_if "$file"
