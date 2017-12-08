@@ -148,6 +148,7 @@ augroup autoreload_vimrc " {
     autocmd!
     autocmd BufWritePost $MYVIMRC source $MYVIMRC
     autocmd BufWritePost ~/.vimrc.bundles source $MYVIMRC
+    autocmd BufWritePost ~/.vimrc.lightline source $MYVIMRC
 augroup END " }
 
 """ PLUGIN SETTINGS
