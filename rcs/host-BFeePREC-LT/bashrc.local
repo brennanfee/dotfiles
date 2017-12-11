@@ -2,6 +2,7 @@
 # Quick navigations
 alias cdp='cd /mnt/c/projects'
 alias cdpp='cd /mnt/c/projects/personal'
+alias cdh='cd /mnt/c/Users/bfee'
 alias cdwh='cd /mnt/c/Users/bfee'
 alias cdd='cd /mnt/c/downloads'
 
