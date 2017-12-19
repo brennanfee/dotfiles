@@ -55,6 +55,9 @@ alias hist='history | ag'
 alias mkdatedir='mkdir $(date "+%Y-%m-%d")'
 alias mkdatefile='touch $(date "+%Y-%m-%d").txt'
 
+# RipGrep should always use "smart-case"
+alias rg='rg -S'
+
 # Markdown & CommonMark
 # May not need this anymore, should use node
 #alias markdown="Markdown.pl"
