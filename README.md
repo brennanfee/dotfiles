@@ -1,6 +1,6 @@
 # dotfiles
 
-My personal and work [dotfiles](https://dotfiles.github.io/).
+My personal and work [dotfiles](https://dotfiles.github.io/) for Mac, Linux, and Windows (WSL).
 
 ## Overview
 
@@ -16,7 +16,8 @@ on RCM can be found [here](https://robots.thoughtbot.com/rcm-for-rc-files-in-dot
 
 **Prerequisites: RCM and CURL.**
 
-To set up or reinstall a machine to use the dotfiles you must first install RCM and curl.  Once installed,
+To set up or reinstall a machine to use the dotfiles you must first install RCM and curl.  At this
+point you should also install any needed SSH keys in order to perform the following clone.  Once configured,
 clone this repo into the ~/.dotfiles directory and follow the steps below.
 
 1. Execute ~/.dotfiles/setup.sh
@@ -41,12 +42,12 @@ repository will need to be placed there manually.
 A number of dotfiles support "include" files in various ways.  All of the files that do
 support such a construct have been pre-configured to allow both an OS specific override as well
 as a local (host specific) override.  In all cases the order is: first the global settings, then
-the OS settings, finally the local settings.
+the OS settings, finally the local settings.  All of which can further be overridden using a
+dotfiles-private repository.
 
-## Windows and PowerShell
+## Windows, WSL, and PowerShell
 
 For Windows machines the above steps should all be performed in the bash shell provided by
-WSL.  After those steps are complete you can run the following to set up PowerShell as well.
+WSL.  After these steps you could then pull the [WinFiles](https://github.com/brennanfee/winfiles)
+repo to set up PowerShell and the Windows side of things (see that repo for instructions).
 
-1. Open a PowerShell window and run ~/.dotfiles/windows/setup-powershell.ps1
-1. Open a separate windows as Administrator and run ~/.dotfiles/windows/setup-win-admin.ps1
