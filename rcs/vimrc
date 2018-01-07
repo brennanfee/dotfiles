@@ -35,6 +35,7 @@ set ignorecase
 set smartcase
 
 set scrolloff=4
+set linebreak
 set nowrap
 if &diff
     set wrap
@@ -43,7 +44,7 @@ endif
 set hlsearch
 set gdefault
 set cursorline
-set colorcolumn=100,120
+set colorcolumn=100
 
 set hidden
 set confirm
@@ -139,9 +140,9 @@ endif
 nnoremap <leader>k :grep! "\b<C-R><C-W>\b"<CR>:cw<CR><CR>
 
 " Mappings to manage vimrc
-nmap <leader>evim :e $MYVIMRC<CR>
-nmap <leader>evib :e ~/.vimrc.bundles<CR>
-nmap <leader>svim :source $MYVIMRC<CR>
+nmap <leader>ev :e $MYVIMRC<CR>
+nmap <leader>eb :e ~/.vimrc.bundles<CR>
+nmap <leader>sv :source $MYVIMRC<CR>
 
 " Source the vimrc if saved
 augroup autoreload_vimrc " {
@@ -150,6 +151,15 @@ augroup autoreload_vimrc " {
     autocmd BufWritePost ~/.vimrc.bundles source $MYVIMRC
     autocmd BufWritePost ~/.vimrc.lightline source $MYVIMRC
 augroup END " }
+
+" Force the # of columns to no more than 120
+set columns=120
+augroup force_columns " {
+    autocmd!
+    autocmd VimResized * if (&columns > 120) | set columns=120 | endif
+augroup END " }
+
+au FileType markdown setlocal wrap
 
 """ PLUGIN SETTINGS
 
@@ -160,20 +170,20 @@ if executable('rg')
     set grepprg&
     if prg ==# &grepprg
         set grepformat=%f:%l:%c:%m
-        let &grepprg = 'rg --vimgrep --hidden $*'
+        let &grepprg = 'rg --color=never --smart-case'
     else
         let &grepprg = prg
     endif
 
     " Use rg in CtrlP for listing files. Lightning fast and respects .gitignore
-    let g:ctrlp_user_command = 'rg -l --vimgrep --hidden "" "%s"'
+    let g:ctrlp_user_command = 'rg %s --files --color=never --glob ""'
     " let g:ctrlp_user_command = 'dir %s /-n /b/s /a-d'
 
     " rg is fast enough that CtrlP doesn't need to cache
     let g:ctrlp_use_caching = 0
 
     " Set up ack.vim plugin to use rg instead of ack
-    let g:ackprg = 'rg --vimgrep --hidden --smart-case'
+    let g:ackprg = 'rg --color=never --smart-case'
     cnoreabbrev ag Ack
     cnoreabbrev aG Ack
     cnoreabbrev Ag Ack
@@ -185,6 +195,7 @@ if executable('rg')
 endif
 
 let g:ctrlp_working_path_mode = 'ra'
+let g:ctrlp_clear_cache_on_exit = 1
 
 " EditorConfig
 
@@ -210,6 +221,7 @@ nnoremap gT :bprevious<CR>
 nnoremap gx :bdelete<CR>
 nnoremap g0 :bfirst<CR>
 nnoremap g$ :blast<CR>
+nnoremap g4 :blast<CR>
 
 " Easymotion
 let g:EasyMotion_do_mapping = 0 " Disable default mappings
@@ -217,6 +229,7 @@ let g:EasyMotion_smartcase = 1
 let g:EasyMotion_startofline = 0
 
 nmap <leader>f <Plug>(easymotion-overwin-f)
+nmap <leader>s <Plug>(easymotion-overwin-f)
 nmap <leader>F <Plug>(easymotion-overwin-f2)
 nmap <leader>w <Plug>(easymotion-overwin-w)
 nmap <leader>W <Plug>(easymotion-bd-W)
@@ -226,7 +239,13 @@ nmap <leader>j <Plug>(easymotion-overwin-line)
 
 " EasyClip
 let g:EasyClipUseSubstituteDefaults = 1
+let g:EasyClipAutoFormat = 1
+let g:EasyClipShareYanks = 1
 nnoremap gm m
+nmap <leader>cf <plug>EasyClipToggleFormattedPaste
+imap <c-v> <plug>EasyClipInsertModePaste
+cmap <c-v> <plug>EasyClipCommandModePaste
+nnoremap <leader>cf :call EasyClip#Yank(expand('%'))<cr>
 
 " Lightline settings are sufficiently verbose so as to need their own file
 if filereadable($HOME . "/.vimrc.lightline")
@@ -235,10 +254,10 @@ endif
 
 " Tabular
 if exists(":Tabularize")
-    nmap <Leader>a= :Tabularize /=<CR>
-    vmap <Leader>a= :Tabularize /=<CR>
-    nmap <Leader>a: :Tabularize /:\zs<CR>
-    vmap <Leader>a: :Tabularize /:\zs<CR>
+    nmap <leader>a= :Tabularize /=<CR>
+    vmap <leader>a= :Tabularize /=<CR>
+    nmap <leader>a: :Tabularize /:\zs<CR>
+    vmap <leader>a: :Tabularize /:\zs<CR>
 endif
 
 """ END PLUGIN SETTINGS
