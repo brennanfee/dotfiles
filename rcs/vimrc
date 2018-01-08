@@ -183,7 +183,7 @@ if executable('rg')
     let g:ctrlp_use_caching = 0
 
     " Set up ack.vim plugin to use rg instead of ack
-    let g:ackprg = 'rg --color=never --smart-case'
+    let g:ackprg = 'rg --vimgrep --no-heading --color=never --smart-case'
     cnoreabbrev ag Ack
     cnoreabbrev aG Ack
     cnoreabbrev Ag Ack
@@ -259,6 +259,15 @@ if exists(":Tabularize")
     nmap <leader>a: :Tabularize /:\zs<CR>
     vmap <leader>a: :Tabularize /:\zs<CR>
 endif
+
+" Pencil
+let g:pencil#wrapModeDefault = 'soft'
+
+augroup Pencil
+    autocmd!
+    autocmd FileType markdown,mkd call pencil#init() | set spell
+    autocmd FileType text call pencil#init() | set spell
+augroup END
 
 """ END PLUGIN SETTINGS
 

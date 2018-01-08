@@ -57,6 +57,7 @@ Plug 'w0rp/ale'
 Plug 'godlygeek/tabular'
 Plug 'ntpeters/vim-better-whitespace'
 Plug 'ap/vim-css-color'
+Plug 'reedes/vim-pencil'
 
 if filereadable(expand("~/.vimrc.bundles.os"))
   source ~/.vimrc.bundles.os
