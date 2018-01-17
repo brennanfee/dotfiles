@@ -130,6 +130,8 @@ if has('mouse')
         nnoremap <Esc>[62~ <C-E>
         nnoremap <Esc>[63~ <C-Y>
     endif
+    set ttymouse=xterm2
+    set mouse=a
 endif
 
 if has('win32') || has('win64')
