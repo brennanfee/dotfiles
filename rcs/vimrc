@@ -97,16 +97,8 @@ if has('gui_running')
         set guifont=Hasklug\ Nerd\ Font\ Complete\ 14
     endif
 else
-    if has('win32') || has('win64')
-        set term=xterm
-
-        " Remap the BackSpace key
-        "inoremap <Char-0x07F> <BS>
-        "nnoremap <Char-0x07F> <BS>
-    else
-        if ! has('nvim')
-            set term=screen-256color
-        endif
+    if ! has('nvim')
+        set term=screen-256color
     endif
 
     set t_Co=256
@@ -122,12 +114,6 @@ endif
 
 " Setup mouse
 if has('mouse')
-    if has('win32') || has('win64')
-        "inoremap <Esc>[62~ <C-X><C-E>
-        "inoremap <Esc>[63~ <C-X><C-Y>
-        "nnoremap <Esc>[62~ <C-E>
-        "nnoremap <Esc>[63~ <C-Y>
-    endif
     set ttymouse=xterm2
     set mouse=a
 endif
@@ -161,6 +147,11 @@ nnoremap <leader>k :grep! "\b<C-R><C-W>\b"<CR>:cw<CR><CR>
 nmap <leader>ev :e $MYVIMRC<CR>
 nmap <leader>eb :e ~/.vimrc.bundles<CR>
 nmap <leader>sv :source $MYVIMRC<CR>
+
+" Map jk to be another version of escape in insert mode
+:set <F13>=jk
+:map <F13> <esc>
+:map! <F13> <esc>
 
 """ PLUGIN SETTINGS
 
@@ -245,8 +236,8 @@ let g:EasyClipAutoFormat = 1
 let g:EasyClipShareYanks = 1
 nnoremap gm m
 nmap <leader>cf <plug>EasyClipToggleFormattedPaste
-imap <c-v> <plug>EasyClipInsertModePaste
-cmap <c-v> <plug>EasyClipCommandModePaste
+imap <leader>v <plug>EasyClipInsertModePaste
+cmap <leader>v <plug>EasyClipCommandModePaste
 nnoremap <leader>cf :call EasyClip#Yank(expand('%'))<cr>
 
 " Lightline settings are sufficiently verbose so as to need their own file
