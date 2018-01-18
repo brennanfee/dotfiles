@@ -148,10 +148,15 @@ nmap <leader>ev :e $MYVIMRC<CR>
 nmap <leader>eb :e ~/.vimrc.bundles<CR>
 nmap <leader>sv :source $MYVIMRC<CR>
 
-" Map jk to be another version of escape in insert mode
-:set <F13>=jk
-:map <F13> <esc>
-:map! <F13> <esc>
+" Map jk to be another version of escape in insert and command mode
+if has('gui_running')
+    inoremap jk <esc>
+    cnoremap jk <esc>
+else
+    :set <F13>=jk
+    :inoremap <F13> <esc>
+    :cnoremap <F13> <esc>
+endif
 
 """ PLUGIN SETTINGS
 
@@ -236,8 +241,6 @@ let g:EasyClipAutoFormat = 1
 let g:EasyClipShareYanks = 1
 nnoremap gm m
 nmap <leader>cf <plug>EasyClipToggleFormattedPaste
-imap <leader>v <plug>EasyClipInsertModePaste
-cmap <leader>v <plug>EasyClipCommandModePaste
 nnoremap <leader>cf :call EasyClip#Yank(expand('%'))<cr>
 
 " Lightline settings are sufficiently verbose so as to need their own file
