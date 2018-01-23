@@ -1,6 +1,0 @@
-log
-tmp
-vendor
-.git/
-bower_components/
-node_modules/
