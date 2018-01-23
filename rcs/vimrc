@@ -241,7 +241,7 @@ nmap <leader>j <Plug>(easymotion-overwin-line)
 let g:EasyClipUseSubstituteDefaults = 1
 let g:EasyClipAutoFormat = 1
 let g:EasyClipShareYanks = 1
-let g:EasyClipShareYanksFile = "~/.cache/vim/easyclip"
+let g:EasyClipShareYanksFile = ".cache/vim/easyclip"
 nnoremap gm m
 nmap <leader>cf <plug>EasyClipToggleFormattedPaste
 nnoremap <leader>cf :call EasyClip#Yank(expand('%'))<cr>
