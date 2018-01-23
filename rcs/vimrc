@@ -7,8 +7,8 @@ augroup vimStartup
     au!
 augroup END
 
-if filereadable(expand("~/.vimrc.bundles"))
-    source ~/.vimrc.bundles
+if filereadable(expand("~/.vim/vimrc.bundles"))
+    source ~/.vim/vimrc.bundles
 endif
 
 if has("multi_byte")
@@ -62,13 +62,13 @@ set visualbell
 set clipboard=unnamed
 
 set backup
-set backupdir=~/.vimscratch/backup//,$TEMP//,$TMP//
+set backupdir=~/.vim/vimscratch/backup//,$TEMP//,$TMP//
 
 set swapfile
-set directory=~/.vimscratch/swap//,$TEMP//,$TMP//
+set directory=~/.vim/vimscratch/swap//,$TEMP//,$TMP//
 
 set undofile
-set undodir=~/.vimscratch/undo//,$TEMP//,$TMP//
+set undodir=~/.vim/vimscratch/undo//,$TEMP//,$TMP//
 
 set noshowmode
 
@@ -126,8 +126,8 @@ endif
 augroup autoreload_vimrc
     autocmd!
     autocmd BufWritePost $MYVIMRC source $MYVIMRC
-    autocmd BufWritePost ~/.vimrc.bundles source $MYVIMRC
-    autocmd BufWritePost ~/.vimrc.lightline source $MYVIMRC
+    autocmd BufWritePost ~/.vim/vimrc.bundles source $MYVIMRC
+    autocmd BufWritePost ~/.vim/vimrc.lightline source $MYVIMRC
 augroup END
 
 " Force the # of columns to no more than 120
@@ -145,15 +145,15 @@ nnoremap <leader>k :grep! "\b<C-R><C-W>\b"<CR>:cw<CR><CR>
 
 " Mappings to manage vimrc
 nmap <leader>ev :e $MYVIMRC<CR>
-nmap <leader>eb :e ~/.vimrc.bundles<CR>
+nmap <leader>eb :e ~/.vim/vimrc.bundles<CR>
 nmap <leader>sv :source $MYVIMRC<CR>
 
 " Map jk to be another version of escape in insert and command mode
 if has('gui_running')
-    inoremap jk <esc>
-    cnoremap jk <esc>
+    inoremap lk <esc>
+    cnoremap lk <esc>
 else
-    :set <F13>=jk
+    :set <F13>=lk
     :inoremap <F13> <esc>
     :cnoremap <F13> <esc>
 endif
@@ -244,8 +244,8 @@ nmap <leader>cf <plug>EasyClipToggleFormattedPaste
 nnoremap <leader>cf :call EasyClip#Yank(expand('%'))<cr>
 
 " Lightline settings are sufficiently verbose so as to need their own file
-if filereadable($HOME . "/.vimrc.lightline")
-    source ~/.vimrc.lightline
+if filereadable($HOME . "/.vim/vimrc.lightline")
+    source ~/.vim/vimrc.lightline
 endif
 
 " Tabular
@@ -268,11 +268,11 @@ augroup END
 """ END PLUGIN SETTINGS
 
 " OS specific config, this should always be next to last
-if filereadable($HOME . "/.vimrc.os")
-    source ~/.vimrc.os
+if filereadable($HOME . "/.vim/vimrc.os")
+    source ~/.vim/vimrc.os
 endif
 
 " Local config, this should always be last
-if filereadable($HOME . "/.vimrc.local")
-    source ~/.vimrc.local
+if filereadable($HOME . "/.vim/vimrc.local")
+    source ~/.vim/vimrc.local
 endif
