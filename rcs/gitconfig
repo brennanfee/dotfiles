@@ -16,6 +16,7 @@
 [merge]
     renamelimit = 0
 [include]
-    path = ~/.gitconfig.os
-    path = ~/.gitconfig.user
-    path = ~/.gitconfig.local
+    path = ~/.config/git/gitconfig.os
+    path = ~/.config/git/gitconfig.user
+    path = ~/.config/git/gitconfig.local
+
