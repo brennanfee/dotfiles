@@ -32,6 +32,7 @@ export HISTIGNORE=$'[ \t]*:&:[fb]g:exit:ls:pwd:cd:cd -:* --help *'
 export HISTTIMEFORMAT="%Y-%m-%d %H:%M:%S  "
 export HISTFILESIZE=5000
 export HISTSIZE=5000
+export HISTFILE=~/.cache/bash_history
 
 # Suffixes to ignore for filename completion
 export FIGNORE=".git:.DS_Store"
