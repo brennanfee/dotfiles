@@ -18,6 +18,7 @@ alias more="most"
 alias la="ls -A"
 alias ll="ls -oh"
 alias lla="ls -ohA"
+alias lls="ls -ohA"
 alias ldir='ls -ohA | grep --color=never "^d"'
 
 # Directory & file

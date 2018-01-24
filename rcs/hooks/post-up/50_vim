@@ -7,7 +7,7 @@ if [[ ! -e $HOME/.vim/autoload/plug.vim ]]; then
 fi
 
 if [[ -f $HOME/.vim/vimrc.bundles ]]; then
-    vim -u $HOME/.vim/vimrc.bundles +PlugInstall +PlugClean! +qa -
+    vim -u $HOME/.vim/vimrc.bundles +PlugUpdate +PlugClean! +qa -
 fi
 
 # Create the scratch directories
