@@ -12,6 +12,14 @@ function mkbk {
 
 alias mkback='mkbk'
 
+function mkorig {
+    if [ ! -n "$1" ]; then
+        echo -e "${red}Enter a file name${reset}"
+    else
+        cp ${1} ${1}.orig
+    fi
+}
+
 function mkcd {
   if [ ! -n "$1" ]; then
     echo -e "${red}Enter a directory name${reset}"
@@ -19,3 +27,4 @@ function mkcd {
     mkdir -p $1 && cd $1
   fi
 }
+

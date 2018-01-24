@@ -9,10 +9,23 @@ export MY_PROFILE=$HOME
 export OS_HOME=$HOME
 
 # Some quick navigations
-alias cdp="cd $MY_PROFILE/projects"
-alias cdpp="cd $MY_PROFILE/projects/personal"
-alias cdd="cd $MY_PROFILE/downloads"
-alias cdi="cd $MY_PROFILE/downloads/installs"
+function cdp {
+    cd "$MY_PROFILE/projects"
+}
 
-alias cdh="cd $OS_HOME"
+function cdpp {
+    cd "$MY_PROFILE/projects/personal"
+}
+
+function cdd {
+    cd "$MY_PROFILE/downloads"
+}
+
+function cdi {
+    cd "$MY_PROFILE/downloads/installs"
+}
+
+function cdh {
+    cd "$OS_HOME"
+}
 
