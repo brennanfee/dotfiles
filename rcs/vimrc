@@ -162,6 +162,9 @@ endif
 
 """ PLUGIN SETTINGS
 
+" vim-gui-position
+let g:gui_position_file_name = $HOME . "/.cache/vim/vimsize"
+
 " Ack.vim & Ctrl-P
 if executable('rg')
     " Use rg over Grep
