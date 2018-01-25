@@ -142,6 +142,9 @@ augroup END
 au FileType markdown setlocal wrap
 
 """" Keyboard mappings
+" Remap the add mark key to gm
+nnoremap gm m
+
 " Leader K to grep word under cursor
 nnoremap <leader>k :grep! "\b<C-R><C-W>\b"<CR>:cw<CR><CR>
 
@@ -150,7 +153,11 @@ nmap <leader>ev :e $MYVIMRC<CR>
 nmap <leader>eb :e ~/.vim/vimrc.bundles<CR>
 nmap <leader>sv :source $MYVIMRC<CR>
 
-" Map jk to be another version of escape in insert and command mode
+" Map leader o and O to create an empty line above or below current line
+nnoremap <leader>o o<esc>k
+nnoremap <leader>O O<esc>j
+
+" Map lk to be another version of escape in insert and command mode
 if has('gui_running')
     inoremap lk <esc>
     cnoremap lk <esc>
