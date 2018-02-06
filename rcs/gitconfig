@@ -15,6 +15,14 @@
     renamelimit = 0
 [merge]
     renamelimit = 0
+[alias]
+    co = checkout
+    c = commit
+    ci = commit
+    br = branch
+    st = status
+    unstage = 'reset HEAD --'
+    last = 'log -1 HEAD'
 [include]
     path = ~/.config/git/gitconfig.os
     path = ~/.config/git/gitconfig.user
