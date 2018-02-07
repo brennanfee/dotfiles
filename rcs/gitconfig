@@ -21,6 +21,7 @@
     ci = commit
     br = branch
     st = status
+    p = pull
     unstage = 'reset HEAD --'
     last = 'log -1 HEAD'
 [include]
