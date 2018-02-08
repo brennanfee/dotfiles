@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-local git_cmd="git"
+git_cmd="git"
 if command_exists hub; then
     git_cmd="hub"
     eval "$(hub alias -s)"
@@ -17,3 +17,5 @@ alias gp="$git_cmd pull"
 alias gexp='$git_cmd archive --format zip --output'
 
 alias gll='$git_cmd log --graph --pretty=oneline --abbrev-commit'
+
+unset git_cmd

@@ -29,3 +29,5 @@ function cdh {
     cd "$OS_HOME"
 }
 
+alias cdr="cd-to-git-root-path"
+

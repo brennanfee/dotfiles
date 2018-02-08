@@ -28,7 +28,7 @@ export MANPAGER="most -s"
 # History
 export HISTCONTROL=$HISTCONTROL${HISTCONTROL+,}ignoredups
 export HISTCONTROL=$HISTCONTROL${HISTCONTROL+,}ignorespace
-export HISTIGNORE=$'[ \t]*:&:[fb]g:exit:ls:pwd:cd:cd -:* --help *'
+export HISTIGNORE=$'[ \t]*:&:[fb]g:exit:ls:ll:la:lls:lla:pwd:cd:cd -:* --help *'
 export HISTTIMEFORMAT="%Y-%m-%d %H:%M:%S  "
 export HISTFILESIZE=5000
 export HISTSIZE=5000

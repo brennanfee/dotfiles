@@ -1,29 +1,15 @@
 #!/usr/bin/env bash
 
-function __get_git_branch_name {
-    local branch_pattern="^## ([[:graph:]]+)\.\.\.[[:graph:]]+ ?.*"
-    local alt_branch_pattern="^## Initial commit on ([[:graph:]]+)"
-    local local_branch_pattern="^## ([[:graph:]]+)"
-
-    local git_branch="unknown"
-    if [[ "$1" =~ $branch_pattern ]]; then
-        git_branch=${BASH_REMATCH[1]}
-    elif [[ "$1" =~ $alt_branch_pattern ]]; then
-        git_branch=${BASH_REMATCH[1]}
-    elif [[ "$1" =~ $local_branch_pattern ]]; then
-        git_branch=${BASH_REMATCH[1]}
-    fi
-    echo "$git_branch"
-}
-
 function git-branch-name {
-    local git_status="$(git status -b --porcelain 2> /dev/null)"
-    local branch_name=$(__get_git_branch_name "$git_status")
-    echo "$branch_name"
+    if [[ $(in-a-git-repo) == 1 ]]; then
+        echo $(git rev-parse --abbrev-ref HEAD)
+    else
+        echo "Not a git repo."
+    fi
 }
 
 function in-a-git-repo {
-  if [[ -e "$(git rev-parse --git-dir 2> /dev/null)" ]]; then
+  if [[ $(git rev-parse --is-inside-work-tree 2>/dev/null) = 'true' ]]; then
     echo 1
   else
     echo 0
@@ -31,9 +17,24 @@ function in-a-git-repo {
 }
 
 function git-root-path {
-    return "$(git rev-parse --show-toplevel 2> /dev/null)"
+    if [[ $(in-a-git-repo) == 1 ]]; then
+        echo "$(git rev-parse --show-toplevel)"
+    else
+        echo "$(pwd)"
+    fi
+}
+
+function cd-to-git-root-path {
+    if [[ $(in-a-git-repo) == 1 ]]; then
+        if [[ -n "$1" ]]; then
+            cd "$(git rev-parse --show-cdup)/$1"
+        else
+            cd "$(git rev-parse --show-cdup)"
+        fi
+    fi
 }
 
 function git-remove-missing-files {
     git ls-files -d -z | xargs -0 git update-index --remove
 }
+
