@@ -80,6 +80,8 @@ if (&termencoding ==# 'utf-8' || &encoding ==# 'utf-8') && version >= 700
 endif
 set list
 
+set iskeyword-=_
+
 if exists('+macmeta')
   set macmeta
 endif

@@ -11,3 +11,5 @@ alias open="cmd.exe /c start"
 alias xdg-open="cmd.exe /c start"
 alias o="cmd.exe /c start"
 
+alias packer="packer.exe"
+alias vagrant="vagrant.exe"
