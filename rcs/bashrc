@@ -22,7 +22,7 @@ for root in "$DOTFILES/bash" "$DOTFILES_PRIVATE/bash"; do
         source_if "$root/$base/options.bash"
 
         # Loop over functions and completions to include
-        for folder in "functions" "completions" "other"; do
+        for folder in "functions" "exports" "third-party" "other"; do
             if [[ -d "$root/$base/$folder" ]]; then
                 for file in $root/$base/$folder/*; do
                     source_if "$file"
@@ -31,7 +31,7 @@ for root in "$DOTFILES/bash" "$DOTFILES_PRIVATE/bash"; do
         done
 
         # Source in other base files
-        for fileroot in "exports" "includes" "path" "prompt"; do
+        for fileroot in "path" "prompt"; do
             source_if "$root/$base/$fileroot.bash"
         done
 
@@ -53,3 +53,4 @@ unset folder
 unset fileroot
 unset file
 unset aliasfile
+
