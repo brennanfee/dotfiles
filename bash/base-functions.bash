@@ -3,13 +3,13 @@
 # Function that sets two environment variables to indicate the
 # type of machine we are on.
 function SetOsEnvironmentVariables {
-    local uname=$(uname -s)
-    if [[ $uname == "Darwin" ]]; then
+    local uname=$(uname | tr '[:upper:]' '[:lower:]')
+    if [[ $uname == "darwin" ]]; then
         export OS_PRIMARY="macos"
         export OS_SECONDARY="macos"
-    elif [[ $uname == "Linux" ]]; then
+    elif [[ $uname == "linux" ]]; then
         local ver=$(cat /proc/version)
-        if [[ $ver == *"-ARCH"* ]]; then
+        if [[ $ver == *"-arch"* ]]; then
             export OS_PRIMARY="linux"
             export OS_SECONDARY="arch"
         elif [[ $ver == *".centos.org"* ]]; then
@@ -21,22 +21,28 @@ function SetOsEnvironmentVariables {
         elif [[ $ver == *"-kalil"* ]]; then
             export OS_PRIMARY="linux"
             export OS_SECONDARY="kali"
-        elif [[ $ver == *"(SUSE "* ]]; then
+        elif [[ $ver == *"(suse "* ]]; then
             export OS_PRIMARY="linux"
             export OS_SECONDARY="suse"
-        elif [[ $ver == *"(Ubuntu "* ]]; then
+        elif [[ $ver == *"(ubuntu "* ]]; then
             export OS_PRIMARY="linux"
             export OS_SECONDARY="ubuntu"
-        elif [[ $ver == *"(Debian "* ]]; then
+        elif [[ $ver == *"(debian "* ]]; then
             export OS_PRIMARY="linux"
             export OS_SECONDARY="debian"
-        elif [[ $ver == *"(Microsoft@Microsoft"* ]]; then
+        elif [[ $ver == *"(microsoft"* ]]; then
             export OS_PRIMARY="windows"
             export OS_SECONDARY="windows"
         else
             export OS_PRIMARY="linux"
             export OS_SECONDARY="unknown"
         fi
+    elif [[ $uname == "freebsd" ]]; then
+        export OS_PRIMARY="bsd"
+        export OS_SECONDARY="freebsd"
+    elif [[ $uname == "openbsd" ]]; then
+        export OS_PRIMARY="bsd"
+        export OS_SECONDARY="openbsd"
     else
         export OS_PRIMARY="unknown"
         export OS_SECONDARY="unknown"
