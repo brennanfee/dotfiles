@@ -5,3 +5,7 @@ if [[ -d "$HOME/.nvm" ]]; then
     [[ -s "$NVM_DIR/nvm.sh" ]] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 fi
 
+if command_exists nvm; then
+    nvm use --lts &> /dev/null
+fi
+
