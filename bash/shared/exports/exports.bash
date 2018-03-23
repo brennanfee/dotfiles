@@ -22,8 +22,11 @@ export EDITOR='vim'
 export GIT_EDITOR='vim'
 export SVN_EDITOR='vim'
 export LESSEDIT='vim'
-export PAGER="most"
-export MANPAGER="most -s"
+
+if command_exists most; then
+    export PAGER="most"
+    export MANPAGER="most -s"
+fi
 
 # History
 export HISTCONTROL=$HISTCONTROL${HISTCONTROL+,}ignoredups

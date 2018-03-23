@@ -11,8 +11,10 @@ alias pgrep="grep --color"
 alias egrep="grep --color"
 
 # Most is less
-alias less="most"
-alias more="most"
+if command_exists most; then
+    alias less="most"
+    alias more="most"
+fi
 
 # Alternates/extensions of ls
 alias la="ls -A"
@@ -57,7 +59,9 @@ alias mkdatedir='mkdir $(date "+%Y-%m-%d")'
 alias mkdatefile='touch $(date "+%Y-%m-%d").txt'
 
 # RipGrep should always use "smart-case"
-alias rg='rg -S'
+if command_exists rg; then
+    alias rg='rg -S'
+fi
 
 # Markdown & CommonMark
 # May not need this anymore, should use node
@@ -75,3 +79,4 @@ fi
 if command_exists thefuck; then
     eval $(thefuck --alias)
 fi
+
