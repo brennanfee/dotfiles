@@ -20,6 +20,12 @@ function SetVirtualizationEnvironmentVariables() {
     fi
 
     export VIRT_TECH="$(systemd-detect-virt)"
+
+    if [[ "$(cat /etc/passwd | grep -i '^vagrant')x" == "x" ]]; then
+        export IS_VAGRANT="false"
+    else
+        export IS_VAGRANT="true"
+    fi
 }
 
 # Function that sets two environment variables to indicate the
