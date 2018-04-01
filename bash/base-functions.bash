@@ -1,5 +1,27 @@
 #!/usr/bin/env bash
 
+function SetVirtualizationEnvironmentVariables() {
+    if [[ $(systemd-detect-virt --vm) == "none" ]]; then
+        export IS_VM="false"
+    else
+        export IS_VM="true"
+    fi
+
+    if [[ $(systemd-detect-virt --container) == "none" ]]; then
+        export IS_CONTAINER="false"
+    else
+        export IS_CONTAINER="true"
+    fi
+
+    if [[ $(systemd-detect-virt) == "none" ]]; then
+        export IS_VIRTUAL="false"
+    else
+        export IS_VIRTUAL="true"
+    fi
+
+    export VIRT_TECH="$(systemd-detect-virt)"
+}
+
 # Function that sets two environment variables to indicate the
 # type of machine we are on.
 function SetOsEnvironmentVariables {
@@ -39,6 +61,8 @@ function SetOsEnvironmentVariables {
         export OS_PRIMARY="unknown"
         export OS_SECONDARY="unknown"
     fi
+
+    SetVirtualizationEnvironmentVariables
 }
 
 function is_mac {
