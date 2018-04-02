@@ -1,0 +1,6 @@
+python 3.6.5
+nodejs 8.11.1
+packer 1.2.2
+terraform 0.11.5
+vault 0.9.6
+golang 1.10.1
