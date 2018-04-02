@@ -15,17 +15,13 @@ source "$DOTFILES/bash/base-symbols.bash"
 SetOsEnvironmentVariables
 SetVirtualizationEnvironmentVariables
 
-# Loop in $DOTFILES first, then $DOTFILES_PRIVATE
-for root in "$DOTFILES/bash" "$DOTFILES_PRIVATE/bash"; do
-    # Loop in a shared folder, then OS specific, lastly distro specific for Linux
+# We want to walk "outside" in... which is to say run all options files first, then all
+# exports, then all functions, etc.
+for folder in "options" "exports" "functions" "third-party" "other" "aliases"; do
     for base in "shared" "$OS_PRIMARY" "distros/$OS_SECONDARY"; do
-        # Options file should be first
-        source_if "$root/$base/options.bash"
-
-        # Loop over functions and completions to include
-        for folder in "exports" "functions" "third-party" "other" "aliases"; do
+        for root in "$DOTFILES/bash" "$DOTFILES_PRIVATE/bash"; do
             if [[ -d "$root/$base/$folder" ]]; then
-                for file in "$root/$base/$folder/*.bash"; do
+                for file in $root/$base/$folder/*.bash; do
                     source_if "$file"
                 done
             fi
@@ -35,14 +31,10 @@ done
 
 # On Windows shells runnin in WSL run some overrides
 if [[ $IS_WSL == "true" ]]; then
-    for root in "$DOTFILES/bash" "$DOTFILES_PRIVATE/bash"; do
-        # Options file should be first
-        source_if "$root/windows-wsl/options.bash"
-
-        # Loop over functions and completions to include
-        for folder in "exports" "functions" "third-party" "other" "aliases"; do
+    for folder in "options" "exports" "functions" "third-party" "other" "aliases"; do
+        for root in "$DOTFILES/bash" "$DOTFILES_PRIVATE/bash"; do
             if [[ -d "$root/windows-wsl/$folder" ]]; then
-                for file in "$root/windows-wsl/$folder/*.bash"; do
+                for file in $root/windows-wsl/$folder/*.bash; do
                     source_if "$file"
                 done
             fi
