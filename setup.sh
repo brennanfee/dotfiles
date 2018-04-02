@@ -13,26 +13,26 @@ source "$DOTFILES/bash/base-functions.bash"
 SetOsEnvironmentVariables
 
 echo ""
-echo -e "${green}Starting setup...${normal}"
+echo -e "${color_green}Starting setup...${color_normal}"
 echo ""
 
 if ! command_exists rcup; then
-    echo -e "${red}RCM is not installed.  Please install it and try again.${normal}"
+    echo -e "${color_red}RCM is not installed.  Please install it and try again.${color_normal}"
     exit 1
 fi
 
 if ! command_exists curl; then
-    echo -e "${red}Curl is not installed.  Please install it and try again.${normal}"
+    echo -e "${color_red}Curl is not installed.  Please install it and try again.${color_normal}"
     exit 1
 fi
 
 rcup -f -K -d "$HOME/.dotfiles/rcs" -d "$HOME/.dotfiles-private/rcs" rcrc
 
 if [[ -f "$HOME/.rcrc" ]]; then
-    echo -e "${yellow}Home .rcrc is in place.${normal}"
+    echo -e "${color_yellow}Home .rcrc is in place.${color_normal}"
     echo ""
 else
-    echo -e "${white}Creating new ~/.rcrc file.${normal}"
+    echo -e "${color_white}Creating new ~/.rcrc file.${color_normal}"
     echo ""
     cp "$DOTFILES/base-rcrc" "$HOME/.rcrc"
 
@@ -45,7 +45,7 @@ else
     mkrc -o "$HOME/.rcrc"
 fi
 
-echo -e "${green}Done!  Edit the ~/.rcrc as needed then run 'rcup'${normal}"
+echo -e "${color_green}Done!  Edit the ~/.rcrc as needed then run 'rcup'${color_normal}"
 echo ""
 
 unset DOTFILES

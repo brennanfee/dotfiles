@@ -13,9 +13,9 @@ fi
 
 function custom_prompt {
     if [[ $? -eq 0 ]]; then
-        local exit_status="${green}$symbol_closed_arrow"
+        local exit_status="${color_green}$symbol_closed_arrow"
     else
-        local exit_status="${red}$symbol_closed_arrow (\$?)"
+        local exit_status="${color_red}$symbol_closed_arrow (\$?)"
     fi
 
     local ssh_text=""
@@ -24,10 +24,10 @@ function custom_prompt {
     fi
 
     if [[ -e /usr/lib/git-core/git-sh-prompt ]]; then
-        git_part="__git_ps1 ${yellow}(%s) "
-        export PS1="${normal}\n${green}\u@\h${yellow}${ssh_text} ${purple}\w $(${git_part}) $exit_status ${normal}\n\$ "
+        git_part="__git_ps1 ${color_yellow}(%s) "
+        export PS1="${color_normal}\n${color_green}\u@\h${color_yellow}${ssh_text} ${color_purple}\w $(${git_part}) $exit_status ${color_normal}\n\$ "
     else
-        export PS1="${normal}\n${green}\u@\h${yellow}${ssh_text} ${purple}\w $exit_status ${normal}\n\$ "
+        export PS1="${color_normal}\n${color_green}\u@\h${color_yellow}${ssh_text} ${color_purple}\w $exit_status ${color_normal}\n\$ "
     fi
 }
 
