@@ -22,7 +22,7 @@ for folder in "options" "exports" "functions" "third-party" "other" "aliases"; d
         for root in "$DOTFILES/bash" "$DOTFILES_PRIVATE/bash"; do
             if [[ -d "$root/$base/$folder" ]]; then
                 for file in $root/$base/$folder/*.bash; do
-                    source_if "$file"
+                    source "$file"
                 done
             fi
         done
@@ -35,7 +35,7 @@ if [[ $IS_WSL == "true" ]]; then
         for root in "$DOTFILES/bash" "$DOTFILES_PRIVATE/bash"; do
             if [[ -d "$root/windows-wsl/$folder" ]]; then
                 for file in $root/windows-wsl/$folder/*.bash; do
-                    source_if "$file"
+                    source "$file"
                 done
             fi
         done

@@ -46,8 +46,3 @@ export FIGNORE=".git:.DS_Store"
 #export PIP_VIRTUALENV_BASE="$WORKON_HOME"
 #export VIRTUALENV_PYTHON="/usr/bin/python2"
 #export VIRTUALENVWRAPPER_PYTHON="/usr/bin/python2"
-
-# Dircolors
-local d="$HOME/.dircolors"
-test -f $d && eval "$(dircolors $d)"
-
