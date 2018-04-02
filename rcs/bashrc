@@ -13,6 +13,7 @@ source "$DOTFILES/bash/base-functions.bash"
 source "$DOTFILES/bash/base-symbols.bash"
 
 SetOsEnvironmentVariables
+SetVirtualizationEnvironmentVariables
 
 # Loop in $DOTFILES first, then $DOTFILES_PRIVATE
 for root in "$DOTFILES/bash" "$DOTFILES_PRIVATE/bash"; do
@@ -22,35 +23,38 @@ for root in "$DOTFILES/bash" "$DOTFILES_PRIVATE/bash"; do
         source_if "$root/$base/options.bash"
 
         # Loop over functions and completions to include
-        for folder in "functions" "exports" "third-party" "other"; do
+        for folder in "exports" "functions" "third-party" "other" "aliases"; do
             if [[ -d "$root/$base/$folder" ]]; then
-                for file in $root/$base/$folder/*; do
+                for file in "$root/$base/$folder/*.bash"; do
                     source_if "$file"
                 done
             fi
         done
-
-        # Source in other base files
-        for fileroot in "path" "prompt"; do
-            source_if "$root/$base/$fileroot.bash"
-        done
-
-        # Lastly the aliases directory
-        if [[ -d "$root/$base/aliases" ]]; then
-            for aliasfile in $root/$base/aliases/*; do
-                source_if "$aliasfile"
-            done
-        fi
     done
 done
 
-# Local config, this should be last
+# On Windows shells runnin in WSL run some overrides
+if [[ $IS_WSL == "true" ]]; then
+    for root in "$DOTFILES/bash" "$DOTFILES_PRIVATE/bash"; do
+        # Options file should be first
+        source_if "$root/windows-wsl/options.bash"
+
+        # Loop over functions and completions to include
+        for folder in "exports" "functions" "third-party" "other" "aliases"; do
+            if [[ -d "$root/windows-wsl/$folder" ]]; then
+                for file in "$root/windows-wsl/$folder/*.bash"; do
+                    source_if "$file"
+                done
+            fi
+        done
+    done
+fi
+
+# Local config, this should be last and never checked into source control (or if it is it should be host specific)
 source_if "$HOME/.bashrc.local"
 
 unset root
 unset base
 unset folder
-unset fileroot
 unset file
-unset aliasfile
 

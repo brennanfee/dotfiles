@@ -1,0 +1,6 @@
+//registry.npmjs.org/:_authToken=${NPM_TOKEN}
+init.author.name=Brennan Fee
+init.author.email=github@todaytechsoft.biz
+init.author.url=https://github.com/brennanfee
+init.license=MIT
+init.version=0.0.1
