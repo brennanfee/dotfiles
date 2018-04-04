@@ -10,6 +10,9 @@ alias grep="grep --color"
 alias pgrep="grep --color"
 alias egrep="grep --color"
 
+# Make sudo preserve home
+alias sudo="sudo -H"
+
 # Most is less
 if command_exists most; then
     alias less="most"
