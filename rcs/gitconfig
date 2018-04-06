@@ -1,6 +1,7 @@
 # This is Git's global configuration file.
 [push]
     default = simple
+	followTags = true
 [color]
     ui = auto
 [core]
