@@ -11,3 +11,5 @@ ruby 2.5.1
 rust stable
 dotnet-core 2.1.103
 R 3.4.4
+java 10
+kotlin 1.2.31
