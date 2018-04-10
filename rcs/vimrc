@@ -73,6 +73,7 @@ set undodir=~/.vim/vimscratch/undo//,$TEMP//,$TMP//
 set viminfo+=n~/.cache/vim/viminfo
 
 set noshowmode
+set conceallevel=2
 
 set listchars=tab:>\ ,trail:-,extends:>,precedes:<
 if (&termencoding ==# 'utf-8' || &encoding ==# 'utf-8') && version >= 700
@@ -141,8 +142,6 @@ augroup force_columns
     autocmd VimResized * if (&columns > 120) | set columns=120 | endif
 augroup END
 
-au FileType markdown setlocal wrap
-
 """" Keyboard mappings
 " Remap the add mark key to gm
 nnoremap gm m
@@ -155,10 +154,6 @@ nmap <leader>ev :e $MYVIMRC<CR>
 nmap <leader>eb :e ~/.vim/vimrc.bundles<CR>
 nmap <leader>sv :source $MYVIMRC<CR>
 
-" Map leader o and O to create an empty line above or below current line
-nnoremap <leader>o o<esc>k
-nnoremap <leader>O O<esc>j
-
 " Map lk to be another version of escape in insert and command mode
 if has('gui_running')
     inoremap lk <esc>
@@ -168,6 +163,16 @@ else
     :inoremap <F13> <esc>
     :cnoremap <F13> <esc>
 endif
+
+""" LANGUAGE & FILETYPE SETTINGS
+
+" Markdown
+au FileType markdown setlocal wrap
+let g:vim_markdown_folding_disabled = 1
+let g:vim_markdown_fenced_languages = ['html', 'css', 'python', 'bash=sh', 'javascript', 'ruby', 'c', 'c#=cs', 'csharp=cs', 'c++=cpp', 'viml=vim', 'ini=dosini' ]
+let g:vim_markdown_follow_anchor = 1
+let g:vim_markdown_math = 1
+let g:vim_markdown_frontmatter = 1
 
 """ PLUGIN SETTINGS
 
@@ -216,10 +221,10 @@ if has('win32') || has('win64')
     let g:EditorConfig_core_mode = 'external_command'
 endif
 
-" NERDTree
-map <leader>t :NERDTreeToggle<CR>
-" Close window if NERDTree is the only thing open
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+" FileBeagle
+" Leader-f is reserved for easymotion so remap the "filebeagle" key to
+" leader-t
+nmap <leader>t :FileBeagle<CR>
 
 " BufTabLineColors
 hi BufTabLineFill ctermfg=NONE ctermbg=236 cterm=NONE guifg=NONE guibg=#323232 gui=NONE
@@ -272,13 +277,13 @@ if exists(":Tabularize")
 endif
 
 " Pencil
-let g:pencil#wrapModeDefault = 'soft'
+"let g:pencil#wrapModeDefault = 'soft'
 
-augroup Pencil
-    autocmd!
-    autocmd FileType markdown,mkd call pencil#init() | set spell
-    autocmd FileType text call pencil#init() | set spell
-augroup END
+"augroup Pencil
+    "autocmd!
+    "autocmd FileType markdown,mkd call pencil#init() | set spell
+    "autocmd FileType text call pencil#init() | set spell
+"augroup END
 
 """ END PLUGIN SETTINGS
 
