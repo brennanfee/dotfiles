@@ -142,7 +142,8 @@ augroup force_columns
     autocmd VimResized * if (&columns > 120) | set columns=120 | endif
 augroup END
 
-"""" Keyboard mappings
+""" KEYBOARD MAPPINGS
+
 " Remap the add mark key to gm
 nnoremap gm m
 
@@ -167,12 +168,19 @@ endif
 """ LANGUAGE & FILETYPE SETTINGS
 
 " Markdown
-au FileType markdown setlocal wrap
-let g:vim_markdown_folding_disabled = 1
-let g:vim_markdown_fenced_languages = ['html', 'css', 'python', 'bash=sh', 'javascript', 'ruby', 'c', 'c#=cs', 'csharp=cs', 'c++=cpp', 'viml=vim', 'ini=dosini' ]
-let g:vim_markdown_follow_anchor = 1
-let g:vim_markdown_math = 1
-let g:vim_markdown_frontmatter = 1
+" First, turn off the one that comes with vim-polyglot
+let g:polyglot_disabled = ['markdown']
+augroup markdown_group
+    autocmd!
+    autocmd BufNewFile,BufFilePre,BufRead *.md set filetype=markdown
+    autocmd FileType markdown setlocal wrap
+augroup END
+
+let g:markdown_fenced_languages = ['html', 'css', 'python', 'bash=sh', 'javascript', 'ruby', 'c', 'c#=cs', 'csharp=cs', "c++=cpp", 'viml=vim', 'ini=dosini' ]
+" Highlighting for html/markdown
+hi htmlItalic ctermfg=188 ctermbg=235 cterm=italic guifg=#a9b7c6 guibg=#2b2b2b gui=italic
+hi htmlBold ctermfg=188 ctermbg=235 cterm=bold guifg=#a9b7c6 guibg=#2b2b2b gui=bold
+hi htmlBoldItalic ctermfg=188 ctermbg=235 cterm=bold guifg=#a9b7c6 guibg=#2b2b2b gui=bold
 
 """ PLUGIN SETTINGS
 
@@ -222,9 +230,11 @@ if has('win32') || has('win64')
 endif
 
 " FileBeagle
-" Leader-f is reserved for easymotion so remap the "filebeagle" key to
-" leader-t
-nmap <leader>t :FileBeagle<CR>
+" Leader-f is reserved for easymotion so remap the "filebeagle" key to leader-t
+let g:filebeagle_suppress_keymaps=1
+let g:filebeagle_show_hidden=1
+map <leader>t <Plug>FileBeagleOpenCurrentWorkingDir
+map - <Plug>FileBeagleOpenCurrentBufferDir
 
 " BufTabLineColors
 hi BufTabLineFill ctermfg=NONE ctermbg=236 cterm=NONE guifg=NONE guibg=#323232 gui=NONE
@@ -261,7 +271,7 @@ let g:EasyClipShareYanks = 1
 let g:EasyClipShareYanksFile = ".cache/vim/easyclip"
 nnoremap gm m
 nmap <leader>cf <plug>EasyClipToggleFormattedPaste
-nnoremap <leader>cf :call EasyClip#Yank(expand('%'))<cr>
+nnoremap <leader>cy :call EasyClip#Yank(expand('%'))<cr>
 
 " Lightline settings are sufficiently verbose so as to need their own file
 if filereadable($HOME . "/.vim/vimrc.lightline")
