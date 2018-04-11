@@ -125,6 +125,8 @@ endif
 
 if has('windows')
     set shell=bash
+    nnoremap <silent> <leader>y :call system('win32yank.exe -i', @0)<CR>
+    vnoremap <silent> <leader>y :call system('win32yank.exe -i', @0)<CR>
 endif
 
 " Source the vimrc if saved
