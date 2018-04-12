@@ -5,6 +5,9 @@ symbol_positive='✓'
 symbol_neutral='○'
 symbol_git='±'
 
+symbol_x='✗'
+symbol_check='✓'
+
 symbol_arrow='→'
 symbol_closed_arrow='▸'
 symbol_closed_arrow_large='►'
