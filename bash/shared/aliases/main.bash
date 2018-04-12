@@ -61,6 +61,11 @@ alias hist='history | ag'
 alias mkdatedir='mkdir $(date "+%Y-%m-%d")'
 alias mkdatefile='touch $(date "+%Y-%m-%d").txt'
 
+# CD typos
+alias cd.='cd ..'
+alias cd..='cd ..'
+alias cdu='cd ..'
+
 # RipGrep should always use "smart-case"
 if command_exists rg; then
     alias rg='rg -S'
