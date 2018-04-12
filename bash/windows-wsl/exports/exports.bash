@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Override the browser
-export BROWSER=/mnt/c/Program\ Files\ \(x86\)/Google/Chrome/Applications/chrome.exe
+export BROWSER=/usr/local/bin/chrome.exe
 
 # Move temp directory (lots of windows tools can't read the Linux tmp path)
 if [[ -d '/mnt/c/Users/brennan/AppData/Local/Temp' ]]; then
