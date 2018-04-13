@@ -5,6 +5,9 @@ export LANG="en_US.UTF-8"
 export LANGUAGE="en_US:en"
 export LC_ALL="en_US.UTF-8"
 
+# Timezone
+export TZ="US/Central"
+
 # Set terminal
 export TERM=xterm-256color
 
