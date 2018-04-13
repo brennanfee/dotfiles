@@ -26,6 +26,8 @@ alias lla="ls -ohA"
 alias lls="ls -ohA"
 alias ldir='ls -ohA | grep --color=never "^d"'
 
+alias sl="ls"
+
 # Directory & file
 alias md='mkdir -p'
 alias mkdir="mkdir -p"

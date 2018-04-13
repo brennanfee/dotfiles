@@ -8,7 +8,6 @@ function SetOsEnvironmentVariables {
         export OS_PRIMARY="macos"
         export OS_SECONDARY="macos"
     elif [[ $uname == "linux" ]]; then
-        local ver=$(cat /etc/os-release | grep -i '^ID=' | sed -e 's/^ID=//' | tr '[:upper:]' '[:lower:]')
         export OS_PRIMARY="linux"
         export OS_SECONDARY=$(cat /etc/os-release | grep -i '^ID=' | sed -e 's/^ID=//' | tr '[:upper:]' '[:lower:]')
         if [[ "${OS_SECONDARY}x" == "x" ]]; then
