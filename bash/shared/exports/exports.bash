@@ -35,7 +35,7 @@ fi
 # History
 export HISTCONTROL=$HISTCONTROL${HISTCONTROL+,}ignoredups
 export HISTCONTROL=$HISTCONTROL${HISTCONTROL+,}ignorespace
-export HISTIGNORE=$'[ \t]*:&:[fb]g:exit:ls:ll:la:lls:lla:pwd:cd:cd -:* --help *'
+export HISTIGNORE=$'[ \t]*:&:[fb]g:exit:ls:ls -la:sl:ll:la:lls:lla:pwd:cd:cd*:* --help *'
 export HISTTIMEFORMAT="%Y-%m-%d %H:%M:%S  "
 export HISTFILESIZE=5000
 export HISTSIZE=5000
@@ -44,8 +44,3 @@ export HISTFILE=~/.cache/bash_history
 # Suffixes to ignore for filename completion
 export FIGNORE=".git:.DS_Store"
 
-# Python
-#export WORKON_HOME="$HOME/.virtualenvs"
-#export PIP_VIRTUALENV_BASE="$WORKON_HOME"
-#export VIRTUALENV_PYTHON="/usr/bin/python2"
-#export VIRTUALENVWRAPPER_PYTHON="/usr/bin/python2"
