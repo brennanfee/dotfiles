@@ -11,6 +11,7 @@ function mkbk {
 }
 
 alias mkback='mkbk'
+alias bk='mkbk'
 
 function mkorig {
     if [ ! -n "$1" ]; then
