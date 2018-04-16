@@ -44,7 +44,7 @@ Plug 'jeetsukumaran/vim-filebeagle'     " Minimal directory browser
 Plug 'airblade/vim-rooter'              " Auto sets vim working directory to 'base' project folder
 Plug 'itchyny/lightline.vim'            " Ooh, pretty graphics for buffer line and status line
 Plug 'ap/vim-buftabline'                " Treats buffers like tabs
-Plug 'editorconfig/editorconfig-vim'    " Support for .editorconfig files.
+Plug 'sgur/vim-editorconfig'            " Support for .editorconfig files.
 Plug 'blueshirts/darcula'               " Color scheme
 Plug 'brennanfee/vim-gui-position'      " My plugin, for GUI versions of vim - records location/size of window
 Plug 'mhinz/vim-signify'                " Show source control mods in left column
