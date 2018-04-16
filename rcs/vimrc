@@ -231,10 +231,29 @@ let g:ctrlp_clear_cache_on_exit = 1
 
 " EditorConfig
 
-let g:EditorConfig_exclude_patterns = ['fugitive://.*']
-if has('win32') || has('win64')
-    let g:EditorConfig_exec_path = 'C:\ProgramData\chocolatey\bin\editorconfig.exe'
-    let g:EditorConfig_core_mode = 'external_command'
+"let g:EditorConfig_exclude_patterns = ['fugitive://.*']
+"if has('win32') || has('win64')
+    "let g:EditorConfig_exec_path = 'C:\ProgramData\chocolatey\bin\editorconfig.exe'
+    "let g:EditorConfig_core_mode = 'external_command'
+"endif
+
+let g:editorconfig_blacklist = {
+\    'filetype': ['git.*', 'fugitive']
+\}
+
+" ALE
+
+let g:ale_sign_column_always = 1
+let g:ale_linters = {
+\    'javascript': ['standard']
+\}
+
+" Gitgutter
+
+if exists('&signcolumn')
+    set signcolumn=yes
+else
+    let g:gitgutter_sign_column_always = 1
 endif
 
 " FileBeagle
