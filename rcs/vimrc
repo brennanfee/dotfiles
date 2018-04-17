@@ -231,12 +231,6 @@ let g:ctrlp_clear_cache_on_exit = 1
 
 " EditorConfig
 
-"let g:EditorConfig_exclude_patterns = ['fugitive://.*']
-"if has('win32') || has('win64')
-    "let g:EditorConfig_exec_path = 'C:\ProgramData\chocolatey\bin\editorconfig.exe'
-    "let g:EditorConfig_core_mode = 'external_command'
-"endif
-
 let g:editorconfig_blacklist = {
 \    'filetype': ['git.*', 'fugitive']
 \}
@@ -245,8 +239,22 @@ let g:editorconfig_blacklist = {
 
 let g:ale_sign_column_always = 1
 let g:ale_linters = {
-\    'javascript': ['standard']
+\    'javascript': ['standard'],
+\    'typescript': ['tslint'],
+\    'css': ['stylelint'],
+\    'sass': ['stylelint'],
+\    'scss': ['stylelint'],
+\    'stylus': ['stylelint'],
+\    'gitcommit': ['gitlint'],
+\    'sh': ['shellcheck'],
+\    'vim': ['vint'],
+\    'yaml': ['yamlint'],
 \}
+
+let g:ale_fixers = { 'javascript': ['prettier_standard']}
+let g:ale_fix_on_save = 1
+let g:ale_sign_error = "\uf05e"
+let g:ale_sign_warning = "\uf071"
 
 " Gitgutter
 
@@ -255,6 +263,12 @@ if exists('&signcolumn')
 else
     let g:gitgutter_sign_column_always = 1
 endif
+
+let g:gitgutter_sign_added = "\uf067"
+let g:gitgutter_sign_modified = "\uf111"
+let g:gitgutter_sign_removed = "\uf068"
+let g:gitgutter_sign_removed_first_line = "\uf068"
+let g:gitgutter_sign_modified_removed = "\uf00d"
 
 " FileBeagle
 " Leader-f is reserved for easymotion so remap the "filebeagle" key to leader-t
