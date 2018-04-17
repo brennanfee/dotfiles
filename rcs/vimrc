@@ -256,19 +256,25 @@ let g:ale_fix_on_save = 1
 let g:ale_sign_error = "\uf05e"
 let g:ale_sign_warning = "\uf071"
 
-" Gitgutter
+" Signify
 
 if exists('&signcolumn')
     set signcolumn=yes
-else
-    let g:gitgutter_sign_column_always = 1
 endif
 
-let g:gitgutter_sign_added = "\uf067"
-let g:gitgutter_sign_modified = "\uf111"
-let g:gitgutter_sign_removed = "\uf068"
-let g:gitgutter_sign_removed_first_line = "\uf068"
-let g:gitgutter_sign_modified_removed = "\uf00d"
+let g:signify_vcs_list = [ 'git' ]
+let g:signify_realtime = 1
+let g:signify_sign_add = "\uf067"
+let g:signify_sign_delete = "\uf068"
+let g:signify_sign_delete_first_line = "\uf068"
+let g:signify_sign_change = "\uf111"
+let g:signify_sign_changedelete = "\uf00d"
+
+hi SignifySignAdd ctermfg=65 ctermbg=NONE cterm=NONE guifg=#5e8759 guibg=NONE gui=NONE
+hi SignifySignChange ctermfg=222 ctermbg=NONE cterm=NONE guifg=#d9c767 guibg=NONE gui=NONE
+hi SignifySignChangeDelete ctermfg=222 ctermbg=NONE cterm=NONE guifg=#d9c767 guibg=NONE gui=NONE
+hi SignifySignDelete ctermfg=88 ctermbg=NONE cterm=NONE guifg=#8c0909 guibg=NONE gui=NONE
+hi SignifySignDeleteFirstLine ctermfg=88 ctermbg=NONE cterm=NONE guifg=#8c0909 guibg=NONE gui=NONE
 
 " FileBeagle
 " Leader-f is reserved for easymotion so remap the "filebeagle" key to leader-t

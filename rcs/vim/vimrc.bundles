@@ -49,7 +49,7 @@ Plug 'ap/vim-buftabline'                " Treats buffers like tabs
 Plug 'sgur/vim-editorconfig'            " Support for .editorconfig files.
 Plug 'blueshirts/darcula'               " Color scheme
 Plug 'brennanfee/vim-gui-position'      " My plugin, for GUI versions of vim - records location/size of window
-Plug 'airblade/vim-gitgutter'           " Show source control mods in left column
+Plug 'mhinz/vim-signify'                " Show source control mods in left column
 Plug 'justinmk/vim-gtfo'                " Go to filemanager or terminal (got)
 Plug 'mattn/emmet-vim'                  " Fast html output (trigger with 'Ctl+y ,')
 Plug 'sheerun/vim-polyglot'             " Large language pack
