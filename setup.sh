@@ -5,9 +5,11 @@ IFS=$'\n\t'
 
 # initialize-settings.sh - Script to set up a new machine with my dotfiles.
 
-DOTFILES="$(dirname $(realpath $BASH_SOURCE))"
+DOTFILES="$(cd -P "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+# shellcheck source=/home/brennan/.dotfiles/bash/base-colors.bash
 source "$DOTFILES/bash/base-colors.bash"
+# shellcheck source=/home/brennan/.dotfiles/bash/base-functions.bash
 source "$DOTFILES/bash/base-functions.bash"
 
 SetOsEnvironmentVariables

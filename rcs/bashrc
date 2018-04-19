@@ -20,8 +20,11 @@ fi
 export DOTFILES="$HOME/.dotfiles"
 export DOTFILES_PRIVATE="$HOME/.dotfiles-private"
 
+# shellcheck source=/home/brennan/.dotfiles/bash/base-colors.bash
 source "$DOTFILES/bash/base-colors.bash"
+# shellcheck source=/home/brennan/.dotfiles/bash/base-functions.bash
 source "$DOTFILES/bash/base-functions.bash"
+# shellcheck source=/home/brennan/.dotfiles/bash/base-symbols.bash
 source "$DOTFILES/bash/base-symbols.bash"
 
 SetOsEnvironmentVariables
@@ -34,6 +37,7 @@ for folder in "options" "exports" "functions" "third-party" "other" "aliases"; d
         for root in "$DOTFILES/bash" "$DOTFILES_PRIVATE/bash"; do
             if [[ -d "$root/$base/$folder" ]]; then
                 for file in $root/$base/$folder/*.bash; do
+                    # shellcheck disable=SC1090
                     source "$file"
                 done
             fi
@@ -47,6 +51,7 @@ if [[ $IS_WSL == "true" ]]; then
         for root in "$DOTFILES/bash" "$DOTFILES_PRIVATE/bash"; do
             if [[ -d "$root/windows-wsl/$folder" ]]; then
                 for file in $root/windows-wsl/$folder/*.bash; do
+                    # shellcheck disable=SC1090
                     source "$file"
                 done
             fi
