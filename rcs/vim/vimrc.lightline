@@ -40,11 +40,11 @@ let g:lightline#ale#indicator_errors = "\uf05e"
 let g:lightline#ale#indicator_ok = "\uf00c"
 
 function! LightLineModified()
-  return &ft =~ 'help\|vimfiler\|gundo' ? '' : &modified ? '+' : &modifiable ? '' : '-'
+  return &filetype =~? 'help\|vimfiler\|gundo' ? '' : &modified ? '+' : &modifiable ? '' : '-'
 endfunction
 
 function! LightLineReadonly()
-  return &ft !~? 'help\|vimfiler\|gundo' && &readonly ? "\ue0a2" : ""
+  return &filetype !~? 'help\|vimfiler\|gundo' && &readonly ? "\ue0a2" : ''
 endfunction
 
 function! LightLineLineInfo()
@@ -52,20 +52,20 @@ function! LightLineLineInfo()
 endfunction
 
 function! LightLineFilename()
-  let fname = expand('%:t')
-  return fname == 'ControlP' && has_key(g:lightline, 'ctrlp_item') ? g:lightline.ctrlp_item :
-        \ fname =~ '__Gundo\|NERD_tree' ? '' :
-        \ ('' != LightLineReadonly() ? LightLineReadonly() . ' ' : '') .
-        \ ('' != fname ? fname : '[No Name]') .
-        \ ('' != LightLineModified() ? ' ' . LightLineModified() : '')
+  let l:fname = expand('%:t')
+  return l:fname ==? 'ControlP' && has_key(g:lightline, 'ctrlp_item') ? g:lightline.ctrlp_item :
+        \ l:fname =~? '__Gundo\|NERD_tree' ? '' :
+        \ ('' !=? LightLineReadonly() ? LightLineReadonly() . ' ' : '') .
+        \ ('' !=? l:fname ? l:fname : '[No Name]') .
+        \ ('' !=? LightLineModified() ? ' ' . LightLineModified() : '')
 endfunction
 
 function! LightLineFugitive()
   try
-    if expand('%:t') !~? 'Tagbar\|Gundo\|NERD' && &ft !~? 'vimfiler' && exists('*fugitive#head')
-      let mark = "\ue725"  " edit here for cool mark
-      let branch = fugitive#head()
-      return branch !=# '' ? mark.' '.branch : ''
+    if expand('%:t') !~? 'Tagbar\|Gundo\|NERD' && &filetype !~? 'vimfiler' && exists('*fugitive#head')
+      let l:mark = "\ue725"  " edit here for cool mark
+      let l:branch = fugitive#head()
+      return l:branch !=# '' ? l:mark.' '.l:branch : ''
     endif
   catch
   endtry
@@ -81,18 +81,18 @@ function! LightLineFiletype()
 endfunction
 
 function! LightLineFileencoding()
-  return winwidth(0) > 70 ? (&fenc !=# '' ? &fenc : &enc) : ''
+  return winwidth(0) > 70 ? (&fileencoding !=# '' ? &fileencoding : &encoding) : ''
 endfunction
 
 function! LightLineMode()
-  let fname = expand('%:t')
-  return fname == 'ControlP' ? 'CtrlP' :
-        \ fname =~ 'NERD_tree' ? 'NERDTree' :
+  let l:fname = expand('%:t')
+  return l:fname ==? 'ControlP' ? 'CtrlP' :
+        \ l:fname =~? 'NERD_tree' ? 'NERDTree' :
         \ winwidth(0) > 60 ? lightline#mode() : ''
 endfunction
 
 function! LightLineCtrlPMark()
-  if expand('%:t') =~ 'ControlP' && has_key(g:lightline, 'ctrlp_item')
+  if expand('%:t') =~? 'ControlP' && has_key(g:lightline, 'ctrlp_item')
     call lightline#link('iR'[g:lightline.ctrlp_regex])
     return lightline#concatenate([g:lightline.ctrlp_prev, g:lightline.ctrlp_item
           \ , g:lightline.ctrlp_next], 0)

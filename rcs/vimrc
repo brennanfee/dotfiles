@@ -127,6 +127,12 @@ if has('windows')
     set shell=bash
     nnoremap <silent> <leader>y :call system('win32yank.exe -i', @0)<CR>
     vnoremap <silent> <leader>y :call system('win32yank.exe -i', @0)<CR>
+
+    " To get a block cursor
+    let &t_ti.="\e[1 q"
+    let &t_SI.="\e[5 q"
+    let &t_EI.="\e[1 q"
+    let &t_te.="\e[0 q"
 endif
 
 " Source the vimrc if saved

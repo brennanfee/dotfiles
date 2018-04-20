@@ -1,7 +1,4 @@
 scriptencoding utf-8
-if &compatible
-  set nocompatible
-end
 
 if has('vim_starting')
     if has('win32') || has('win64')
@@ -63,11 +60,11 @@ Plug 'reedes/vim-pencil'                " Tools for working with prose (text, ma
 Plug 'kana/vim-textobj-user'            " Used by other plugins to define text objects
 Plug 'reedes/vim-textobj-sentence'      " A better 'sentence' text object for prose.
 
-if filereadable(expand("~/.vimrc.bundles.os"))
+if filereadable(expand('~/.vimrc.bundles.os'))
   source ~/.vimrc.bundles.os
 endif
 
-if filereadable(expand("~/.vimrc.bundles.local"))
+if filereadable(expand('~/.vimrc.bundles.local'))
   source ~/.vimrc.bundles.local
 endif
 
