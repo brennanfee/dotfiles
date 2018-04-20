@@ -167,6 +167,12 @@ else
     :cnoremap <F13> <esc>
 endif
 
+augroup filetypes_mappings
+    autocmd!
+    autocmd BufNewFile,BufFilePre,BufRead *.md set filetype=markdown
+    autocmd BufNewFile,BufFilePre,BufRead LICENSE set filetype=text
+augroup END
+
 """ LANGUAGE & FILETYPE SETTINGS
 
 " Markdown
@@ -174,7 +180,6 @@ endif
 let g:polyglot_disabled = ['markdown']
 augroup markdown_group
     autocmd!
-    autocmd BufNewFile,BufFilePre,BufRead *.md set filetype=markdown
     autocmd FileType markdown setlocal wrap
 augroup END
 
