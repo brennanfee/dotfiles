@@ -13,9 +13,9 @@ fi
 
 function custom_prompt {
     if [[ $? -eq 0 ]]; then
-        local exit_status="${color_green}$symbol_closed_arrow"
+        local exit_status="${color_green}${i_fa_check}"
     else
-        local exit_status="${color_red}$symbol_closed_arrow (\$?)"
+        local exit_status="${color_red}${i_fa_close} (\$?)"
     fi
 
     local ssh_text=""

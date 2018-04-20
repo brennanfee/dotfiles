@@ -32,7 +32,7 @@ if command_exists most; then
     export MANPAGER="most -s"
 fi
 
-export SUDO_PROMPT="[sudo] password for %u@%h: "
+export SUDO_PROMPT="${i_fa_lock} password for %u@%h: "
 
 # History
 export HISTCONTROL=$HISTCONTROL${HISTCONTROL+,}ignoredups
