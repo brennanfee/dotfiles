@@ -12,7 +12,9 @@ alias get="$git_cmd"
 alias gs="$git_cmd status"
 alias gss="$git_cmd status -sb"
 
-alias gp="$git_cmd pull"
+alias gp="$git_cmd push"
+alias gf="$git_cmd fetch"
+alias gm="$git_cmd pull"
 
 alias gexp='$git_cmd archive --format zip --output'
 
