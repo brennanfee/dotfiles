@@ -264,39 +264,53 @@ let g:editorconfig_blacklist = {
 let g:ale_sign_column_always = 1
 let g:ale_lint_on_text_changed = 'normal'
 let g:ale_lint_on_insert_leave = 1
+let g:ale_sign_error = "\uf05e"
+let g:ale_sign_warning = "\uf071"
+let g:ale_fix_on_save = 1
 
 let g:ale_linters = {
-    \ 'javascript': ['eslint'],
-    \ 'typescript': ['tslint'],
-    \ 'graphql': ['eslint'],
-    \ 'json': ['jsonlint'],
+    \ 'ansible': ['ansible_lint'],
+    \ 'awk': ['gawk'],
+    \ 'cmake': ['cmakelint'],
     \ 'css': ['stylelint'],
+    \ 'gitcommit': ['gitlint'],
+    \ 'graphql': ['eslint'],
+    \ 'html': ['htmlhint', 'proselint'],
+    \ 'javascript': ['eslint'],
+    \ 'json': ['jsonlint'],
+    \ 'less': ['stylelint'],
+    \ 'mail': ['proselint'],
+    \ 'make': ['checkmake'],
+    \ 'markdown': ['proselint'],
     \ 'sass': ['stylelint'],
     \ 'scss': ['stylelint'],
-    \ 'less': ['stylelint'],
+    \ 'sh': ['shellcheck', 'shell'],
     \ 'stylus': ['stylelint'],
-    \ 'gitcommit': ['gitlint'],
-    \ 'sh': ['shellcheck'],
+    \ 'tex': ['chktex', 'proselint'],
+    \ 'texinfo': ['proselint'],
+    \ 'text': ['proselint'],
+    \ 'typescript': ['tslint'],
     \ 'vim': ['vint'],
+    \ 'xml': ['xmllint'],
     \ 'yaml': ['yamlint'],
 \}
 
 let g:ale_fixers = {
-    \ 'javascript': ['prettier'],
-    \ 'typescript': ['prettier'],
+    \ 'css': ['stylelint', 'prettier'],
     \ 'graphql': ['prettier'],
-    \ 'vue': ['prettier'],
+    \ 'javascript': ['prettier'],
     \ 'json': ['prettier'],
-    \ 'css': ['prettier'],
-    \ 'sass': ['prettier'],
-    \ 'scss': ['prettier'],
-    \ 'less': ['prettier'],
-    \ 'stylus': ['prettier'],
+    \ 'less': ['stylelint', 'prettier'],
     \ 'markdown': ['prettier'],
+    \ 'sass': ['stylelint', 'prettier'],
+    \ 'scss': ['stylelint', 'prettier'],
+    \ 'sh': ['shfmt'],
+    \ 'stylus': ['stylelint', 'prettier'],
+    \ 'typescript': ['prettier'],
+    \ 'vue': ['prettier'],
 \}
-let g:ale_fix_on_save = 1
-let g:ale_sign_error = "\uf05e"
-let g:ale_sign_warning = "\uf071"
+
+let g:ale_sh_shfmt_options = '-i 4 -ci -s'
 
 " Signify
 
