@@ -328,8 +328,8 @@ let g:signify_sign_changedelete = "\uf00d"
 hi SignifySignAdd ctermfg=65 ctermbg=NONE cterm=NONE guifg=#5e8759 guibg=NONE gui=NONE
 hi SignifySignChange ctermfg=222 ctermbg=NONE cterm=NONE guifg=#d9c767 guibg=NONE gui=NONE
 hi SignifySignChangeDelete ctermfg=222 ctermbg=NONE cterm=NONE guifg=#d9c767 guibg=NONE gui=NONE
-hi SignifySignDelete ctermfg=88 ctermbg=NONE cterm=NONE guifg=#990000 guibg=NONE gui=NONE
-hi SignifySignDeleteFirstLine ctermfg=88 ctermbg=NONE cterm=NONE guifg=#990000 guibg=NONE gui=NONE
+hi SignifySignDelete ctermfg=88 ctermbg=NONE cterm=NONE guifg=#c93b48 guibg=NONE gui=NONE
+hi SignifySignDeleteFirstLine ctermfg=88 ctermbg=NONE cterm=NONE guifg=#c93b48 guibg=NONE gui=NONE
 
 " FileBeagle
 " Leader-f is reserved for easymotion so remap the "filebeagle" key to leader-t

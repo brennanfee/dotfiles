@@ -32,4 +32,3 @@ echo -e "${color_pink}████ ${color_normal} pink = bold magenta"
 echo -e "${color_purple}████ ${color_normal} purple = magenta"
 echo -e "${color_orange}████ ${color_normal} orange = yellow"
 echo ""
-
