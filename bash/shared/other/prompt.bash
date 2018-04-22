@@ -11,7 +11,7 @@ if [[ -e /usr/lib/git-core/git-sh-prompt ]]; then
     GIT_PS1_SHOWCOLORHINTS=1
 fi
 
-function custom_prompt {
+function custom_prompt() {
     if [[ $? -eq 0 ]]; then
         local exit_status="${color_green}${i_fa_check}"
     else
@@ -19,7 +19,7 @@ function custom_prompt {
     fi
 
     local ssh_text=""
-    if [[ -n "$SSH_CLIENT" ]]; then
+    if [[ -n $SSH_CLIENT ]]; then
         local ssh_text=" (SSH)"
     fi
 

@@ -13,4 +13,3 @@ if [[ $rc_tags == *"work"* ]]; then
 fi
 
 unset rc_tags
-

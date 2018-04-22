@@ -1,4 +1,3 @@
-
 # Aliases for linux apps, redirecting to windows versions
 alias gvim="/mnt/c/Program\ Files\ \(x86\)/vim/vim80/gvim.exe"
 
@@ -13,4 +12,3 @@ alias o="cmd.exe /c start"
 
 alias packer="packer.exe"
 alias vagrant="vagrant.exe"
-

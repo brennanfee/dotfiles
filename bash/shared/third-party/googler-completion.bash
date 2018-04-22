@@ -5,7 +5,7 @@
 #   Zhiming Wang <zmwangx@gmail.com>
 #
 
-_googler () {
+_googler() {
     COMPREPLY=()
     local IFS=$' \n'
     local cur=$2 prev=$3
@@ -50,7 +50,7 @@ _googler () {
 
     if [[ $cur == -* ]]; then
         # The current argument is an option -- complete option names.
-        COMPREPLY=( $(compgen -W "${opts[*]}" -- "$cur") )
+        COMPREPLY=($(compgen -W "${opts[*]}" -- "$cur"))
     else
         # Do not complete option arguments; only autocomplete positional
         # arguments (queries).
@@ -62,7 +62,7 @@ _googler () {
         COMPREPLY=()
         while IFS= read -r completion; do
             # Quote spaces for `complete -W wordlist`
-            COMPREPLY+=( "${completion// /\\ }" )
+            COMPREPLY+=("${completion// /\\ }")
         done < <(googler --complete "$cur")
     fi
 

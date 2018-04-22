@@ -39,9 +39,9 @@ else
     cp "$DOTFILES/base-rcrc" "$HOME/.rcrc"
 
     if [[ $OS_PRIMARY == "linux" ]]; then
-        echo "TAGS=\"$OS_PRIMARY $OS_SECONDARY\"" >> "$HOME/.rcrc"
+        echo "TAGS=\"$OS_PRIMARY $OS_SECONDARY\"" >>"$HOME/.rcrc"
     else
-        echo "TAGS=\"$OS_PRIMARY\"" >> "$HOME/.rcrc"
+        echo "TAGS=\"$OS_PRIMARY\"" >>"$HOME/.rcrc"
     fi
 
     mkrc -o "$HOME/.rcrc"

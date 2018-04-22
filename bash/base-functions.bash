@@ -2,7 +2,7 @@
 
 # Function that sets two environment variables to indicate the
 # type of machine we are on.
-function SetOsEnvironmentVariables {
+function SetOsEnvironmentVariables() {
     local uname=$(uname -s | tr '[:upper:]' '[:lower:]')
     if [[ $uname == "darwin" ]]; then
         export OS_PRIMARY="macos"
@@ -33,15 +33,15 @@ function SetOsEnvironmentVariables {
     fi
 }
 
-function is_mac {
+function is_mac() {
     return [[ $OS_PRIMARY == "macos" ]]
 }
 
-function is_linux {
+function is_linux() {
     return [[ $OS_PRIMARY == "linux" ]]
 }
 
-function is_windows {
+function is_windows() {
     return [[ $IS_WSL == "true" ]]
 }
 
@@ -75,41 +75,40 @@ function SetVirtualizationEnvironmentVariables() {
 
 # Function to easily add a path (this version adds to the end)
 # http://superuser.com/a/39995
-function path_append {
-  if [[ -d "$1" ]] && [[ ":$PATH:" != *":$1:"* ]]; then
-      export PATH="${PATH:+"$PATH:"}$1"
-  fi
+function path_append() {
+    if [[ -d $1 ]] && [[ ":$PATH:" != *":$1:"* ]]; then
+        export PATH="${PATH:+"$PATH:"}$1"
+    fi
 }
 
-function manpath_append {
-  if [[ -d "$1" ]] && [[ ":$MANPATH:" != *":$1:"* ]]; then
-      export MANPATH="${MANPATH:+"$MANPATH:"}$1"
-  fi
+function manpath_append() {
+    if [[ -d $1 ]] && [[ ":$MANPATH:" != *":$1:"* ]]; then
+        export MANPATH="${MANPATH:+"$MANPATH:"}$1"
+    fi
 }
 
 # Function to easily add a path (this version adds to the beginning)
 # http://superuser.com/a/39995
-function path_prepend {
-  if [[ -d "$1" ]] && [[ ":$PATH:" != *":$1:"* ]]; then
-      export PATH="$1:$PATH"
-  fi
+function path_prepend() {
+    if [[ -d $1 ]] && [[ ":$PATH:" != *":$1:"* ]]; then
+        export PATH="$1:$PATH"
+    fi
 }
 
-function manpath_prepend {
-  if [[ -d "$1" ]] && [[ ":$MANPATH:" != *":$1:"* ]]; then
-      export MANPATH="$1:$MANPATH"
-  fi
+function manpath_prepend() {
+    if [[ -d $1 ]] && [[ ":$MANPATH:" != *":$1:"* ]]; then
+        export MANPATH="$1:$MANPATH"
+    fi
 }
 
 # function to make sourcing an optional item easier
-function source_if {
-    if [[ -f "$1" ]]; then
+function source_if() {
+    if [[ -f $1 ]]; then
         source "$1"
     fi
 }
 
 # function to make checking executable existence easier
-function command_exists {
-    command -v "$1" &> /dev/null && return 0 || return 1
+function command_exists() {
+    command -v "$1" &>/dev/null && return 0 || return 1
 }
-

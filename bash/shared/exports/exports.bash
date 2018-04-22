@@ -45,4 +45,3 @@ export HISTFILE=~/.cache/bash_history
 
 # Suffixes to ignore for filename completion
 export FIGNORE=".git:.DS_Store"
-

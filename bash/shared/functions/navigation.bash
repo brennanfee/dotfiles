@@ -9,7 +9,7 @@ export MY_PROFILE=$HOME
 export OS_HOME=$HOME
 
 # Some quick navigations
-function cdp {
+function cdp() {
     if [[ -d "$MY_PROFILE/projects" ]]; then
         cd "$MY_PROFILE/projects"
     elif [[ -d "$MY_PROFILE/Projects" ]]; then
@@ -19,7 +19,7 @@ function cdp {
     fi
 }
 
-function cdpp {
+function cdpp() {
     if [[ -d "$MY_PROFILE/projects" ]]; then
         if [[ -d "$MY_PROFILE/projects/personal" ]]; then
             cd "$MY_PROFILE/projects/personal"
@@ -41,7 +41,7 @@ function cdpp {
     fi
 }
 
-function cdd {
+function cdd() {
     if [[ -d "$MY_PROFILE/downloads" ]]; then
         cd "$MY_PROFILE/downloads"
     elif [[ -d "$MY_PROFILE/Downloads" ]]; then
@@ -51,7 +51,7 @@ function cdd {
     fi
 }
 
-function cdi {
+function cdi() {
     if [[ -d "$MY_PROFILE/installs" ]]; then
         cd "$MY_PROFILE/installs"
     elif [[ -d "$MY_PROFILE/Installs" ]]; then
@@ -73,7 +73,7 @@ function cdi {
     fi
 }
 
-function cdt {
+function cdt() {
     if [[ -d "$HOME/.dotfiles" ]]; then
         cd "$HOME/.dotfiles"
     else
@@ -81,7 +81,7 @@ function cdt {
     fi
 }
 
-function cdm {
+function cdm() {
     if [[ -d "$MY_PROFILE/music" ]]; then
         cd "$MY_PROFILE/music"
     elif [[ -d "$MY_PROFILE/Music" ]]; then
@@ -91,7 +91,7 @@ function cdm {
     fi
 }
 
-function cdv {
+function cdv() {
     if [[ -d "$MY_PROFILE/videos" ]]; then
         cd "$MY_PROFILE/videos"
     elif [[ -d "$MY_PROFILE/Videos" ]]; then
@@ -101,7 +101,7 @@ function cdv {
     fi
 }
 
-function cdb {
+function cdb() {
     if [[ -d "$MY_PROFILE/dropbox" ]]; then
         cd "$MY_PROFILE/dropbox"
     elif [[ -d "$MY_PROFILE/Dropbox" ]]; then
@@ -111,7 +111,7 @@ function cdb {
     fi
 }
 
-function cdc {
+function cdc() {
     if [[ -d "$MY_PROFILE/documents" ]]; then
         cd "$MY_PROFILE/documents"
     elif [[ -d "$MY_PROFILE/Documents" ]]; then
@@ -121,7 +121,7 @@ function cdc {
     fi
 }
 
-function cdx {
+function cdx() {
     if [[ -d "$MY_PROFILE/pictures" ]]; then
         cd "$MY_PROFILE/pictures"
     elif [[ -d "$MY_PROFILE/Pictures" ]]; then
@@ -131,8 +131,8 @@ function cdx {
     fi
 }
 
-function cdh {
-    if [[ -d "$OS_HOME" ]]; then
+function cdh() {
+    if [[ -d $OS_HOME ]]; then
         cd "$OS_HOME"
     else
         cd "$HOME"
@@ -140,4 +140,3 @@ function cdh {
 }
 
 alias cdr="cd-to-git-root-path"
-
