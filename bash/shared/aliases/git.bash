@@ -15,9 +15,11 @@ alias gss="$git_cmd status -sb"
 alias gp="$git_cmd push"
 alias gf="$git_cmd fetch"
 alias gm="$git_cmd pull"
+alias ga="$git_cmd add ."
+alias gc="$git_cmd commit"
 
-alias gexp='$git_cmd archive --format zip --output'
+alias gexp="$git_cmd archive --format zip --output"
 
-alias gll='$git_cmd log --graph --pretty=oneline --abbrev-commit'
+alias gll="$git_cmd log --graph --pretty=oneline --abbrev-commit"
 
 unset git_cmd

@@ -168,6 +168,9 @@ augroup END
 " Remap the add mark key to gm
 nnoremap gm m
 
+" Make zz be the same as 1z= (fix spelling with the first suggestion)
+nnoremap zz 1z=e
+
 " Leader K to grep word under cursor
 nnoremap <leader>k :grep! "\b<C-R><C-W>\b"<CR>:cw<CR><CR>
 
