@@ -59,6 +59,7 @@ Plug 'ap/vim-css-color'                 " Color previewer - don't really like th
 Plug 'reedes/vim-pencil'                " Tools for working with prose (text, markdown)
 Plug 'kana/vim-textobj-user'            " Used by other plugins to define text objects
 Plug 'reedes/vim-textobj-sentence'      " A better 'sentence' text object for prose.
+Plug 'kshenoy/vim-signature'            " Show marks in the left column
 
 if filereadable(expand('~/.vimrc.bundles.os'))
   source ~/.vimrc.bundles.os

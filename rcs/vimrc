@@ -165,9 +165,6 @@ augroup END
 
 """ KEYBOARD MAPPINGS
 
-" Remap the add mark key to gm
-nnoremap gm m
-
 " Make zz be the same as 1z= (fix spelling with the first suggestion)
 nnoremap zz 1z=e
 
@@ -178,6 +175,15 @@ nnoremap <leader>k :grep! "\b<C-R><C-W>\b"<CR>:cw<CR><CR>
 nmap <leader>ev :e $MYVIMRC<CR>
 nmap <leader>eb :e ~/.vim/vimrc.bundles<CR>
 nmap <leader>sv :source $MYVIMRC<CR>
+
+" Map space-<hjkl> to add a space or a line in that direction
+nnoremap <space>j <Plug>unimpairedBlankDown
+nnoremap <space>k <Plug>unimpairedBlankUp
+nnoremap <space>h i<space><esc>
+nnoremap <space>l a<space><esc>
+
+" Mapping to close quickfix or location list windows
+nmap <silent> <leader>c :bufdo if &buftype == "quickfix" <bar><bar> &buftype == "locationlist" <bar> bdelete <bar> endif<CR>
 
 " Map lk to be another version of escape in insert and command mode
 if has('gui_running')
@@ -334,6 +340,10 @@ hi SignifySignChangeDelete ctermfg=222 ctermbg=NONE cterm=NONE guifg=#d9c767 gui
 hi SignifySignDelete ctermfg=88 ctermbg=NONE cterm=NONE guifg=#c93b48 guibg=NONE gui=NONE
 hi SignifySignDeleteFirstLine ctermfg=88 ctermbg=NONE cterm=NONE guifg=#c93b48 guibg=NONE gui=NONE
 
+" vim-signature
+
+let g:SignatureMarkTextHL = 'normal'
+
 " FileBeagle
 " Leader-f is reserved for easymotion so remap the "filebeagle" key to leader-t
 let g:filebeagle_suppress_keymaps=1
@@ -347,13 +357,13 @@ hi BufTabLineCurrent ctermfg=188 ctermbg=24 term=reverse guifg=#a9b7c6 guibg=#98
 hi BufTabLineActive ctermfg=188 ctermbg=24 term=reverse guifg=#a9b7c6 guibg=#214283 gui=NONE
 hi BufTabLineHidden ctermfg=188 ctermbg=24 term=reverse guifg=#a9b7c6 guibg=#323232 gui=NONE
 " Make buffers behave like tabs
-nnoremap gt :bnext<CR>
-nnoremap gT :bprevious<CR>
-nnoremap gx :bdelete<CR>
-nnoremap g0 :bfirst<CR>
-nnoremap g1 :bfirst<CR>
-nnoremap g$ :blast<CR>
-nnoremap g4 :blast<CR>
+nnoremap <silent> gt :bnext<CR>
+nnoremap <silent> gT :bprevious<CR>
+nnoremap <silent> gx :bdelete<CR>
+nnoremap <silent> g0 :bfirst<CR>
+nnoremap <silent> g1 :bfirst<CR>
+nnoremap <silent> g$ :blast<CR>
+nnoremap <silent> g4 :blast<CR>
 
 " Easymotion
 let g:EasyMotion_do_mapping = 0 " Disable default mappings
@@ -374,9 +384,17 @@ let g:EasyClipUseSubstituteDefaults = 1
 let g:EasyClipAutoFormat = 1
 let g:EasyClipShareYanks = 1
 let g:EasyClipShareYanksFile = ".cache/vim/easyclip"
-nnoremap gm m
+let g:EasyClipUseCutDefaults = 0
+
+nmap <leader>m <plug>MoveMotionPlug
+xmap <leader>m <plug>MoveMotionXPlug
+nmap <leader>mm <plug>MoveMotionLinePlug
+nmap <leader>M <plug>MoveMotionEndOfLinePlug
+nmap <leader>mM <plug>MoveMotionReplaceLinePlug
+
 nmap <leader>cf <plug>EasyClipToggleFormattedPaste
 nnoremap <leader>cy :call EasyClip#Yank(expand('%'))<cr>
+imap <C-v> <plug>EasyClipInsertModePaste
 
 " Lightline settings are sufficiently verbose so as to need their own file
 if filereadable($HOME . "/.vim/vimrc.lightline")
@@ -392,7 +410,7 @@ if exists(":Tabularize")
 endif
 
 " vim-better-whitespace
-hi ExtraWhitespace ctermbg=88 guibg=#8c0909
+hi ExtraWhitespace ctermbg=88 guibg=#c93b48
 let g:better_whiespace_enabled=1
 let g:strip_whitespace_on_save=1
 
