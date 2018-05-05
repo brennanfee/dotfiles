@@ -8,6 +8,7 @@
     editor = vim
     eol = lf
     autocrlf = input
+    gvfs = true
 [fetch]
     prune = true
 [http]
