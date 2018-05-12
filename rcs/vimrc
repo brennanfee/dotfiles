@@ -70,7 +70,11 @@ set directory=~/.vim/vimscratch/swap//,$TEMP//,$TMP//
 set undofile
 set undodir=~/.vim/vimscratch/undo//,$TEMP//,$TMP//
 
-set viminfo+=n~/.cache/vim/viminfo
+if !has('nvim')
+    set viminfo+=n~/.cache/vim/viminfo
+else
+    set viminfo+=n~/.cache/nvim/shada
+endif
 
 set noshowmode
 set conceallevel=2
@@ -119,7 +123,10 @@ endif
 
 " Setup mouse
 if has('mouse')
-    set ttymouse=xterm2
+    if !has('nvim')
+        set ttymouse=xterm2
+    endif
+
     set mouse=a
 endif
 
