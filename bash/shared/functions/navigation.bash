@@ -163,5 +163,14 @@ function cdh() {
     fi
 }
 
+# Jump to the "winfiles"... otherwise "dotfiles"
+function cdw() {
+    if [[ "${WIN_HOME}x" != "x" && -d "$WIN_HOME/winfiles" ]]; then
+        cd "$WIN_HOME/winfiles" || return
+    else
+        cdt
+    fi
+}
+
 # The root of the current git project
 alias cdr="cd-to-git-root-path"

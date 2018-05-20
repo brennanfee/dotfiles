@@ -27,10 +27,14 @@ export GIT_EDITOR='vim'
 export SVN_EDITOR='vim'
 export LESSEDIT='vim'
 
-if [[ -x /usr/bin/code ]]; then
-    export VISUAL='/usr/bin/code'
-else
+if command_exists code; then
+    export VISUAL='code'
+elif command_exists atom; then
+    export VISUAL='atom'
+elif command_exists gvim; then
     export VISUAL='gvim'
+else
+    export VISUAL='vim'
 fi
 
 if command_exists most; then
@@ -44,7 +48,7 @@ export SUDO_PROMPT="${i_fa_lock} password for %u@%h: "
 # History
 export HISTCONTROL=$HISTCONTROL${HISTCONTROL+,}ignoredups
 export HISTCONTROL=$HISTCONTROL${HISTCONTROL+,}ignorespace
-export HISTIGNORE=$'[ \t]*:&:[fb]g:exit:ls:ls -la:sl:ll:la:lls:lla:pwd:cd:cdp:cdpp:cdd:cdi:cdt:cdtp:cdm:cdmp:cdv:cdb:cdc:cdx:cdh:cdr:* --help *'
+export HISTIGNORE=$'[ \t]*:&:[fb]g:exit:ls:ls -la:sl:ll:la:lls:lla:pwd:cd:cdp:cdpp:cdd:cdi:cdt:cdtp:cdm:cdmp:cdv:cdb:cdc:cdx:cdh:cdr:cdw:* --help *'
 export HISTTIMEFORMAT="%Y-%m-%d %H:%M:%S  "
 export HISTFILESIZE=5000
 export HISTSIZE=5000

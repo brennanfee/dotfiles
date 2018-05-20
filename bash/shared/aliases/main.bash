@@ -41,10 +41,10 @@ alias du='du -h'
 alias cls="clear"
 
 # Editor mappings
-alias e='$EDITOR'
-alias edit='$EDITOR'
-alias ev='$VISUAL'
-alias vis='$VISUAL'
+alias e='"$EDITOR"'
+alias edit='"$EDITOR"'
+alias ge='"$VISUAL"'
+alias vis='"$VISUAL"'
 alias v="vim -R"
 alias view="vim -R"
 
