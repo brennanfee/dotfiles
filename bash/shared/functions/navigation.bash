@@ -156,7 +156,7 @@ function cdx() {
 
 # "Alternate" home, or Windows home - will only be different than $HOME on Windows
 function cdh() {
-    if [[ -z ${WIN_HOME+x} && -d $WIN_HOME ]]; then
+    if [[ "${WIN_HOME}x" != "x" && -d "$WIN_HOME" ]]; then
         cd "$WIN_HOME" || return
     else
         cd "$HOME" || return
