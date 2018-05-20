@@ -77,8 +77,8 @@ function cdt() {
 
 # Private dotfiles folder
 function cdtp() {
-    if [[ -d "$HOME/.dotfiles-nope" ]]; then
-        cd "$HOME/.dotfiles-nope" || return
+    if [[ -d "$HOME/.dotfiles-private" ]]; then
+        cd "$HOME/.dotfiles-private" || return
     else
         cdt
     fi
