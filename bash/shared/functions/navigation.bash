@@ -1,14 +1,8 @@
 #!/usr/bin/env bash
 
-# Set the base of my profile (this is where I create folders for normal use)
-export MY_PROFILE=$HOME
-# This is only here for Windows and WSL.  For all non-Windows machines HOME is home, but for
-# the WSL shell home is the unix home and OS_HOME gets set to the machines user
-# profile (/mnt/c/Users/<name>).  This allows cd on its own to take you to the unix home but cdh
-# to take you to the "windows" home.  On a linux box cdh is equivelant to cd.
-export OS_HOME=$HOME
+# Some quick navigations within my profile path
 
-# Some quick navigations
+# Projects folder
 function cdp() {
     if [[ -d "$MY_PROFILE/projects" ]]; then
         cd "$MY_PROFILE/projects"
@@ -19,6 +13,7 @@ function cdp() {
     fi
 }
 
+# Personal projects folder
 function cdpp() {
     if [[ -d "$MY_PROFILE/projects" ]]; then
         if [[ -d "$MY_PROFILE/projects/personal" ]]; then
@@ -41,6 +36,7 @@ function cdpp() {
     fi
 }
 
+# Downloads folder
 function cdd() {
     if [[ -d "$MY_PROFILE/downloads" ]]; then
         cd "$MY_PROFILE/downloads"
@@ -51,6 +47,7 @@ function cdd() {
     fi
 }
 
+# Install folder
 function cdi() {
     if [[ -d "$MY_PROFILE/installs" ]]; then
         cd "$MY_PROFILE/installs"
@@ -73,6 +70,7 @@ function cdi() {
     fi
 }
 
+# Dotfiles folder
 function cdt() {
     if [[ -d "$HOME/.dotfiles" ]]; then
         cd "$HOME/.dotfiles"
@@ -81,6 +79,7 @@ function cdt() {
     fi
 }
 
+# Music folder
 function cdm() {
     if [[ -d "$MY_PROFILE/music" ]]; then
         cd "$MY_PROFILE/music"
@@ -91,6 +90,7 @@ function cdm() {
     fi
 }
 
+# Videos folder
 function cdv() {
     if [[ -d "$MY_PROFILE/videos" ]]; then
         cd "$MY_PROFILE/videos"
@@ -101,6 +101,7 @@ function cdv() {
     fi
 }
 
+# Dropbox
 function cdb() {
     if [[ -d "$MY_PROFILE/dropbox" ]]; then
         cd "$MY_PROFILE/dropbox"
@@ -111,6 +112,7 @@ function cdb() {
     fi
 }
 
+# Documents or "My Documents"
 function cdc() {
     if [[ -d "$MY_PROFILE/documents" ]]; then
         cd "$MY_PROFILE/documents"
@@ -121,6 +123,7 @@ function cdc() {
     fi
 }
 
+# Pictures or Photos
 function cdx() {
     if [[ -d "$MY_PROFILE/pictures" ]]; then
         cd "$MY_PROFILE/pictures"
@@ -131,12 +134,14 @@ function cdx() {
     fi
 }
 
+# "Alternate" home, or Windows home - will only be different than $HOME on Windows
 function cdh() {
-    if [[ -d $OS_HOME ]]; then
-        cd "$OS_HOME"
+    if [[ -z "${WIN_HOME+x}" && -d "$WIN_HOME" ]]; then
+        cd "$WIN_HOME"
     else
         cd "$HOME"
     fi
 }
 
+# The root of the current git project
 alias cdr="cd-to-git-root-path"

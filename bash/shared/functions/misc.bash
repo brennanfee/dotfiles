@@ -5,19 +5,19 @@ function reload_profile() {
 }
 
 function lsgrep() {
-    ls | grep -i "$*"
+    ls | grep -i "$@"
 }
 
 function lagrep() {
-    ls -A | grep -i "$*"
+    ls -A | grep -i "$@"
 }
 
-function lsag() {
-    ls | ag -i "$*"
+function lsrg() {
+    ls | rg "$@"
 }
 
-function laag() {
-    ls -A | ag -i "$*"
+function larg() {
+    ls -A | rg "$@"
 }
 
 function myip() {
@@ -26,8 +26,8 @@ function myip() {
 }
 
 function usage() {
-    if [ -n $1 ]; then
-        du -h --max-depth=1 $1
+    if [ -n "$1" ]; then
+        du -h --max-depth=1 "$1"
     else
         du -h --max-depth=1
     fi

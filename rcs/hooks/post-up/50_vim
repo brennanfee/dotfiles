@@ -7,11 +7,11 @@ if [[ ! -e $HOME/.vim/autoload/plug.vim ]]; then
 fi
 
 if [[ -f $HOME/.vim/vimrc.bundles ]]; then
-    vim -u $HOME/.vim/vimrc.bundles +PlugUpdate +PlugClean! +qa -
+    vim -N -u $HOME/.vim/vimrc.bundles +PlugUpdate +PlugClean! +qa -
 fi
 
 # Create the scratch directories
-mkdir -p $HOME/.vim/vimscratch/backup
-mkdir -p $HOME/.vim/vimscratch/swap
-mkdir -p $HOME/.vim/vimscratch/undo
+mkdir -p "$HOME/.vim/vimscratch/backup"
+mkdir -p "$HOME/.vim/vimscratch/swap"
+mkdir -p "$HOME/.vim/vimscratch/undo"
 

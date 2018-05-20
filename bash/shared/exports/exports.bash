@@ -21,16 +21,22 @@ export USER_AGENT="Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML
 
 # Editors and pagers
 export VIM_VER="$($(which vim) --version | grep "Vi IMproved" | awk '{print $5}' | sed -e 's/\.//g')"
-export VISUAL='vim'
 export EDITOR='vim'
 export GIT_EDITOR='vim'
 export SVN_EDITOR='vim'
 export LESSEDIT='vim'
 
+if [[ -x /usr/bin/code ]]; then
+    export VISUAL='/usr/bin/code'
+else
+    export VISUAL='gvim'
+fi
+
 if command_exists most; then
     export PAGER="most"
     export MANPAGER="most -s"
 fi
+export GIT_PAGER="less"
 
 export SUDO_PROMPT="${i_fa_lock} password for %u@%h: "
 

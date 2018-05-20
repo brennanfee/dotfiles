@@ -1,6 +1,0 @@
-#!/usr/bin/env bash
-
-# Overrides for work
-export MY_PROFILE="/mnt/c/profile"
-export OS_HOME="/mnt/c/Users/bfee"
-

@@ -45,8 +45,7 @@ alias du='du -h'
 alias cls="clear"
 
 # Editor mappings
-alias e="${EDITOR}"
-alias edit="${EDITOR}"
+alias edit=e
 alias v="vim -R"
 alias view="vim -R"
 
@@ -72,10 +71,6 @@ alias cdu='cd ..'
 if command_exists rg; then
     alias rg='rg -S'
 fi
-
-# Markdown & CommonMark
-# May not need this anymore, should use node
-#alias markdown="Markdown.pl"
 
 # vless
 alias vless="/usr/share/vim/vim$VIM_VER/macros/less.sh"

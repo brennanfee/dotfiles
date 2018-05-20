@@ -3,13 +3,9 @@
 # Override the browser
 export BROWSER=/usr/local/bin/chrome.exe
 
-# Move temp directory (lots of windows tools can't read the Linux tmp path)
-if [[ -d '/mnt/c/Users/brennan/AppData/Local/Temp' ]]; then
-    export TMPDIR='/mnt/c/Users/brennan/AppData/Local/Temp'
-elif [[ -d '/mnt/c/Users/Brennan/AppData/Local/Temp' ]]; then
-    export TMPDIR='/mnt/c/Users/Brennan/AppData/Local/Temp'
-elif [[ -d '/mnt/c/Users/bfee/AppData/Local/Temp' ]]; then
-    export TMPDIR='/mnt/c/Users/bfee/AppData/Local/Temp'
+# Setup a visual editor
+if [[ -x "/mnt/c/Program Files/Microsoft VS Code/bin/code" ]]; then
+    export VISUAL="/mnt/c/Program Files/Microsoft VS Code/bin/code"
 fi
 
 # Force the Display output
