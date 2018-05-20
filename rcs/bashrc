@@ -1,18 +1,18 @@
 #!/usr/bin/env bash
 
 # If not running interactively, don't do anything
-if [[ "$-" != *i* ]]; then
+if [[ $- != *i* ]]; then
     return
 fi
 
 export DOTFILES="$HOME/.dotfiles"
 export DOTFILES_PRIVATE="$HOME/.dotfiles-private"
 
-# shellcheck source=/home/brennan/.dotfiles/bash/base-colors.bash
+# shellcheck source=/dev/null
 source "$DOTFILES/bash/base-colors.bash"
-# shellcheck source=/home/brennan/.dotfiles/bash/base-functions.bash
+# shellcheck source=/dev/null
 source "$DOTFILES/bash/base-functions.bash"
-# shellcheck source=/home/brennan/.dotfiles/bash/nerdfonts/i_all.sh
+# shellcheck source=/dev/null
 source "$DOTFILES/bash/nerdfonts/i_all.sh"
 
 SetOsEnvironmentVariables
@@ -25,7 +25,7 @@ for folder in "options" "exports" "functions" "third-party" "other" "aliases"; d
         for root in "$DOTFILES/bash" "$DOTFILES_PRIVATE/bash"; do
             if [[ -d "$root/$base/$folder" ]]; then
                 for file in $root/$base/$folder/*.bash; do
-                    # shellcheck disable=SC1090
+                    # shellcheck source=/dev/null
                     source "$file"
                 done
             fi
@@ -39,7 +39,7 @@ if [[ $IS_WSL == "true" ]]; then
         for root in "$DOTFILES/bash" "$DOTFILES_PRIVATE/bash"; do
             if [[ -d "$root/windows-wsl/$folder" ]]; then
                 for file in $root/windows-wsl/$folder/*.bash; do
-                    # shellcheck disable=SC1090
+                    # shellcheck source=/dev/null
                     source "$file"
                 done
             fi
@@ -48,10 +48,10 @@ if [[ $IS_WSL == "true" ]]; then
 fi
 
 # Local config, this should be last and never checked into source control (or if it is it should be host specific)
-source_if "$HOME/.bashrc.local"
+# shellcheck source=/dev/null
+[[ -f "$HOME/.bashrc.local" ]] && source "$HOME/.bashrc.local"
 
 unset root
 unset base
 unset folder
 unset file
-

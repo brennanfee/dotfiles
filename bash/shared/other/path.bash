@@ -6,6 +6,7 @@ path_prepend "${HOME}/.local/bin"
 path_prepend "$DOTFILES/bin"
 path_prepend "$DOTFILES_PRIVATE/bin"
 path_prepend "${HOME}/bin"
+[[ -d "$WIN_HOME/winfiles/bin" ]] && path_append "${WIN_HOME}/winfiles/bin"
 
 if command_exists yarn; then
     path_append "$(yarn global bin)"

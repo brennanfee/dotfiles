@@ -6,7 +6,7 @@ function yt() {
         echo "Downloading $url"
         youtube-dl.exe "$url"
     else
-        url=$(xclip -o)
+        url=$(xsel -o)
         echo "Downloading $url"
         youtube-dl "$url"
     fi

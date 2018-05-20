@@ -1,4 +1,5 @@
 #!/bin/bash
+# shellcheck disable=SC2034
 # Weather Icons (228 icons)
 # Codepoints: F000, F0EB, Nerd Fonts moved E300-E3EB
 # Nerd Fonts Version: 2.0.0
@@ -232,4 +233,3 @@ i='' i_weather_moon_alt_waning_crescent_4=$i
 i='' i_weather_moon_alt_waning_crescent_5=$i
 i='' i_weather_moon_alt_waning_crescent_6=$i
 i='' i_weather_moon_alt_new=$i
-

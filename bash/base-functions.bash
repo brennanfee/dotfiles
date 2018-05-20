@@ -3,15 +3,17 @@
 # Function that sets two environment variables to indicate the
 # type of machine we are on.
 function SetOsEnvironmentVariables() {
-    local uname=$(uname -s | tr '[:upper:]' '[:lower:]')
+    local uname
+    uname=$(uname -s | tr '[:upper:]' '[:lower:]')
     if [[ $uname == "darwin" ]]; then
         export OS_PRIMARY="macos"
         export OS_SECONDARY="macos"
     elif [[ $uname == "linux" ]]; then
         export OS_PRIMARY="linux"
-        export OS_SECONDARY=$(cat /etc/os-release | grep -i '^ID=' | sed -e 's/^ID=//' | tr '[:upper:]' '[:lower:]')
+        export OS_SECONDARY
+        OS_SECONDARY=$(grep -i '^ID=' </etc/os-release | sed -e 's/^ID=//' | tr '[:upper:]' '[:lower:]')
         if [[ "${OS_SECONDARY}x" == "x" ]]; then
-            export OS_SECONDARY="unknown"
+            OS_SECONDARY="unknown"
         fi
     elif [[ $uname == "freebsd" ]]; then
         export OS_PRIMARY="bsd"
@@ -25,7 +27,8 @@ function SetOsEnvironmentVariables() {
     fi
 
     # Also check to see if we are runnin on Windows in WSL
-    local kernel=$(uname -r | tr '[:upper:]' '[:lower:]')
+    local kernel
+    kernel=$(uname -r | tr '[:upper:]' '[:lower:]')
     if [[ $kernel == *"microsoft"* ]]; then
         export IS_WSL="true"
     else
@@ -34,15 +37,27 @@ function SetOsEnvironmentVariables() {
 }
 
 function is_mac() {
-    return [[ $OS_PRIMARY == "macos" ]]
+    if [[ $OS_PRIMARY == "macos" ]]; then
+        return 0
+    else
+        return 1
+    fi
 }
 
 function is_linux() {
-    return [[ $OS_PRIMARY == "linux" ]]
+    if [[ $OS_PRIMARY == "linux" ]]; then
+        return 0
+    else
+        return 1
+    fi
 }
 
 function is_windows() {
-    return [[ $IS_WSL == "true" ]]
+    if [[ $IS_WSL == "true" ]]; then
+        return 0
+    else
+        return 1
+    fi
 }
 
 function SetVirtualizationEnvironmentVariables() {
@@ -64,9 +79,11 @@ function SetVirtualizationEnvironmentVariables() {
         export IS_VIRTUAL="true"
     fi
 
-    export VIRT_TECH="$(systemd-detect-virt)"
+    local VIRT_TECH
+    VIRT_TECH="$(systemd-detect-virt)"
+    export VIRT_TECH
 
-    if [[ "$(cat /etc/passwd | grep -i '^vagrant')x" == "x" ]]; then
+    if [[ "$(grep -i '^vagrant' </etc/passwd)x" == "x" ]]; then
         export IS_VAGRANT="false"
     else
         export IS_VAGRANT="true"
@@ -104,6 +121,7 @@ function manpath_prepend() {
 # function to make sourcing an optional item easier
 function source_if() {
     if [[ -f $1 ]]; then
+        # shellcheck source=/dev/null
         source "$1"
     fi
 }

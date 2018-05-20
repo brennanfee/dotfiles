@@ -1,4 +1,5 @@
 #!/bin/bash
+# shellcheck disable=SC2034
 # Seti-UI + Custom (53 icons, 6 aliases)
 # Codepoints: E5FA-E62E
 # Nerd Fonts Version: 2.0.0
@@ -6,7 +7,7 @@
 test -n "$__i_seti_loaded" && return || __i_seti_loaded=1
 i='' i_custom_folder_npm=$i
 i='' i_custom_folder_git=$i
-      i_custom_folder_git_branch=$i_custom_folder_git
+i_custom_folder_git_branch=$i_custom_folder_git
 i='' i_custom_folder_config=$i
 i='' i_custom_folder_github=$i
 i='' i_custom_folder_open=$i
@@ -23,7 +24,7 @@ i='' i_seti_php=$i
 i='' i_seti_markdown=$i
 i='' i_seti_license=$i
 i='' i_seti_json=$i
-      i_seti_less=$i_seti_json
+i_seti_less=$i_seti_json
 i='' i_seti_javascript=$i
 i='' i_seti_image=$i
 i='' i_seti_html=$i
@@ -31,7 +32,7 @@ i='' i_seti_mustache=$i
 i='' i_seti_gulp=$i
 i='' i_seti_grunt=$i
 i='' i_seti_default=$i
-      i_seti_text=$i_seti_default
+i_seti_text=$i_seti_default
 i='' i_seti_folder=$i
 i='' i_seti_css=$i
 i='' i_seti_config=$i
@@ -41,15 +42,15 @@ i='' i_seti_ejs=$i
 i='' i_seti_xml=$i
 i='' i_seti_bower=$i
 i='' i_seti_coffee=$i
-      i_seti_cjsx=$i_seti_coffee
+i_seti_cjsx=$i_seti_coffee
 i='' i_seti_twig=$i
 i='' i_custom_cpp=$i
 i='' i_custom_c=$i
 i='' i_seti_haskell=$i
 i='' i_seti_lua=$i
 i='' i_indent_line=$i
-      i_indentation_line=$i_indent_line
-      i_indent_dotted_guide=$i_indent_line
+i_indentation_line=$i_indent_line
+i_indent_dotted_guide=$i_indent_line
 i='' i_seti_karma=$i
 i='' i_seti_favicon=$i
 i='' i_seti_julia=$i

@@ -1,4 +1,5 @@
 #!/bin/bash
+# shellcheck disable=SC2034
 # Devicons (198 icons, 7 do not have an established name)
 # Codepoints: Nerd moved E600-E6C5 → E700-E7C5
 test -n "$__i_dev_loaded" && return || __i_dev_loaded=1

@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC2139
 
 git_cmd="git"
 if command_exists hub; then
@@ -14,7 +15,7 @@ alias gss="$git_cmd status -sb"
 
 alias gp="$git_cmd push"
 alias gf="$git_cmd fetch"
-alias gm="$git_cmd pull"
+alias gl="$git_cmd pull"
 alias ga="$git_cmd add ."
 alias gc="$git_cmd commit"
 

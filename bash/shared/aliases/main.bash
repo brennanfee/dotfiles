@@ -32,10 +32,6 @@ alias sl="ls"
 alias md='mkdir -p'
 alias mkdir="mkdir -p"
 
-# Top, ps, and other process tools
-alias psgrep='ps aux | grep $(echo $1 | sed "s/^\(.\)/[\1]/g")'
-alias psag='ps aux | ag $(echo $1 | sed "s/^\(.\)/[\1]/g")'
-
 # Default to human readable figures
 alias vi="vim"
 alias df='df -h'
@@ -45,7 +41,10 @@ alias du='du -h'
 alias cls="clear"
 
 # Editor mappings
-alias edit=e
+alias e='$EDITOR'
+alias edit='$EDITOR'
+alias ev='$VISUAL'
+alias vis='$VISUAL'
 alias v="vim -R"
 alias view="vim -R"
 
@@ -73,6 +72,7 @@ if command_exists rg; then
 fi
 
 # vless
+# shellcheck disable=SC2139
 alias vless="/usr/share/vim/vim$VIM_VER/macros/less.sh"
 
 # Setting up command-line web tools with a user agent
@@ -82,5 +82,5 @@ if [[ $USER_AGENT != "" ]]; then
 fi
 
 if command_exists thefuck; then
-    eval $(thefuck --alias)
+    eval "$(thefuck --alias)"
 fi

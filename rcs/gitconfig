@@ -4,11 +4,24 @@
     followTags = true
 [color]
     ui = auto
+[color "diff-highlight"]
+    oldNormal = red bold
+    oldHighlight = red bold 52
+    newNormal = green bold
+    newHighlight = green bold 22
+[color "diff"]
+    meta = yellow
+    frag = magenta bold
+    commit = yellow bold
+    old = red bold
+    new = green bold
+    whitespace = red reverse
 [core]
     editor = vim
     eol = lf
     autocrlf = input
     gvfs = true
+    pager = diff-so-fancy | less --tabs=4 -RFX
 [fetch]
     prune = true
 [http]
@@ -23,11 +36,12 @@
     ci = commit
     br = branch
     st = status
-    p = pull
+    p = push
+    l = pull
     unstage = 'reset HEAD --'
     last = 'log -1 HEAD'
+    patch = !git --no-pager diff --no-color
 [include]
     path = ~/.config/git/gitconfig.os
     path = ~/.config/git/gitconfig.user
     path = ~/.config/git/gitconfig.local
-

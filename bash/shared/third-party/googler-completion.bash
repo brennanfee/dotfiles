@@ -9,8 +9,7 @@ _googler() {
     COMPREPLY=()
     local IFS=$' \n'
     local cur=$2 prev=$3
-    local -a opts opts_with_args
-    opts=(
+    local opts=(
         -h --help
         -s --start
         -n --count
@@ -36,7 +35,7 @@ _googler() {
         -v --version
         -d --debug
     )
-    opts_with_arg=(
+    local opts_with_arg=(
         -s --start
         -n --count
         -c --tld
@@ -55,7 +54,7 @@ _googler() {
         # Do not complete option arguments; only autocomplete positional
         # arguments (queries).
         for opt in "${opts_with_arg[@]}"; do
-            [[ $opt == $prev ]] && return 1
+            [[ $opt == "$prev" ]] && return 1
         done
 
         local completion
