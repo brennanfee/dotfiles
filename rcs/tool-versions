@@ -5,7 +5,6 @@ terraform 0.11.5
 vault 0.9.6
 golang 1.10.1
 lua 5.3.3
-luaJIT 2.0.3--2.4.2
 php 7.2.4
 ruby 2.5.1
 rust stable
