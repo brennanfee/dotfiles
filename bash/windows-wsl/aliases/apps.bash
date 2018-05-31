@@ -1,5 +1,10 @@
 # Aliases for linux apps, redirecting to windows versions
-alias gvim="/mnt/c/Program\ Files\ \(x86\)/vim/vim80/gvim.exe"
+
+if [[ -d "/mnt/c/Program\ Files\ \(x86\)/vim/vim81" ]]; then
+    alias gvim="/mnt/c/Program\ Files\ \(x86\)/vim/vim81/gvim.exe"
+elif [[ -d "/mnt/c/Program Files (x86)/vim/vim80" ]]; then
+    alias gvim="/mnt/c/Program\ Files\ \(x86\)/vim/vim80/gvim.exe"
+fi
 
 alias docker="docker.exe"
 alias docker-compose="docker-compose.exe"
