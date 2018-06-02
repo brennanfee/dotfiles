@@ -16,7 +16,7 @@ alias gss="$git_cmd status -sb"
 alias gpu="$git_cmd push"
 alias gpl="$git_cmd pull"
 alias gf="$git_cmd fetch"
-alias ga="$git_cmd add"
+alias ga="$git_cmd add ."
 alias gc="$git_cmd commit"
 
 alias gexp="$git_cmd archive --format zip --output"
