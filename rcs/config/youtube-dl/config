@@ -7,7 +7,10 @@
 -o ~/Videos/%(title)s.%(ext)s
 
 # Best video format up to 720p
--f '(mp4,webm)best[height<=?720]'
+#-f '(mp4,webm)best[height<=?720]'
+-f 'bestvideo[ext=mp4][height<=?1080]+bestaudio[ext=m4a]/bestvideo[ext=webm][height<=?1080]+bestaudio[ext=webm]/best[height<=?1080]/best'
+
+--prefer-free-formats
 
 --audio-format mp3
 
