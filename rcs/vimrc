@@ -308,7 +308,8 @@ let g:ale_linters = {
     \ 'typescript': ['tslint'],
     \ 'vim': ['vint'],
     \ 'xml': ['xmllint'],
-    \ 'yaml': ['yamlint'],
+    \ 'yaml': ['yamllint'],
+    \ 'yaml.ansible': ['ansible_lint'],
 \}
 
 let g:ale_fixers = {
