@@ -121,6 +121,9 @@ else
     colorscheme darcula
 endif
 
+" Darcula doesn't have a ColorColumn
+highlight ColorColumn ctermbg=235 guibg=#353535
+
 " Setup mouse
 if has('mouse')
     if !has('nvim')
