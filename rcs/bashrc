@@ -2,7 +2,7 @@
 
 # If not running interactively, don't do anything
 if [[ $- != *i* ]]; then
-    return
+  return
 fi
 
 export DOTFILES="$HOME/.dotfiles"
@@ -21,30 +21,30 @@ SetVirtualizationEnvironmentVariables
 # We want to walk "outside" in... which is to say run all options files first, then all
 # exports, then all functions, etc.
 for folder in "options" "exports" "functions" "third-party" "other" "aliases"; do
-    for base in "shared" "$OS_PRIMARY" "distros/$OS_SECONDARY"; do
-        for root in "$DOTFILES/bash" "$DOTFILES_PRIVATE/bash"; do
-            if [[ -d "$root/$base/$folder" ]]; then
-                for file in $root/$base/$folder/*.bash; do
-                    # shellcheck source=/dev/null
-                    source "$file"
-                done
-            fi
+  for base in "shared" "$OS_PRIMARY" "distros/$OS_SECONDARY"; do
+    for root in "$DOTFILES/bash" "$DOTFILES_PRIVATE/bash"; do
+      if [[ -d "$root/$base/$folder" ]]; then
+        for file in $root/$base/$folder/*.bash; do
+          # shellcheck source=/dev/null
+          source "$file"
         done
+      fi
     done
+  done
 done
 
 # On Windows shells runnin in WSL run some overrides
 if [[ $IS_WSL == "true" ]]; then
-    for folder in "options" "exports" "functions" "third-party" "other" "aliases"; do
-        for root in "$DOTFILES/bash" "$DOTFILES_PRIVATE/bash"; do
-            if [[ -d "$root/windows-wsl/$folder" ]]; then
-                for file in $root/windows-wsl/$folder/*.bash; do
-                    # shellcheck source=/dev/null
-                    source "$file"
-                done
-            fi
+  for folder in "options" "exports" "functions" "third-party" "other" "aliases"; do
+    for root in "$DOTFILES/bash" "$DOTFILES_PRIVATE/bash"; do
+      if [[ -d "$root/windows-wsl/$folder" ]]; then
+        for file in $root/windows-wsl/$folder/*.bash; do
+          # shellcheck source=/dev/null
+          source "$file"
         done
+      fi
     done
+  done
 fi
 
 # Local config, this should be last and never checked into source control (or if it is it should be host specific)

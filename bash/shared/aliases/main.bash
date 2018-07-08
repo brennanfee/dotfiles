@@ -15,8 +15,8 @@ alias sudo="sudo -H"
 
 # Most is less
 if command_exists most; then
-    alias less="most"
-    alias more="most"
+  alias less="most"
+  alias more="most"
 fi
 
 # Alternates/extensions of ls
@@ -68,7 +68,7 @@ alias cdu='cd ..'
 
 # RipGrep should always use "smart-case"
 if command_exists rg; then
-    alias rg='rg -S'
+  alias rg='rg -S'
 fi
 
 # vless
@@ -77,10 +77,10 @@ alias vless="/usr/share/vim/vim$VIM_VER/macros/less.sh"
 
 # Setting up command-line web tools with a user agent
 if [[ $USER_AGENT != "" ]]; then
-    alias wget='wget --user-agent="$USER_AGENT"'
-    alias curl='curl -A "$USER_AGENT"'
+  alias wget='wget --user-agent="$USER_AGENT"'
+  alias curl='curl -A "$USER_AGENT"'
 fi
 
 if command_exists thefuck; then
-    eval "$(thefuck --alias)"
+  eval "$(thefuck --alias)"
 fi

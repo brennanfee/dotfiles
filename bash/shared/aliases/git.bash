@@ -3,8 +3,8 @@
 
 git_cmd="git"
 if command_exists hub; then
-    git_cmd="hub"
-    eval "$(hub alias -s)"
+  git_cmd="hub"
+  eval "$(hub alias -s)"
 fi
 
 alias g="$git_cmd"

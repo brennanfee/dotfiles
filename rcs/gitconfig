@@ -1,47 +1,47 @@
 # This is Git's global configuration file.
 [push]
-    default = simple
-    followTags = true
+  default = simple
+  followTags = true
 [color]
-    ui = auto
+  ui = auto
 [color "diff-highlight"]
-    oldNormal = red bold
-    oldHighlight = red bold 52
-    newNormal = green bold
-    newHighlight = green bold 22
+  oldNormal = red bold
+  oldHighlight = red bold 52
+  newNormal = green bold
+  newHighlight = green bold 22
 [color "diff"]
-    meta = yellow
-    frag = magenta bold
-    commit = yellow bold
-    old = red bold
-    new = green bold
-    whitespace = red reverse
+  meta = yellow
+  frag = magenta bold
+  commit = yellow bold
+  old = red bold
+  new = green bold
+  whitespace = red reverse
 [core]
-    editor = vim
-    eol = lf
-    autocrlf = input
-    gvfs = true
-    pager = diff-so-fancy | less --tabs=4 -RFX
+  editor = vim
+  eol = lf
+  autocrlf = input
+  gvfs = true
+  pager = diff-so-fancy | less --tabs=4 -RFX
 [fetch]
-    prune = true
+  prune = true
 [http]
-    postBuffer = 524288000
+  postBuffer = 524288000
 [diff]
-    renamelimit = 0
+  renamelimit = 0
 [merge]
-    renamelimit = 0
+  renamelimit = 0
 [alias]
-    co = checkout
-    c = commit
-    ci = commit
-    br = branch
-    st = status
-    p = push
-    l = pull
-    unstage = 'reset HEAD --'
-    last = 'log -1 HEAD'
-    patch = !git --no-pager diff --no-color
+  co = checkout
+  c = commit
+  ci = commit
+  br = branch
+  st = status
+  p = push
+  l = pull
+  unstage = 'reset HEAD --'
+  last = 'log -1 HEAD'
+  patch = !git --no-pager diff --no-color
 [include]
-    path = ~/.config/git/gitconfig.os
-    path = ~/.config/git/gitconfig.user
-    path = ~/.config/git/gitconfig.local
+  path = ~/.config/git/gitconfig.os
+  path = ~/.config/git/gitconfig.user
+  path = ~/.config/git/gitconfig.local

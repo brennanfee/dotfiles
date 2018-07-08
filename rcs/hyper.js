@@ -3,121 +3,121 @@
 // currently supported options.
 
 module.exports = {
-    config: {
-        // Choose either "stable" for receiving highly polished, or "canary" for
-        // less polished but more frequent updates
-        updateChannel: "stable",
+  config: {
+    // Choose either "stable" for receiving highly polished, or "canary" for
+    // less polished but more frequent updates
+    updateChannel: "stable",
 
-        // default font size in pixels for all tabs
-        fontSize: 20,
+    // default font size in pixels for all tabs
+    fontSize: 20,
 
-        // font family with optional fallbacks
-        fontFamily:
-            '"Hasklug Nerd Font", "Hasklug NF", "SauceCodePro Nerd Font", "SauceCodePro NF", "DejaVuSansMono Nerd Font", "DejaVuSansMono NF", "DejaVu Sans Mono", Consolas, "Lucida Console", monospace',
+    // font family with optional fallbacks
+    fontFamily:
+    '"Hasklug Nerd Font", "Hasklug NF", "SauceCodePro Nerd Font", "SauceCodePro NF", "DejaVuSansMono Nerd Font", "DejaVuSansMono NF", "DejaVu Sans Mono", Consolas, "Lucida Console", monospace',
 
-        // terminal cursor background color and opacity (hex, rgb, hsl, hsv, hwb or
-        // cmyk)
-        cursorColor: "#ff99ff",
+    // terminal cursor background color and opacity (hex, rgb, hsl, hsv, hwb or
+    // cmyk)
+    cursorColor: "#ff99ff",
 
-        // `BEAM` for |, `UNDERLINE` for _, `BLOCK` for █
-        cursorShape: "BLOCK",
+    // `BEAM` for |, `UNDERLINE` for _, `BLOCK` for █
+    cursorShape: "BLOCK",
 
-        // set to true for blinking cursor
-        cursorBlink: false,
+    // set to true for blinking cursor
+    cursorBlink: false,
 
-        // color of the text
-        foregroundColor: "#a9b7c6",
+    // color of the text
+    foregroundColor: "#a9b7c6",
 
-        // terminal background color
-        backgroundColor: "#2b2b2b",
+    // terminal background color
+    backgroundColor: "#2b2b2b",
 
-        // border color (window, tabs)
-        borderColor: "#333",
+    // border color (window, tabs)
+    borderColor: "#333",
 
-        // custom css to embed in the main window
-        css: "",
+    // custom css to embed in the main window
+    css: "",
 
-        // custom css to embed in the terminal window
-        termCSS: "",
+    // custom css to embed in the terminal window
+    termCSS: "",
 
-        // set to `true` (without backticks) if you're using a Linux setup that
-        // doesn't show native menus default: `false` on Linux, `true` on Windows
-        // (ignored on macOS)
-        showHamburgerMenu: "",
+    // set to `true` (without backticks) if you're using a Linux setup that
+    // doesn't show native menus default: `false` on Linux, `true` on Windows
+    // (ignored on macOS)
+    showHamburgerMenu: "",
 
-        // set to `false` if you want to hide the minimize, maximize and close
-        // buttons additionally, set to `'left'` if you want them on the left, like
-        // in Ubuntu default: `true` on windows and Linux (ignored on macOS)
-        showWindowControls: "",
+    // set to `false` if you want to hide the minimize, maximize and close
+    // buttons additionally, set to `'left'` if you want them on the left, like
+    // in Ubuntu default: `true` on windows and Linux (ignored on macOS)
+    showWindowControls: "",
 
-        // custom padding (css format, i.e.: `top right bottom left`)
-        padding: "12px 14px",
+    // custom padding (css format, i.e.: `top right bottom left`)
+    padding: "12px 14px",
 
-        // the full list. if you're going to provide the full color palette,
-        // including the 6 x 6 color cubes and the grayscale map, just provide an
-        // array here instead of a color map object
-        colors: {
-            black: "#2b2b2b",
-            red: "#8f5247",
-            green: "#6a8759",
-            yellow: "#cc7832",
-            blue: "#6897bb",
-            magenta: "#8976aa",
-            cyan: "#299999",
-            white: "#a9b7c6",
-            lightBlack: "#808080",
-            lightRed: "#c93b48",
-            lightGreen: "#659c6b",
-            lightYellow: "#ffc66d",
-            lightBlue: "#287bde",
-            lightMagenta: "#ff99ff",
-            lightCyan: "#62dada",
-            lightWhite: "#d0d0ff"
-        },
-
-        // the shell to run when spawning a new session (i.e. /usr/local/bin/fish)
-        // if left empty, your system's login shell will be used by default
-        //
-        // Windows - Make sure to use a full path if the binary name doesn't work -
-        // Remove `--login` in shellArgs
-        //
-        // Bash on Windows - Example: `C:\\Windows\\System32\\bash.exe`
-        //
-        // Powershell on Windows - Example:
-        // `C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe`
-        //shell: "bash",
-
-        // for setting shell arguments (i.e. for using interactive shellArgs:
-        // ['-i']) by default ['--login'] will be used
-        //shellArgs: ['--login'],
-
-        // for environment variables
-        env: {},
-
-        // set to false for no bell
-        bell: "SOUND",
-
-        // if true, selected text will automatically be copied to the clipboard
-        copyOnSelect: false
-
-        // if true, on right click selected text will be copied or pasted if no
-        // selection is present (true by default on Windows) quickEdit: true
-
-        // URL to custom bell bellSoundURL: 'http://example.com/bell.mp3',
-
-        // for advanced config flags please refer to https://hyper.is/#cfg
+    // the full list. if you're going to provide the full color palette,
+    // including the 6 x 6 color cubes and the grayscale map, just provide an
+    // array here instead of a color map object
+    colors: {
+      black: "#2b2b2b",
+      red: "#8f5247",
+      green: "#6a8759",
+      yellow: "#cc7832",
+      blue: "#6897bb",
+      magenta: "#8976aa",
+      cyan: "#299999",
+      white: "#a9b7c6",
+      lightBlack: "#808080",
+      lightRed: "#c93b48",
+      lightGreen: "#659c6b",
+      lightYellow: "#ffc66d",
+      lightBlue: "#287bde",
+      lightMagenta: "#ff99ff",
+      lightCyan: "#62dada",
+      lightWhite: "#d0d0ff"
     },
 
-    // a list of plugins to fetch and install from npm format:
-    // [@org/]project[#version] examples: `hyperpower` `@company/project`
-    // `project#1.0.1`
-    plugins: ["hyper-opacity"],
+    // the shell to run when spawning a new session (i.e. /usr/local/bin/fish)
+    // if left empty, your system's login shell will be used by default
+    //
+    // Windows - Make sure to use a full path if the binary name doesn't work -
+    // Remove `--login` in shellArgs
+    //
+    // Bash on Windows - Example: `C:\\Windows\\System32\\bash.exe`
+    //
+    // Powershell on Windows - Example:
+    // `C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe`
+    //shell: "bash",
 
-    // in development, you can create a directory under `~/.hyper_plugins/local/`
-    // and include it here to load it and avoid it being `npm install`ed
-    localPlugins: [],
+    // for setting shell arguments (i.e. for using interactive shellArgs:
+    // ['-i']) by default ['--login'] will be used
+    //shellArgs: ['--login'],
 
-    keymaps: {
-        // Example 'window:devtools': 'cmd+alt+o',
-    }
+    // for environment variables
+    env: {},
+
+    // set to false for no bell
+    bell: "SOUND",
+
+    // if true, selected text will automatically be copied to the clipboard
+    copyOnSelect: false
+
+    // if true, on right click selected text will be copied or pasted if no
+    // selection is present (true by default on Windows) quickEdit: true
+
+    // URL to custom bell bellSoundURL: 'http://example.com/bell.mp3',
+
+    // for advanced config flags please refer to https://hyper.is/#cfg
+  },
+
+  // a list of plugins to fetch and install from npm format:
+  // [@org/]project[#version] examples: `hyperpower` `@company/project`
+  // `project#1.0.1`
+  plugins: ["hyper-opacity"],
+
+  // in development, you can create a directory under `~/.hyper_plugins/local/`
+  // and include it here to load it and avoid it being `npm install`ed
+  localPlugins: [],
+
+  keymaps: {
+    // Example 'window:devtools': 'cmd+alt+o',
+  }
 };

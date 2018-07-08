@@ -407,6 +407,9 @@ nnoremap <silent> g1 :bfirst<CR>
 nnoremap <silent> g$ :blast<CR>
 nnoremap <silent> g4 :blast<CR>
 
+" Quick command to save quickly
+nnoremap <silent> gw :w<CR>
+
 "" Easymotion
 let g:EasyMotion_do_mapping = 0 " Disable default mappings
 let g:EasyMotion_smartcase = 1
