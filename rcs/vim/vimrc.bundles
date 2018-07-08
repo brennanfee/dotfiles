@@ -23,6 +23,7 @@ call minpac#add('tmhedberg/matchit')                " Adds extra things that mat
 call minpac#add('tpope/vim-sensible')               " Sensible vim defaults
 call minpac#add('tpope/vim-repeat')                 " Plugin to be used by other plugins to support the period key
 call minpac#add('tpope/vim-surround')               " Key mappings to deal with surrounding characters
+call minpac#add('tpope/vim-dispatch')               " Asynchronous build and test dispatcher
 call minpac#add('tpope/vim-git')                    " Plugin to be used by other plugins to add git support
 call minpac#add('tpope/vim-fugitive')               " Git functionality in vim
 call minpac#add('tpope/vim-rhubarb')                " GitHub extension
@@ -34,14 +35,20 @@ call minpac#add('tpope/vim-rsi')                    " Mappings to mimic readline
 call minpac#add('tpope/vim-eunuch')                 " Unix commands from within Vim
 call minpac#add('tpope/vim-speeddating')            " Ctl-A/Ctl-X support for dates, times, and more
 call minpac#add('tpope/vim-abolish')                " Support for fuzzy word abbrev's and search/replace
+call minpac#add('tpope/vim-apathy')                 " Sets the 'path' option for misc file types
+call minpac#add('tpope/vim-capslock')               " Software based capslock
 call minpac#add('tpope/vim-jdaddy')                 " JSON support
+call minpac#add('tpope/vim-projectionist')          " Allows project specific configurations
+call minpac#add('tpope/vim-rails', {'type': 'opt'})       " Ruby On Rails power tools
+call minpac#add('tpope/vim-rake', {'type': 'opt'})        " Ruby support, without Rails
+call minpac#add('tpope/vim-bundler', {'type': 'opt'})     " Support for Ruby bundler
+call minpac#add('tpope/vim-classpath', {'type': 'opt'})   " Set 'path' from the Java class path
 call minpac#add('junegunn/gv.vim')                  " Git log\commit browser (:GV)
-call minpac#add('vim-scripts/a.vim')                " Open 'alternative' files quickly (:A, <leader>ih)
 call minpac#add('wellle/targets.vim')               " Provides additional text objects
 call minpac#add('michaeljsmith/vim-indent-object')  " Provides a text object for lines at same indent level
 call minpac#add('easymotion/vim-easymotion')        " Jump to any visible character
 call minpac#add('svermeulen/vim-easyclip')          " Simplified clipboard functionality
-call minpac#add('mileszs/ack.vim')                  " Ack support, but I use it with RipGrep
+call minpac#add('mhinz/vim-grepper')                " Support for numerous grep-like tools (RG)
 call minpac#add('ctrlpvim/ctrlp.vim')               " Fuzzy file loader
 call minpac#add('jeetsukumaran/vim-filebeagle')     " Minimal directory browser
 call minpac#add('airblade/vim-rooter')              " Auto sets vim working directory to 'base' project folder
@@ -59,6 +66,7 @@ call minpac#add('sheerun/vim-polyglot')             " Large language pack
 call minpac#add('christoomey/vim-tmux-navigator')   " Easy navigation between vim and tmux
 call minpac#add('tmux-plugins/vim-tmux-focus-events') " Plugin needed when switching between tmux/vim, used by other plugins
 call minpac#add('roxma/vim-tmux-clipboard')         " Seamless integration for vim and tmux's clipboard
+call minpac#add('radenling/vim-dispatch-neovim')    " Native neovim terminal support for Dispatch
 call minpac#add('godlygeek/tabular')                " Tools for aligning text
 call minpac#add('ntpeters/vim-better-whitespace')   " Trailing whitespace highlighting
 call minpac#add('ap/vim-css-color')                 " Color previewer - don't really like this one, looking for alternative
@@ -67,12 +75,13 @@ call minpac#add('kana/vim-textobj-user')            " Used by other plugins to d
 call minpac#add('reedes/vim-textobj-sentence')      " A better 'sentence' text object for prose.
 call minpac#add('kshenoy/vim-signature')            " Show marks in the left column
 call minpac#add('ryanoasis/vim-devicons')           " File type icons from Nerd Fonts
+call minpac#add('janko-m/vim-test')                 " Run tests from within Vim
 
 if filereadable(expand('~/.vim/vimrc.bundles.os'))
-  source ~/.vimrc.bundles.os
+  source ~/.vim/vimrc.bundles.os
 endif
 
 if filereadable(expand('~/.vim/vimrc.bundles.local'))
-  source ~/.vimrc.bundles.local
+  source ~/.vim/rc.bundles.local
 endif
 

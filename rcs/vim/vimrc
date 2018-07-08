@@ -1,30 +1,32 @@
 scriptencoding utf-8
 
+""" Main settings
+
 " Vim 8 defaults
 unlet! skip_defaults_vim
 silent! source $VIMRUNTIME/defaults.vim
 augroup vimStartup
-    au!
+  au!
 augroup END
 
-if filereadable(expand("~/.vim/vimrc.bundles"))
-    source ~/.vim/vimrc.bundles
+if filereadable(expand('~/.vim/vimrc.bundles'))
+  source ~/.vim/vimrc.bundles
 endif
 
-if has("multi_byte")
-    if &termencoding == ""
-        let &termencoding = &encoding
-    endif
-    set encoding=utf-8
-    set nobomb
-    setglobal fileencoding=utf-8
-    set fileencodings=ucs-bom,utf-8,latin1
+if has('multi_byte')
+  if &termencoding == ''
+    let &termencoding = &encoding
+  endif
+  set encoding=utf-8
+  set nobomb
+  setglobal fileencoding=utf-8
+  set fileencodings=ucs-bom,utf-8,latin1
 endif
 
 let mapleader = ","
 let maplocalleader = "\\"
 
-set exrc
+set noexrc
 set pastetoggle=<F2>
 
 set relativenumber  " set realtive numbers to show
@@ -38,7 +40,7 @@ set scrolloff=4
 set linebreak
 set nowrap
 if &diff
-    set wrap
+  set wrap
 endif
 
 set hlsearch
@@ -71,9 +73,9 @@ set undofile
 set undodir=~/.vim/vimscratch/undo//,$TEMP//,$TMP//
 
 if !has('nvim')
-    set viminfo+=n~/.cache/vim/viminfo
+  set viminfo+=n~/.cache/vim/viminfo
 else
-    set viminfo+=n~/.cache/nvim/shada
+  set viminfo+=n~/.cache/nvim/shada
 endif
 
 set noshowmode
@@ -81,7 +83,7 @@ set conceallevel=2
 
 set listchars=tab:>\ ,trail:-,extends:>,precedes:<
 if (&termencoding ==# 'utf-8' || &encoding ==# 'utf-8') && version >= 700
-    let &listchars="tab:\u25b8 ,trail:\u00b7,extends:\u00bb,precedes:\u00ab"
+  let &listchars="tab:\u25b8 ,trail:\u00b7,extends:\u00bb,precedes:\u00ab"
 endif
 set list
 
@@ -94,83 +96,84 @@ endif
 set background=dark
 
 if has('gui_running')
-    set guioptions-=T
-    set guioptions-=t
-    set guioptions-=m
-    colorscheme darcula
-    if has('gui_win32') || has('gui_win64')
-        set guifont=Hasklug_NF:h14
-    elseif has('gui_macvim')
-        set guifont=Hasklug\ Nerd\ Font\ Complete:h18
-    else
-        set guifont=Hasklug\ Nerd\ Font\ 16
-    endif
+  set guioptions-=T
+  set guioptions-=t
+  set guioptions-=m
+  colorscheme darcula
+  if has('gui_win32') || has('gui_win64')
+    set guifont=Hasklug_NF:h14
+  elseif has('gui_macvim')
+    set guifont=Hasklug\ Nerd\ Font\ Complete:h18
+  else
+    set guifont=Hasklug\ Nerd\ Font\ 16
+  endif
 else
-    if ! has('nvim')
-        set term=screen-256color
-    endif
+  if ! has('nvim')
+    set term=screen-256color
+  endif
 
-    set t_Co=256
+  set t_Co=256
 
-    if has('termguicolors')
-        let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-        let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-        set termguicolors
-    endif
+  if has('termguicolors')
+    let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+    let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+    set termguicolors
+  endif
 
-    colorscheme darcula
+  colorscheme darcula
 endif
 
 " Darcula doesn't have a ColorColumn
 highlight ColorColumn ctermbg=235 guibg=#353535
+highlight CursorLine ctermbg=235 guibg=#353535
 
 " Setup mouse
 if has('mouse')
-    if !has('nvim')
-        set ttymouse=xterm2
-    endif
+  if !has('nvim')
+    set ttymouse=xterm2
+  endif
 
-    set mouse=a
+  set mouse=a
 endif
 
 if has('windows')
-    set shell=bash
-    nnoremap <silent> <leader>y :call system('win32yank.exe -i', @0)<CR>
-    vnoremap <silent> <leader>y :call system('win32yank.exe -i', @0)<CR>
+  set shell=bash
+  nnoremap <silent> <leader>y :call system('win32yank.exe -i', @0)<CR>
+  vnoremap <silent> <leader>y :call system('win32yank.exe -i', @0)<CR>
 endif
 
 " Source the vimrc if saved
 augroup autoreload_vimrc
-    autocmd!
-    autocmd BufWritePost $MYVIMRC source $MYVIMRC
-    autocmd BufWritePost ~/.vim/vimrc.bundles source $MYVIMRC
-    autocmd BufWritePost ~/.vim/vimrc.lightline source $MYVIMRC
+  autocmd!
+  autocmd BufWritePost $MYVIMRC source $MYVIMRC
+  autocmd BufWritePost ~/.vim/vimrc.bundles source $MYVIMRC
+  autocmd BufWritePost ~/.vim/vimrc.lightline source $MYVIMRC
 augroup END
 
 " Force the # of columns to no more than 120
 set columns=120
 augroup force_columns
-    autocmd!
-    autocmd VimResized * if (&columns > 120) | set columns=120 | endif
+  autocmd!
+  autocmd VimResized * if (&columns > 120) | set columns=120 | endif
 augroup END
 
 " Close vim if buffer is closed and there are no more buffers
 function! CloseOnLastBuffer()
-    let cnt = 0
-    for nr in range(1, bufnr("$"))
-        if buflisted(nr) && ! empty(bufname(nr)) || getbufvar(nr, '&buftype') ==# 'help'
-            let cnt += 1
-        endif
-    endfor
-
-    if cnt == 1
-        :q
+  let cnt = 0
+  for nr in range(1, bufnr("$"))
+    if buflisted(nr) && ! empty(bufname(nr)) || getbufvar(nr, '&buftype') ==# 'help'
+      let cnt += 1
     endif
+  endfor
+
+  if cnt == 1
+    :q
+  endif
 endfunction
 
 augroup close_on_last_buffer
-    autocmd!
-    autocmd BufDelete * call CloseOnLastBuffer()
+  autocmd!
+  autocmd BufDelete * call CloseOnLastBuffer()
 augroup END
 
 """ KEYBOARD MAPPINGS
@@ -178,17 +181,18 @@ augroup END
 " Make zz be the same as 1z= (fix spelling with the first suggestion)
 nnoremap zz 1z=e
 
-" Leader K to grep word under cursor
-nnoremap <leader>k :grep! "\b<C-R><C-W>\b"<CR>:cw<CR><CR>
-
 " Mappings to manage vimrc
 nmap <leader>ev :e $MYVIMRC<CR>
 nmap <leader>eb :e ~/.vim/vimrc.bundles<CR>
 nmap <leader>sv :source $MYVIMRC<CR>
 
+" Turn off highligting
+nnoremap <leader>n :noh<CR>
+nnoremap <leader><space> :noh<CR>
+
 " Map space-<hjkl> to add a space or a line in that direction
-nnoremap <space>j <Plug>unimpairedBlankDown
-nnoremap <space>k <Plug>unimpairedBlankUp
+nmap <space>j ]<space>
+nmap <space>k [<space>
 nnoremap <space>h i<space><esc>
 nnoremap <space>l a<space><esc>
 
@@ -197,28 +201,40 @@ nmap <silent> <leader>c :bufdo if &buftype == "quickfix" <bar><bar> &buftype == 
 
 " Map lk to be another version of escape in insert and command mode
 if has('gui_running')
-    inoremap lk <esc>
-    cnoremap lk <esc>
+  inoremap lk <esc>
+  cnoremap lk <esc>
 else
-    :set <F13>=lk
-    :inoremap <F13> <esc>
-    :cnoremap <F13> <esc>
+  set <F13>=lk
+  inoremap <F13> <esc>
+  cnoremap <F13> <esc>
 endif
 
-augroup filetypes_mappings
-    autocmd!
-    autocmd BufNewFile,BufFilePre,BufRead *.md set filetype=markdown
-    autocmd BufNewFile,BufFilePre,BufRead LICENSE set filetype=text
-augroup END
+" Neovim specific mappings
+if has('nvim')
+  " Make escape work like normal in the terminal
+  tnoremap <Esc> <C-\><C-n>
+  " So, now we need to provide a way to send escape to the underlying app
+  tnoremap <C-v><Esc> <Esc>
+
+  " Some custom colors for Terminals
+  highlight! link TermCursor Cursor
+  highlight! TermCursorNC guibg=red guifg=white ctermbg=1 ctermfg=15
+endif
 
 """ LANGUAGE & FILETYPE SETTINGS
+
+augroup filetypes_mappings
+  autocmd!
+  autocmd BufNewFile,BufFilePre,BufRead *.md set filetype=markdown
+  autocmd BufNewFile,BufFilePre,BufRead LICENSE set filetype=text
+augroup END
 
 " Markdown
 " First, turn off the one that comes with vim-polyglot
 let g:polyglot_disabled = ['markdown']
 augroup markdown_group
-    autocmd!
-    autocmd FileType markdown setlocal wrap
+  autocmd!
+  autocmd FileType markdown setlocal wrap
 augroup END
 
 let g:markdown_fenced_languages = ['html', 'css', 'python', 'bash=sh', 'javascript', 'ruby', 'c', 'c#=cs', 'csharp=cs', "c++=cpp", 'viml=vim', 'ini=dosini' ]
@@ -229,56 +245,64 @@ hi htmlBoldItalic ctermfg=188 ctermbg=235 cterm=bold guifg=#a9b7c6 guibg=#2b2b2b
 
 " Git commits - Turn spellcheck on
 augroup gitcommit_group
-    autocmd!
-    autocmd FileType git,gitsendemail,*commit*,*COMMIT* setlocal spell
+  autocmd!
+  autocmd FileType git,gitsendemail,*commit*,*COMMIT* setlocal spell
 augroup END
+
+" Utility to map command aliases
+function! SetupCommandAlias(input, output)
+  exec 'cabbrev <expr> '.a:input
+        \ .' ((getcmdtype() is# ":" && getcmdline() is# "'.a:input.'")'
+        \ .'? ("'.a:output.'") : ("'.a:input.'"))'
+endfunction
 
 """ PLUGIN SETTINGS
 
-" vim-gui-position
-let g:gui_position_file_name = $HOME . "/.cache/vim/vimsize"
+"" vim-gui-position
+let g:gui_position_file_name = $HOME . '/.cache/vim/vimsize'
 
-" Ack.vim & Ctrl-P
+"" Ctrl-P (set up to us RipGrep - rg)
 if executable('rg')
-    " Use rg over Grep
-    let prg = &grepprg
-    set grepprg&
-    if prg ==# &grepprg
-        set grepformat=%f:%l:%c:%m
-        let &grepprg = 'rg --color=never --smart-case'
-    else
-        let &grepprg = prg
-    endif
+  " Use rg in CtrlP for listing files. Lightning fast and respects .gitignore
+  let g:ctrlp_user_command = 'rg %s --files --color=never --glob ""'
 
-    " Use rg in CtrlP for listing files. Lightning fast and respects .gitignore
-    let g:ctrlp_user_command = 'rg %s --files --color=never --glob ""'
-    " let g:ctrlp_user_command = 'dir %s /-n /b/s /a-d'
-
-    " rg is fast enough that CtrlP doesn't need to cache
-    let g:ctrlp_use_caching = 0
-
-    " Set up ack.vim plugin to use rg instead of ack
-    let g:ackprg = 'rg --vimgrep --no-heading --color=never --smart-case'
-    cnoreabbrev ag Ack
-    cnoreabbrev aG Ack
-    cnoreabbrev Ag Ack
-    cnoreabbrev AG Ack
-    cnoreabbrev rg Ack
-    cnoreabbrev rG Ack
-    cnoreabbrev Rg Ack
-    cnoreabbrev RG Ack
+  " rg is fast enough that CtrlP doesn't need to cache
+  let g:ctrlp_use_caching = 0
 endif
 
 let g:ctrlp_working_path_mode = 'ra'
 let g:ctrlp_clear_cache_on_exit = 1
 
-" EditorConfig
+"" Grepper
+let g:grepper = {}
+let g:grepper.tools = ['rg', 'git', 'grep']
+
+" Search for current word
+nnoremap <leader>* :Grepper -cword -noprompt<CR>
+nnoremap <leader>g :Grepper -cword -noprompt<CR>
+
+" Search for current selection
+nmap gs <plug>(GrepperOperator)
+xmap gs <plug>(GrepperOperator)
+
+call SetupCommandAlias('grep', 'GrepperRg')
+cnoreabbrev rg GrepperRg
+cnoreabbrev rG GrepperRg
+cnoreabbrev Rg GrepperRg
+cnoreabbrev RG GrepperRg
+
+if executable('rg')
+  set grepprg=rg\ -H\ --no-heading\ --vimgrep
+  set grepformat=%f:%l:%c:%m
+endif
+
+"" EditorConfig
 
 let g:editorconfig_blacklist = {
-\    'filetype': ['git.*', 'fugitive']
-\}
+      \    'filetype': ['git.*', 'fugitive']
+      \}
 
-" ALE
+"" ALE
 
 let g:ale_sign_column_always = 1
 let g:ale_lint_on_text_changed = 'normal'
@@ -288,56 +312,61 @@ let g:ale_sign_warning = "\uf071"
 let g:ale_fix_on_save = 1
 
 let g:ale_linters = {
-    \ 'ansible': ['ansible_lint'],
-    \ 'awk': ['gawk'],
-    \ 'cmake': ['cmakelint'],
-    \ 'css': ['stylelint'],
-    \ 'gitcommit': ['gitlint'],
-    \ 'graphql': ['eslint'],
-    \ 'html': ['htmlhint', 'proselint'],
-    \ 'javascript': ['eslint'],
-    \ 'json': ['jsonlint'],
-    \ 'json5': ['eslint'],
-    \ 'less': ['stylelint'],
-    \ 'mail': ['proselint'],
-    \ 'make': ['checkmake'],
-    \ 'markdown': ['proselint'],
-    \ 'sass': ['stylelint'],
-    \ 'scss': ['stylelint'],
-    \ 'sh': ['shellcheck', 'shell'],
-    \ 'stylus': ['stylelint'],
-    \ 'tex': ['chktex', 'proselint'],
-    \ 'texinfo': ['proselint'],
-    \ 'text': ['proselint'],
-    \ 'typescript': ['tslint'],
-    \ 'vim': ['vint'],
-    \ 'xml': ['xmllint'],
-    \ 'yaml': ['yamllint'],
-    \ 'yaml.ansible': ['ansible_lint'],
-\}
+      \ 'ansible': ['ansible_lint'],
+      \ 'awk': ['gawk'],
+      \ 'cmake': ['cmakelint'],
+      \ 'css': ['stylelint'],
+      \ 'gitcommit': ['gitlint'],
+      \ 'graphql': ['eslint'],
+      \ 'html': ['htmlhint', 'proselint'],
+      \ 'javascript': ['eslint'],
+      \ 'json': ['jsonlint'],
+      \ 'json5': ['eslint'],
+      \ 'less': ['stylelint'],
+      \ 'mail': ['proselint'],
+      \ 'make': ['checkmake'],
+      \ 'markdown': ['proselint'],
+      \ 'sass': ['stylelint'],
+      \ 'scss': ['stylelint'],
+      \ 'sh': ['shellcheck', 'shell'],
+      \ 'stylus': ['stylelint'],
+      \ 'tex': ['chktex', 'proselint'],
+      \ 'texinfo': ['proselint'],
+      \ 'text': ['proselint'],
+      \ 'typescript': ['tslint'],
+      \ 'vim': ['vint'],
+      \ 'xml': ['xmllint'],
+      \ 'yaml': ['yamllint'],
+      \ 'yaml.ansible': ['ansible_lint'],
+      \}
 
 let g:ale_fixers = {
-    \ 'css': ['stylelint', 'prettier'],
-    \ 'graphql': ['prettier'],
-    \ 'javascript': ['prettier'],
-    \ 'json': ['prettier'],
-    \ 'json5': ['prettier'],
-    \ 'less': ['stylelint', 'prettier'],
-    \ 'markdown': ['prettier'],
-    \ 'sass': ['stylelint', 'prettier'],
-    \ 'scss': ['stylelint', 'prettier'],
-    \ 'sh': ['shfmt'],
-    \ 'stylus': ['stylelint', 'prettier'],
-    \ 'typescript': ['prettier'],
-    \ 'vue': ['prettier'],
-\}
+      \ 'css': ['stylelint', 'prettier'],
+      \ 'graphql': ['prettier'],
+      \ 'javascript': ['prettier'],
+      \ 'json': ['prettier'],
+      \ 'json5': ['prettier'],
+      \ 'less': ['stylelint', 'prettier'],
+      \ 'markdown': ['prettier'],
+      \ 'sass': ['stylelint', 'prettier'],
+      \ 'scss': ['stylelint', 'prettier'],
+      \ 'sh': ['shfmt'],
+      \ 'stylus': ['stylelint', 'prettier'],
+      \ 'typescript': ['prettier'],
+      \ 'vue': ['prettier'],
+      \}
 
 let g:ale_sh_shfmt_options = '-i 2 -ci -s'
 
-" Signify
+nmap <silent> [W <Plug>(ale_first)
+nmap <silent> [w <Plug>(ale_previous)
+nmap <silent> ]w <Plug>(ale_next)
+nmap <silent> ]W <Plug>(ale_last)
+
+"" Signify
 
 if exists('&signcolumn')
-    set signcolumn=yes
+  set signcolumn=yes
 endif
 
 let g:signify_vcs_list = [ 'git' ]
@@ -353,18 +382,18 @@ hi SignifySignChangeDelete ctermfg=222 ctermbg=NONE cterm=NONE guifg=#d9c767 gui
 hi SignifySignDelete ctermfg=88 ctermbg=NONE cterm=NONE guifg=#c93b48 guibg=NONE gui=NONE
 hi SignifySignDeleteFirstLine ctermfg=88 ctermbg=NONE cterm=NONE guifg=#c93b48 guibg=NONE gui=NONE
 
-" vim-signature
+"" vim-signature
 
 let g:SignatureMarkTextHL = 'normal'
 
-" FileBeagle
-" Leader-f is reserved for easymotion so remap the "filebeagle" key to leader-t
+"" FileBeagle
+" Leader-f is reserved for easymotion so remap the filebeagle key to leader-t
 let g:filebeagle_suppress_keymaps=1
 let g:filebeagle_show_hidden=1
 map <leader>t <Plug>FileBeagleOpenCurrentWorkingDir
 map - <Plug>FileBeagleOpenCurrentBufferDir
 
-" BufTabLineColors
+"" BufTabLineColors
 hi BufTabLineFill ctermfg=NONE ctermbg=236 cterm=NONE guifg=NONE guibg=#323232 gui=NONE
 hi BufTabLineCurrent ctermfg=188 ctermbg=24 term=reverse guifg=#a9b7c6 guibg=#9876aa gui=NONE
 hi BufTabLineActive ctermfg=188 ctermbg=24 term=reverse guifg=#a9b7c6 guibg=#214283 gui=NONE
@@ -378,7 +407,7 @@ nnoremap <silent> g1 :bfirst<CR>
 nnoremap <silent> g$ :blast<CR>
 nnoremap <silent> g4 :blast<CR>
 
-" Easymotion
+"" Easymotion
 let g:EasyMotion_do_mapping = 0 " Disable default mappings
 let g:EasyMotion_smartcase = 1
 let g:EasyMotion_startofline = 0
@@ -392,11 +421,11 @@ nmap <leader>e <Plug>(easymotion-bd-e)
 nmap <leader>E <Plug>(easymotion-bd-E)
 nmap <leader>j <Plug>(easymotion-overwin-line)
 
-" EasyClip
+"" EasyClip
 let g:EasyClipUseSubstituteDefaults = 1
 let g:EasyClipAutoFormat = 1
 let g:EasyClipShareYanks = 1
-let g:EasyClipShareYanksFile = ".cache/vim/easyclip"
+let g:EasyClipShareYanksFile = '.cache/vim/easyclip'
 let g:EasyClipUseCutDefaults = 0
 
 nmap <leader>m <plug>MoveMotionPlug
@@ -404,47 +433,61 @@ xmap <leader>m <plug>MoveMotionXPlug
 nmap <leader>mm <plug>MoveMotionLinePlug
 nmap <leader>M <plug>MoveMotionEndOfLinePlug
 nmap <leader>mM <plug>MoveMotionReplaceLinePlug
+nmap <leader>MM <plug>MoveMotionReplaceLinePlug
 
 nmap <leader>cf <plug>EasyClipToggleFormattedPaste
 nnoremap <leader>cy :call EasyClip#Yank(expand('%'))<cr>
 imap <C-v> <plug>EasyClipInsertModePaste
 
+"" Lightline
 " Lightline settings are sufficiently verbose so as to need their own file
-if filereadable($HOME . "/.vim/vimrc.lightline")
-    source ~/.vim/vimrc.lightline
+if filereadable(expand('~/.vim/vimrc.lightline'))
+  source ~/.vim/vimrc.lightline
 endif
 
-" Tabular
-if exists(":Tabularize")
-    nmap <leader>a= :Tabularize /=<CR>
-    vmap <leader>a= :Tabularize /=<CR>
-    nmap <leader>a: :Tabularize /:\zs<CR>
-    vmap <leader>a: :Tabularize /:\zs<CR>
+"" Tabular
+if exists(':Tabularize')
+  nmap <leader>a= :Tabularize /=<CR>
+  vmap <leader>a= :Tabularize /=<CR>
+  nmap <leader>a: :Tabularize /:\zs<CR>
+  vmap <leader>a: :Tabularize /:\zs<CR>
 endif
 
-" vim-better-whitespace
+"" vim-better-whitespace
 hi ExtraWhitespace ctermbg=88 guibg=#c93b48
 let g:better_whiespace_enabled=1
 let g:strip_whitespace_on_save=1
 
-" Pencil
+"" Pencil
 let g:pencil#wrapModeDefault = 'soft'
 let g:pencil#textwidth = 100
 
 augroup Pencil
-    autocmd!
-    autocmd FileType markdown,mkd call pencil#init() | call textobj#sentence#init() | setlocal spell
-    autocmd FileType text call pencil#init() | call textobj#sentence#init() | setlocal spell
+  autocmd!
+  autocmd FileType markdown,mkd call pencil#init() | call textobj#sentence#init() | setlocal spell
+  autocmd FileType text call pencil#init() | call textobj#sentence#init() | setlocal spell
 augroup END
+
+"" Vim Test
+
+let test#strategy = 'dispatch'
+
+nmap <silent> <leader>tn :TestNearest<CR>
+nmap <silent> <leader>tf :TestFile<CR>
+nmap <silent> <leader>ts :TestSuite<CR>
+nmap <silent> <leader>ta :TestSuite<CR>
+nmap <silent> <leader>tt :TestSuite<CR>
+nmap <silent> <leader>tl :TestLast<CR>
+nmap <silent> <leader>tv :TestVisit<CR>
 
 """ END PLUGIN SETTINGS
 
 " OS specific config, this should always be next to last
-if filereadable($HOME . "/.vim/vimrc.os")
-    source ~/.vim/vimrc.os
+if filereadable(expand('~/.vim/vimrc.os'))
+  source ~/.vim/vimrc.os
 endif
 
 " Local config, this should always be last
-if filereadable($HOME . "/.vim/vimrc.local")
-    source ~/.vim/vimrc.local
+if filereadable(expand('~/.vim/vimrc.local'))
+  source ~/.vim/vimrc.local
 endif

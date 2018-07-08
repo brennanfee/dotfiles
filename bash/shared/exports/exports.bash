@@ -27,19 +27,20 @@ export GIT_EDITOR='vim'
 export SVN_EDITOR='vim'
 export LESSEDIT='vim'
 
-if command_exists code; then
-    export VISUAL='code'
-elif command_exists atom; then
-    export VISUAL='atom'
-elif command_exists gvim; then
-    export VISUAL='gvim'
-else
-    export VISUAL='vim'
-fi
+export VISUAL='vim'
+# if command_exists code; then
+#   export VISUAL='code'
+# elif command_exists atom; then
+#   export VISUAL='atom'
+# elif command_exists gvim; then
+#   export VISUAL='gvim'
+# else
+#   export VISUAL='vim'
+# fi
 
 if command_exists most; then
-    export PAGER="most"
-    export MANPAGER="most -s"
+  export PAGER="most"
+  export MANPAGER="most -s"
 fi
 
 # shellcheck disable=SC2154
