@@ -1,73 +1,78 @@
 scriptencoding utf-8
 
 if has('vim_starting')
-    if has('win32') || has('win64')
-        set runtimepath+=$HOME/.vim,$VIM/vimfiles
-    endif
+  if has('win32') || has('win64')
+    " I believe I should be able to remove the ref to vimfiles, check
+    " the next time I am on windows
+    set runtimepath+=$HOME/.vim,$HOME/vimfiles
+    set packpath^=$HOME/.vim
+  endif
 endif
 
-"if has('mac')
-  "let g:plug_url_format = 'git@github.com:%s.git'
-"else
-  "let $GIT_SSL_NO_VERIFY = 'true'
-"endif
-call plug#begin('~/.vim/plugged')
+packadd minpac
+call minpac#init()
 
-Plug 'tmhedberg/matchit'                " Adds extra things that match to % key
-Plug 'tpope/vim-sensible'               " Sensible vim defaults
-Plug 'tpope/vim-repeat'                 " Plugin to be used by other plugins to support the period key
-Plug 'tpope/vim-surround'               " Key mappings to deal with surrounding characters
-Plug 'tpope/vim-git'                    " Plugin to be used by other plugins to add git support
-Plug 'tpope/vim-fugitive'               " Git functionality in vim
-Plug 'tpope/vim-rhubarb'                " GitHub extension
-Plug 'tpope/vim-tbone'                  " Basic tmux support for vim
-Plug 'tpope/vim-unimpaired'             " Pairs of mappings to do various things
-Plug 'tpope/vim-characterize'           " Unicode detection and entry (ga to examine a character)
-Plug 'tpope/vim-commentary'             " Comment stuff out (gcc, or gc with a motion)
-Plug 'tpope/vim-rsi'                    " Mappings to mimic readline behavior
-Plug 'tpope/vim-eunuch'                 " Unix commands from within Vim
-Plug 'tpope/vim-speeddating'            " Ctl-A/Ctl-X support for dates, times, and more
-Plug 'tpope/vim-abolish'                " Support for fuzzy word abbrev's and search/replace
-Plug 'tpope/vim-jdaddy'                 " JSON support
-Plug 'junegunn/gv.vim'                  " Git log\commit browser (:GV)
-Plug 'vim-scripts/a.vim'                " Open 'alternative' files quickly (:A, <leader>ih)
-Plug 'wellle/targets.vim'               " Provides additional text objects
-Plug 'michaeljsmith/vim-indent-object'  " Provides a text object for lines at same indent level
-Plug 'easymotion/vim-easymotion'        " Jump to any visible character
-Plug 'svermeulen/vim-easyclip'          " Simplified clipboard functionality
-Plug 'mileszs/ack.vim'                  " Ack support, but I use it with RipGrep
-Plug 'ctrlpvim/ctrlp.vim'               " Fuzzy file loader
-Plug 'jeetsukumaran/vim-filebeagle'     " Minimal directory browser
-Plug 'airblade/vim-rooter'              " Auto sets vim working directory to 'base' project folder
-Plug 'w0rp/ale'                         " Dynamic, asynchronous linting
-Plug 'itchyny/lightline.vim'            " Ooh, pretty graphics for buffer line and status line
-Plug 'maximbaz/lightline-ale'           " Ale plugin for lightline
-Plug 'ap/vim-buftabline'                " Treats buffers like tabs
-Plug 'sgur/vim-editorconfig'            " Support for .editorconfig files.
-Plug 'blueshirts/darcula'               " Color scheme
-Plug 'brennanfee/vim-gui-position'      " My plugin, for GUI versions of vim - records location/size of window
-Plug 'mhinz/vim-signify'                " Show source control mods in left column
-Plug 'justinmk/vim-gtfo'                " Go to filemanager or terminal (got)
-Plug 'mattn/emmet-vim'                  " Fast html output (trigger with 'Ctl+y ,')
-Plug 'sheerun/vim-polyglot'             " Large language pack
-Plug 'christoomey/vim-tmux-navigator'   " Easy navigation between vim and tmux
-Plug 'tmux-plugins/vim-tmux-focus-events'    " Plugin needed when switching between tmux/vim, used by other plugins
-Plug 'roxma/vim-tmux-clipboard'         " Seamless integration for vim and tmux's clipboard
-Plug 'godlygeek/tabular'                " Tools for aligning text
-Plug 'ntpeters/vim-better-whitespace'   " Trailing whitespace highlighting
-Plug 'ap/vim-css-color'                 " Color previewer - don't really like this one, looking for alternative
-Plug 'reedes/vim-pencil'                " Tools for working with prose (text, markdown)
-Plug 'kana/vim-textobj-user'            " Used by other plugins to define text objects
-Plug 'reedes/vim-textobj-sentence'      " A better 'sentence' text object for prose.
-Plug 'kshenoy/vim-signature'            " Show marks in the left column
-Plug 'ryanoasis/vim-devicons'           " File type icons from Nerd Fonts
+" Minpac commands
+command! PackUpdate call minpac#update()
+command! PackClean call minpac#clean()
 
-if filereadable(expand('~/.vimrc.bundles.os'))
+" The plugins
+
+call minpac#add('k-takata/minpac', {'type': 'opt'}) " The package manager
+call minpac#add('tmhedberg/matchit')                " Adds extra things that match to % key
+call minpac#add('tpope/vim-sensible')               " Sensible vim defaults
+call minpac#add('tpope/vim-repeat')                 " Plugin to be used by other plugins to support the period key
+call minpac#add('tpope/vim-surround')               " Key mappings to deal with surrounding characters
+call minpac#add('tpope/vim-git')                    " Plugin to be used by other plugins to add git support
+call minpac#add('tpope/vim-fugitive')               " Git functionality in vim
+call minpac#add('tpope/vim-rhubarb')                " GitHub extension
+call minpac#add('tpope/vim-tbone')                  " Basic tmux support for vim
+call minpac#add('tpope/vim-unimpaired')             " Pairs of mappings to do various things
+call minpac#add('tpope/vim-characterize')           " Unicode detection and entry (ga to examine a character)
+call minpac#add('tpope/vim-commentary')             " Comment stuff out (gcc, or gc with a motion)
+call minpac#add('tpope/vim-rsi')                    " Mappings to mimic readline behavior
+call minpac#add('tpope/vim-eunuch')                 " Unix commands from within Vim
+call minpac#add('tpope/vim-speeddating')            " Ctl-A/Ctl-X support for dates, times, and more
+call minpac#add('tpope/vim-abolish')                " Support for fuzzy word abbrev's and search/replace
+call minpac#add('tpope/vim-jdaddy')                 " JSON support
+call minpac#add('junegunn/gv.vim')                  " Git log\commit browser (:GV)
+call minpac#add('vim-scripts/a.vim')                " Open 'alternative' files quickly (:A, <leader>ih)
+call minpac#add('wellle/targets.vim')               " Provides additional text objects
+call minpac#add('michaeljsmith/vim-indent-object')  " Provides a text object for lines at same indent level
+call minpac#add('easymotion/vim-easymotion')        " Jump to any visible character
+call minpac#add('svermeulen/vim-easyclip')          " Simplified clipboard functionality
+call minpac#add('mileszs/ack.vim')                  " Ack support, but I use it with RipGrep
+call minpac#add('ctrlpvim/ctrlp.vim')               " Fuzzy file loader
+call minpac#add('jeetsukumaran/vim-filebeagle')     " Minimal directory browser
+call minpac#add('airblade/vim-rooter')              " Auto sets vim working directory to 'base' project folder
+call minpac#add('w0rp/ale')                         " Dynamic, asynchronous linting
+call minpac#add('itchyny/lightline.vim')            " Ooh, pretty graphics for buffer line and status line
+call minpac#add('maximbaz/lightline-ale')           " Ale plugin for lightline
+call minpac#add('ap/vim-buftabline')                " Treats buffers like tabs
+call minpac#add('sgur/vim-editorconfig')            " Support for .editorconfig files.
+call minpac#add('blueshirts/darcula')               " Color scheme
+call minpac#add('brennanfee/vim-gui-position')      " My plugin, for GUI versions of vim - records location/size of window
+call minpac#add('mhinz/vim-signify')                " Show source control mods in left column
+call minpac#add('justinmk/vim-gtfo')                " Go to filemanager or terminal (got)
+call minpac#add('mattn/emmet-vim')                  " Fast html output (trigger with 'Ctl+y ,')
+call minpac#add('sheerun/vim-polyglot')             " Large language pack
+call minpac#add('christoomey/vim-tmux-navigator')   " Easy navigation between vim and tmux
+call minpac#add('tmux-plugins/vim-tmux-focus-events') " Plugin needed when switching between tmux/vim, used by other plugins
+call minpac#add('roxma/vim-tmux-clipboard')         " Seamless integration for vim and tmux's clipboard
+call minpac#add('godlygeek/tabular')                " Tools for aligning text
+call minpac#add('ntpeters/vim-better-whitespace')   " Trailing whitespace highlighting
+call minpac#add('ap/vim-css-color')                 " Color previewer - don't really like this one, looking for alternative
+call minpac#add('reedes/vim-pencil')                " Tools for working with prose (text, markdown)
+call minpac#add('kana/vim-textobj-user')            " Used by other plugins to define text objects
+call minpac#add('reedes/vim-textobj-sentence')      " A better 'sentence' text object for prose.
+call minpac#add('kshenoy/vim-signature')            " Show marks in the left column
+call minpac#add('ryanoasis/vim-devicons')           " File type icons from Nerd Fonts
+
+if filereadable(expand('~/.vim/vimrc.bundles.os'))
   source ~/.vimrc.bundles.os
 endif
 
-if filereadable(expand('~/.vimrc.bundles.local'))
+if filereadable(expand('~/.vim/vimrc.bundles.local'))
   source ~/.vimrc.bundles.local
 endif
 
-call plug#end()
