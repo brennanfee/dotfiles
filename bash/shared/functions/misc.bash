@@ -5,10 +5,12 @@ function reload_profile() {
   source "$HOME/.bash_profile"
 }
 
-function lsgrep() {
-  # shellcheck disable=SC2010
-  ls | grep -i "$@"
-}
+alias lsgrep="ls | grep -i \"$@\""
+
+# function lsgrep() {
+#   # shellcheck disable=SC2010
+#   ls | grep -i "$@"
+# }
 
 function lagrep() {
   # shellcheck disable=SC2010

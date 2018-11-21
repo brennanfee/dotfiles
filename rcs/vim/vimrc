@@ -188,7 +188,7 @@ nmap <leader>sv :source $MYVIMRC<CR>
 
 " Turn off highligting
 nnoremap <leader>n :noh<CR>
-nnoremap <leader><space> :noh<CR>
+nnoremap <space>n :noh<CR>
 
 " Map space-<hjkl> to add a space or a line in that direction
 nmap <space>j ]<space>
@@ -326,6 +326,7 @@ let g:ale_linters = {
       \ 'mail': ['proselint'],
       \ 'make': ['checkmake'],
       \ 'markdown': ['proselint'],
+      \ 'python': ['flake8'],
       \ 'sass': ['stylelint'],
       \ 'scss': ['stylelint'],
       \ 'sh': ['shellcheck', 'shell'],
@@ -348,6 +349,7 @@ let g:ale_fixers = {
       \ 'json5': ['prettier'],
       \ 'less': ['stylelint', 'prettier'],
       \ 'markdown': ['prettier'],
+      \ 'python': ['yapf'],
       \ 'sass': ['stylelint', 'prettier'],
       \ 'scss': ['stylelint', 'prettier'],
       \ 'sh': ['shfmt'],
@@ -356,6 +358,7 @@ let g:ale_fixers = {
       \ 'vue': ['prettier'],
       \}
 
+let g:ale_python_yapf_use_global = 1
 let g:ale_sh_shfmt_options = '-i 2 -ci -s'
 
 nmap <silent> [W <Plug>(ale_first)

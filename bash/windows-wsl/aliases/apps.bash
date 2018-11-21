@@ -10,11 +10,6 @@ alias docker="docker.exe"
 alias docker-compose="docker-compose.exe"
 alias docker-machine="docker-machine.exe"
 
-alias start="cmd.exe /c start"
-alias open="cmd.exe /c start"
-alias xdg-open="cmd.exe /c start"
-alias o="cmd.exe /c start"
-
 alias packer="packer.exe"
 alias vagrant="vagrant.exe"
 
