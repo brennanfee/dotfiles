@@ -12,6 +12,7 @@ alias egrep="grep --color"
 
 # Make sudo preserve home
 alias sudo="sudo -H"
+alias se="sudoedit"
 
 # Most is less
 if command_exists most; then
