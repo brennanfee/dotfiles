@@ -18,6 +18,7 @@ alias gpl="$git_cmd pull"
 alias gf="$git_cmd fetch"
 alias ga="$git_cmd add ."
 alias gc="$git_cmd commit"
+alias gd="$git_cmd diff"
 
 alias gexp="$git_cmd archive --format zip --output"
 
