@@ -1,6 +1,8 @@
 # Do not copy the mtime
 --no-mtime
 
+--add-metadata
+
 --mark-watched
 
 # Save all videos under the Downloads/!Videos folder
