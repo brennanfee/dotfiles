@@ -1,0 +1,15 @@
+[default]
+region = us-east-1
+output = json
+[profile core]
+region = us-east-1
+output = json
+[profile ni]
+region = us-east-1
+output = json
+[profile logos]
+region = us-east-1
+output = json
+[profile open]
+region = us-east-1
+output = json
