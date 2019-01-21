@@ -7,7 +7,12 @@
 
 # For Windows WSL I use the WSLENV environment variable to pass in the values
 # I am checking for below.  That value should be set up as well as the custom
-# WIN_PROFILE value.  WSLENV should be set to "TMP/up:USERPROFILE/up:WIN_PROFILE/up".
+# WIN_PROFILE and WIN_USER values.  WIN_PROFILE should point to the root path
+# of my profile directory.  By default that would be C:\Users\<username>\ but
+# on most dual disk machines I move it to D:\Profile.  WIN_USER should be set to
+# %USERNAME%, this variable is used in situations where the unix and windows
+# usernames might difer (which is common).  WSLENV should be set
+# to "TMP/up:USERPROFILE/up:WIN_PROFILE/up:WIN_USER".
 
 # Set the temp directory if TMP env variable is set, generally this should only happen on windows.
 # Lots of windows tools can't read the Linux tmp path.

@@ -2,8 +2,8 @@
 
 export NAME="Brennan Fee"
 
-export HOME_EMAIL="brennan@todaytechsoft.com"
-export WORK_EMAIL="bfee@uship.com"
+export HOME_EMAIL="brennan@logoscorner.com"
+export WORK_EMAIL="febrennan@amazon.com"
 
 export EMAIL="$HOME_EMAIL"
 
