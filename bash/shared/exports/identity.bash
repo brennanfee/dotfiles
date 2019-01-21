@@ -3,7 +3,7 @@
 export NAME="Brennan Fee"
 
 export HOME_EMAIL="brennan@logoscorner.com"
-export WORK_EMAIL="febrennan@amazon.com"
+export WORK_EMAIL="febrenna@amazon.com"
 
 export EMAIL="$HOME_EMAIL"
 
