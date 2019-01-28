@@ -38,10 +38,26 @@ export VISUAL='vim'
 #   export VISUAL='vim'
 # fi
 
-if command_exists most; then
-  export PAGER="most"
-  export MANPAGER="most -s"
+# Pager
+export PAGER="less"
+export MANPAGER="less"
+
+export LESS="--ignore-case --LONG-PROMPT --RAW-CONTROL-CHARS --tabs=4 --window=-4 --quiet"
+# The below version only works for less version 530 or later
+#export LESS="--quit-if-one-screen --ignore-case --LONG-PROMPT --RAW-CONTROL-CHARS --tabs=4 --window=-4 --quiet"
+export LESSHISTFILE="$HOME/.config/lesshst"
+
+if type lesspipe.sh >/dev/null 2>&1; then
+  export LESSOPEN="|lesspipe.sh %s"
 fi
+
+export LESS_TERMCAP_mb=$'\E[1;31m'     # begin bold
+export LESS_TERMCAP_md=$'\E[1;36m'     # begin blink
+export LESS_TERMCAP_me=$'\E[0m'        # reset bold/blink
+export LESS_TERMCAP_so=$'\E[01;44;33m' # begin reverse video
+export LESS_TERMCAP_se=$'\E[0m'        # reset reverse video
+export LESS_TERMCAP_us=$'\E[1;32m'     # begin underline
+export LESS_TERMCAP_ue=$'\E[0m'        # reset underline
 
 # shellcheck disable=SC2154
 export SUDO_PROMPT="${i_fa_lock} password for %u@%h: "

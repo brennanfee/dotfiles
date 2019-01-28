@@ -14,12 +14,6 @@ alias egrep="grep --color"
 alias sudo="sudo -H"
 alias se="sudoedit"
 
-# Most is less
-if command_exists most; then
-  alias less="most"
-  alias more="most"
-fi
-
 # Alternates/extensions of ls
 alias la="ls -A"
 alias ll="ls -oh"
@@ -75,6 +69,11 @@ fi
 # vless
 # shellcheck disable=SC2139
 alias vless="/usr/share/vim/vim$VIM_VER/macros/less.sh"
+
+# If bat is installed, make it cat
+if command_exists bat; then
+  alias cat="bat"
+fi
 
 # Setting up command-line web tools with a user agent
 if [[ $USER_AGENT != "" ]]; then
