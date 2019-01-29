@@ -443,7 +443,7 @@ nmap <leader>MM <plug>MoveMotionReplaceLinePlug
 
 nmap <leader>cf <plug>EasyClipToggleFormattedPaste
 nnoremap <leader>cy :call EasyClip#Yank(expand('%'))<cr>
-imap <C-v> <plug>EasyClipInsertModePaste
+"imap <C-v> <plug>EasyClipInsertModePaste
 
 "" Lightline
 " Lightline settings are sufficiently verbose so as to need their own file
