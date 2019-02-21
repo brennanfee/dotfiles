@@ -27,6 +27,7 @@ let mapleader = ","
 let maplocalleader = "\\"
 
 set noexrc
+set modeline
 set pastetoggle=<F2>
 
 set relativenumber  " set realtive numbers to show
@@ -225,8 +226,9 @@ endif
 
 augroup filetypes_mappings
   autocmd!
-  autocmd BufNewFile,BufFilePre,BufRead *.md set filetype=markdown
-  autocmd BufNewFile,BufFilePre,BufRead LICENSE set filetype=text
+  autocmd BufNewFile,BufFilePre,BufRead *.md setlocal filetype=markdown
+  autocmd BufNewFile,BufFilePre,BufRead LICENSE setlocal filetype=text
+  autocmd BufNewFile,BufFilePre,BufRead * if match(getline(1), "---") >= 0 | setlocal filetype=yaml | endif
 augroup END
 
 " Markdown

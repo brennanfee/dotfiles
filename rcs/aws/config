@@ -1,6 +1,9 @@
 [default]
 region = us-east-1
 output = json
+[profile master]
+region = us-east-1
+output = json
 [profile core]
 region = us-east-1
 output = json
