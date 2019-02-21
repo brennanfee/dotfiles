@@ -4,15 +4,28 @@ output = json
 [profile master]
 region = us-east-1
 output = json
-[profile core]
+[profile shared]
+role_arn = arn:aws:iam::272471611991:role/OrganizationAccountAccessRole
+source_profile = master
 region = us-east-1
 output = json
 [profile ni]
+role_arn = arn:aws:iam::930312086861:role/OrganizationAccountAccessRole
+source_profile = master
 region = us-east-1
 output = json
 [profile logos]
+role_arn = arn:aws:iam::612366796533:role/OrganizationAccountAccessRole
+source_profile = master
 region = us-east-1
 output = json
 [profile open]
+role_arn = arn:aws:iam::570031119418:role/OrganizationAccountAccessRole
+source_profile = master
+region = us-east-1
+output = json
+[profile security]
+role_arn = arn:aws:iam::622119185857:role/OrganizationAccountAccessRole
+source_profile = master
 region = us-east-1
 output = json
