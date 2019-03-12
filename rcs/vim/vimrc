@@ -27,6 +27,7 @@ let mapleader = ","
 let maplocalleader = "\\"
 
 set noexrc
+set modeline
 set pastetoggle=<F2>
 
 set relativenumber  " set realtive numbers to show
@@ -138,8 +139,8 @@ endif
 
 if has('windows')
   set shell=bash
-  nnoremap <silent> <leader>y :call system('win32yank.exe -i', @0)<CR>
-  vnoremap <silent> <leader>y :call system('win32yank.exe -i', @0)<CR>
+  nnoremap <silent> <leader>y :call system('clip.exe', @0)<CR>
+  vnoremap <silent> <leader>y :call system('clip.exe', @0)<CR>
 endif
 
 " Source the vimrc if saved
@@ -225,8 +226,9 @@ endif
 
 augroup filetypes_mappings
   autocmd!
-  autocmd BufNewFile,BufFilePre,BufRead *.md set filetype=markdown
-  autocmd BufNewFile,BufFilePre,BufRead LICENSE set filetype=text
+  autocmd BufNewFile,BufFilePre,BufRead *.md setlocal filetype=markdown
+  autocmd BufNewFile,BufFilePre,BufRead LICENSE setlocal filetype=text
+  autocmd BufNewFile,BufFilePre,BufRead * if match(getline(1), "---") >= 0 | setlocal filetype=yaml | endif
 augroup END
 
 " Markdown
@@ -428,22 +430,10 @@ nmap <leader>E <Plug>(easymotion-bd-E)
 nmap <leader>j <Plug>(easymotion-overwin-line)
 
 "" EasyClip
-let g:EasyClipUseSubstituteDefaults = 1
-let g:EasyClipAutoFormat = 1
-let g:EasyClipShareYanks = 1
-let g:EasyClipShareYanksFile = '.cache/vim/easyclip'
-let g:EasyClipUseCutDefaults = 0
-
-nmap <leader>m <plug>MoveMotionPlug
-xmap <leader>m <plug>MoveMotionXPlug
-nmap <leader>mm <plug>MoveMotionLinePlug
-nmap <leader>M <plug>MoveMotionEndOfLinePlug
-nmap <leader>mM <plug>MoveMotionReplaceLinePlug
-nmap <leader>MM <plug>MoveMotionReplaceLinePlug
-
-nmap <leader>cf <plug>EasyClipToggleFormattedPaste
-nnoremap <leader>cy :call EasyClip#Yank(expand('%'))<cr>
-imap <C-v> <plug>EasyClipInsertModePaste
+nnoremap <leader>m d
+xnoremap <leader>m d
+nnoremap <leader>mm dd
+nnoremap <leader>M D
 
 "" Lightline
 " Lightline settings are sufficiently verbose so as to need their own file

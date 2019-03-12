@@ -51,7 +51,7 @@ call minpac#add('junegunn/gv.vim')                  " Git log\commit browser (:G
 call minpac#add('wellle/targets.vim')               " Provides additional text objects
 call minpac#add('michaeljsmith/vim-indent-object')  " Provides a text object for lines at same indent level
 call minpac#add('easymotion/vim-easymotion')        " Jump to any visible character
-call minpac#add('svermeulen/vim-easyclip')          " Simplified clipboard functionality
+call minpac#add('svermeulen/vim-cutlass')          " Change the 'cut' behavior to be more natural
 call minpac#add('mhinz/vim-grepper')                " Support for numerous grep-like tools (RG)
 call minpac#add('ctrlpvim/ctrlp.vim')               " Fuzzy file loader
 call minpac#add('jeetsukumaran/vim-filebeagle')     " Minimal directory browser
