@@ -14,7 +14,11 @@ call minpac#init()
 
 " Minpac commands
 command! PackUpdate call minpac#update()
+command! PackInstall call minpac#update()
 command! PackClean call minpac#clean()
+command! PlugUpdate call minpac#update()
+command! PlugInstall call minpac#update()
+command! PlugClean call minpac#clean()
 
 " The plugins
 
