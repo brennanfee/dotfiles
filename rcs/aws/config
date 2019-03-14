@@ -1,31 +1,50 @@
 [default]
 region = us-east-1
 output = json
+cli_timestamp_format = iso8601
+
 [profile master]
 region = us-east-1
+mfa_serial = arn:aws:iam::655934616551:mfa/brennan
 output = json
+cli_timestamp_format = iso8601
+
 [profile shared]
 role_arn = arn:aws:iam::272471611991:role/OrganizationAccountAccessRole
+mfa_serial = arn:aws:iam::655934616551:mfa/brennan
 source_profile = master
 region = us-east-1
 output = json
+cli_timestamp_format = iso8601
+
 [profile ni]
 role_arn = arn:aws:iam::930312086861:role/OrganizationAccountAccessRole
+mfa_serial = arn:aws:iam::655934616551:mfa/brennan
 source_profile = master
 region = us-east-1
 output = json
+cli_timestamp_format = iso8601
+
 [profile logos]
 role_arn = arn:aws:iam::612366796533:role/OrganizationAccountAccessRole
+mfa_serial = arn:aws:iam::655934616551:mfa/brennan
 source_profile = master
 region = us-east-1
 output = json
+cli_timestamp_format = iso8601
+
 [profile open]
 role_arn = arn:aws:iam::570031119418:role/OrganizationAccountAccessRole
+mfa_serial = arn:aws:iam::655934616551:mfa/brennan
 source_profile = master
 region = us-east-1
 output = json
+cli_timestamp_format = iso8601
+
 [profile security]
 role_arn = arn:aws:iam::622119185857:role/OrganizationAccountAccessRole
+mfa_serial = arn:aws:iam::655934616551:mfa/brennan
 source_profile = master
 region = us-east-1
 output = json
+cli_timestamp_format = iso8601
