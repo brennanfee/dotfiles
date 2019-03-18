@@ -43,15 +43,15 @@ call minpac#add('tpope/vim-apathy')                 " Sets the 'path' option for
 call minpac#add('tpope/vim-capslock')               " Software based capslock
 call minpac#add('tpope/vim-jdaddy')                 " JSON support
 call minpac#add('tpope/vim-projectionist')          " Allows project specific configurations
-call minpac#add('tpope/vim-rails', {'type': 'opt'})       " Ruby On Rails power tools
-call minpac#add('tpope/vim-rake', {'type': 'opt'})        " Ruby support, without Rails
-call minpac#add('tpope/vim-bundler', {'type': 'opt'})     " Support for Ruby bundler
+"call minpac#add('tpope/vim-rails', {'type': 'opt'})       " Ruby On Rails power tools
+"call minpac#add('tpope/vim-rake', {'type': 'opt'})        " Ruby support, without Rails
+"call minpac#add('tpope/vim-bundler', {'type': 'opt'})     " Support for Ruby bundler
 call minpac#add('tpope/vim-classpath', {'type': 'opt'})   " Set 'path' from the Java class path
 call minpac#add('junegunn/gv.vim')                  " Git log\commit browser (:GV)
 call minpac#add('wellle/targets.vim')               " Provides additional text objects
 call minpac#add('michaeljsmith/vim-indent-object')  " Provides a text object for lines at same indent level
 call minpac#add('easymotion/vim-easymotion')        " Jump to any visible character
-call minpac#add('svermeulen/vim-cutlass')          " Change the 'cut' behavior to be more natural
+call minpac#add('svermeulen/vim-cutlass')           " Change the 'cut' behavior to be more natural
 call minpac#add('mhinz/vim-grepper')                " Support for numerous grep-like tools (RG)
 call minpac#add('ctrlpvim/ctrlp.vim')               " Fuzzy file loader
 call minpac#add('jeetsukumaran/vim-filebeagle')     " Minimal directory browser
@@ -80,6 +80,7 @@ call minpac#add('reedes/vim-textobj-sentence')      " A better 'sentence' text o
 call minpac#add('kshenoy/vim-signature')            " Show marks in the left column
 call minpac#add('ryanoasis/vim-devicons')           " File type icons from Nerd Fonts
 call minpac#add('janko-m/vim-test')                 " Run tests from within Vim
+call minpac#add('bkad/CamelCaseMotion')             " Motions for camel cased identifiers
 
 if filereadable(expand('~/.vim/vimrc.bundles.os'))
   source ~/.vim/vimrc.bundles.os

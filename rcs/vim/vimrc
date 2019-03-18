@@ -423,11 +423,35 @@ let g:EasyMotion_startofline = 0
 nmap <leader>f <Plug>(easymotion-overwin-f)
 nmap <leader>s <Plug>(easymotion-overwin-f)
 nmap <leader>F <Plug>(easymotion-overwin-f2)
-nmap <leader>w <Plug>(easymotion-overwin-w)
-nmap <leader>W <Plug>(easymotion-bd-W)
-nmap <leader>e <Plug>(easymotion-bd-e)
-nmap <leader>E <Plug>(easymotion-bd-E)
-nmap <leader>j <Plug>(easymotion-overwin-line)
+" nmap <leader>w <Plug>(easymotion-overwin-w)
+" nmap <leader>W <Plug>(easymotion-bd-W)
+" nmap <leader>e <Plug>(easymotion-bd-e)
+" nmap <leader>E <Plug>(easymotion-bd-E)
+" nmap <leader>j <Plug>(easymotion-overwin-line)
+
+"" CamelCaseMotion
+"call camelcasemotion#CreateMotionMappings('<leader>')
+nmap <silent> <leader>w <Plug>CamelCaseMotion_w
+nmap <silent> <leader>b <Plug>CamelCaseMotion_b
+nmap <silent> <leader>e <Plug>CamelCaseMotion_e
+nmap <silent> <leader>ge <Plug>CamelCaseMotion_ge
+xmap <silent> <leader>w <Plug>CamelCaseMotion_w
+xmap <silent> <leader>b <Plug>CamelCaseMotion_b
+xmap <silent> <leader>e <Plug>CamelCaseMotion_e
+xmap <silent> <leader>ge <Plug>CamelCaseMotion_ge
+omap <silent> <leader>w <Plug>CamelCaseMotion_w
+omap <silent> <leader>b <Plug>CamelCaseMotion_b
+omap <silent> <leader>e <Plug>CamelCaseMotion_e
+omap <silent> <leader>ge <Plug>CamelCaseMotion_ge
+
+omap <silent> i<leader>w <Plug>CamelCaseMotion_iw
+omap <silent> i<leader>b <Plug>CamelCaseMotion_ib
+omap <silent> i<leader>e <Plug>CamelCaseMotion_ie
+omap <silent> i<leader>ge <Plug>CamelCaseMotion_ige
+xmap <silent> i<leader>w <Plug>CamelCaseMotion_iw
+xmap <silent> i<leader>b <Plug>CamelCaseMotion_ib
+xmap <silent> i<leader>e <Plug>CamelCaseMotion_ie
+xmap <silent> i<leader>ge <Plug>CamelCaseMotion_ige
 
 "" EasyClip
 nnoremap <leader>m d
