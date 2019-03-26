@@ -387,6 +387,10 @@ hi SignifySignChangeDelete ctermfg=222 ctermbg=NONE cterm=NONE guifg=#d9c767 gui
 hi SignifySignDelete ctermfg=88 ctermbg=NONE cterm=NONE guifg=#c93b48 guibg=NONE gui=NONE
 hi SignifySignDeleteFirstLine ctermfg=88 ctermbg=NONE cterm=NONE guifg=#c93b48 guibg=NONE gui=NONE
 
+"" vim-hexokinase
+
+let g:Hexokinase_ftAutoload = ['css', 'html', 'xml', 'vim']
+
 "" vim-signature
 
 let g:SignatureMarkTextHL = 'normal'

@@ -16,9 +16,11 @@ call minpac#init()
 command! PackUpdate call minpac#update()
 command! PackInstall call minpac#update()
 command! PackClean call minpac#clean()
+command! PackStatus call minpac#status()
 command! PlugUpdate call minpac#update()
 command! PlugInstall call minpac#update()
 command! PlugClean call minpac#clean()
+command! PlugStatus call minpac#status()
 
 " The plugins
 
@@ -73,7 +75,7 @@ call minpac#add('roxma/vim-tmux-clipboard')         " Seamless integration for v
 call minpac#add('radenling/vim-dispatch-neovim')    " Native neovim terminal support for Dispatch
 call minpac#add('godlygeek/tabular')                " Tools for aligning text
 call minpac#add('ntpeters/vim-better-whitespace')   " Trailing whitespace highlighting
-call minpac#add('ap/vim-css-color')                 " Color previewer - don't really like this one, looking for alternative
+call minpac#add('RRethy/vim-hexokinase')            " Color previewer
 call minpac#add('reedes/vim-pencil')                " Tools for working with prose (text, markdown)
 call minpac#add('kana/vim-textobj-user')            " Used by other plugins to define text objects
 call minpac#add('reedes/vim-textobj-sentence')      " A better 'sentence' text object for prose.
