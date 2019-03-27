@@ -5,9 +5,7 @@
 
 # Python
 path_prepend "${HOME}/.local/bin"
-if command_exists poetry; then
-  path_prepend "${HOME}/.poetry/bin"
-fi
+path_prepend "${HOME}/.poetry/bin"
 
 # Node
 if command_exists yarn; then
