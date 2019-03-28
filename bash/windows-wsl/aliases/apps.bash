@@ -13,6 +13,8 @@ fi
 alias docker="docker.exe"
 alias docker-compose="docker-compose.exe"
 alias docker-machine="docker-machine.exe"
+alias kubectl="kubectl.exe"
+alias notary="notary.exe"
 
 alias packer="packer.exe"
 alias vagrant="vagrant.exe"
