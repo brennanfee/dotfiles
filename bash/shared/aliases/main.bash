@@ -32,6 +32,8 @@ alias vi="vim"
 alias df='df -h'
 alias du='du -h'
 
+alias dsize='du -h --max-depth=1 | sort -hr'
+
 # DOS like clear
 alias cls="clear"
 
