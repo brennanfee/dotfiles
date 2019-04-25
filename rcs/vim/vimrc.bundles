@@ -69,6 +69,7 @@ call minpac#add('mhinz/vim-signify')                " Show source control mods i
 call minpac#add('justinmk/vim-gtfo')                " Go to filemanager or terminal (got)
 call minpac#add('mattn/emmet-vim')                  " Fast html output (trigger with 'Ctl+y ,')
 call minpac#add('sheerun/vim-polyglot')             " Large language pack
+call minpac#add('lervag/vimtex')                    " Better LaTeX support
 call minpac#add('christoomey/vim-tmux-navigator')   " Easy navigation between vim and tmux
 call minpac#add('tmux-plugins/vim-tmux-focus-events') " Plugin needed when switching between tmux/vim, used by other plugins
 call minpac#add('roxma/vim-tmux-clipboard')         " Seamless integration for vim and tmux's clipboard
