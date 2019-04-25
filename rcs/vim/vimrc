@@ -62,7 +62,7 @@ set smartindent
 
 set visualbell
 
-set clipboard=unnamed
+set clipboard=unnamedplus
 
 set backup
 set backupdir=~/.vim/vimscratch/backup//,$TEMP//,$TMP//
