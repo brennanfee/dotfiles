@@ -6,9 +6,9 @@ function yt() {
     echo "Downloading $url"
     youtube-dl.exe "$url"
   else
-    url=$(xsel -o)
+    url=$(xsel -o --clipboard)
     echo "Downloading $url"
-    if [[ $(command -v "aria2c" &> /dev/null) ]]; then
+    if command_exists aria2c; then
       youtube-dl --external-downloader=aria2c "$url"
     else
       youtube-dl "$url"
