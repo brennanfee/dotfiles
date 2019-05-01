@@ -407,6 +407,8 @@ hi BufTabLineFill ctermfg=NONE ctermbg=236 cterm=NONE guifg=NONE guibg=#323232 g
 hi BufTabLineCurrent ctermfg=188 ctermbg=24 term=reverse guifg=#a9b7c6 guibg=#9876aa gui=NONE
 hi BufTabLineActive ctermfg=188 ctermbg=24 term=reverse guifg=#a9b7c6 guibg=#214283 gui=NONE
 hi BufTabLineHidden ctermfg=188 ctermbg=24 term=reverse guifg=#a9b7c6 guibg=#323232 gui=NONE
+" Map the original gx action
+nnoremap ,o :normal mxviugx<Esc>`x
 " Make buffers behave like tabs
 nnoremap <silent> gt :bnext<CR>
 nnoremap <silent> gT :bprevious<CR>

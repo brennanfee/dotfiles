@@ -80,6 +80,7 @@ call minpac#add('RRethy/vim-hexokinase')            " Color previewer
 call minpac#add('reedes/vim-pencil')                " Tools for working with prose (text, markdown)
 call minpac#add('kana/vim-textobj-user')            " Used by other plugins to define text objects
 call minpac#add('reedes/vim-textobj-sentence')      " A better 'sentence' text object for prose.
+call minpac#add('jceb/vim-textobj-uri')             " URI's as text objects
 call minpac#add('kshenoy/vim-signature')            " Show marks in the left column
 call minpac#add('ryanoasis/vim-devicons')           " File type icons from Nerd Fonts
 call minpac#add('janko-m/vim-test')                 " Run tests from within Vim
