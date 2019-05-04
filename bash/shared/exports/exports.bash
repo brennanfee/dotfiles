@@ -42,9 +42,7 @@ export VISUAL='vim'
 export PAGER="less"
 export MANPAGER="less"
 
-export LESS="--ignore-case --LONG-PROMPT --RAW-CONTROL-CHARS --tabs=4 --window=-4 --quiet"
-# The below version only works for less version 530 or later
-#export LESS="--quit-if-one-screen --ignore-case --LONG-PROMPT --RAW-CONTROL-CHARS --tabs=4 --window=-4 --quiet"
+export LESS="--quit-if-one-screen --ignore-case --LONG-PROMPT --RAW-CONTROL-CHARS --tabs=4 --window=-4 --quiet"
 export LESSHISTFILE="$HOME/.config/lesshst"
 
 if type lesspipe.sh >/dev/null 2>&1; then
