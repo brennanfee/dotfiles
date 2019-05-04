@@ -73,9 +73,9 @@ fi
 alias vless="/usr/share/vim/vim$VIM_VER/macros/less.sh"
 
 # If bat is installed, make it cat
-if command_exists bat; then
-  alias cat="bat"
-fi
+# if command_exists bat; then
+#   alias cat="bat"
+# fi
 
 # Setting up command-line web tools with a user agent
 if [[ $USER_AGENT != "" ]]; then

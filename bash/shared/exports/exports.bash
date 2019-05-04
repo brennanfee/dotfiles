@@ -42,11 +42,13 @@ export VISUAL='vim'
 export PAGER="less"
 export MANPAGER="less"
 
-export LESS="--quit-if-one-screen --ignore-case --LONG-PROMPT --RAW-CONTROL-CHARS --tabs=4 --window=-4 --quiet"
+export LESS="--LINE-NUMBERS --quit-if-one-screen --ignore-case --LONG-PROMPT --RAW-CONTROL-CHARS --tabs=4 --window=-4 --quiet"
 export LESSHISTFILE="$HOME/.config/lesshst"
 
-if type lesspipe.sh >/dev/null 2>&1; then
-  export LESSOPEN="|lesspipe.sh %s"
+if type source-highlight >/dev/null 2>&1; then
+  export LESSOPEN="| ~/.dotfiles/bin/src-hilite-lesspipe.sh %s"
+elif type lesspipe >/dev/null 2>&1; then
+    export LESSOPEN="| lesspipe %s"
 fi
 
 export LESS_TERMCAP_mb=$'\E[1;31m'     # begin bold
