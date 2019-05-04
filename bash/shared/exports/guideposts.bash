@@ -1,23 +1,28 @@
 #!/usr/bin/env bash
 
-# The values exported here serve as navigational "guideposts".  I use these in other
-# locations/scripts/functions as "markers".  On Unixes (Linux and OSX) most things
-# are usually in $HOME, but on Windows they can be in wildly different locations
-# (even across different Windows machines).
+# The values exported here serve as navigational "guideposts".  They serve to smooth
+# out minor differences in the way Windows WSL and Unixes (Linux and macOS) are
+# set up.
 
 # For Windows WSL I use the WSLENV environment variable to pass in the values
-# I am checking for below.  That value should be set up as well as the custom
-# WIN_PROFILE and WIN_USER values.  WIN_PROFILE should point to the root path
-# of my profile directory.  By default that would be C:\Users\<username>\ but
-# on most dual disk machines I move it to D:\Profile.  WIN_USER should be set to
-# %USERNAME%, this variable is used in situations where the unix and windows
-# usernames might difer (which is common).  WSLENV should be set
-# to "TMP/up:USERPROFILE/up:WIN_PROFILE/up:WIN_USER".
+# USERPROFILE, TMP, and WIN_USER.  USERPROFILE and TMP are set up by default in
+# Windows but WIN_USER is a custom value that should be set to the %USERNAME% value
+# in Windows.  This variable is used in situations where the unix (WSL) and windows
+# usernames might differ (which is common).  WSLENV should be set to:
+# "TMP/up:USERPROFILE/up:WIN_USER"
 
 # Set the temp directory if TMP env variable is set, generally this should only happen on windows.
-# Lots of windows tools can't read the Linux tmp path.
+# Lots of windows tools can't read the Linux tmp path.  For Unixes I ensure they are set the the
+# usual default of /tmp.
 if [[ "${TMP}x" != "x" && -d $TMP ]]; then
+  export TEMP="$TMP"
   export TMPDIR="$TMP"
+else
+  if [[ "${TMPDIR}x" == "x" && -d /tmp ]]; then
+    export TMP="/tmp"
+    export TEMP="/tmp"
+    export TMPDIR="/tmp"
+  fi
 fi
 
 # This is only here for Windows and WSL.  For all non-Windows machines $HOME is "home", but
@@ -31,13 +36,3 @@ else
   export WIN_HOME="$HOME"
 fi
 
-# Lastly, my profile.  This is a root directory that I use to store most of the other
-# organizational folders.  In both Unixes and Windows these are folders like Videos, Music,
-# Downloads, etc.  For the Unixes, this is again usually the $HOME folder.  On Windows,
-# it can be anywhere.  I create a Windows environment variable called WIN_PROFILE that
-# should point to that location.
-if [[ "${WIN_PROFILE}x" != "x" && -d $WIN_PROFILE ]]; then
-  export MY_PROFILE="$WIN_PROFILE"
-else
-  export MY_PROFILE="$HOME"
-fi
