@@ -21,7 +21,7 @@ alias gc="$git_cmd commit"
 alias gd="$git_cmd diff"
 alias gds="$git_cmd diff --cached"
 alias gdt="$git_cmd difftool -y"
-alias gdts="$git_cmd difftool --cached"
+alias gdts="$git_cmd difftool -y --cached"
 alias gmt="$git_cmd mergetool -y"
 
 alias gexp="$git_cmd archive --format zip --output"
