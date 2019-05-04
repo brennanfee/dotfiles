@@ -1,14 +1,11 @@
 # TwoDark theme (for now)
---theme="Dracula"
+--theme="TwoDark"
 
 # Show line numbers, Git modifications but no file header or grid
 --style="numbers,changes"
 
 # Use italic text in the terminal (not supported in all terminals)
 --italic-text=always
-
-# For now, force the less options
---pager="less --ignore-case --status-column --LONG-PROMPT --RAW-CONTROL-CHARS --tabs=4 --window=-4 --quiet"
 
 # Set the terminal width to one less character (for the status-column in less)
 --terminal-width=-1
