@@ -182,8 +182,10 @@ function cdh() {
 
 # Jump to the "winfiles"... otherwise "dotfiles"
 function cdw() {
-  if [[ "${WIN_HOME}x" != "x" && -d "$WIN_HOME/winfiles" ]]; then
-    cd "$WIN_HOME/winfiles" || return
+  local profilePath
+  profilePath=$(xdg-user-dir PROFILE)
+  if [[ -d $profilePath && -d "$profilePath/winfiles" ]]; then
+    cd "$profilePath/winfiles" || return
   else
     cdt
   fi
