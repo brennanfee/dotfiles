@@ -118,6 +118,7 @@ function cdm() {
 function cdmp() {
   xdg-cd-sub "MUSIC" "playlists" "Playlists"
 }
+alias cdpl="cdmp"
 
 # Mounts folder
 function cdmt() {
