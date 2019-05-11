@@ -13,7 +13,7 @@ export TERM=xterm-256color
 
 # Turn on colors
 export CLICOLOR=1
-export LS_OPTIONS="-h --color=auto --group-directories-first --time-style=long-iso"
+export LS_OPTIONS="-hv --color=auto --group-directories-first --time-style=long-iso"
 
 # User Agent
 # List of user agents: http://www.useragentstring.com/pages/useragentstring.php
