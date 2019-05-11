@@ -2,6 +2,7 @@
 
 # Turn on colors
 alias ls='ls $LS_OPTIONS'
+alias lss='ls -1'
 alias dir='ls -CA'
 alias vdir='ls -lA'
 alias tree="tree -C"
