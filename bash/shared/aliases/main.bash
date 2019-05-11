@@ -2,8 +2,8 @@
 
 # Turn on colors
 alias ls='ls $LS_OPTIONS'
-alias dir='ls -A --format=vertical'
-alias vdir='ls -A --format=long'
+alias dir='ls -CA'
+alias vdir='ls -lA'
 alias tree="tree -C"
 
 alias grep="grep --color"
@@ -18,8 +18,8 @@ alias se="sudoedit"
 alias la="ls -A"
 alias ll="ls -oh"
 alias lla="ls -ohA"
-alias lls="ls -ohA"
-alias ldir='ls -ohA | grep --color=never "^d"'
+alias lls="ls -lhA"
+alias ldir='ls -ohA --color=never | grep --color=never "^d"'
 
 alias sl="ls"
 
