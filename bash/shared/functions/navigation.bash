@@ -5,16 +5,6 @@
 # their locations.
 
 # Helper function the others will use
-function xdg-cd() {
-  local path
-  path=$(xdg-user-dir "$1")
-  if [[ -d "$path" ]]; then
-    cd "$path" || return
-  else
-    cd "$HOME" || return
-  fi
-}
-
 function xdg-cd-sub() {
   local path
   local sub
@@ -40,25 +30,21 @@ function xdg-cd-sub() {
 # Profile folder
 function cdp() {
   cd "$(xdg-user-dir PROFILE)" || return
-  #xdg-cd "PROFILE"
 }
 
 # Desktop folder
 function cdk() {
   cd "$(xdg-user-dir DESKTOP)" || return
-  #xdg-cd "DESKTOP"
 }
 
 # Templates folder
 function cdl() {
   cd "$(xdg-user-dir TEMPLATES)" || return
-  #xdg-cd "TEMPLATES"
 }
 
 # Source folder
 function cds() {
   cd "$(xdg-user-dir SOURCE)" || return
-  #xdg-cd "SOURCE"
 }
 
 # Personal source folder (usually only there on my work machines)
@@ -75,7 +61,6 @@ function cdsg() {
 # Downloads folder
 function cdd() {
   cd "$(xdg-user-dir DOWNLOAD)" || return
-  #xdg-cd "DOWNLOAD"
 }
 
 # Install folder
@@ -127,7 +112,6 @@ function cdtp() {
 # Music folder
 function cdm() {
   cd "$(xdg-user-dir MUSIC)" || return
-  #xdg-cd "MUSIC"
 }
 
 # Music playlist folder
@@ -138,37 +122,36 @@ function cdmp() {
 # Mounts folder
 function cdmt() {
   cd "$(xdg-user-dir MOUNTS)" || return
-  #xdg-cd "MOUNTS"
 }
 
 # Videos folder
 function cdv() {
   cd "$(xdg-user-dir VIDEOS)" || return
-  #xdg-cd "VIDEOS"
 }
 
 # VMs folder
 function cdvm() {
   cd "$(xdg-user-dir VMS)" || return
-  #xdg-cd "VMS"
 }
 
 # Dropbox
 function cddb() {
   cd "$(xdg-user-dir DROPBOX)" || return
-  #xdg-cd "DROPBOX"
+}
+
+# Cloud folder, intended as the cloud shared\synced folder
+function cdc() {
+  cd "$(xdg-user-dir CLOUD)" || cd "$(xdg-user-dir DROPBOX)" || return
 }
 
 # Documents or "My Documents"
-function cdc() {
+function cdoc() {
   cd "$(xdg-user-dir DOCUMENTS)" || return
-  #xdg-cd "DOCUMENTS"
 }
 
 # Pictures or Photos
 function cdx() {
   cd "$(xdg-user-dir PICTURES)" || return
-  #xdg-cd "PICTURES"
 }
 
 # "Alternate" home, or Windows home - will only be different than $HOME on Windows
