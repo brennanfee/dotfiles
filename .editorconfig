@@ -33,6 +33,11 @@ indent_size = 4
 [*.{ps1,psd1,psm1,pssc}]
 indent_size = 4
 
+# Command & Batch
+[*.{cmd,bat}]
+end_of_line = crlf
+indent_size = 4
+
 # Makefiles
 [{Makefile,*.mk,Makefile.*}]
 indent_size = tab
