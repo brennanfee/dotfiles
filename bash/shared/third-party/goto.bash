@@ -76,6 +76,7 @@ goto()
 _goto_resolve_db()
 {
   GOTO_DB="${GOTO_DB:-$HOME/.goto}"
+  touch -a "$GOTO_DB"
 }
 
 _goto_usage()
@@ -111,22 +112,24 @@ USAGE
 # Displays version
 _goto_version()
 {
-  echo "goto version 1.2.3"
+  echo "goto version 1.2.3.1"
 }
 
 # Expands directory.
 # Helpful for ~, ., .. paths
 _goto_expand_directory()
 {
-  cd "$1" 2>/dev/null && pwd
+  builtin cd "$1" 2>/dev/null && pwd
 }
 
 # Lists registered aliases.
 _goto_list_aliases()
 {
-  local IFS=$'\n'
+  local IFS=$' '
   if [ -f "$GOTO_DB" ]; then
-    column -t "$GOTO_DB" 2>/dev/null
+    while read -r name directory; do
+      printf '\e[1;36m%20s  \e[0m%s\n' "$name" "$directory"
+    done < "$GOTO_DB"
   else
     echo "You haven't configured any directory aliases yet."
   fi
@@ -261,7 +264,7 @@ _goto_directory()
 
   target=$(_goto_resolve_alias "$1") || return 1
 
-  cd "$target" 2> /dev/null || \
+  builtin cd "$target" 2> /dev/null || \
     { _goto_error "Failed to goto '$target'" && return 1; }
 }
 
