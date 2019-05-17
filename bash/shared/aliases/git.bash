@@ -6,6 +6,10 @@ if command_exists hub; then
   git_cmd="hub"
   eval "$(hub alias -s)"
 fi
+if command_exists lab; then
+  git_cmd="lab"
+  alias git=lab
+fi
 
 alias g="$git_cmd"
 alias get="$git_cmd"
