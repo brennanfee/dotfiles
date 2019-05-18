@@ -5,26 +5,34 @@ function reload_profile() {
   source "$HOME/.bash_profile"
 }
 
-alias lsgrep="ls | grep -i \"$@\""
-
-# function lsgrep() {
-#   # shellcheck disable=SC2010
-#   ls | grep -i "$@"
-# }
+function lsgrep() {
+  # shellcheck disable=SC2010
+  ls | grep -i "$@"
+}
 
 function lagrep() {
   # shellcheck disable=SC2010
   ls -A | grep -i "$@"
 }
 
+function llgrep() {
+  # shellcheck disable=SC2010
+  ls -hlA | grep -i "$@"
+}
+
 function lsrg() {
   # shellcheck disable=SC2012
-  ls | rg "$@"
+  ls | rg -S "$@"
 }
 
 function larg() {
   # shellcheck disable=SC2012
-  ls -A | rg "$@"
+  ls -A | rg -S "$@"
+}
+
+function llrg() {
+  # shellcheck disable=SC2012
+  ls -hlA | rg -S "$@"
 }
 
 function psgrep() {
@@ -34,7 +42,7 @@ function psgrep() {
 
 function psrg() {
   # shellcheck disable=SC2001
-  ps aux | rg "$(echo "$@" | sed "s/^\(.\)/[\1]/g")"
+  ps aux | rg -S "$(echo "$@" | sed "s/^\(.\)/[\1]/g")"
 }
 
 function myip() {
@@ -45,9 +53,9 @@ function myip() {
 
 function usage() {
   if [ -n "$1" ]; then
-    du -h --max-depth=1 "$1"
+    du -h --max-depth=1 "$1" | sort -hr
   else
-    du -h --max-depth=1
+    du -h --max-depth=1 | sort -hr
   fi
 }
 
