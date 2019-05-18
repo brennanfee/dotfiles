@@ -7,11 +7,6 @@ function reload_profile() {
 
 function lsgrep() {
   # shellcheck disable=SC2010
-  ls | grep -i "$@"
-}
-
-function lagrep() {
-  # shellcheck disable=SC2010
   ls -A | grep -i "$@"
 }
 
@@ -21,11 +16,6 @@ function llgrep() {
 }
 
 function lsrg() {
-  # shellcheck disable=SC2012
-  ls | rg -S "$@"
-}
-
-function larg() {
   # shellcheck disable=SC2012
   ls -A | rg -S "$@"
 }
