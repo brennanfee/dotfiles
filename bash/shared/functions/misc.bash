@@ -37,7 +37,7 @@ function psrg() {
 
 function myip() {
   local res
-  res=$(curl -sL checkip.dyndns.org | grep -Eo '[0-9\.]+')
+  res=$(dig +short myip.opendns.com @resolver1.opendns.com)
   echo -e "Your public IP is: $res"
 }
 
