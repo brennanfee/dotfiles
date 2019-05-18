@@ -34,6 +34,6 @@ function cd-to-git-root-path() {
   fi
 }
 
-function git-remove-missing-files() {
+function git-stage-removed-files() {
   git ls-files -d -z | xargs -0 git update-index --remove
 }
