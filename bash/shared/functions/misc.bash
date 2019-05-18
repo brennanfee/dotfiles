@@ -12,7 +12,7 @@ function lsgrep() {
 
 function llgrep() {
   # shellcheck disable=SC2010
-  ls -hlA | grep -i "$@"
+  ls -hlA --time-style=long-iso | grep -i "$@"
 }
 
 function lsrg() {
@@ -22,7 +22,7 @@ function lsrg() {
 
 function llrg() {
   # shellcheck disable=SC2012
-  ls -hlA | rg -S "$@"
+  ls -hlA --time-style=long-iso | rg -S "$@"
 }
 
 function psgrep() {
