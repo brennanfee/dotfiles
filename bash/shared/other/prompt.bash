@@ -23,17 +23,29 @@ function custom_prompt() {
 
   local ssh_text=""
   if [[ -n $SSH_CLIENT ]]; then
-    local ssh_text=" (SSH)"
+    # shellcheck disable=SC2154
+    local ssh_text="${color_yellow}(SSH) "
+  fi
+
+  # shellcheck disable=SC2154
+  local curShell="${color_blue}("
+  if [[ $IS_WSL ]]; then
+    curShell+="WSL "
+  fi
+  if [[ $0 -eq "-bash" ]]; then
+    curShell+="bash)"
+  else
+    curShell+="$0)"
   fi
 
   if [[ -e /usr/lib/git-core/git-sh-prompt ]]; then
     # shellcheck disable=SC2154
-    local git_part="__git_ps1 ${color_yellow}(%s) "
+    local git_part="__git_ps1 ${color_yellow}[%s] "
     export PS1
     # shellcheck disable=SC2154
-    PS1="${color_normal}\n${color_green}\u@\h${color_yellow}${ssh_text} ${color_purple}\w $(${git_part}) $exit_status ${color_normal}\n\$ "
+    PS1="${color_normal}\n${ssh_text}${color_green}\u@\h ${color_purple}\w $(${git_part}) ${curShell} ${exit_status} ${color_normal}\n\$ "
   else
-    export PS1="${color_normal}\n${color_green}\u@\h${color_yellow}${ssh_text} ${color_purple}\w $exit_status ${color_normal}\n\$ "
+    export PS1="${color_normal}\n${ssh_text}${color_green}\u@\h ${color_purple}\w ${curShell} ${exit_status} ${color_normal}\n\$ "
   fi
 }
 
