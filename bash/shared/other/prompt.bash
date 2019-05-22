@@ -24,7 +24,7 @@ function custom_prompt() {
   local ssh_text=""
   if [[ -n $SSH_CLIENT ]]; then
     # shellcheck disable=SC2154
-    local ssh_text="${color_yellow}(SSH) "
+    local ssh_text="${color_cyan}(SSH) "
   fi
 
   # shellcheck disable=SC2154
