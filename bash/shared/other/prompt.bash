@@ -29,7 +29,7 @@ function custom_prompt() {
 
   # shellcheck disable=SC2154
   local curShell="${color_blue}("
-  if [[ $IS_WSL ]]; then
+  if [[ $IS_WSL == "true" ]]; then
     curShell+="WSL "
   fi
   if [[ $0 -eq "-bash" ]]; then
@@ -39,11 +39,12 @@ function custom_prompt() {
   fi
 
   if [[ -e /usr/lib/git-core/git-sh-prompt ]]; then
+    local git_part
     # shellcheck disable=SC2154
-    local git_part="__git_ps1 ${color_yellow}[%s] "
+    git_part=$(__git_ps1 "${color_yellow}[%s] ")
     export PS1
     # shellcheck disable=SC2154
-    PS1="${color_normal}\n${ssh_text}${color_green}\u@\h ${color_purple}\w $(${git_part}) ${curShell} ${exit_status} ${color_normal}\n\$ "
+    PS1="${color_normal}\n${ssh_text}${color_green}\u@\h ${color_purple}\w ${git_part}${curShell} ${exit_status} ${color_normal}\n\$ "
   else
     export PS1="${color_normal}\n${ssh_text}${color_green}\u@\h ${color_purple}\w ${curShell} ${exit_status} ${color_normal}\n\$ "
   fi
