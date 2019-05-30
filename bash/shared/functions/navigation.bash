@@ -33,14 +33,16 @@ function cdp() {
 }
 
 # Desktop folder
-function cdk() {
+function cdsk() {
   cd "$(xdg-user-dir DESKTOP)" || return
 }
+alias cdk=cdsk
 
 # Templates folder
 function cdl() {
   cd "$(xdg-user-dir TEMPLATES)" || return
 }
+alias cdtm=cdl
 
 # Source folder
 function cds() {
@@ -51,6 +53,7 @@ function cds() {
 function cdss() {
   xdg-cd-sub "SOURCE" "personal" "Personal"
 }
+alias cdsp=cdss
 
 # Github source folder (source projects I pull directly from Github)
 # In truth this is also where I pull BitBucket or GitLab public projects
@@ -90,6 +93,7 @@ function cdi() {
     fi
   fi
 }
+alias cddi=cdi
 
 # Dotfiles folder
 function cdt() {
@@ -145,18 +149,38 @@ function cdc() {
   cd "$(xdg-user-dir CLOUD)" || cd "$(xdg-user-dir DROPBOX)" || return
 }
 
+# "Worksync" folder (currently workdocs)
+function cdws() {
+  cd "$(xdg-user-dir PROFILE)" || return
+  profile_path=$(xdg-user-dir PROFILE)
+  path="$profile_path/workdocs"
+  if [[ -d "$path" ]]; then
+    cd "$path" || return
+  else
+    cd "$profile_path" || return
+  fi
+}
+alias cdwd=cdws
+
 # Documents or "My Documents"
 function cdoc() {
   cd "$(xdg-user-dir DOCUMENTS)" || return
 }
+alias cdo=cdoc
 
 # Pictures or Photos
 function cdx() {
   cd "$(xdg-user-dir PICTURES)" || return
 }
+alias cdpx=cdx
+
+# Home alias, some linux systems require typing "cd -" to go home.  This replaces that.
+function cdh() {
+  cd "$HOME" || return
+}
 
 # "Alternate" home, or Windows home - will only be different than $HOME on Windows
-function cdh() {
+function cdhh() {
   if [[ "${WIN_HOME}x" != "x" && -d $WIN_HOME ]]; then
     cd "$WIN_HOME" || return
   else
