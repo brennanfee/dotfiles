@@ -3,9 +3,13 @@
 function yt-helper() {
   local url
   if [[ $IS_WSL == "1" ]]; then
-    url=$(paste.exe)
+    url=$(powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -Command Get-Clipboard)
     echo "Downloading $url"
-    youtube-dl.exe -o "$1" "$url"
+    if command_exists aria2c.exe; then
+      youtube-dl.exe --external-downloader=aria2c.exe -o "$1" "$url"
+    else
+      youtube-dl.exe -o "$1" "$url"
+    fi
   else
     url=$(xsel -o --clipboard)
     echo "Downloading $url"
@@ -28,4 +32,3 @@ function pt() {
   output="$(xdg-user-dir PICTURES)/!other/%(title)s.%(ext)s"
   yt-helper "$output"
 }
-
