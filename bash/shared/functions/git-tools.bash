@@ -34,6 +34,22 @@ function cd-to-git-root-path() {
   fi
 }
 
+function git-get-repo-user() {
+  if in-a-git-repo; then
+    git remote get-url origin | sed -E 's@^.+(:|/)([^/]+)/.+$@\2@'
+  else
+    ""
+  fi
+}
+
+function git-get-repo-name() {
+  if in-a-git-repo; then
+    git remote get-url origin | sed -E 's@^.+[:/][^/]+.+/([^.]+)(.git)?$@\1@'
+  else
+    ""
+  fi
+}
+
 function git-stage-removed-files() {
   git ls-files -d -z | xargs -0 git update-index --remove
 }
