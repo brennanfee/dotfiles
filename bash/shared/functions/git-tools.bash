@@ -50,6 +50,22 @@ function git-get-repo-name() {
   fi
 }
 
+function git-get-repo-protocol() {
+  if in-a-git-repo; then
+    git remote get-url origin | sed -E 's@^((?:git|ssh|https))[\@:+].+$@\1@'
+  else
+    ""
+  fi
+}
+
+function git-get-repo-service() {
+  if in-a-git-repo; then
+    git remote get-url origin | sed -E 's@^(?:(?:git|ssh|https))[:+\@](?://)?(?:.+?[\@])?(?:git-)?(.+?)[\@:/.].+$@\1@'
+  else
+    ""
+  fi
+}
+
 function git-stage-removed-files() {
   git ls-files -d -z | xargs -0 git update-index --remove
 }
