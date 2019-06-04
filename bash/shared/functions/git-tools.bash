@@ -67,7 +67,7 @@ function git-get-remote-protocol() {
   fi
 
   if in-a-git-repo; then
-    git remote get-url "$remote" | sed -E 's@^((git|ssh|https))[\@:+].+$@\1@'
+    git remote get-url "$remote" | sed -E 's@^(git|ssh|https)[\@:+].+$@\1@'
   else
     ""
   fi
@@ -80,7 +80,7 @@ function git-get-remote-service() {
   fi
 
   if in-a-git-repo; then
-    git remote get-url "$remote" | sed -E 's@^(?:(?:git|ssh|https))[:+\@](?://)?(?:.+?[\@])?(?:git-)?(.+?)[\@:/.].+$@\1@'
+    git remote get-url "$remote" | sed -E 's@^(git|ssh|https)[\@:+](//)?((.+[\@])?(git-)?([^:/.]+)).+$@\6@'
   else
     ""
   fi
