@@ -34,33 +34,53 @@ function cd-to-git-root-path() {
   fi
 }
 
-function git-get-repo-user() {
+function git-get-remote-user() {
+  local remote="origin"
+  if [[ -n $1 ]]; then
+    remote=$1
+  fi
+
   if in-a-git-repo; then
-    git remote get-url origin | sed -E 's@^.+(:|/)([^/]+)/.+$@\2@'
+    git remote get-url "$remote" | sed -E 's@^.+(:|/)([^/]+)/.+$@\2@'
   else
     ""
   fi
 }
 
-function git-get-repo-name() {
+function git-get-remote-name() {
+  local remote="origin"
+  if [[ -n $1 ]]; then
+    remote=$1
+  fi
+
   if in-a-git-repo; then
-    git remote get-url origin | sed -E 's@^.+[:/][^/]+.+/([^.]+)(.git)?$@\1@'
+    git remote get-url "$remote" | sed -E 's@^.+[:/][^/]+.+/([^.]+)(.git)?$@\1@'
   else
     ""
   fi
 }
 
-function git-get-repo-protocol() {
+function git-get-remote-protocol() {
+  local remote="origin"
+  if [[ -n $1 ]]; then
+    remote=$1
+  fi
+
   if in-a-git-repo; then
-    git remote get-url origin | sed -E 's@^((?:git|ssh|https))[\@:+].+$@\1@'
+    git remote get-url "$remote" | sed -E 's@^((git|ssh|https))[\@:+].+$@\1@'
   else
     ""
   fi
 }
 
-function git-get-repo-service() {
+function git-get-remote-service() {
+  local remote="origin"
+  if [[ -n $1 ]]; then
+    remote=$1
+  fi
+
   if in-a-git-repo; then
-    git remote get-url origin | sed -E 's@^(?:(?:git|ssh|https))[:+\@](?://)?(?:.+?[\@])?(?:git-)?(.+?)[\@:/.].+$@\1@'
+    git remote get-url "$remote" | sed -E 's@^(?:(?:git|ssh|https))[:+\@](?://)?(?:.+?[\@])?(?:git-)?(.+?)[\@:/.].+$@\1@'
   else
     ""
   fi
