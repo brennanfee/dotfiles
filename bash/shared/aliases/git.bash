@@ -1,15 +1,7 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC2139
 
-git_cmd="git"
-if command_exists hub; then
-  git_cmd="hub"
-  eval "$(hub alias -s)"
-fi
-if command_exists lab; then
-  git_cmd="lab"
-  alias git=lab
-fi
+git_cmd=$(git-exe)
 
 alias g="$git_cmd"
 alias get="$git_cmd"
@@ -20,7 +12,7 @@ alias gss="$git_cmd status -sb"
 alias gpu="$git_cmd push --tags"
 alias gpl="$git_cmd pull"
 alias gf="$git_cmd fetch --all --tags"
-alias ga="$git_cmd add ."
+alias ga="git-add-alias"
 alias gc="$git_cmd commit"
 alias gd="$git_cmd diff"
 alias gds="$git_cmd diff --cached"

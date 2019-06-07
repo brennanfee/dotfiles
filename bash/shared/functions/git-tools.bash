@@ -1,5 +1,16 @@
 #!/usr/bin/env bash
 
+function git-exe() {
+  git_cmd="git"
+  if command_exists hub; then
+    git_cmd="hub"
+  fi
+  if command_exists lab; then
+    git_cmd="lab"
+  fi
+  echo "$git_cmd"
+}
+
 function git-branch-name() {
   if in-a-git-repo; then
     git rev-parse --abbrev-ref HEAD
@@ -88,4 +99,12 @@ function git-get-remote-service() {
 
 function git-stage-removed-files() {
   git ls-files -d -z | xargs -0 git update-index --remove
+}
+
+function git-add-alias() {
+  if [[ -n $1 ]]; then
+    git add "$@"
+  else
+    git add .
+  fi
 }
