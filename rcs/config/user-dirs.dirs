@@ -17,7 +17,7 @@ XDG_VIDEOS_DIR="$HOME/profile/videos"
 # Custom directories
 XDG_PROFILE_DIR="$HOME/profile"
 XDG_DROPBOX_DIR="$HOME/profile/dropbox"
-XDG_CLOUD_DIR="$HOME/profile/dropbox"
+XDG_CLOUD_DIR="$HOME/profile/cloud"
 XDG_SOURCE_DIR="$HOME/profile/source"
 XDG_INSTALLS_DIR="$HOME/profile/downloads/installs"
 XDG_MOUNTS_DIR="$HOME/profile/mounts"
