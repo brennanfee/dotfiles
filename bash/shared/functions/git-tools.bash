@@ -108,3 +108,11 @@ function git-add-alias() {
     git add .
   fi
 }
+
+function git-checkout-alias() {
+  if [[ -n $1 ]]; then
+    git checkout "$@"
+  else
+    git checkout master
+  fi
+}
