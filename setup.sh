@@ -44,7 +44,7 @@ else
     echo "TAGS=\"$OS_PRIMARY\"" >>"$HOME/.rcrc"
   fi
 
-  mkrc -o "$HOME/.rcrc"
+  echo -e "${color_yellow}~/.rcrc file created.  You will need to add it with mkrc -o ~/.rcrc${color_normal}"
 fi
 
 echo -e "${color_green}Done!  Edit the ~/.rcrc as needed then run 'rcup'${color_normal}"
