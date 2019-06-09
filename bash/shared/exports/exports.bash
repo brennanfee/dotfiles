@@ -15,10 +15,6 @@ export TERM=xterm-256color
 export CLICOLOR=1
 export LS_OPTIONS="-hv --color=auto --group-directories-first --time-style=long-iso"
 
-# User Agent
-# List of user agents: http://www.useragentstring.com/pages/useragentstring.php
-export USER_AGENT="Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko)"
-
 # Editors and pagers
 export VIM_VER
 VIM_VER="$($(which vim) --version | grep "Vi IMproved" | awk '{print $5}' | sed -e 's/\.//g')"

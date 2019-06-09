@@ -76,12 +76,6 @@ alias vless="/usr/share/vim/vim$VIM_VER/macros/less.sh"
 #   alias cat="bat"
 # fi
 
-# Setting up command-line web tools with a user agent
-if [[ $USER_AGENT != "" ]]; then
-  alias wget='wget --user-agent="$USER_AGENT"'
-  alias curl='curl -A "$USER_AGENT"'
-fi
-
 if command_exists thefuck; then
   eval "$(thefuck --alias)"
 fi
