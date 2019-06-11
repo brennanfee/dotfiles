@@ -1,5 +1,12 @@
 #!/usr/bin/env bash
 
+# Set temps, for consistency
+if [[ -d /tmp ]]; then
+  export TMP="/tmp"
+  export TEMP="/tmp"
+  export TMPDIR="/tmp"
+fi
+
 # Set languages
 export LANG="en_US.UTF-8"
 export LANGUAGE="en_US:en"
