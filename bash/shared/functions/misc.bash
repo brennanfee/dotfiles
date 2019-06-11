@@ -36,9 +36,7 @@ function psrg() {
 }
 
 function myip() {
-  local res
-  res=$(dig +short myip.opendns.com @resolver1.opendns.com)
-  echo -e "Your public IP is: $res"
+  curl ifconfig.co/ip
 }
 
 function usage() {
