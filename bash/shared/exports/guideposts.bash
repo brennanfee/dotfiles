@@ -5,11 +5,17 @@
 # set up.
 
 # For Windows WSL I use the WSLENV environment variable to pass in the values
-# USERPROFILE and WIN_USER.  USERPROFILE is set up by default in Windows but
-# WIN_USER is a custom value that should be set to the %USERNAME% value
-# in Windows.  This variable is used in situations where the unix (WSL) and windows
+# USERPROFILE, PROFILEPATH, and WIN_USER.  USERPROFILE is set up by default in
+# Windows but PROFILEPATH and WIN_USER are custom values that should be set
+# manually.  WIN_USER should be set to the %USERNAME% value in Windows.
+# PROFILEPATH should point to the main profile path set up on the machine.
+# The WIN_USER variable is used in situations where the unix (WSL) and windows
 # usernames might differ (which is common).  WSLENV should be set to:
-# "USERPROFILE/up:WIN_USER"
+# "USERPROFILE/up:PROFILEPATH/up:WIN_USER"
+
+if [[ "${PROFILEPATH}x" == "x" ]]; then
+  export PROFILEPATH="$HOME/profile"
+fi
 
 # This is only here for Windows and WSL.  For all non-Windows machines $HOME is "home", but
 # for my WSL shells I keep track of two homes.  The "Linux" home stays as "home" (cd -) but

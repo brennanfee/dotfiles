@@ -5,21 +5,21 @@
 # homedir-relative path, or XDG_xxx_DIR="/yyy", where /yyy is an
 # absolute path. No other format is supported.
 #
-XDG_DESKTOP_DIR="$HOME/profile/desktop"
-XDG_DOWNLOAD_DIR="$HOME/profile/downloads"
-XDG_TEMPLATES_DIR="$HOME/profile/templates"
-XDG_PUBLICSHARE_DIR="$HOME/profile/public"
-XDG_DOCUMENTS_DIR="$HOME/profile/documents"
-XDG_MUSIC_DIR="$HOME/profile/music"
-XDG_PICTURES_DIR="$HOME/profile/pictures"
-XDG_VIDEOS_DIR="$HOME/profile/videos"
+XDG_DESKTOP_DIR="$PROFILEPATH/desktop"
+XDG_DOWNLOAD_DIR="$PROFILEPATH/downloads"
+XDG_TEMPLATES_DIR="$PROFILEPATH/templates"
+XDG_PUBLICSHARE_DIR="$PROFILEPATH/public"
+XDG_DOCUMENTS_DIR="$PROFILEPATH/documents"
+XDG_MUSIC_DIR="$PROFILEPATH/music"
+XDG_PICTURES_DIR="$PROFILEPATH/pictures"
+XDG_VIDEOS_DIR="$PROFILEPATH/videos"
 
 # Custom directories
-XDG_PROFILE_DIR="$HOME/profile"
-XDG_DROPBOX_DIR="$HOME/profile/dropbox"
-XDG_CLOUD_DIR="$HOME/profile/cloud"
-XDG_SOURCE_DIR="$HOME/profile/source"
-XDG_INSTALLS_DIR="$HOME/profile/downloads/installs"
-XDG_MOUNTS_DIR="$HOME/profile/mounts"
-XDG_VMS_DIR="$HOME/profile/vms"
+XDG_PROFILE_DIR="$PROFILEPATH"
+XDG_DROPBOX_DIR="$PROFILEPATH/dropbox"
+XDG_CLOUD_DIR="$PROFILEPATH/cloud"
+XDG_SOURCE_DIR="$PROFILEPATH/source"
+XDG_INSTALLS_DIR="$PROFILEPATH/downloads/installs"
+XDG_MOUNTS_DIR="$PROFILEPATH/mounts"
+XDG_VMS_DIR="$PROFILEPATH/vms"
 
