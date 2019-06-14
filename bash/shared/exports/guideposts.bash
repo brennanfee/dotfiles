@@ -14,7 +14,11 @@
 # "USERPROFILE/up:PROFILEPATH/up:WIN_USER"
 
 if [[ "${PROFILEPATH}x" == "x" ]]; then
-  export PROFILEPATH="$HOME/profile"
+  if [[ -d "$HOME/profile" ]]; then
+    export PROFILEPATH="$HOME/profile"
+  else
+    export PROFILEPATH="$HOME"
+  fi
 fi
 
 # This is only here for Windows and WSL.  For all non-Windows machines $HOME is "home", but
