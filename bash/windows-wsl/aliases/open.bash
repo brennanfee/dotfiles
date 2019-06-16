@@ -1,5 +1,5 @@
 
-alias start="cmd.exe /c start"
-alias open="cmd.exe /c start"
-alias xdg-open="cmd.exe /c start"
-alias o="cmd.exe /c start"
+alias start="powershell.exe -NoProfile -NonInteractive -Command Invoke-Item"
+alias open="powershell.exe -NoProfile -NonInteractive -Command Invoke-Item"
+alias xdg-open="powershell.exe -NoProfile -NonInteractive -Command Invoke-Item"
+alias o="powershell.exe -NoProfile -NonInteractive -Command Invoke-Item"
