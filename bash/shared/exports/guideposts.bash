@@ -5,13 +5,15 @@
 # set up.
 
 # For Windows WSL I use the WSLENV environment variable to pass in the values
-# USERPROFILE, PROFILEPATH, and WIN_USER.  USERPROFILE is set up by default in
-# Windows but PROFILEPATH and WIN_USER are custom values that should be set
-# manually.  WIN_USER should be set to the %USERNAME% value in Windows.
-# PROFILEPATH should point to the main profile path set up on the machine.
-# The WIN_USER variable is used in situations where the unix (WSL) and windows
-# usernames might differ (which is common).  WSLENV should be set to:
-# "USERPROFILE/up:PROFILEPATH/up:WIN_USER"
+# some path values along with a custom value WIN_USER.  WIN_USER should be set
+# to the %USERNAME% value in Windows.  The WIN_USER variable is used in
+# situations where the Unix (WSL) and Windows usernames might differ (which
+# will be common).  PROFILEPATH is a custom value that gets set with my standard
+# PowerShell profile scripts and points to my main profile location.  The
+# SCOOP and SCOOP_GLOBAL are paths for the Scoop package manager for Windows.
+# Both USERPROFILE and SystemRoot are standard paths available in Windows by
+# default.  The WSLENV should be set to:
+# USERPROFILE/up:PROFILEPATH/up:SystemRoot/up:SCOOP/up:SCOOP_GLOBAL/up:WIN_USER
 
 if [[ "${PROFILEPATH}x" == "x" ]]; then
   if [[ -d "$HOME/profile" ]]; then
