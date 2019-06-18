@@ -3,8 +3,6 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-# Hello all
-
 # initialize-settings.sh - Script to set up a new machine with my dotfiles.
 
 DOTFILES="$(cd -P "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
