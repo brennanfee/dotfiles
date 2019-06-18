@@ -45,6 +45,8 @@ as a local (host specific) override.  In all cases the order is: first the globa
 the OS settings, finally the local settings.  All of which can further be overridden using a
 dotfiles-private repository.
 
+Hello all!
+
 ## Windows, WSL, and PowerShell
 
 For Windows machines the above steps should all be performed in the bash shell provided by
