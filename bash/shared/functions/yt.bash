@@ -36,7 +36,7 @@ function pt() {
 # To extract an MP3 from a video, requires ffmpeg to be installed
 function ytm() {
   local output
-  output="$(xdg-user-dir VIDEOS)/%(title)s.%(ext)s"
+  output="$(xdg-user-dir VIDEOS)/%(title)s-youtube.%(ext)s"
 
   local url
   if [[ $IS_WSL == "1" ]]; then
