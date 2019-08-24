@@ -58,6 +58,9 @@ TAB: menu-complete
 # in the line
 Space: magic-space
 
+###### History settings
+set revert-all-at-newline on
+
 ###### Misc Settings
 
 # Don't ring bell on completion
