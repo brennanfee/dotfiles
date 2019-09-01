@@ -29,6 +29,9 @@ alias gr="$git_cmd restore"
 # to those branches
 alias gsm="$git_cmd switch master"
 alias gsd="$git_cmd switch develop"
+# I also also merge develop into master quite a lot
+alias gmd="$git_cmd merge develop --ff-only"
+alias gmm="$git_cmd merge master --ff-only"
 
 alias gexp="$git_cmd archive --format zip --output"
 
