@@ -20,6 +20,11 @@ if command_exists ruby && command_exists gem; then
   path_prepend "$(ruby -r rubygems -e 'puts Gem.user_dir')/bin"
 fi
 
+# Rust
+if [[ -d "$HOME/.asdf/installs/rust/stable/bin" ]]; then
+  path_prepend "${HOME}/.asdf/installs/rust/stable/bin"
+fi
+
 # Dotfiles
 path_prepend "$DOTFILES/bin"
 path_prepend "$DOTFILES_PRIVATE/bin"
