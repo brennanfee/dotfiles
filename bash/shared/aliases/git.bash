@@ -25,6 +25,11 @@ alias gmt="$git_cmd mergetool -y"
 alias gsw="git-switch-alias"
 alias gr="$git_cmd restore"
 
+# Since I use master and develop branches so much, add specific aliases to switch
+# to those branches
+alias gsm="$git_cmd switch master"
+alias gsd="$git_cmd switch develop"
+
 alias gexp="$git_cmd archive --format zip --output"
 
 alias gl="$git_cmd log --graph --pretty=oneline --abbrev-commit"
