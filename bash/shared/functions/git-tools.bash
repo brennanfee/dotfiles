@@ -109,10 +109,12 @@ function git-add-alias() {
   fi
 }
 
-function git-checkout-alias() {
+function git-switch-alias() {
   if [[ -n $1 ]]; then
-    git checkout "$@"
+    git switch "$@"
   else
-    git checkout master
+    git switch master
   fi
 }
+
+alias git-checkout-alias="git-switch-alias"
