@@ -1,6 +1,6 @@
 # Aliases for linux apps, redirecting to windows versions
 
-if [[ -d "$SCOOP/shims/gvim.exe" ]]; then
+if [[ -e "$SCOOP/shims/gvim.exe" ]]; then
   alias gvim="$SCOOP/shims/gvim.exe"
 fi
 
@@ -10,7 +10,9 @@ alias docker-machine="docker-machine.exe"
 alias kubectl="kubectl.exe"
 alias notary="notary.exe"
 
-alias packer="$SCOOP/shims/packer.exe"
+if [[ -e "$SCOOP/shims/packer.exe" ]]; then
+  alias packer="$SCOOP/shims/packer.exe"
+fi
 alias vagrant="vagrant.exe"
 
 alias bcomp="/mnt/c/Program\ Files/Beyond\ Compare\ 4/BCompare.exe"
