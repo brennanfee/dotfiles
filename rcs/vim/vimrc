@@ -103,6 +103,7 @@ if has('gui_running')
   colorscheme darcula
   if has('gui_win32') || has('gui_win64')
     set guifont=Hasklug_NF:h14
+    set clipboard=unnamed
   elseif has('gui_macvim')
     set guifont=Hasklug\ Nerd\ Font\ Complete:h18
   else
