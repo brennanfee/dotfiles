@@ -9,10 +9,13 @@ alias get="$git_cmd"
 alias gs="$git_cmd status"
 alias gss="$git_cmd status -sb"
 
-alias gp="$git_cmd push"
 alias gpu="$git_cmd push"
-alias gl="$git_cmd pull --all --ff-only"
+alias gpush="$git_cmd push"
+
+alias gp="$git_cmd pull --all --ff-only"
 alias gpl="$git_cmd pull --all --ff-only"
+alias gpull="$git_cmd pull --all --ff-only"
+
 alias gf="$git_cmd fetch --all --tags"
 alias ga="git-add-alias"
 alias gc="$git_cmd commit"
