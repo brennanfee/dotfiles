@@ -211,6 +211,10 @@ else
   cnoremap <F13> <esc>
 endif
 
+" :w!! to save a file as sudo when you forgot to open the file as sudo
+command WriteSudo w !sudo tee % > /dev/null
+cnoremap w!! WriteSudo
+
 " Neovim specific mappings
 if has('nvim')
   " Make escape work like normal in the terminal
