@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 # shellcheck disable=SC2039
-# URL: https://github.com/iridakos/goto
+# SOURCE: https://github.com/iridakos/goto
 # MIT License
 #
 # Copyright (c) 2018 Lazarus Lazaridis
@@ -75,7 +75,8 @@ goto()
 
 _goto_resolve_db()
 {
-  GOTO_DB="${GOTO_DB:-$HOME/.goto}"
+  local CONFIG_DEFAULT="${XDG_CONFIG_HOME:-$HOME/.config/goto}"
+  GOTO_DB="${GOTO_DB:-$CONFIG_DEFAULT}"
   touch -a "$GOTO_DB"
 }
 
@@ -112,7 +113,7 @@ USAGE
 # Displays version
 _goto_version()
 {
-  echo "goto version 1.2.3.1"
+  echo "goto version 1.2.4.1"
 }
 
 # Expands directory.
@@ -439,16 +440,22 @@ _complete_goto_zsh()
   return $ret
 }
 
-# Register the goto completions.
-if [ -n "${BASH_VERSION}" ]; then
-  if ! [[ $(uname -s) =~ Darwin* ]]; then
-    complete -o filenames -F _complete_goto_bash goto
-  else
-    complete -F _complete_goto_bash goto
-  fi
-elif [ -n "${ZSH_VERSION}" ]; then
-  compdef _complete_goto_zsh goto
-else
-  echo "Unsupported shell."
-  exit 1
-fi
+goto_aliases=($(alias | sed -n "s/.*\s\(.*\)='goto'/\1/p"))
+goto_aliases+=("goto")
+
+for i in "${goto_aliases[@]}"
+	do
+		# Register the goto completions.
+	if [ -n "${BASH_VERSION}" ]; then
+	  if ! [[ $(uname -s) =~ Darwin* ]]; then
+	    complete -o filenames -F _complete_goto_bash $i
+	  else
+	    complete -F _complete_goto_bash $i
+	  fi
+	elif [ -n "${ZSH_VERSION}" ]; then
+	  compdef _complete_goto_zsh $i
+	else
+	  echo "Unsupported shell."
+	  exit 1
+	fi
+done
