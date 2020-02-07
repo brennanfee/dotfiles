@@ -2,8 +2,20 @@
 
 export PROMPT_DIRTRIM=4
 
+GIT_PS1_USEGIT=0
+
 if [[ -e /usr/lib/git-core/git-sh-prompt ]]; then
   source '/usr/lib/git-core/git-sh-prompt'
+  GIT_PS1_USEGIT=1
+  GIT_PS1_SHOWDIRTYSTATE=1
+  GIT_PS1_SHOWSTASHSTATE=1
+  GIT_PS1_SHOWUNTRACKEDFILES=1
+  GIT_PS1_SHOWUPSTREAM="verbose git"
+  GIT_PS1_SHOWCOLORHINTS=1
+fi
+if [[ -e /usr/lib/git/git-core/git-sh-prompt ]]; then
+  source '/usr/lib/git/git-core/git-sh-prompt'
+  GIT_PS1_USEGIT=1
   GIT_PS1_SHOWDIRTYSTATE=1
   GIT_PS1_SHOWSTASHSTATE=1
   GIT_PS1_SHOWUNTRACKEDFILES=1
@@ -32,13 +44,13 @@ function custom_prompt() {
   if [[ $IS_WSL == "true" ]]; then
     curShell+="WSL "
   fi
-  if [[ $0 -eq "-bash" ]]; then
+  if [[ "$0" == "-bash" ]] || [[ "$0" == "/bin/bash" ]]; then
     curShell+="bash)"
   else
     curShell+="$0)"
   fi
 
-  if [[ -e /usr/lib/git-core/git-sh-prompt ]]; then
+  if [[ $GIT_PS1_USEGIT -eq 1 ]]; then
     local git_part
     # shellcheck disable=SC2154
     git_part=$(__git_ps1 "${color_yellow}[%s] ")
