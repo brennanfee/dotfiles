@@ -10,6 +10,12 @@ fi
 
 if [[ $completions_loaded == 0 && -f "/etc/bash_completion" ]]; then
   source "/etc/bash_completion"
+  completions_loaded=1
+fi
+
+if [[ $completions_loaded == 0 && -f "/usr/share/bash-completion/bash_completion" ]]; then
+  source "/usr/share/bash-completion/bash_completion"
+  completions_loaded=1
 fi
 
 unset completions_loaded
