@@ -47,7 +47,7 @@ endif
 set hlsearch
 set gdefault
 set cursorline
-set colorcolumn=88,100
+set colorcolumn=88,100,120
 
 set hidden
 set confirm
@@ -239,10 +239,6 @@ augroup END
 " Markdown
 " First, turn off the one that comes with vim-polyglot
 let g:polyglot_disabled = ['markdown']
-augroup markdown_group
-  autocmd!
-  autocmd FileType markdown setlocal wrap
-augroup END
 
 let g:markdown_fenced_languages = ['html', 'css', 'python', 'bash=sh', 'javascript', 'ruby', 'c', 'c#=cs', 'csharp=cs', "c++=cpp", 'viml=vim', 'ini=dosini' ]
 " Highlighting for html/markdown
