@@ -1,6 +1,7 @@
 " Lightline Settings
+"      \ 'colorscheme': 'darcula',
 let g:lightline = {
-      \ 'colorscheme': 'darcula',
+      \ 'colorscheme': 'onehalfdark',
       \ 'mode_map': { 'c': 'NORMAL' },
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename' ], ['ctrlpmark'] ],

@@ -100,7 +100,8 @@ if has('gui_running')
   set guioptions-=T
   set guioptions-=t
   set guioptions-=m
-  colorscheme darcula
+  "colorscheme darcula
+  colorscheme onehalfdark
   if has('gui_win32') || has('gui_win64')
     set guifont=Hasklug_NF:h14
     set clipboard=unnamed
@@ -122,7 +123,8 @@ else
     set termguicolors
   endif
 
-  colorscheme darcula
+  "colorscheme darcula
+  colorscheme onehalfdark
 endif
 
 " Darcula doesn't have a ColorColumn
