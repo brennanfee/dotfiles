@@ -1,12 +1,14 @@
 #!/usr/bin/env bash
 
-# Download minpac if not present
-if [[ ! -e $HOME/.vim/pack/minpac/opt/minpac ]]; then
-  git clone https://github.com/k-takata/minpac.git "$HOME/.vim/pack/minpac/opt/minpac"
+# Download vim-plug & initialize the bundles
+if [[ ! -e $HOME/.vim/autoload/plug.vim ]]; then
+  curl -fsSLo "$HOME/.vim/autoload/plug.vim" --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 fi
 
-# Initialize the bundles
-vim -N -u "$HOME/.vim/vimrc.bundles" +PackUpdate +PackClean +qa -
+if [[ -f $HOME/.vim/vimrc.bundles ]]; then
+  vim -N -u "$HOME/.vim/vimrc.bundles" +PlugUpdate +PlugClean! +qa -
+fi
 
 # Create the scratch directories
 mkdir -p "$HOME/.vim/vimscratch/backup"
