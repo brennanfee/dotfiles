@@ -5,10 +5,10 @@ useTabs: false
 semi: false
 singleQuote: true
 quoteProps: "as-needed"
-jsxSingelQuote: false
+jsxSingleQuote: false
 trailingComma: "es5"
 bracketSpacing: true
-jsxBrackeSameLine: false
+jsxBracketSameLine: false
 arrowParens: "avoid"
 requirePragma: false
 insertPragma: false
