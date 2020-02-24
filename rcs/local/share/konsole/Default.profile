@@ -5,7 +5,7 @@ Font=JetBrainsMono Nerd Font,16,-1,5,50,0,0,0,0,0,Regular
 UseFontLineChararacters=true
 
 [General]
-Command=~/.asdf/shims/tmux
+Command=tmux
 Directory=~/profile
 Name=Default
 Parent=FALLBACK/
