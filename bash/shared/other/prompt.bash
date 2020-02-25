@@ -7,15 +7,19 @@ GIT_PS1_USEGIT=0
 if [[ -e /usr/lib/git-core/git-sh-prompt ]]; then
   source '/usr/lib/git-core/git-sh-prompt'
   GIT_PS1_USEGIT=1
-  GIT_PS1_SHOWDIRTYSTATE=1
-  GIT_PS1_SHOWSTASHSTATE=1
-  GIT_PS1_SHOWUNTRACKEDFILES=1
-  GIT_PS1_SHOWUPSTREAM="verbose git"
-  GIT_PS1_SHOWCOLORHINTS=1
 fi
+
 if [[ -e /usr/lib/git/git-core/git-sh-prompt ]]; then
   source '/usr/lib/git/git-core/git-sh-prompt'
   GIT_PS1_USEGIT=1
+fi
+
+if [[ -e /usr/share/git/git-prompt.sh ]]; then
+  source '/usr/share/git/git-prompt.sh'
+  GIT_PS1_USEGIT=1
+fi
+
+if [[ $GIT_PS1_USEGIT -eq 1 ]]; then
   GIT_PS1_SHOWDIRTYSTATE=1
   GIT_PS1_SHOWSTASHSTATE=1
   GIT_PS1_SHOWUNTRACKEDFILES=1
