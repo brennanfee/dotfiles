@@ -11,7 +11,7 @@ function SetOsEnvironmentVariables() {
   elif [[ $uname == "linux" ]]; then
     export OS_PRIMARY="linux"
     export OS_SECONDARY
-    OS_SECONDARY=$(grep -i '^ID=' </etc/os-release | sed -e 's/^ID=//' | tr '[:upper:]' '[:lower:]')
+    OS_SECONDARY=$(grep -i '^ID=' </etc/os-release | sed -e 's/^ID=//;s/"//g' | tr '[:upper:]' '[:lower:]')
     if [[ "${OS_SECONDARY}x" == "x" ]]; then
       OS_SECONDARY="unknown"
     fi
