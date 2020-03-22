@@ -4,6 +4,7 @@ prettier-plugin-package
 prettier-plugin-toml
 stylelint
 stylelint-prettier
+stylelint-config-prettier
 eslint
 eslint-config-prettier
 eslint-plugin-prettier
