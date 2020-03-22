@@ -1,3 +1,4 @@
 prettier
 @prettier/plugin-xml
+prettier-plugin-package
 prettier-plugin-toml
