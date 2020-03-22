@@ -1,2 +1,3 @@
-sprout-cli
 prettier
+@prettier/plugin-xml
+prettier-plugin-toml
