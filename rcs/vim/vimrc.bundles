@@ -44,7 +44,7 @@ Plug 'mhinz/vim-grepper'                  " Support for numerous grep-like tools
 Plug 'ctrlpvim/ctrlp.vim'                 " Fuzzy file loader
 Plug 'jeetsukumaran/vim-filebeagle'       " Minimal directory browser
 Plug 'airblade/vim-rooter'                " Auto sets vim working directory to 'base' project folder
-Plug 'w0rp/ale'                           " Dynamic, asynchronous linting
+Plug 'dense-analysis/ale'                 " Dynamic, asynchronous linting
 Plug 'itchyny/lightline.vim'              " Ooh, pretty graphics for buffer line and status line
 Plug 'maximbaz/lightline-ale'             " Ale plugin for lightline
 Plug 'ap/vim-buftabline'                  " Treats buffers like tabs

@@ -2,3 +2,10 @@ prettier
 @prettier/plugin-xml
 prettier-plugin-package
 prettier-plugin-toml
+stylelint
+stylelint-prettier
+eslint
+eslint-config-prettier
+eslint-plugin-prettier
+htmlhint
+jsonlint
