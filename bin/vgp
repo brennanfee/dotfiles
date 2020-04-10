@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+# shellcheck source=/home/brennan/.dotfiles/bash/base-colors.bash
+source "$DOTFILES/bash/base-colors.bash"
+
+# Check we are in a directory with a Vagrantfile
+if [ ! -f "Vagrantfile" ]; then
+  echo -e "${color_red}Not in a directory with a Vagrantfile!${color_normal}"
+  exit 1
+fi
+
+# Set the provisioner to use
+provisioner=main
+if [ $# -eq 0 ]; then
+  echo -e "${color_yellow}No provisioner given, using default of 'main'${color_normal}"
+else
+  provisioner=$1
+fi
+
+# Make the call
+vagrant provision --provision-with "$provisioner"

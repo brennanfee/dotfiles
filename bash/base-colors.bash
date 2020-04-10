@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
 color_reset="\033[0;0;0m"
 color_normal="\033[0;0;0m"
