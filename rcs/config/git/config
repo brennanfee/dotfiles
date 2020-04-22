@@ -33,18 +33,6 @@
   renamelimit = 0
 [merge]
   renamelimit = 0
-[credential "https://git-codecommit.us-east-1.amazonaws.com"]
-  helper = !aws codecommit credential-helper $@
-  UseHttpPath = true
-[credential "https://git-codecommit.us-east-2.amazonaws.com"]
-  helper = !aws codecommit credential-helper $@
-  UseHttpPath = true
-[credential "https://git-codecommit.us-west-1.amazonaws.com"]
-  helper = !aws codecommit credential-helper $@
-  UseHttpPath = true
-[credential "https://git-codecommit.us-west-2.amazonaws.com"]
-  helper = !aws codecommit credential-helper $@
-  UseHttpPath = true
 [alias]
   co = checkout
   c = commit
