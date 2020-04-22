@@ -1,0 +1,8 @@
+application/pdf; wsl-open '%s'
+text/plain; wsl-open '%s'
+application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; wsl-open '%s'
+application/vnd.openxmlformats-officedocument.wordprocessingml.document; wsl-open '%s'
+text/csv; wsl-open '%s'
+image/png; wsl-open '%s'
+image/jpeg; wsl-open '%s'
+image/gif; wsl-open '%s'

@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# Export a browser
+export BROWSER=wsl-open
+
 # Force the Display output
 export DISPLAY=:0
 
