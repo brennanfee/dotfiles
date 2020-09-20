@@ -6,13 +6,11 @@
 --mark-watched
 
 # Provide a default format, most commands should override
--o "%(title)s.%(ext)s"
+-o "%(title)s-%(id)s.%(ext)s"
 
 # Best video format up to 720p
 #-f '(mp4,webm)best[height<=?720]'
 -f 'bestvideo[ext=mp4][height<=?1080]+bestaudio[ext=m4a]/bestvideo[ext=webm][height<=?1080]+bestaudio[ext=webm]/best[height<=?1080]/best'
 
 --prefer-free-formats
-
---audio-format mp3
 
