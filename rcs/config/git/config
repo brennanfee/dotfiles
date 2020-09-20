@@ -49,3 +49,6 @@
   path = ~/.config/git/gitconfig.user
   path = ~/.config/git/gitconfig.wsl
   path = ~/.config/git/gitconfig.local
+[pull]
+	rebase = false
+	ff = only
