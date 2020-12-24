@@ -238,10 +238,6 @@ augroup filetypes_mappings
   autocmd BufNewFile,BufFilePre,BufRead * if match(getline(1), "---") >= 0 | setlocal filetype=yaml | endif
 augroup END
 
-" Markdown
-" First, turn off the one that comes with vim-polyglot
-let g:polyglot_disabled = ['markdown']
-
 let g:markdown_fenced_languages = ['html', 'css', 'python', 'bash=sh', 'javascript', 'ruby', 'c', 'c#=cs', 'csharp=cs', "c++=cpp", 'viml=vim', 'ini=dosini' ]
 " Highlighting for html/markdown
 hi htmlItalic ctermfg=188 ctermbg=235 cterm=italic guifg=#a9b7c6 guibg=#2b2b2b gui=italic

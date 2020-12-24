@@ -10,6 +10,9 @@ if has('vim_starting')
   endif
 endif
 
+" First, turn off the one that comes with vim-polyglot
+let g:polyglot_disabled = ['markdown']
+
 call plug#begin('~/.vim/plugged')
 
 " The plugins
