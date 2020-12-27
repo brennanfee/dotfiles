@@ -30,13 +30,13 @@ alias gmt="$git_cmd mergetool -y"
 alias gsw="git-switch-alias"
 alias gr="$git_cmd restore"
 
-# Since I use master and develop branches so much, add specific aliases to switch
+# Since I use main and develop branches so much, add specific aliases to switch
 # to those branches
-alias gsm="$git_cmd switch master"
+alias gsm="$git_cmd switch main"
 alias gsd="$git_cmd switch develop"
-# I also also merge develop into master quite a lot
+# I also also merge develop into main quite a lot
 alias gmd="$git_cmd merge develop --ff-only"
-alias gmm="$git_cmd merge master --ff-only"
+alias gmm="$git_cmd merge main --ff-only"
 
 alias gexp="$git_cmd archive --format zip --output"
 
