@@ -1,1 +1,1 @@
-sshfs -C -o allow_other,reconnect,IdentityFile="$HOME/.ssh/id_ed25519_brennan" brennan@aristotle.tts.lan:/mnt/p "$(xdg-user-dir MOUNTS)/p"
+sshfs -C -o allow_other,reconnect,IdentityFile="$HOME/.ssh/id_ed25519_brennan" brennan@aristotle.tts.lan:/mnt/aristotle "$(xdg-user-dir MOUNTS)/p"
