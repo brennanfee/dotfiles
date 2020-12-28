@@ -1,0 +1,6 @@
+[/home/brennan/.local/share/Trash]
+Days=7
+LimitReachedAction=1
+Percent=25
+UseSizeLimit=true
+UseTimeLimit=false

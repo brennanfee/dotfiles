@@ -1,0 +1,36 @@
+[Desktop Entry]
+Type=Application
+Name=SpeedCrunch
+Name[de]=SpeedCrunch
+Name[el]=SpeedCrunch
+Name[en_GB]=SpeedCrunch
+Name[hu]=SpeedCrunch
+Name[it]=SpeedCrunch
+Name[lt]=SpeedCrunch
+Name[pt]=SpeedCrunch
+Name[ru]=SpeedCrunch
+Name[zh]=SpeedCrunch
+Exec=/usr/bin/flatpak run --branch=stable --arch=x86_64 --command=speedcrunch org.speedcrunch.SpeedCrunch
+Icon=org.speedcrunch.SpeedCrunch
+StartupWMClass=speedcrunch
+Comment=A high-precision scientific calculator
+Comment[de]=Ein hochpräziser wissenschaftlicher Taschenrechner
+Comment[el]=Επιστημονική αριθμομηχανή υψηλής ακρίβειας
+Comment[en_GB]=A high-precision scientific calculator
+Comment[hu]=Egy nagy pontosságú tudományos számológép
+Comment[it]=Una calcolatrice scientifica ad alta precisione
+Comment[lt]=Labai tikslus mokslinis skaičiuotuvas
+Comment[pt]=Calculadora científica de alta precisão
+Comment[ru]=Научный инженерный калькулятор
+Comment[zh]=高精度科学计算器
+Categories=Qt;Utility;Calculator;
+Keywords=arithmetic;calculation;math;scientific;
+Keywords[de]=arithmetik;berechnungen;rechnen;mathe;mathematik;wissenschaftlich;
+Keywords[en_GB]=arithmetic;calculation;math;scientific;
+Keywords[hu]=aritmetika;számítás;matematika;tudományos;
+Keywords[it]=aritmetica;calcolo;matematica;scientifico;
+Keywords[lt]=aritmetika;skaičiavimas;matematika;mokslinis;
+Keywords[pt]=aritmética;cálculo;matemática;científico;
+Keywords[zh]=计算;数学;科学计算;计算器;公式;
+X-Flatpak-RenamedFrom=speedcrunch.desktop;
+X-Flatpak=org.speedcrunch.SpeedCrunch
