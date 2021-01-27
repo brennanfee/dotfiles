@@ -1,0 +1,1 @@
+sshfs -C -o allow_other,reconnect,IdentityFile="$HOME/.ssh/id_ed25519_brennan" brennan@192.168.10.20:/mnt/p "$(xdg-user-dir MOUNTS)/aristotle"
