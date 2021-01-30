@@ -117,6 +117,7 @@ Theme=Papirus-Dark
 
 [KDE]
 LookAndFeelPackage=org.kde.breezedark.desktop
+ShowDeleteCommand=true
 contrast=4
 widgetStyle=Breeze
 
@@ -138,6 +139,9 @@ Sort directories first=true
 Sort reversed=false
 Speedbar Width=125
 View Style=DetailTree
+
+[PreviewSettings]
+MaximumRemoteSize=0
 
 [WM]
 FakeEntryToKeepThisGroup=true
