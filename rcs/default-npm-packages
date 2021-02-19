@@ -2,6 +2,7 @@ prettier
 @prettier/plugin-xml
 prettier-plugin-package
 prettier-plugin-toml
+prettier-plugin-sh
 stylelint
 stylelint-prettier
 stylelint-config-prettier
