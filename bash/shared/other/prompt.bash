@@ -53,6 +53,9 @@ function custom_prompt() {
   else
     curShell+="$0)"
   fi
+  if [[ "$VIRTUAL_ENV" != "" ]]; then
+    curShell+="${color_red} VENV"
+  fi
 
   if [[ $GIT_PS1_USEGIT -eq 1 ]]; then
     local git_part
