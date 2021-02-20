@@ -1,7 +1,7 @@
 //registry.npmjs.org/:_authToken=${NPM_TOKEN}
-init.author.name=Brennan Fee
-init.author.email=brennan@github.mailbots.org
-init.author.url=https://github.com/brennanfee
-init.license=MIT
-init.version=0.0.1
+init-author-name=Brennan Fee
+init-author-email=brennan@github.mailbots.org
+init-author-url=https://github.com/brennanfee
+init-license=MIT
+init-version=0.1.0
 scripts-prepend-node-path=true
