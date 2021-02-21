@@ -20,7 +20,7 @@ fi
 if command -v apt-get &> /dev/null
 then
   DEBIAN_FRONTEND=noninteractive apt-get -y -q update
-  DEBIAN_FRONTEND=noninteractive apt-get -y -q full-upgrade
+  DEBIAN_FRONTEND=noninteractive apt-get -y -q upgrade
   DEBIAN_FRONTEND=noninteractive apt-get -y -q autoremove
 fi
 
@@ -39,13 +39,19 @@ fi
 # OpenSUSE machines
 if command -v zypper &> /dev/null
 then
-  zypper -q -n -l dist-upgrade
+  zypper -q -n refresh
+  distro=$(lsb_release -i -d)
+  if [[ $distro == *"Tumbleweed"* ]]; then
+    zypper -q -n -l dist-upgrade
+  else
+    zypper -q -n -l update
+  fi
 fi
 
 # Arch flavored machines
 if command -v pacman &> /dev/null
 then
-  yes | pacman -Syyu
+  pacman -Syu --noconfirm
 fi
 
 if command -v pamac &> /dev/null
@@ -62,6 +68,19 @@ fi
 if command -v yay &> /dev/null
 then
   yes | yay -Syu
+fi
+
+# Gentoo machines
+if command -v emerge &> /dev/null
+then
+  emerge --sync
+  emerge --update --deep --with-bdeps=y @world
+fi
+
+# Alpine Linux
+if command -v apk &> /dev/null
+then
+  apk -U upgrade
 fi
 
 # Lastly, update flatpak packages
