@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+# py --- run python, with poetry if applicable
+# Can use an environnement variable (PY_PYTHON) to override which command is the fallback
+
+# Bash "strict" mode
+SOURCED=false && [ "$0" = "$BASH_SOURCE" ] || SOURCED=true
+if ! $SOURCED; then
+  set -eEuo pipefail
+  shopt -s extdebug
+  trap 's=$?; echo "$0: Error on line "$LINENO": $BASH_COMMAND"; exit $s' ERR
+  IFS=$'\n\t'
+fi
+
+start="$PWD"
+
+while true; do
+  if [ -e pyproject.toml ]; then
+    exec poetry run python -m $@
+  elif [ / = "$PWD" ]; then
+    cd $start
+    exec ${PY_PYTHON:-python3} -m $@
+  else
+    cd ..
+  fi
+done
