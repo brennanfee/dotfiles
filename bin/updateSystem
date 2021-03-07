@@ -1,0 +1,91 @@
+#!/usr/bin/env bash
+# NOTE: I'm trying as much as possible to make this "touchless" meaning that as long as
+# the user runs this script as sudo they won't be prompted for anything else.
+
+# Bash "strict" mode
+SOURCED=false && [ "$0" = "$BASH_SOURCE" ] || SOURCED=true
+if ! $SOURCED; then
+  set -eEuo pipefail
+  shopt -s extdebug
+  trap 's=$?; echo "$0: Error on line "$LINENO": $BASH_COMMAND"; exit $s' ERR
+  IFS=$'\n\t'
+fi
+
+if ! [ $(id -u) = 0 ]; then
+   echo "The script need to be run as root." >&2
+   exit 1
+fi
+
+# Debian/Ubuntu flavored machines
+if command -v apt-get &> /dev/null
+then
+  DEBIAN_FRONTEND=noninteractive apt-get -y -q update
+  DEBIAN_FRONTEND=noninteractive apt-get -y -q upgrade
+  DEBIAN_FRONTEND=noninteractive apt-get -y -q autoremove
+fi
+
+# RedHat flavored machines
+if command -v dnf &> /dev/null
+then
+  dnf -q -y upgrade
+  dnf -q -y autoremove
+fi
+
+if command -v yum &> /dev/null
+then
+  yum -q -y update
+fi
+
+# OpenSUSE machines
+if command -v zypper &> /dev/null
+then
+  zypper -q -n refresh
+  distro=$(lsb_release -i -d)
+  if [[ $distro == *"Tumbleweed"* ]]; then
+    zypper -q -n -l dist-upgrade
+  else
+    zypper -q -n -l update
+  fi
+fi
+
+# Arch flavored machines
+if command -v pacman &> /dev/null
+then
+  pacman -Syu --noconfirm
+fi
+
+if command -v pamac &> /dev/null
+then
+  pamac upgrade --no-confirm
+fi
+
+## Aur helpers
+if command -v paru &> /dev/null
+then
+  yes | paru -Syu
+fi
+
+if command -v yay &> /dev/null
+then
+  yes | yay -Syu
+fi
+
+# Gentoo machines
+if command -v emerge &> /dev/null
+then
+  emerge --sync
+  emerge --update --deep --with-bdeps=y @world
+fi
+
+# Alpine Linux
+if command -v apk &> /dev/null
+then
+  apk -U upgrade
+fi
+
+# Lastly, update flatpak packages
+if command -v flatpak &> /dev/null
+then
+  flatpak update -y --noninteractive
+fi
+
