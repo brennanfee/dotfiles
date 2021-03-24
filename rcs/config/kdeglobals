@@ -129,7 +129,7 @@ smallestReadableFont=Noto Sans,10,-1,5,50,0,0,0,0,0
 toolBarFont=Noto Sans,12,-1,5,50,0,0,0,0,0
 
 [Icons]
-Theme=breeze-dark
+Theme=Papirus-Dark
 
 [KDE]
 LookAndFeelPackage=org.kde.breezedark.desktop
