@@ -5,7 +5,7 @@ Color=40,44,52
 Color=40,44,52
 
 [BackgroundIntense]
-Color=40,44,52
+Color=52,57,68
 
 [Color0]
 Color=40,44,52
@@ -89,6 +89,8 @@ Color=220,223,228
 Color=220,223,228
 
 [General]
+Blur=false
+ColorRandomization=false
 Description=OneHalf Dark
 Opacity=1
 Wallpaper=
