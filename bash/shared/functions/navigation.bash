@@ -36,7 +36,7 @@ function cdp() {
 function cdsk() {
   cd "$(xdg-user-dir DESKTOP)" || return
 }
-alias cdk=cdsk
+#alias cdk=cdsk
 
 # Templates folder
 function cdl() {
