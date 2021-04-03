@@ -11,3 +11,4 @@ eslint-config-prettier
 eslint-plugin-prettier
 htmlhint
 jsonlint
+aws-cdk
