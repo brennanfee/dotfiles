@@ -125,6 +125,9 @@ LookAndFeelPackage=org.kde.breezedark.desktop
 contrast=4
 widgetStyle=Breeze
 
+[PreviewSettings]
+MaximumRemoteSize=0
+
 [WM]
 activeBackground=49,54,59
 activeBlend=255,255,255
