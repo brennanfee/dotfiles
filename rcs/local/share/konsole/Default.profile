@@ -1,7 +1,7 @@
 [Appearance]
 BoldIntense=true
 ColorScheme=onehalf-dark
-Font=JetBrainsMono Nerd Font,16,-1,5,50,0,0,0,0,0,Regular
+Font=JetBrainsMono Nerd Font,16,-1,5,50,0,0,0,0,0
 UseFontLineChararacters=true
 
 [General]
@@ -9,7 +9,9 @@ Command=tmux
 Directory=~/profile
 Name=Default
 Parent=FALLBACK/
+TerminalCenter=true
 TerminalColumns=122
+TerminalMargin=5
 TerminalRows=32
 
 [Interaction Options]

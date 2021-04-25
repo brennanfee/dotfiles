@@ -157,6 +157,7 @@ widgetStyle=Breeze
 
 [PreviewSettings]
 MaximumRemoteSize=0
+MaximumSize=3145728
 
 [WM]
 activeBackground=49,54,59

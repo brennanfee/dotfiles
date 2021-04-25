@@ -24,5 +24,5 @@ DesktopListLayout=org.kde.breeze.desktop
 LayoutName=org.kde.breeze.desktop
 
 [org.kde.kdecoration2]
-BorderSize=Large
+BorderSize=VeryLarge
 BorderSizeAuto=false
