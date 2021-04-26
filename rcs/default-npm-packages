@@ -12,3 +12,5 @@ eslint-plugin-prettier
 htmlhint
 jsonlint
 aws-cdk
+typescript-language-server
+typescript
