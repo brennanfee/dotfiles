@@ -138,7 +138,7 @@ ForegroundVisited=155,89,182
 [General]
 ColorScheme=BreezeDark
 Name=Breeze Dark
-fixed=Hack,12,-1,5,50,0,0,0,0,0
+fixed=JetBrains Mono,12,-1,5,50,0,0,0,0,0
 font=Noto Sans,12,-1,5,50,0,0,0,0,0
 menuFont=Noto Sans,12,-1,5,50,0,0,0,0,0
 shadeSortColumn=true
