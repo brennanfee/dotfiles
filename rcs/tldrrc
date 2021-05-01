@@ -1,0 +1,13 @@
+{
+  "themes": {
+    "oneDark": {
+      "commandName": "bold, underline, magenta",
+      "mainDescription": "",
+      "exampleDescription": "green",
+      "exampleCode": "magenta",
+      "exampleToken": "dim"
+    }
+  },
+  "theme": "oneDark",
+  "platform": "linux"
+}
