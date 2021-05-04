@@ -17,6 +17,7 @@ Rows=1
 Active=true
 LatitudeAuto=30.4548
 LongitudeAuto=-97.7664
+NightTemperature=2600
 
 [TabBox]
 DesktopLayout=org.kde.breeze.desktop
