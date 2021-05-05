@@ -1,1 +1,9 @@
-sshfs -C -o allow_other,reconnect,IdentityFile="$HOME/.ssh/id_ed25519_brennan" brennan@aristotle.tts.lan:/mnt/p "$(xdg-user-dir MOUNTS)/aristotle"
+#!/usr/bin/env sh
+
+the_hostname=$(hostname)
+
+if [ $the_hostname = marx ]; then
+  sshfs -C -o allow_other,reconnect,IdentityFile="$HOME/.ssh/id_ed25519_brennan" brennan@192.168.10.20:/mnt/p "$(xdg-user-dir MOUNTS)/aristotle"
+else
+  sshfs -C -o allow_other,reconnect,IdentityFile="$HOME/.ssh/id_ed25519_brennan" brennan@aristotle.tts.lan:/mnt/p "$(xdg-user-dir MOUNTS)/aristotle"
+fi
