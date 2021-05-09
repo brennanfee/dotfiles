@@ -152,6 +152,7 @@ Theme=Papirus-Dark
 [KDE]
 ColorScheme=Breeze
 LookAndFeelPackage=org.kde.breezedark.desktop
+ShowDeleteCommand=true
 contrast=4
 widgetStyle=Breeze
 
