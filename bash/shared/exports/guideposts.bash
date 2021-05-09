@@ -9,11 +9,10 @@
 # to the %USERNAME% value in Windows.  The WIN_USER variable is used in
 # situations where the Unix (WSL) and Windows usernames might differ (which
 # will be common).  PROFILEPATH is a custom value that gets set with my standard
-# PowerShell profile scripts and points to my main profile location.  The
-# SCOOP and SCOOP_GLOBAL are paths for the Scoop package manager for Windows.
+# PowerShell profile scripts and points to my main profile location.
 # Both USERPROFILE and SystemRoot are standard paths available in Windows by
 # default.  The WSLENV should be set to:
-# USERPROFILE/up:PROFILEPATH/up:SystemRoot/up:SCOOP/up:SCOOP_GLOBAL/up:WIN_USER
+# USERPROFILE/up:PROFILEPATH/up:SystemRoot/up:WIN_USER
 
 if [[ "${PROFILEPATH}x" == "x" ]]; then
   if [[ -d "$HOME/profile" ]]; then
