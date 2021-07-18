@@ -1,0 +1,6 @@
+[
+  {
+    "command": "toggleExternalEditing",
+    "accelerator": "F2"
+  }
+]

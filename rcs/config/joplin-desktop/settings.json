@@ -1,0 +1,45 @@
+{
+	"$schema": "https://joplinapp.org/schema/settings.json",
+	"locale": "en_US",
+	"api.token": "30df47a6b7587dadcff82cf6aeb98bd110712d9cef079e39ba7fbe05a8284e9cab119b5cd3f5f015caa9659d2ea91b21d6dc34f53b93c6d4e0f7cf5b9a7e92bb",
+	"markdown.plugin.softbreaks": false,
+	"markdown.plugin.typographer": false,
+	"spellChecker.language": "en-US",
+	"ui.layout": {
+		"key": "root",
+		"children": [
+			{
+				"key": "sideBar",
+				"width": 250,
+				"visible": true
+			},
+			{
+				"key": "noteList",
+				"width": 250,
+				"visible": true
+			},
+			{
+				"key": "editor",
+				"visible": true
+			}
+		],
+		"visible": true
+	},
+	"noteVisiblePanes": [
+		"editor",
+		"viewer"
+	],
+	"sync.interval": 1800,
+	"sync.resourceDownloadMode": "manual",
+	"dateFormat": "YYYY-MM-DD",
+	"timeFormat": "h:mm A",
+	"editor": "gvim",
+	"theme": 2,
+	"style.editor.fontSize": 16,
+	"style.editor.fontFamily": "JetBrains Mono Regular",
+	"style.editor.monospaceFontFamily": "JetBrains Mono Regular",
+	"newNoteFocus": "title",
+	"showTrayIcon": true,
+	"startMinimized": true,
+	"clipperServer.autoStart": true
+}
