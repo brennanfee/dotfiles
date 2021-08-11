@@ -33,7 +33,7 @@
 	"sync.resourceDownloadMode": "manual",
 	"dateFormat": "YYYY-MM-DD",
 	"timeFormat": "h:mm A",
-	"editor": "gvim",
+	"editor": "/usr/bin/gvim",
 	"theme": 2,
 	"style.editor.fontSize": 16,
 	"style.editor.fontFamily": "JetBrains Mono Regular",
@@ -41,5 +41,6 @@
 	"newNoteFocus": "title",
 	"showTrayIcon": true,
 	"startMinimized": true,
-	"clipperServer.autoStart": true
+	"clipperServer.autoStart": true,
+	"editor.codeView": false
 }
