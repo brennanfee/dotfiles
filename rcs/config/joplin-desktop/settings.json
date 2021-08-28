@@ -15,7 +15,7 @@
 			},
 			{
 				"key": "noteList",
-				"width": 250,
+				"width": 302,
 				"visible": true
 			},
 			{
@@ -33,7 +33,7 @@
 	"sync.resourceDownloadMode": "manual",
 	"dateFormat": "YYYY-MM-DD",
 	"timeFormat": "h:mm A",
-	"editor": "/usr/bin/gvim",
+	"editor": "gvim",
 	"theme": 2,
 	"style.editor.fontSize": 16,
 	"style.editor.fontFamily": "JetBrains Mono Regular",
