@@ -205,10 +205,10 @@ nmap <silent> <leader>c :bufdo if &buftype == "quickfix" <bar><bar> &buftype == 
 
 " Map lk to be another version of escape in insert and command mode
 if has('gui_running')
-  inoremap lk <esc>
-  cnoremap lk <esc>
+  inoremap hk <esc>
+  cnoremap hk <esc>
 else
-  set <F13>=lk
+  set <F13>=hk
   inoremap <F13> <esc>
   cnoremap <F13> <esc>
 endif
