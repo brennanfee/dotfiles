@@ -42,5 +42,6 @@
 	"showTrayIcon": true,
 	"startMinimized": true,
 	"clipperServer.autoStart": true,
-	"editor.codeView": false
+	"editor.codeView": false,
+	"sync.target": 7
 }
