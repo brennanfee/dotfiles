@@ -16,8 +16,13 @@ function yt-helper() {
     format="$lowFormat"
   fi
 
+  prog="youtube-dl"
+  if [ command -v "yt-dlp" &>/dev/null -eq 1 ]; then
+    prog="yt-dlp"
+  fi
+
   echo "Downloading $url"
-  youtube-dl -i -f "$format" -o "$2" "$url" "${@:3}"
+  $prog -i -f "$format" -o "$2" "$url" "${@:3}"
 }
 
 function yt() {
@@ -44,6 +49,11 @@ function ytm() {
     url=$(xsel -o --clipboard)
   fi
 
+  prog="youtube-dl"
+  if [ command -v "yt-dlp" &>/dev/null -eq 1 ]; then
+    prog="yt-dlp"
+  fi
+
   echo "Downloading $url"
-  youtube-dl --extract-audio --audio-format mp3 -i -o "$output" "$url" "${@:2}"
+  $prog --extract-audio --audio-format mp3 -i -o "$output" "$url" "${@:2}"
 }
