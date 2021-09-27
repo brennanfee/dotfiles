@@ -135,6 +135,10 @@ ForegroundNormal=252,252,252
 ForegroundPositive=39,174,96
 ForegroundVisited=155,89,182
 
+[DirSelect Dialog]
+DirSelectDialog Size=831,608
+History Items[$e]=file:$HOME/profile/source/packer-linux
+
 [General]
 BrowserApplication=firefox.desktop
 ColorScheme=BreezeDark
