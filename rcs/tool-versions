@@ -1,6 +1,6 @@
-dotnet-core 5.0.300
-java adoptopenjdk-16.0.1+9 corretto-16.0.1.9.1
-nodejs 14.17.0
-packer 1.7.2
-python 3.9.5
-terraform 0.15.5
+dotnet-core 6.0.101
+java adoptopenjdk-17.0.1+12
+nodejs 16.13.1
+packer 1.7.8
+python 3.10.1
+terraform 1.1.3
