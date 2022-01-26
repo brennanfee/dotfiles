@@ -1,2 +1,0 @@
-DOTFILES_DIRS="$HOME/.dotfiles/rcs $HOME/.dotfiles-private/rcs"
-TAGS="wsl ubuntu work"
