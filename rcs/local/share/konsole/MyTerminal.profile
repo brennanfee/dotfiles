@@ -7,7 +7,7 @@ UseFontLineChararacters=true
 [General]
 Command=tmux
 Directory=~/profile
-Name=Default
+Name=MyTerminal
 Parent=FALLBACK/
 TerminalCenter=true
 TerminalColumns=122
