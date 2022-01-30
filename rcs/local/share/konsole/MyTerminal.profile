@@ -10,7 +10,7 @@ Directory=~/profile
 Name=MyTerminal
 Parent=FALLBACK/
 TerminalCenter=true
-TerminalColumns=122
+TerminalColumns=125
 TerminalMargin=5
 TerminalRows=32
 
