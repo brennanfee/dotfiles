@@ -158,6 +158,7 @@ Theme=Papirus-Dark
 ColorScheme=Breeze
 LookAndFeelPackage=org.kde.breezedark.desktop
 ShowDeleteCommand=true
+SingleClick=false
 contrast=4
 widgetStyle=Breeze
 
