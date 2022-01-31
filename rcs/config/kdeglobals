@@ -140,7 +140,7 @@ DirSelectDialog Size=831,608
 History Items[$e]=file:$HOME/profile/source/packer-linux
 
 [General]
-BrowserApplication=firefox.desktop
+BrowserApplication=org.mozilla.firefox.desktop
 ColorScheme=BreezeDark
 Name=Breeze Dark
 fixed=JetBrains Mono,12,-1,5,50,0,0,0,0,0
