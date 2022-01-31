@@ -30,7 +30,7 @@
 		"viewer"
 	],
 	"sync.interval": 1800,
-	"sync.resourceDownloadMode": "manual",
+	"sync.resourceDownloadMode": "auto",
 	"dateFormat": "YYYY-MM-DD",
 	"timeFormat": "h:mm A",
 	"editor": "gvim",
@@ -43,5 +43,6 @@
 	"startMinimized": true,
 	"clipperServer.autoStart": true,
 	"editor.codeView": false,
-	"sync.target": 7
+	"sync.target": 10,
+	"sync.10.username": "brennan+joplin@mailbots.org"
 }

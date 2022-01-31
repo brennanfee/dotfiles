@@ -1,6 +1,7 @@
 [ActivityManager]
 _k_friendly_name=Activity Manager
 switch-to-activity-5ea0f09f-c1da-43fa-a6d0-dd8997afd1c2=none,none,Switch to activity "Default"
+switch-to-activity-999c49d5-ec65-41a5-9df4-6705c7112c1c=none,none,Switch to activity "Default"
 
 [KDE Keyboard Layout Switcher]
 Switch keyboard layout to English (US)=none,none,Switch keyboard layout to English (US)
@@ -24,7 +25,7 @@ display=Display\tMeta+P,Display\tMeta+P,Switch Display
 
 [khotkeys]
 _k_friendly_name=Custom Shortcuts Service
-{32130aca-9f43-4100-9b7c-dde10a9fecb5}=Ctrl+Alt+T,none,Launch Konsole
+{22bca9cc-f798-434a-a786-3e9d0b141fec}=,none,Launch Konsole
 {d03619b6-9b3c-48cc-9d9c-a2aadb485550}=,none,Search
 
 [kmix]
