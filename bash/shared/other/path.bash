@@ -31,6 +31,7 @@ path_prepend "$DOTFILES_PRIVATE/bin"
 
 # Home (local override), should always be the "first" to override everything else
 path_prepend "${HOME}/bin"
+path_prepend "${HOME}/.bin"
 
 # WSL (Windows)
 [[ -d "$WIN_HOME/winfiles/bin" ]] && path_append "${WIN_HOME}/winfiles/bin"
