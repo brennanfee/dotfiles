@@ -129,6 +129,11 @@ function cdmt() {
   cd "$(xdg-user-dir MOUNTS)" || return
 }
 
+# Main files folder (mounted from a network share)
+function cdf() {
+  xdg-cd-sub "MOUNTS" "moose" "moose"
+}
+
 # Videos folder
 function cdv() {
   cd "$(xdg-user-dir VIDEOS)" || return
