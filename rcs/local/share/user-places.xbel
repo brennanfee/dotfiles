@@ -158,7 +158,7 @@
    </metadata>
   </info>
  </bookmark>
- <separator>
+ <separator href="file:///">
   <info>
    <metadata owner="http://www.kde.org">
     <UDI>/org/freedesktop/UDisks2/block_devices/nvme0n1p3</UDI>
@@ -166,10 +166,10 @@
     <IsHidden>false</IsHidden>
    </metadata>
    <metadata owner="http://freedesktop.org">
-    <bookmark:icon name="drive-harddisk"/>
+    <bookmark:icon name="drive-harddisk-root"/>
    </metadata>
   </info>
-  <title>930.3 GiB Encrypted Drive</title>
+  <title>os</title>
  </separator>
  <separator href="file:///">
   <info>
@@ -195,7 +195,7 @@
     <bookmark:icon name="drive-harddisk"/>
    </metadata>
   </info>
-  <title>732.0 MiB Hard Drive</title>
+  <title>boot</title>
  </separator>
  <bookmark href="file:///home/brennan/profile/source">
   <title>source</title>
@@ -210,14 +210,14 @@
    </metadata>
   </info>
  </bookmark>
- <bookmark href="file:///home/brennan/profile/mounts/aristotle">
-  <title>aristotle</title>
+ <bookmark href="file:///home/brennan/profile/mounts/moose">
+  <title>moose</title>
   <info>
    <metadata owner="http://freedesktop.org">
     <bookmark:icon name="inode-directory"/>
    </metadata>
    <metadata owner="http://www.kde.org">
-    <ID>1609112593/11</ID>
+    <ID>1645291363/0</ID>
     <isSystemItem>false</isSystemItem>
     <IsHidden>false</IsHidden>
    </metadata>
@@ -344,7 +344,7 @@
   <title>Trash</title>
   <info>
    <metadata owner="http://freedesktop.org">
-    <bookmark:icon name="user-trash"/>
+    <bookmark:icon name="user-trash-full"/>
    </metadata>
    <metadata owner="http://www.kde.org">
     <ID>1608621632/5</ID>
@@ -353,4 +353,82 @@
    </metadata>
   </info>
  </bookmark>
+ <separator>
+  <info>
+   <metadata owner="http://www.kde.org">
+    <UDI>/org/freedesktop/UDisks2/block_devices/sda1</UDI>
+    <isSystemItem>true</isSystemItem>
+    <IsHidden>false</IsHidden>
+   </metadata>
+   <metadata owner="http://freedesktop.org">
+    <bookmark:icon name="drive-harddisk"/>
+   </metadata>
+  </info>
+  <title>931.5 GiB Internal Drive (sda1)</title>
+ </separator>
+ <separator href="file:///home">
+  <info>
+   <metadata owner="http://www.kde.org">
+    <UDI>/org/freedesktop/UDisks2/block_devices/dm_2d2</UDI>
+    <isSystemItem>true</isSystemItem>
+    <IsHidden>false</IsHidden>
+   </metadata>
+   <metadata owner="http://freedesktop.org">
+    <bookmark:icon name="drive-harddisk"/>
+   </metadata>
+  </info>
+  <title>3.4 TiB Internal Drive (dm-2)</title>
+ </separator>
+ <separator>
+  <info>
+   <metadata owner="http://www.kde.org">
+    <UDI>/org/freedesktop/UDisks2/block_devices/sdb1</UDI>
+    <isSystemItem>true</isSystemItem>
+    <IsHidden>false</IsHidden>
+   </metadata>
+   <metadata owner="http://freedesktop.org">
+    <bookmark:icon name="drive-harddisk"/>
+   </metadata>
+  </info>
+  <title>data</title>
+ </separator>
+ <separator href="">
+  <info>
+   <metadata owner="http://www.kde.org">
+    <UDI>/org/freedesktop/UDisks2/block_devices/sdc1</UDI>
+    <isSystemItem>true</isSystemItem>
+    <IsHidden>false</IsHidden>
+   </metadata>
+   <metadata owner="http://freedesktop.org">
+    <bookmark:icon name="drive-removable-media-usb"/>
+   </metadata>
+  </info>
+  <title>unsorted3</title>
+ </separator>
+ <separator href="file:///">
+  <info>
+   <metadata owner="http://www.kde.org">
+    <UDI>/org/freedesktop/UDisks2/block_devices/dm_2d0</UDI>
+    <isSystemItem>true</isSystemItem>
+    <IsHidden>false</IsHidden>
+   </metadata>
+   <metadata owner="http://freedesktop.org">
+    <bookmark:icon name="drive-harddisk-root"/>
+   </metadata>
+  </info>
+  <title>root</title>
+ </separator>
+ <separator>
+  <info>
+   <metadata owner="http://www.kde.org">
+    <UDI>/org/freedesktop/UDisks2/block_devices/dm_2d3</UDI>
+    <isSystemItem>true</isSystemItem>
+    <IsHidden>false</IsHidden>
+   </metadata>
+   <metadata owner="http://freedesktop.org">
+    <bookmark:icon name="drive-harddisk"/>
+   </metadata>
+  </info>
+  <title>data</title>
+ </separator>
 </xbel>
