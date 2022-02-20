@@ -7,4 +7,4 @@ if [ "$SHLVL" = 1 ]; then
 fi
 
 # Unmount the shares
-[ -f "${HOME}/.dotfiles/bin/unmount-shares" ] && sh "${HOME}/.dotfiles/bin/unmount-shares"
+#[ -f "${HOME}/.dotfiles/bin/unmount-shares" ] && sh "${HOME}/.dotfiles/bin/unmount-shares"
