@@ -53,6 +53,9 @@ for file in $DOTFILES/bash/completions/*.{bash,bash-completion}; do
   source "$file"
 done
 
+# Mount shares
+[[ -f "$HOME/.dotfiles/bin/mount-shares" ]] && /usr/bin/bash "$HOME/.dotfiles/bin/mount-shares"
+
 # Local config, this should be last and never checked into source control (or if it is it should be host specific)
 # shellcheck source=/dev/null
 [[ -f "$HOME/.bashrc.local" ]] && source "$HOME/.bashrc.local"

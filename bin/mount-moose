@@ -1,0 +1,161 @@
+#!/usr/bin/env bash
+# Author: Brennan Fee
+# License: MIT License
+#
+# Utility script to mount moose files into predictable locations
+
+# Bash strict mode
+# shellcheck disable=SC2154
+([[ -n ${ZSH_EVAL_CONTEXT} && ${ZSH_EVAL_CONTEXT} =~ :file$ ]] ||
+ [[ -n ${BASH_VERSION} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
+if ! ${SOURCED}; then
+  set -o errexit # same as set -e
+  set -o nounset # same as set -u
+  set -o errtrace # same as set -E
+  set -o pipefail
+  set -o posix
+  #set -o xtrace # same as set -x, turn on for debugging
+
+  shopt -s extdebug
+  IFS=$(printf '\n\t')
+fi
+# END Bash scrict mode
+
+VERSION="0.2 2022-02-20"
+
+RESET=$(tput sgr0)
+
+### Help
+show_help() {
+  echo "Moose mounter, version ${VERSION}"
+  echo ""
+  echo "Little utility to mount my MooseFS volumes just the way I like."
+  echo ""
+  echo "Options: "
+  echo ""
+  echo "    'mount-moose -?'  Show this help"
+  echo "    'mount-moose <share name>'  The share to mount, options are:"
+  echo "        files, backups, metadata, files-ro"
+#  echo ""
+#  echo "Can optional pass an override to the mount location: "
+#  echo "    'mount-moose <share name> <mount location>"
+  echo ""
+  exit 0
+}
+
+error_msg() {
+  local RED
+  local T_COLS
+  RED=$(tput setaf 1)
+  T_COLS=$(tput cols)
+  echo -e "${RED}$1${RESET}\n" | fold -sw $((T_COLS - 1))
+  exit 1
+}
+
+### Parse and handle input
+COMMAND_INPUT=${1:-}
+if [[ -z ${COMMAND_INPUT} ]]; then
+  show_help
+elif [[ ${COMMAND_INPUT} = "-?" ]]; then
+  show_help
+fi
+
+# Verify the role, error if not valid
+SHARE_TO_MOUNT=$(echo "${COMMAND_INPUT}" | tr "[:upper:]" "[:lower:]")
+
+PROFILE=${PROFILEPATH:-}
+if [[ -z ${PROFILE} ]]; then
+  PROFILE="${HOME}/profile"
+fi
+
+MOOSE_SRV="moose.fee.house"
+HOSTNAME=$(hostanme -s)
+if [[ "${HOSTNAME}" == "marx" ]]; then
+  # On Marx we need to use the IP not the name as that machine is always VPN'ed out
+  # This may be temporary as once I get my DNS stuff reconfigured this may not be needed
+  MOOSE_SRV="10.10.0.51" # An unstable IP but should work 90% of the time
+fi
+
+if [[ "${SHARE_TO_MOUNT}" != "files-ro" ]]; then
+  if ! command -v "kwalletcli" >/dev/null ; then
+    error_msg "ERROR! kwalletcli not installed or on path.  Install it first!"
+  fi
+fi
+
+case "${SHARE_TO_MOUNT}" in
+  files)
+    LOCATION="${PROFILE}/mounts/files"
+    REMOTE_FOLDER="/files"
+    WALLET_ENTRY="files"
+
+    PWD=$(kwalletcli -f moosefs -e "${WALLET_ENTRY}")
+    if [[ -z "${PWD}" ]]; then
+      error_msg "ERROR! The moosefs wallet entry has not been set up correctly."
+    fi
+    mkdir -p "${LOCATION}"
+    mountpoint -q "${LOCATION}" && umount -q "${LOCATION}"
+    mfsmount "${LOCATION}" -H "${MOOSE_SRV}" -S "${REMOTE_FOLDER}" -o rw -o mfspassword="${PWD}" -o mfsdelayedinit
+    ;;
+  backups)
+    LOCATION="${PROFILE}/mounts/backups"
+    REMOTE_FOLDER="/backups"
+    WALLET_ENTRY="backups"
+
+    PWD=$(kwalletcli -f moosefs -e "${WALLET_ENTRY}")
+    if [[ -z "${PWD}" ]]; then
+      error_msg "ERROR! The moosefs wallet entry has not been set up correctly."
+    fi
+    mkdir -p "${LOCATION}"
+    mountpoint -q "${LOCATION}" && umount -q "${LOCATION}"
+    mfsmount "${LOCATION}" -H "${MOOSE_SRV}" -S "${REMOTE_FOLDER}" -o rw -o mfspassword="${PWD}" -o mfsdelayedinit
+    ;;
+  other)
+    LOCATION="${PROFILE}/mounts/other"
+    REMOTE_FOLDER="/other"
+    WALLET_ENTRY="other"
+
+    PWD=$(kwalletcli -f moosefs -e "${WALLET_ENTRY}")
+    if [[ -z "${PWD}" ]]; then
+      error_msg "ERROR! The moosefs wallet entry has not been set up correctly."
+    fi
+    mkdir -p "${LOCATION}"
+    mountpoint -q "${LOCATION}" && umount -q "${LOCATION}"
+    mfsmount "${LOCATION}" -H "${MOOSE_SRV}" -S "${REMOTE_FOLDER}" -o rw -o mfspassword="${PWD}" -o mfsdelayedinit
+    ;;
+  files-ro)
+    LOCATION="${PROFILE}/mounts/files"
+    REMOTE_FOLDER="/files"
+
+    mkdir -p "${LOCATION}"
+    mountpoint -q "${LOCATION}" && umount -q "${LOCATION}"
+    mfsmount "${LOCATION}" -H "${MOOSE_SRV}" -S "${REMOTE_FOLDER}" -o ro -o mfsdelayedinit
+    ;;
+  metadata)
+    LOCATION="${PROFILE}/mounts/moose-meta"
+    REMOTE_FOLDER="."
+    WALLET_ENTRY="metadata"
+
+    PWD=$(kwalletcli -f moosefs -e "${WALLET_ENTRY}")
+    if [[ -z "${PWD}" ]]; then
+      error_msg "ERROR! The moosefs wallet entry has not been set up correctly."
+    fi
+    mkdir -p "${LOCATION}"
+    mountpoint -q "${LOCATION}" && umount -q "${LOCATION}"
+    mfsmount "${LOCATION}" -H "${MOOSE_SRV}" --meta -o rw -o mfspassword="${PWD}" -o mfsdelayedinit
+    ;;
+  root)
+    LOCATION="${PROFILE}/mounts/moose-root"
+    WALLET_ENTRY="root"
+
+    PWD=$(kwalletcli -f moosefs -e "${WALLET_ENTRY}")
+    if [[ -z "${PWD}" ]]; then
+      error_msg "ERROR! The moosefs wallet entry has not been set up correctly."
+    fi
+    mkdir -p "${LOCATION}"
+    mountpoint -q "${LOCATION}" && umount -q "${LOCATION}"
+    mfsmount "${LOCATION}" -H "${MOOSE_SRV}" -o rw -o mfspassword="${PWD}" -o mfsdelayedinit
+    ;;
+  *)
+    error_msg "Invalid share option detected '${SHARE_TO_MOUNT}', please use a valid share option."
+    ;;
+esac
