@@ -1,0 +1,18 @@
+#!/usr/bin/env sh
+
+# POSIX strict mode (may produce issues in sourced scenarios)
+set -o errexit
+set -o nounset
+#set -o xtrace # same as set -x, turn on for debugging
+
+IFS=$(printf '\n\t')
+# END POSIX scrict mode
+
+[ -d "${PROFILEPATH}/mounts/moose" ] && umount -q -l "${PROFILEPATH}/mounts/moose"
+[ -d "${PROFILEPATH}/mounts/backups" ] && umount -q -l "${PROFILEPATH}/mounts/backups"
+[ -d "${PROFILEPATH}/mounts/other" ] && umount -q -l "${PROFILEPATH}/mounts/other"
+[ -d "${PROFILEPATH}/mounts/files" ] && umount -q -l "${PROFILEPATH}/mounts/files"
+[ -d "${PROFILEPATH}/mounts/files-iot" ] && umount -q -l "${PROFILEPATH}/mounts/files-iot"
+[ -d "${PROFILEPATH}/mounts/moose-meta" ] && umount -q -l "${PROFILEPATH}/mounts/moose-meta"
+[ -d "${PROFILEPATH}/mounts/moose-root" ] && umount -q -l "${PROFILEPATH}/mounts/moose-root"
+

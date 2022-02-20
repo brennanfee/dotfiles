@@ -54,7 +54,9 @@ for file in $DOTFILES/bash/completions/*.{bash,bash-completion}; do
 done
 
 # Mount shares
-[[ -f "$HOME/.dotfiles/bin/mount-shares" ]] && /usr/bin/bash "$HOME/.dotfiles/bin/mount-shares"
+if ! mountpoint -q "${PROFILEPATH}/moose"; then
+  [[ -f "$HOME/.dotfiles/bin/mount-shares" ]] && /usr/bin/bash "$HOME/.dotfiles/bin/mount-shares"
+fi
 
 # Local config, this should be last and never checked into source control (or if it is it should be host specific)
 # shellcheck source=/dev/null

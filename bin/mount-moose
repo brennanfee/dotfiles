@@ -69,7 +69,7 @@ if [[ -z ${PROFILE} ]]; then
 fi
 
 MOOSE_SRV="moose.fee.house"
-HOSTNAME=$(hostanme -s)
+HOSTNAME=$(hostname -s)
 if [[ "${HOSTNAME}" == "marx" ]]; then
   # On Marx we need to use the IP not the name as that machine is always VPN'ed out
   # This may be temporary as once I get my DNS stuff reconfigured this may not be needed
@@ -84,7 +84,7 @@ fi
 
 case "${SHARE_TO_MOUNT}" in
   files)
-    LOCATION="${PROFILE}/mounts/files"
+    LOCATION="${PROFILE}/mounts/moose"
     REMOTE_FOLDER="/files"
     WALLET_ENTRY="files"
 
