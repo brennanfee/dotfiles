@@ -107,6 +107,13 @@
   :init
   (savehist-mode))
 
+(global-tab-line-mode t)
+(dolist (mode '(term-mode-hook
+                shell-mode-hook
+                treemacs-mode-hook
+                eshell-mode-hook))
+  (add-hook mode (lambda () (tab-line-mode 0))))
+
 ;;;;;; Style Settings
 
 ;; Fonts
@@ -178,6 +185,8 @@
 (add-hook 'text-mode-hook 'ws-butler-mode)
 (add-hook 'prog-mode-hook 'ws-butler-mode)
 
+(customize-set-variable 'show-trailing-whitespace t)
+
 ;;;;;; EditorConfig
 (use-package editorconfig
   :after ws-butler
@@ -233,6 +242,12 @@
   :after evil
   :config
   (global-set-key (kbd "M-/") 'evilnc-comment-or-uncomment-lines))
+
+;; Make sure some modes start in Emacs state
+(dolist (mode '(custom-mode
+                eshell-mode
+                term-mode))
+  (add-to-list 'evil-emacs-state-modes mode))
 
 ;;;;;; Selection
 
