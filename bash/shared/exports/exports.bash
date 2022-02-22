@@ -76,3 +76,6 @@ export HISTFILE=~/.cache/bash_history
 
 # Suffixes to ignore for filename completion
 export FIGNORE=".git:.DS_Store"
+
+# XDG variablers, if not already set
+export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
