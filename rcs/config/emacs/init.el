@@ -22,9 +22,10 @@
            gcs-done)))
 
 ;;; Package initialization
-(setq straight-use-package-by-default t)
 
 ;; Initialize straight.el
+(setq straight-use-package-by-default t)
+
 (defvar bootstrap-version)
 (let ((bootstrap-file
       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
@@ -38,6 +39,7 @@
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 
+;; Use Package
 (straight-use-package 'use-package)
 (require 'use-package)
 
@@ -255,11 +257,22 @@
   :init
   (vertico-mode))
 
+(require 'vertico-directory "extensions/vertico-directory.el")
+
+(with-eval-after-load 'evil
+  (define-key vertico-map (kbd "C-j") 'vertico-next)
+  (define-key vertico-map (kbd "C-k") 'vertico-previous)
+  (define-key vertico-map (kbd "M-h") 'vertico-directory-up))
+
+;; Cycle back to top/bottom result when the edge is reached
+(customize-set-variable 'vertico-cycle t)
+
 (use-package orderless
   :custom (completion-styles '(orderless)))
 
 (use-package marginalia
-  :init
+  :config
+  (setq marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
   (marginalia-mode))
 
 ;;;;;; Completions
@@ -474,6 +487,22 @@
   :config
   (evil-collection-define-key 'normal 'dired-mode-map
     "H" 'dired-hide-dotfiles-mode))
+
+;;;;;; Programming & LSP
+;; Notes: Languages I want to integrate support for:  Markdown, JavaScript, TypeScript, (ESlint?), Python, Go, Rust, Bash, C# (dotnet), Make, CMake, CSS, HTML, Vue, React, Svelte, Dockerfile, Json, Yaml, LanguageTool, Powershell, Terraform, LaTeX, TOML, Vimscript, XML
+;; Bash: https://github.com/bash-lsp/bash-language-server
+;;
+
+(use-package flycheck
+  :ensure t
+  :init (global-flycheck-mode))
+
+(use-package lsp-mode
+  :commands (lsp lsp-deferred)
+  :init
+  (setq lsp-keymap-prefix "C-c l"))
+
+(use-package dap-mode)
 
 ;;;;;; Remaining Keybindings
 
