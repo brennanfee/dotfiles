@@ -100,7 +100,7 @@ Check how many copies of a file: `mfscheckfile ${MOUNTPOINT}/path/to/file`
 
 ## Dashboard
 
-http://moose.fee.house:9425/mfs.cgi?sections=IN%7CHD%7CRS%7CCS%7CMO%7CMS&OFsessionid=42&ALinode=1
+http://moose.bfee.org:9425/mfs.cgi?sections=IN%7CHD%7CRS%7CCS%7CMO%7CMS&OFsessionid=42&ALinode=1
 
 ## My storage structure and permissions
 

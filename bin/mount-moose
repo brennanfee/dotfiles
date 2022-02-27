@@ -68,7 +68,7 @@ if [[ -z ${PROFILE} ]]; then
   PROFILE="${HOME}/profile"
 fi
 
-MOOSE_SRV="moose.fee.house"
+MOOSE_SRV="moose.bfee.org"
 HOSTNAME=$(hostname -s)
 if [[ "${HOSTNAME}" == "marx" ]]; then
   # On Marx we need to use the IP not the name as that machine is always VPN'ed out
