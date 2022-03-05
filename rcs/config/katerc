@@ -19,6 +19,9 @@ Tab Double Click New Document=true
 Tab Middle Click Close Document=true
 Tabbar Tab Limit=0
 
+[KFileDialog Settings]
+detailViewIconSize=16
+
 [KTextEditor Document]
 Allow End of Line Detection=true
 BOM=false
@@ -122,8 +125,8 @@ RunPrefix=
 SetEditor=false
 
 [MainWindow]
-DisplayPort-0 Height 3840x1080=917
-DisplayPort-0 Width 3840x1080=1496
+DisplayPort-0 Height 3840x1080=999
+DisplayPort-0 Width 3840x1080=1418
 
 [UiSettings]
 ColorScheme=

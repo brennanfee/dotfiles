@@ -8,9 +8,17 @@ set -o nounset
 IFS=$(printf '\n\t')
 # END POSIX scrict mode
 
+OPTION_INPUT=${1:-}
+OPTION=""
+if [ "${OPTION_INPUT}" = "-f" ]; then
+  OPTION="--force"
+elif [ "${OPTION_INPUT}" = "--force" ]; then
+  OPTION="--force"
+fi
+
 SCRIPT="${HOME}/.dotfiles/bin/mount-moose"
 if [ -f "${SCRIPT}" ]; then
-  /usr/bin/bash "${SCRIPT}" "files"
-  /usr/bin/bash "${SCRIPT}" "other"
-  /usr/bin/bash "${SCRIPT}" "backups"
+  /usr/bin/bash "${SCRIPT}" "files" "${OPTION}"
+  /usr/bin/bash "${SCRIPT}" "other" "${OPTION}"
+  /usr/bin/bash "${SCRIPT}" "backups" "${OPTION}"
 fi

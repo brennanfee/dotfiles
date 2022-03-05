@@ -60,6 +60,14 @@ elif [[ ${COMMAND_INPUT} = "-?" ]]; then
   show_help
 fi
 
+OPTION_INPUT=${2:-}
+FORCE=0
+if [[ ${OPTION_INPUT} = "-f" ]]; then
+  FORCE=1
+elif [[ ${OPTION_INPUT} = "--force" ]]; then
+  FORCE=1
+fi
+
 # Verify the role, error if not valid
 SHARE_TO_MOUNT=$(echo "${COMMAND_INPUT}" | tr "[:upper:]" "[:lower:]")
 
@@ -93,8 +101,16 @@ case "${SHARE_TO_MOUNT}" in
       error_msg "ERROR! The moosefs wallet entry has not been set up correctly."
     fi
     mkdir -p "${LOCATION}"
-    mountpoint -q "${LOCATION}" && umount -q "${LOCATION}"
-    mfsmount "${LOCATION}" -H "${MOOSE_SRV}" -S "${REMOTE_FOLDER}" -o rw -o mfspassword="${PWD}" -o mfsdelayedinit
+    if mountpoint -q "${LOCATION}"; then
+      # already mounted
+      if [[ "${FORCE}" = 1 ]]; then
+        umount -q "${LOCATION}"
+        mfsmount "${LOCATION}" -H "${MOOSE_SRV}" -S "${REMOTE_FOLDER}" -o rw -o mfspassword="${PWD}" -o mfsdelayedinit
+      fi
+    else
+      # not mounted
+      mfsmount "${LOCATION}" -H "${MOOSE_SRV}" -S "${REMOTE_FOLDER}" -o rw -o mfspassword="${PWD}" -o mfsdelayedinit
+    fi
     ;;
   backups)
     LOCATION="${PROFILE}/mounts/backups"
@@ -106,8 +122,16 @@ case "${SHARE_TO_MOUNT}" in
       error_msg "ERROR! The moosefs wallet entry has not been set up correctly."
     fi
     mkdir -p "${LOCATION}"
-    mountpoint -q "${LOCATION}" && umount -q "${LOCATION}"
-    mfsmount "${LOCATION}" -H "${MOOSE_SRV}" -S "${REMOTE_FOLDER}" -o rw -o mfspassword="${PWD}" -o mfsdelayedinit
+    if mountpoint -q "${LOCATION}"; then
+      # already mounted
+      if [[ "${FORCE}" = 1 ]]; then
+        umount -q "${LOCATION}"
+        mfsmount "${LOCATION}" -H "${MOOSE_SRV}" -S "${REMOTE_FOLDER}" -o rw -o mfspassword="${PWD}" -o mfsdelayedinit
+      fi
+    else
+      # not mounted
+      mfsmount "${LOCATION}" -H "${MOOSE_SRV}" -S "${REMOTE_FOLDER}" -o rw -o mfspassword="${PWD}" -o mfsdelayedinit
+    fi
     ;;
   other)
     LOCATION="${PROFILE}/mounts/other"
@@ -119,16 +143,32 @@ case "${SHARE_TO_MOUNT}" in
       error_msg "ERROR! The moosefs wallet entry has not been set up correctly."
     fi
     mkdir -p "${LOCATION}"
-    mountpoint -q "${LOCATION}" && umount -q "${LOCATION}"
-    mfsmount "${LOCATION}" -H "${MOOSE_SRV}" -S "${REMOTE_FOLDER}" -o rw -o mfspassword="${PWD}" -o mfsdelayedinit
+    if mountpoint -q "${LOCATION}"; then
+      # already mounted
+      if [[ "${FORCE}" = 1 ]]; then
+        umount -q "${LOCATION}"
+        mfsmount "${LOCATION}" -H "${MOOSE_SRV}" -S "${REMOTE_FOLDER}" -o rw -o mfspassword="${PWD}" -o mfsdelayedinit
+      fi
+    else
+      # not mounted
+      mfsmount "${LOCATION}" -H "${MOOSE_SRV}" -S "${REMOTE_FOLDER}" -o rw -o mfspassword="${PWD}" -o mfsdelayedinit
+    fi
     ;;
   files-ro)
     LOCATION="${PROFILE}/mounts/files"
     REMOTE_FOLDER="/files"
 
     mkdir -p "${LOCATION}"
-    mountpoint -q "${LOCATION}" && umount -q "${LOCATION}"
-    mfsmount "${LOCATION}" -H "${MOOSE_SRV}" -S "${REMOTE_FOLDER}" -o ro -o mfsdelayedinit
+    if mountpoint -q "${LOCATION}"; then
+      # already mounted
+      if [[ "${FORCE}" = 1 ]]; then
+        umount -q "${LOCATION}"
+        mfsmount "${LOCATION}" -H "${MOOSE_SRV}" -S "${REMOTE_FOLDER}" -o ro -o mfsdelayedinit
+      fi
+    else
+      # not mounted
+      mfsmount "${LOCATION}" -H "${MOOSE_SRV}" -S "${REMOTE_FOLDER}" -o ro -o mfsdelayedinit
+    fi
     ;;
   metadata)
     LOCATION="${PROFILE}/mounts/moose-meta"
@@ -140,8 +180,16 @@ case "${SHARE_TO_MOUNT}" in
       error_msg "ERROR! The moosefs wallet entry has not been set up correctly."
     fi
     mkdir -p "${LOCATION}"
-    mountpoint -q "${LOCATION}" && umount -q "${LOCATION}"
-    mfsmount "${LOCATION}" -H "${MOOSE_SRV}" --meta -o rw -o mfspassword="${PWD}" -o mfsdelayedinit
+    if mountpoint -q "${LOCATION}"; then
+      # already mounted
+      if [[ "${FORCE}" = 1 ]]; then
+        umount -q "${LOCATION}"
+        mfsmount "${LOCATION}" -H "${MOOSE_SRV}" --meta -o rw -o mfspassword="${PWD}" -o mfsdelayedinit
+      fi
+    else
+      # not mounted
+      mfsmount "${LOCATION}" -H "${MOOSE_SRV}" --meta -o rw -o mfspassword="${PWD}" -o mfsdelayedinit
+    fi
     ;;
   root)
     LOCATION="${PROFILE}/mounts/moose-root"
@@ -152,8 +200,16 @@ case "${SHARE_TO_MOUNT}" in
       error_msg "ERROR! The moosefs wallet entry has not been set up correctly."
     fi
     mkdir -p "${LOCATION}"
-    mountpoint -q "${LOCATION}" && umount -q "${LOCATION}"
-    mfsmount "${LOCATION}" -H "${MOOSE_SRV}" -o rw -o mfspassword="${PWD}" -o mfsdelayedinit
+    if mountpoint -q "${LOCATION}"; then
+      # already mounted
+      if [[ "${FORCE}" = 1 ]]; then
+        umount -q "${LOCATION}"
+        mfsmount "${LOCATION}" -H "${MOOSE_SRV}" -o rw -o mfspassword="${PWD}" -o mfsdelayedinit
+      fi
+    else
+      # not mounted
+      mfsmount "${LOCATION}" -H "${MOOSE_SRV}" -o rw -o mfspassword="${PWD}" -o mfsdelayedinit
+    fi
     ;;
   *)
     error_msg "Invalid share option detected '${SHARE_TO_MOUNT}', please use a valid share option."
