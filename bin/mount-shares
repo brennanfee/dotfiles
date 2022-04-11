@@ -18,7 +18,7 @@ fi
 
 SCRIPT="${HOME}/.dotfiles/bin/mount-moose"
 if [ -f "${SCRIPT}" ]; then
-  /usr/bin/bash "${SCRIPT}" "files" "${OPTION}"
-  /usr/bin/bash "${SCRIPT}" "other" "${OPTION}"
-  /usr/bin/bash "${SCRIPT}" "backups" "${OPTION}"
+  bash "${SCRIPT}" "files" "${OPTION}"
+  bash "${SCRIPT}" "other" "${OPTION}"
+  bash "${SCRIPT}" "backups" "${OPTION}"
 fi
