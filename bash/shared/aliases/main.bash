@@ -71,6 +71,11 @@ fi
 # shellcheck disable=SC2139
 alias vless="/usr/share/vim/vim$VIM_VER/macros/less.sh"
 
+# Set up alias for fd
+if command_exists fdfind; then
+  alias fd="fdfind"
+fi
+
 # If bat is installed, make it cat
 # if command_exists bat; then
 #   alias cat="bat"
