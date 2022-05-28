@@ -17,3 +17,17 @@ sso_account_id = 680656432136
 sso_role_name = AWSAdministratorAccess
 region = us-east-1
 output = yaml
+[profile ni-prod-admin]
+sso_start_url = https://novelimpacts.awsapps.com/start
+sso_region = us-east-2
+sso_account_id = 793543507852
+sso_role_name = AWSAdministratorAccess
+region = us-east-2
+output = yaml
+[profile logos-corner-admin]
+sso_start_url = https://logoscorner.awsapps.com/start
+sso_region = us-east-1
+sso_account_id = 060562934763
+sso_role_name = AWSAdministratorAccess
+region = us-east-1
+output = yaml
