@@ -64,7 +64,7 @@
 ;; Use spaces instead of tabs, because spaces are better
 (setq-default indent-tabs-mode nil)
 
-;; Line Numbers, inclufing disabling for some modes
+;; Line Numbers, including disabling for some modes
 (column-number-mode)
 (global-display-line-numbers-mode t)
 (dolist (mode '(org-mode-hook
@@ -180,7 +180,7 @@
 (setq auto-save-file-name-transforms
       `((".*" ,(no-littering-expand-var-file-name "auto-save/") t)))
 
-;;;;;; ws-butler
+;;;;;; ws-butler (whitespace butler)
 (use-package ws-butler)
 
 ;; Set up ws-butler for trimming whitespace and line endings
@@ -383,7 +383,7 @@
   ;; Optionally configure a different project root function.
   ;; There are multiple reasonable alternatives to chose from.
   ;;;; 1. project.el (the default)
-  ;; (setq consult-project-root-function #'consult--project-root-default-function)
+  (setq consult-project-root-function #'consult--project-root-default-function)
   ;;;; 2. projectile.el (projectile-project-root)
   ;; (autoload 'projectile-project-root "projectile")
   ;; (setq consult-project-root-function #'projectile-project-root)
@@ -503,6 +503,20 @@
   (setq lsp-keymap-prefix "C-c l"))
 
 (use-package dap-mode)
+
+;;;; Markdown
+
+;;:init (setq markdown-command "multimarkdown"))
+(use-package markdown-mode
+  :mode ("README\\.md\\'" . gfm-mode)
+  :commands (markdown-mode gfm-mode)
+  :init
+  (setq markdown-command "pandoc -f gfm -t html5")
+  (setq markdown-split-window-direction 'right)
+  (setq markdown-live-preview-delete-export 'delete-on-export)
+  )
+
+;; (format "<!DOCTYPE html><html><title>Markdown preview</title><link rel=\"stylesheet\" href = \"https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.1.0/github-markdown.min.css\"/><body><article class=\"markdown-body\" style=\"box-sizing: border-box;min-width: 200px;max-width: 980px;margin: 0 auto;padding: 45px;\">%s</article></body></html>"
 
 ;;;;;; Remaining Keybindings
 
