@@ -76,6 +76,11 @@ if command_exists fdfind; then
   alias fd="fdfind"
 fi
 
+# Set up alias for nvim
+if command_exists io.neovim.vim; then
+  alias nvim="io.neovim.vim"
+fi
+
 # If bat is installed, make it cat
 # if command_exists bat; then
 #   alias cat="bat"

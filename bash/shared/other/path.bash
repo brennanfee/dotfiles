@@ -25,6 +25,15 @@ if [[ -d "$HOME/.asdf/installs/rust/stable/bin" ]]; then
   path_prepend "${HOME}/.asdf/installs/rust/stable/bin"
 fi
 
+# Flatpak
+if [[ -d "/var/lib/flatpak/exports/bin" ]]; then
+  path_append "/var/lib/flatpak/exorts/bin"
+fi
+
+if [[ -d "${HOME}/.local/share/flatpak/exports/bin" ]]; then
+  path_append "${HOME}/.local/share/flatpak/exports/bin"
+fi
+
 # Dotfiles
 path_prepend "$DOTFILES/bin"
 path_prepend "$DOTFILES_PRIVATE/bin"
