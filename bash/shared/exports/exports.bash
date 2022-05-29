@@ -16,7 +16,7 @@ export LC_ALL="en_US.UTF-8"
 export TZ="US/Central"
 
 # Set terminal
-export TERM=xterm-256color
+export TERM=screen-256color
 
 # Turn on colors
 export CLICOLOR=1
