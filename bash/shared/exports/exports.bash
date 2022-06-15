@@ -33,3 +33,7 @@ export FIGNORE=".git:.DS_Store"
 # Input
 INPUTRC="$(xdg-base-dir CONFIG)/readline/inputrc"
 export INPUTRC
+
+# gnupg
+GNUPGHOME="$(xdg-base-dir DATA)/gnupg"
+export GNUPGHOME
