@@ -26,7 +26,7 @@ export XDG_STATE_HOME="${XDG_STATE_HOME:-${HOME}/.local/state}"
 function xdg-base-dir() {
   case $1 in
 
-    CONFIG)
+    CONFIG | CONFIGHOME)
       echo "${XDG_CONFIG_HOME:-${HOME}/.config}"
       ;;
 
@@ -34,7 +34,7 @@ function xdg-base-dir() {
       echo "${XDG_CONFIG_DIRS:-"/etc/xdg"}"
       ;;
 
-    DATA)
+    DATA | DATAHOME)
       echo "${XDG_DATA_HOME:-${HOME}/.local/share}"
       ;;
 
@@ -42,15 +42,15 @@ function xdg-base-dir() {
       echo "${XGD_DATA_DIRS:-"/usr/local/share/:/usr/share/"}"
       ;;
 
-    CACHE)
+    CACHE | CACHEHOME)
       echo "${XDG_CACHE_HOME:-${HOME}/.cache}"
       ;;
 
-    STATE)
+    STATE | STATEHOME)
       echo "${XDG_STATE_HOME:-${HOME}/.local/state}"
       ;;
 
-    RUNTIME)
+    RUNTIME | RUNTIMEDIR)
       echo "${XDG_RUNTIME_DIR:-/run/user/${UID}}"
       ;;
 
