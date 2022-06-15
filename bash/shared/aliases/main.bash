@@ -1,5 +1,22 @@
 #!/usr/bin/env bash
 
+# Bash strict mode
+# shellcheck disable=SC2154
+([[ -n ${ZSH_EVAL_CONTEXT} && ${ZSH_EVAL_CONTEXT} =~ :file$ ]] ||
+ [[ -n ${BASH_VERSION} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
+if ! ${SOURCED}; then
+  set -o errexit # same as set -e
+  set -o nounset # same as set -u
+  set -o errtrace # same as set -E
+  set -o pipefail
+  set -o posix
+  #set -o xtrace # same as set -x, turn on for debugging
+
+  shopt -s extdebug
+  IFS=$(printf '\n\t')
+fi
+# END Bash scrict mode
+
 # Turn on colors
 alias ls='ls $LS_OPTIONS'
 alias lss='ls -1'
@@ -67,9 +84,13 @@ if command_exists rg; then
   alias rg='rg -S'
 fi
 
-# vless
+# wget
 # shellcheck disable=SC2139
-alias vless="/usr/share/vim/vim$VIM_VER/macros/less.sh"
+alias wget=wget --hsts-file="$(xdg-base-dir DATA || true)/wget-hsts"
+
+# vless
+# shellcheck disable=SC2139,2154
+alias vless="/usr/share/vim/vim${VIM_VER}/macros/less.sh"
 
 # Set up alias for fd
 if command_exists fdfind; then
@@ -87,5 +108,5 @@ fi
 # fi
 
 if command_exists thefuck; then
-  eval "$(thefuck --alias)"
+  eval "$(thefuck --alias || true)"
 fi
