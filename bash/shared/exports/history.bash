@@ -17,19 +17,10 @@ if ! ${SOURCED}; then
 fi
 # END Bash scrict mode
 
-export NAME_FIRST="Brennan"
-export NAME_LAST="Brennan"
-export NAME="Brennan Fee"
-export NAME_FULL="${NAME}"
-
-export HOME_EMAIL="brennan@logoscorner.com"
-export WORK_EMAIL="febrenna@amazon.com"
-
-export EMAIL="${HOME_EMAIL}"
-
-rc_tags=$(grep -i '^TAGS=' "${HOME}/.rcrc" | sed -e 's/^TAGS=//' | tr '[:upper:]' '[:lower:]')
-if [[ ${rc_tags} == *"work"* ]]; then
-  export EMAIL="${WORK_EMAIL}"
-fi
-
-unset rc_tags
+export HISTCONTROL=${HISTCONTROL}${HISTCONTROL+,}ignoredups
+export HISTCONTROL=${HISTCONTROL}${HISTCONTROL+,}ignorespace
+export HISTIGNORE=$'[ \t]*:&:[fb]g:exit:ls:ls -la:sl:ll:la:lls:lla:pwd:cd:cdp:cdpp:cdd:cdi:cdt:cdtp:cdm:cdmp:cdv:cdb:cdc:cdx:cdh:cdr:cdw:* --help *'
+export HISTTIMEFORMAT="%Y-%m-%d %H:%M:%S  "
+export HISTFILESIZE=5000
+export HISTSIZE=5000
+export HISTFILE="${XDG_CACHE_HOME:-${HOME}/.cache}/bash_history"

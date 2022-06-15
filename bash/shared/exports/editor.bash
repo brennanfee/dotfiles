@@ -17,19 +17,22 @@ if ! ${SOURCED}; then
 fi
 # END Bash scrict mode
 
-export NAME_FIRST="Brennan"
-export NAME_LAST="Brennan"
-export NAME="Brennan Fee"
-export NAME_FULL="${NAME}"
+## TODO: Setup for neovim instead of vim
 
-export HOME_EMAIL="brennan@logoscorner.com"
-export WORK_EMAIL="febrenna@amazon.com"
+export VIM_VER
+VIM_VER="$($(command -v vim) --version | grep "Vi IMproved" | awk '{print $5}' | sed -e 's/\.//g' || true)"
+export EDITOR='vim'
+export GIT_EDITOR='vim'
+export SVN_EDITOR='vim'
+export LESSEDIT='vim'
 
-export EMAIL="${HOME_EMAIL}"
-
-rc_tags=$(grep -i '^TAGS=' "${HOME}/.rcrc" | sed -e 's/^TAGS=//' | tr '[:upper:]' '[:lower:]')
-if [[ ${rc_tags} == *"work"* ]]; then
-  export EMAIL="${WORK_EMAIL}"
-fi
-
-unset rc_tags
+export VISUAL='vim'
+# if command_exists code; then
+#   export VISUAL='code'
+# elif command_exists atom; then
+#   export VISUAL='atom'
+# elif command_exists gvim; then
+#   export VISUAL='gvim'
+# else
+#   export VISUAL='vim'
+# fi

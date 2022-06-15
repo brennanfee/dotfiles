@@ -1,5 +1,24 @@
 #!/usr/bin/env bash
 
+# Bash strict mode
+# shellcheck disable=SC2154
+([[ -n ${ZSH_EVAL_CONTEXT} && ${ZSH_EVAL_CONTEXT} =~ :file$ ]] ||
+ [[ -n ${BASH_VERSION} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
+if ! ${SOURCED}; then
+  set -o errexit # same as set -e
+  set -o nounset # same as set -u
+  set -o errtrace # same as set -E
+  set -o pipefail
+  set -o posix
+  #set -o xtrace # same as set -x, turn on for debugging
+
+  shopt -s extdebug
+  IFS=$(printf '\n\t')
+fi
+# END Bash scrict mode
+
+shopt -s inherit_errexit
+
 export PROMPT_DIRTRIM=4
 
 GIT_PS1_USEGIT=0
@@ -19,7 +38,7 @@ if [[ -e /usr/share/git/git-prompt.sh ]]; then
   GIT_PS1_USEGIT=1
 fi
 
-if [[ $GIT_PS1_USEGIT -eq 1 ]]; then
+if [[ ${GIT_PS1_USEGIT} -eq 1 ]]; then
   GIT_PS1_SHOWDIRTYSTATE=1
   GIT_PS1_SHOWSTASHSTATE=1
   GIT_PS1_SHOWUNTRACKEDFILES=1
@@ -29,23 +48,23 @@ fi
 
 function custom_prompt() {
   local last_exit=$?
-  if [[ $last_exit -eq 0 ]]; then
+  if [[ ${last_exit} -eq 0 ]]; then
     # shellcheck disable=SC2154
-    local exit_status="${color_green}${i_fa_check}"
+    local exit_status="${text_green}${i_fa_check}"
   else
     # shellcheck disable=SC2154
-    local exit_status="${color_red}${i_fa_close} (\$?)"
+    local exit_status="${text_red}${i_fa_close} (\$?)"
   fi
 
   local ssh_text=""
-  if [[ -n $SSH_CLIENT ]]; then
+  if [[ -n ${SSH_CLIENT} ]]; then
     # shellcheck disable=SC2154
-    local ssh_text="${color_cyan}(SSH) "
+    local ssh_text="${text_cyan}(SSH) "
   fi
 
   # shellcheck disable=SC2154
-  local curShell="${color_blue}("
-  if [[ $IS_WSL == "true" ]]; then
+  local curShell="${text_blue}("
+  if [[ ${IS_WSL} == "true" ]]; then
     curShell+="WSL "
   fi
   if [[ "$0" == "-bash" ]] || [[ "$0" == "/bin/bash" ]]; then
@@ -53,19 +72,19 @@ function custom_prompt() {
   else
     curShell+="$0)"
   fi
-  if [[ "$VIRTUAL_ENV" != "" ]]; then
-    curShell+="${color_red} VENV"
+  if [[ "${VIRTUAL_ENV}" != "" ]]; then
+    curShell+="${text_red} VENV"
   fi
 
-  if [[ $GIT_PS1_USEGIT -eq 1 ]]; then
+  if [[ ${GIT_PS1_USEGIT} -eq 1 ]]; then
     local git_part
     # shellcheck disable=SC2154
-    git_part=$(__git_ps1 "${color_yellow}[%s] ")
+    git_part=$(__git_ps1 "${text_yellow}[%s] ")
     export PS1
     # shellcheck disable=SC2154
-    PS1="${color_normal}\n${ssh_text}${color_green}\u@\h ${color_purple}\w ${git_part}${curShell} ${exit_status} ${color_normal}\n\$ "
+    PS1="${text_normal}\n${ssh_text}${text_green}\u@\h ${text_purple}\w ${git_part}${curShell} ${exit_status} ${text_normal}\n\$ "
   else
-    export PS1="${color_normal}\n${ssh_text}${color_green}\u@\h ${color_purple}\w ${curShell} ${exit_status} ${color_normal}\n\$ "
+    export PS1="${text_normal}\n${ssh_text}${text_green}\u@\h ${text_purple}\w ${curShell} ${exit_status} ${text_normal}\n\$ "
   fi
 }
 
