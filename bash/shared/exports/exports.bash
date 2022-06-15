@@ -29,3 +29,8 @@ export SUDO_PROMPT="${i_fa_lock} password for %u@%h: "
 
 # Suffixes to ignore for filename completion
 export FIGNORE=".git:.DS_Store"
+
+# X11
+
+ERRFILE="$(xdg-base-dir CACHE)/X11/xsession-errors"
+export ERRFILE
