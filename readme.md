@@ -20,7 +20,7 @@ To set up or reinstall a machine to use the dotfiles you must first install RCM 
 point you should also install any needed SSH keys in order to perform the following clone.  Once configured,
 clone this repo into the ~/.dotfiles directory and follow the steps below.
 
-1.  Execute ~/.dotfiles/setup.sh
+1.  Execute ~/.dotfiles/setup.bash
 1.  Edit ~/.rcrc as needed for the machine you are on.  Tags may need to be changed, etc.
 1.  Then simply run 'rcup'
 
@@ -50,4 +50,3 @@ dotfiles-private repository.
 For Windows machines the above steps should all be performed in the bash shell provided by
 WSL.  After these steps you could then pull the [WinFiles](https://github.com/brennanfee/winfiles)
 repo to set up PowerShell and the Windows side of things (see that repo for instructions).
-
