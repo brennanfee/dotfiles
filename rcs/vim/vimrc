@@ -65,18 +65,18 @@ set visualbell
 set clipboard=unnamedplus
 
 set backup
-set backupdir=~/.vim/vimscratch/backup//,$TEMP//,$TMP//
+set backupdir=$XDG_STATE_HOME/vim/backup//,$TEMP/vim//,$TMP/vim// | call mkdir(&backupdir, 'p')
 
 set swapfile
-set directory=~/.vim/vimscratch/swap//,$TEMP//,$TMP//
+set directory=$XDG_STATE_HOME/vim/swap//,$TEMP/vim//,$TMP/vim// | call mkdir(&directory, 'p')
 
 set undofile
-set undodir=~/.vim/vimscratch/undo//,$TEMP//,$TMP//
+set undodir=$XDG_STATE_HOME/vim/undo//,$TEMP/vim//,$TMP/vim// | call mkdir(&undodir,   'p')
+
+set viewdir=$XDG_STATE_HOME/vim/view | call mkdir(&viewdir,   'p')
 
 if !has('nvim')
-  set viminfo+=n~/.cache/vim/viminfo
-else
-  set viminfo+=n~/.cache/nvim/shada
+  set viminfofile=$XDG_STATE_HOME/vim/viminfo
 endif
 
 set noshowmode
