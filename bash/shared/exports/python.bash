@@ -17,5 +17,9 @@ if ! ${SOURCED}; then
 fi
 # END Bash scrict mode
 
+## Python startup
+PYTHONSTARTUP="$(xdg-base-dir CONFIG)/python/pythonrc"
+export PYTHONSTARTUP
+
 ## For PIPX
 export PIPX_DEFAULT_PYTHON=/usr/bin/python3
