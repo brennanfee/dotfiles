@@ -1,3 +1,22 @@
+#!/usr/bin/env bash
+
+# Bash strict mode
+# shellcheck disable=SC2154
+([[ -n ${ZSH_EVAL_CONTEXT} && ${ZSH_EVAL_CONTEXT} =~ :file$ ]] ||
+ [[ -n ${BASH_VERSION} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
+if ! ${SOURCED}; then
+  set -o errexit # same as set -e
+  set -o nounset # same as set -u
+  set -o errtrace # same as set -E
+  set -o pipefail
+  set -o posix
+  #set -o xtrace # same as set -x, turn on for debugging
+
+  shopt -s extdebug
+  IFS=$(printf '\n\t')
+fi
+# END Bash scrict mode
+
 #
 # Rudimentary Bash completion definition for googler.
 #
@@ -47,14 +66,15 @@ _googler() {
     --url-handler
   )
 
-  if [[ $cur == -* ]]; then
+  if [[ ${cur} == -* ]]; then
     # The current argument is an option -- complete option names.
-    COMPREPLY=($(compgen -W "${opts[*]}" -- "$cur"))
+    # shellcheck disable=2207
+    COMPREPLY=($(compgen -W "${opts[*]}" -- "${cur}"))
   else
     # Do not complete option arguments; only autocomplete positional
     # arguments (queries).
     for opt in "${opts_with_arg[@]}"; do
-      [[ $opt == "$prev" ]] && return 1
+      [[ ${opt} == "${prev}" ]] && return 1
     done
 
     local completion
@@ -62,7 +82,7 @@ _googler() {
     while IFS= read -r completion; do
       # Quote spaces for `complete -W wordlist`
       COMPREPLY+=("${completion// /\\ }")
-    done < <(googler --complete "$cur")
+    done < <(googler --complete "${cur}" || true)
   fi
 
   return 0

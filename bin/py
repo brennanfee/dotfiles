@@ -1,25 +1,33 @@
 #!/usr/bin/env bash
 
+# Bash strict mode
+# shellcheck disable=SC2154
+([[ -n ${ZSH_EVAL_CONTEXT} && ${ZSH_EVAL_CONTEXT} =~ :file$ ]] ||
+ [[ -n ${BASH_VERSION} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
+if ! ${SOURCED}; then
+  set -o errexit # same as set -e
+  set -o nounset # same as set -u
+  set -o errtrace # same as set -E
+  set -o pipefail
+  set -o posix
+  #set -o xtrace # same as set -x, turn on for debugging
+
+  shopt -s extdebug
+  IFS=$(printf '\n\t')
+fi
+# END Bash scrict mode
+
 # py --- run python, with poetry if applicable
 # Can use an environnement variable (PY_PYTHON) to override which command is the fallback
 
-# Bash "strict" mode
-SOURCED=false && [ "$0" = "$BASH_SOURCE" ] || SOURCED=true
-if ! $SOURCED; then
-  set -eEuo pipefail
-  shopt -s extdebug
-  trap 's=$?; echo "$0: Error on line "$LINENO": $BASH_COMMAND"; exit $s' ERR
-  IFS=$'\n\t'
-fi
-
-start="$PWD"
+start="${PWD}"
 
 while true; do
-  if [ -e pyproject.toml ]; then
-    exec poetry run python $@
-  elif [ / = "$PWD" ]; then
-    cd $start
-    exec ${PY_PYTHON:-python3} $@
+  if [[ -e pyproject.toml ]]; then
+    exec poetry run python "$@"
+  elif [[ / = "${PWD}" ]]; then
+    cd "${start}"
+    exec ${PY_PYTHON:-python3} "$@"
   else
     cd ..
   fi

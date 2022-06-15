@@ -1,5 +1,24 @@
 #!/usr/bin/env bash
 
+# Bash strict mode
+# shellcheck disable=SC2154
+([[ -n ${ZSH_EVAL_CONTEXT} && ${ZSH_EVAL_CONTEXT} =~ :file$ ]] ||
+ [[ -n ${BASH_VERSION} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
+if ! ${SOURCED}; then
+  set -o errexit # same as set -e
+  set -o nounset # same as set -u
+  set -o errtrace # same as set -E
+  set -o pipefail
+  set -o posix
+  #set -o xtrace # same as set -x, turn on for debugging
+
+  shopt -s extdebug
+  IFS=$(printf '\n\t')
+fi
+# END Bash scrict mode
+
+shopt -s inherit_errexit
+
 function git-exe() {
   git_cmd="git"
   if command_exists hub; then
@@ -8,11 +27,12 @@ function git-exe() {
   if command_exists lab; then
     git_cmd="lab"
   fi
-  echo "$git_cmd"
+  echo "${git_cmd}"
 }
 
 function git-branch-name() {
-  if in-a-git-repo; then
+  local res=in-a-git-repo
+  if [[ res -eq 0 ]]; then
     git rev-parse --abbrev-ref HEAD
   else
     echo "Not a git repo."
@@ -20,7 +40,7 @@ function git-branch-name() {
 }
 
 function in-a-git-repo() {
-  if [[ $(git rev-parse --is-inside-work-tree 2>/dev/null) == 'true' ]]; then
+  if [[ $(git rev-parse --is-inside-work-tree 2>/dev/null || true) == 'true' ]]; then
     return 0
   else
     return 1
@@ -28,7 +48,8 @@ function in-a-git-repo() {
 }
 
 function git-root-path() {
-  if in-a-git-repo; then
+  local res=in-a-git-repo
+  if [[ res -eq 0 ]]; then
     git rev-parse --show-toplevel
   else
     pwd
@@ -36,11 +57,12 @@ function git-root-path() {
 }
 
 function cd-to-git-root-path() {
-  if in-a-git-repo; then
+  local res=in-a-git-repo
+  if [[ res -eq 0 ]]; then
     if [[ -n $1 ]]; then
-      cd "$(git rev-parse --show-cdup)/$1" || return
+      cd "$(git rev-parse --show-cdup || true)/$1" || return
     else
-      cd "$(git rev-parse --show-cdup)" || return
+      cd "$(git rev-parse --show-cdup || true)" || return
     fi
   fi
 }
@@ -51,10 +73,11 @@ function git-get-remote-user() {
     remote=$1
   fi
 
-  if in-a-git-repo; then
-    git remote get-url "$remote" | sed -E 's@^.+(:|/)([^/]+)/.+$@\2@'
+  local res=in-a-git-repo
+  if [[ res -eq 0 ]]; then
+    git remote get-url "${remote}" | sed -E 's@^.+(:|/)([^/]+)/.+$@\2@'
   else
-    ""
+    echo ""
   fi
 }
 
@@ -64,10 +87,11 @@ function git-get-remote-name() {
     remote=$1
   fi
 
-  if in-a-git-repo; then
-    git remote get-url "$remote" | sed -E 's@^.+[:/][^/]+.+/([^.]+)(.git)?$@\1@'
+  local res=in-a-git-repo
+  if [[ res -eq 0 ]]; then
+    git remote get-url "${remote}" | sed -E 's@^.+[:/][^/]+.+/([^.]+)(.git)?$@\1@'
   else
-    ""
+    echo ""
   fi
 }
 
@@ -77,10 +101,11 @@ function git-get-remote-protocol() {
     remote=$1
   fi
 
-  if in-a-git-repo; then
-    git remote get-url "$remote" | sed -E 's@^(git|ssh|https)[\@:+].+$@\1@'
+  local res=in-a-git-repo
+  if [[ res -eq 0 ]]; then
+    git remote get-url "${remote}" | sed -E 's@^(git|ssh|https)[\@:+].+$@\1@'
   else
-    ""
+    echo ""
   fi
 }
 
@@ -90,10 +115,11 @@ function git-get-remote-service() {
     remote=$1
   fi
 
-  if in-a-git-repo; then
-    git remote get-url "$remote" | sed -E 's@^(git|ssh|https)[\@:+](//)?((.+[\@])?(git-)?([^:/.]+)).+$@\6@'
+  local res=in-a-git-repo
+  if [[ res -eq 0 ]]; then
+    git remote get-url "${remote}" | sed -E 's@^(git|ssh|https)[\@:+](//)?((.+[\@])?(git-)?([^:/.]+)).+$@\6@'
   else
-    ""
+    echo ""
   fi
 }
 

@@ -1,7 +1,21 @@
 #!/usr/bin/env bash
-# Bash "strict" mode
-set -euo pipefail
-IFS=$'\n\t'
+
+# Bash strict mode
+# shellcheck disable=SC2154
+([[ -n ${ZSH_EVAL_CONTEXT} && ${ZSH_EVAL_CONTEXT} =~ :file$ ]] ||
+ [[ -n ${BASH_VERSION} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
+if ! ${SOURCED}; then
+  set -o errexit # same as set -e
+  set -o nounset # same as set -u
+  set -o errtrace # same as set -E
+  set -o pipefail
+  set -o posix
+  #set -o xtrace # same as set -x, turn on for debugging
+
+  shopt -s extdebug
+  IFS=$(printf '\n\t')
+fi
+# END Bash scrict mode
 
 # This program is free software. It comes without any warranty, to
 # the extent permitted by applicable law. You can redistribute it
@@ -12,9 +26,9 @@ IFS=$'\n\t'
 for fgbg in 38 48; do # Foreground / Background
     for color in {0..255}; do # Colors
         # Display the color
-        printf "\e[${fgbg};5;%sm  %3s  \e[0m" $color $color
+        printf "\e[${fgbg};5;%sm  %3s  \e[0m" ${color} ${color}
         # Display 6 colors per lines
-        if [ $(((color + 1) % 6)) == 4 ]; then
+        if [[ $(((color + 1) % 6)) == 4 ]]; then
             echo # New line
         fi
     done

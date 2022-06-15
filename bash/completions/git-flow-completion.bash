@@ -1,4 +1,22 @@
-#!bash
+#!/usr/bin/env bash
+
+# Bash strict mode
+# shellcheck disable=SC2154
+([[ -n ${ZSH_EVAL_CONTEXT} && ${ZSH_EVAL_CONTEXT} =~ :file$ ]] ||
+ [[ -n ${BASH_VERSION} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
+if ! ${SOURCED}; then
+  set -o errexit # same as set -e
+  set -o nounset # same as set -u
+  set -o errtrace # same as set -E
+  set -o pipefail
+  set -o posix
+  #set -o xtrace # same as set -x, turn on for debugging
+
+  shopt -s extdebug
+  IFS=$(printf '\n\t')
+fi
+# END Bash scrict mode
+
 #
 # git-flow-completion
 # ===================
@@ -56,13 +74,14 @@ __git_flow_config_file_options="
 _git_flow ()
 {
     local subcommands="init feature bugfix release hotfix support help version config finish delete publish rebase"
-    local subcommand="$(__git_find_on_cmdline "$subcommands")"
-    if [ -z "$subcommand" ]; then
-        __gitcomp "$subcommands"
+    local subcommand
+    subcommand="$(__git_find_on_cmdline "${subcommands}")"
+    if [[ -z "${subcommand}" ]]; then
+        __gitcomp "${subcommands}"
         return
     fi
 
-    case "$subcommand" in
+    case "${subcommand}" in
     init)
         __git_flow_init
         return
@@ -100,19 +119,23 @@ _git_flow ()
 __git_flow_init ()
 {
     local subcommands="help"
-    local subcommand="$(__git_find_on_cmdline "$subcommands")"
-    if [ -z "$subcommand" ]; then
-        __gitcomp "$subcommands"
+    local subcommand
+    subcommand="$(__git_find_on_cmdline "${subcommands}")"
+    if [[ -z "${subcommand}" ]]; then
+        __gitcomp "${subcommands}"
     fi
 
-    case "$cur" in
-    --*)
+    case "${cur}" in
+      --*)
         __gitcomp "
                 --nodefaults --defaults
                 --noforce --force
-                $__git_flow_config_file_options
+                ${__git_flow_config_file_options}
                 "
         return
+        ;;
+
+      *)
         ;;
     esac
 }
@@ -120,38 +143,42 @@ __git_flow_init ()
 __git_flow_feature ()
 {
     local subcommands="list start finish publish track diff rebase checkout pull help delete rename"
-    local subcommand="$(__git_find_on_cmdline "$subcommands")"
+    local subcommand
+    subcommand="$(__git_find_on_cmdline "${subcommands}")"
 
-    if [ -z "$subcommand" ]; then
-        __gitcomp "$subcommands"
+    if [[ -z "${subcommand}" ]]; then
+        __gitcomp "${subcommands}"
         return
     fi
 
-    case "$subcommand" in
+    case "${subcommand}" in
     pull)
-        __gitcomp_nl "$(__git_remotes)"
+        __gitcomp_nl "$(__git_remotes || true)"
         return
         ;;
     checkout)
-        __gitcomp_nl "$(__git_flow_list_local_branches 'feature')"
+        __gitcomp_nl "$(__git_flow_list_local_branches 'feature' || true)"
         return
         ;;
     delete)
-        case "$cur" in
-        --*)
+        case "${cur}" in
+          --*)
             __gitcomp "
                     --noforce --force
                     --noremote --remote
                     "
             return
             ;;
+
+          *)
+            ;;
         esac
-        __gitcomp_nl "$(__git_flow_list_local_branches 'feature')"
+        __gitcomp_nl "$(__git_flow_list_local_branches 'feature' || true)"
         return
         ;;
     finish)
-        case "$cur" in
-        --*)
+        case "${cur}" in
+          --*)
             __gitcomp "
                     --nofetch --fetch
                     --norebase --rebase
@@ -165,33 +192,39 @@ __git_flow_feature ()
                 "
             return
             ;;
+
+          *)
+            ;;
         esac
-        __gitcomp_nl "$(__git_flow_list_local_branches 'feature')"
+        __gitcomp_nl "$(__git_flow_list_local_branches 'feature' || true)"
         return
         ;;
     diff)
-        __gitcomp_nl "$(__git_flow_list_local_branches 'feature')"
+        __gitcomp_nl "$(__git_flow_list_local_branches 'feature' || true)"
         return
         ;;
     rebase)
         case "$cur" in
-        --*)
+          --*)
             __gitcomp "
                     --nointeractive --interactive
                     --nopreserve-merges --preserve-merges
                 "
             return
             ;;
+
+          *)
+            ;;
         esac
-        __gitcomp_nl "$(__git_flow_list_local_branches 'feature')"
+        __gitcomp_nl "$(__git_flow_list_local_branches 'feature' || true)"
         return
         ;;
     publish)
-        __gitcomp_nl "$(__git_flow_list_branches 'feature')"
+        __gitcomp_nl "$(__git_flow_list_branches 'feature' || true)"
         return
         ;;
     track)
-        __gitcomp_nl "$(__git_flow_list_branches 'feature')"
+        __gitcomp_nl "$(__git_flow_list_branches 'feature' || true)"
         return
         ;;
     *)

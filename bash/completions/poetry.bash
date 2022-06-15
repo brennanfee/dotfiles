@@ -1,3 +1,22 @@
+#!/usr/bin/env bash
+
+# Bash strict mode
+# shellcheck disable=SC2154
+([[ -n ${ZSH_EVAL_CONTEXT} && ${ZSH_EVAL_CONTEXT} =~ :file$ ]] ||
+ [[ -n ${BASH_VERSION} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
+if ! ${SOURCED}; then
+  set -o errexit # same as set -e
+  set -o nounset # same as set -u
+  set -o errtrace # same as set -E
+  set -o pipefail
+  set -o posix
+  #set -o xtrace # same as set -x, turn on for debugging
+
+  shopt -s extdebug
+  IFS=$(printf '\n\t')
+fi
+# END Bash scrict mode
+
 _poetry_b702f0cce29acd08_complete()
 {
     local cur script coms opts com
@@ -5,16 +24,16 @@ _poetry_b702f0cce29acd08_complete()
     _get_comp_words_by_ref -n : cur words
 
     # for an alias, get the real script behind it
-    if [[ $(type -t ${words[0]}) == "alias" ]]; then
-        script=$(alias ${words[0]} | sed -E "s/alias ${words[0]}='(.*)'/\1/")
+    if [[ $(type -t "${words[0]}" || true) == "alias" ]]; then
+        script=$(alias "${words[0]}" | sed -E "s/alias ${words[0]}='(.*)'/\1/")
     else
         script=${words[0]}
     fi
 
     # lookup for command
-    for word in ${words[@]:1}; do
-        if [[ $word != -* ]]; then
-            com=$word
+    for word in "${words[@]:1}"; do
+        if [[ ${word} != -* ]]; then
+            com=${word}
             break
         fi
     done
@@ -23,7 +42,7 @@ _poetry_b702f0cce29acd08_complete()
     if [[ ${cur} == --* ]] ; then
         opts="--ansi --help --no-ansi --no-interaction --quiet --verbose --version"
 
-        case "$com" in
+        case "${com}" in
 
             (about)
             opts="${opts} "
@@ -125,24 +144,28 @@ _poetry_b702f0cce29acd08_complete()
             opts="${opts} "
             ;;
 
+            *)
+              ;;
         esac
 
-        COMPREPLY=($(compgen -W "${opts}" -- ${cur}))
-        __ltrim_colon_completions "$cur"
+        # shellcheck disable=2207
+        COMPREPLY=($(compgen -W "${opts}" -- "${cur}"))
+        __ltrim_colon_completions "${cur}"
 
         return 0;
     fi
 
     # completing for a command
-    if [[ $cur == $com ]]; then
+    if [[ ${cur} == "${com}" ]]; then
         coms="about add build cache:clear check config debug:info debug:resolve develop help init install list lock new publish remove run script search self:update shell show update version"
 
-        COMPREPLY=($(compgen -W "${coms}" -- ${cur}))
-        __ltrim_colon_completions "$cur"
+        # shellcheck disable=2207
+        COMPREPLY=($(compgen -W "${coms}" -- "${cur}"))
+        __ltrim_colon_completions "${cur}"
 
         return 0
     fi
 }
 
 complete -o default -F _poetry_b702f0cce29acd08_complete poetry
-complete -o default -F _poetry_b702f0cce29acd08_complete /home/brennan/.poetry/bin/poetry
+complete -o default -F _poetry_b702f0cce29acd08_complete /home/brennan/.local/bin/poetry

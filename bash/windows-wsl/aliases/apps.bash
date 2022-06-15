@@ -1,3 +1,22 @@
+#!/usr/bin/env bash
+
+# Bash strict mode
+# shellcheck disable=SC2154
+([[ -n ${ZSH_EVAL_CONTEXT} && ${ZSH_EVAL_CONTEXT} =~ :file$ ]] ||
+ [[ -n ${BASH_VERSION} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
+if ! ${SOURCED}; then
+  set -o errexit # same as set -e
+  set -o nounset # same as set -u
+  set -o errtrace # same as set -E
+  set -o pipefail
+  set -o posix
+  #set -o xtrace # same as set -x, turn on for debugging
+
+  shopt -s extdebug
+  IFS=$(printf '\n\t')
+fi
+# END Bash scrict mode
+
 # Aliases for linux apps, redirecting to windows versions
 
 if [[ -e "/mnt/c/Program\ Files/Vim/vim82/gvim.exe" ]]; then
@@ -10,9 +29,6 @@ alias docker-machine="docker-machine.exe"
 alias kubectl="kubectl.exe"
 alias notary="notary.exe"
 
-#if [[ -e "$SCOOP/shims/packer.exe" ]]; then
-#  alias packer="$SCOOP/shims/packer.exe"
-#fi
 alias vagrant="vagrant.exe"
 
 if [[ -e "/mnt/c/Program\ Files/Beyond\ Compare\ 4/BCompare.exe" ]]; then
