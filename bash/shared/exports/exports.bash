@@ -33,4 +33,8 @@ export FIGNORE=".git:.DS_Store"
 # X11
 
 ERRFILE="$(xdg-base-dir CACHE)/X11/xsession-errors"
+# Note: Some display managers will not support this (LightDM or SLiM)
+XAUTHORITY="(xdg-base-dir RUNTIME)/Xauthority"
+
 export ERRFILE
+export XAUTHORITY
