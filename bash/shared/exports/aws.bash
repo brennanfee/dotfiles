@@ -18,3 +18,10 @@ fi
 # END Bash scrict mode
 
 export AWS_DEFAULT_REGION="us-east-1"
+
+aws_home="$(xdg-user-dir CONFIG)/aws"
+
+export AWS_SHARED_CREDENTIALS_FILE="${aws_home}/credentials"
+export AWS_CONFIG_FILE="${aws_home}/config"
+
+unset aws_home
