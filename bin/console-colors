@@ -1,34 +1,61 @@
 #!/usr/bin/env bash
-# Bash "strict" mode
-set -euo pipefail
-IFS=$'\n\t'
+
+# Bash strict mode
+# shellcheck disable=SC2154
+([[ -n ${ZSH_EVAL_CONTEXT} && ${ZSH_EVAL_CONTEXT} =~ :file$ ]] ||
+ [[ -n ${BASH_VERSION} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
+if ! ${SOURCED}; then
+  set -o errexit # same as set -e
+  set -o nounset # same as set -u
+  set -o errtrace # same as set -E
+  set -o pipefail
+  set -o posix
+  #set -o xtrace # same as set -x, turn on for debugging
+
+  shopt -s extdebug
+  IFS=$(printf '\n\t')
+fi
+# END Bash scrict mode
 
 # console-colors - Script to show the configured colors by base-colors.sh
 
-source "$DOTFILES/bash/base-colors.bash"
+# Load the colors if needed
+if [[ ${text_black:-} == "" ]]; then
+  # shellcheck source=/home/brennan/.dotfiles/bash/base-profile.bash
+  source "${DOTFILES}/bash/base-profile.bash"
+fi
 
 echo ""
 echo "Console color map"
 echo ""
-echo -e "${color_black}████ ${color_normal} black"
-echo -e "${color_red}████ ${color_normal} red"
-echo -e "${color_green}████ ${color_normal} green"
-echo -e "${color_yellow}████ ${color_normal} yellow"
-echo -e "${color_blue}████ ${color_normal} blue"
-echo -e "${color_magenta}████ ${color_normal} magenta"
-echo -e "${color_cyan}████ ${color_normal} cyan"
-echo -e "${color_white}████ ${color_normal} white"
+echo -e "${text_black}████ ${text_normal} black"
+echo -e "${text_red}████ ${text_normal} red"
+echo -e "${text_green}████ ${text_normal} green"
+echo -e "${text_yellow}████ ${text_normal} yellow"
+echo -e "${text_blue}████ ${text_normal} blue"
+echo -e "${text_magenta}████ ${text_normal} magenta"
+echo -e "${text_cyan}████ ${text_normal} cyan"
+echo -e "${text_white}████ ${text_normal} white"
 echo ""
-echo -e "${color_bold_black}████ ${color_normal} bold_black"
-echo -e "${color_bold_red}████ ${color_normal} bold_red"
-echo -e "${color_bold_green}████ ${color_normal} bold_green"
-echo -e "${color_bold_yellow}████ ${color_normal} bold_yellow"
-echo -e "${color_bold_blue}████ ${color_normal} bold_blue"
-echo -e "${color_bold_magenta}████ ${color_normal} bold_magenta"
-echo -e "${color_bold_cyan}████ ${color_normal} bold_cyan"
-echo -e "${color_bold_white}████ ${color_normal} bold_white"
+echo -e "${text_bright_black}████ ${text_normal} bright_black"
+echo -e "${text_bright_red}████ ${text_normal} bright_red"
+echo -e "${text_bright_green}████ ${text_normal} bright_green"
+echo -e "${text_bright_yellow}████ ${text_normal} bright_yellow"
+echo -e "${text_bright_blue}████ ${text_normal} bright_blue"
+echo -e "${text_bright_magenta}████ ${text_normal} bright_magenta"
+echo -e "${text_bright_cyan}████ ${text_normal} bright_cyan"
+echo -e "${text_bright_white}████ ${text_normal} bright_white"
 echo ""
-echo -e "${color_pink}████ ${color_normal} pink = bold magenta"
-echo -e "${color_purple}████ ${color_normal} purple = magenta"
-echo -e "${color_orange}████ ${color_normal} orange = yellow"
+echo -e "${text_dim_black}████ ${text_normal} dim_black"
+echo -e "${text_dim_red}████ ${text_normal} dim_red"
+echo -e "${text_dim_green}████ ${text_normal} dim_green"
+echo -e "${text_dim_yellow}████ ${text_normal} dim_yellow"
+echo -e "${text_dim_blue}████ ${text_normal} dim_blue"
+echo -e "${text_dim_magenta}████ ${text_normal} dim_magenta"
+echo -e "${text_dim_cyan}████ ${text_normal} dim_cyan"
+echo -e "${text_dim_white}████ ${text_normal} dim_white"
+echo ""
+echo -e "${text_pink}████ ${text_normal} pink = bold magenta"
+echo -e "${text_purple}████ ${text_normal} purple = magenta"
+echo -e "${text_orange}████ ${text_normal} orange = yellow"
 echo ""

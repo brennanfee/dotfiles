@@ -67,7 +67,6 @@ if [[ ${uname} == "darwin" ]]; then
   OS_SECONDARY="macos"
 elif [[ ${uname} == "linux" ]]; then
   OS_PRIMARY="linux"
-  OS_SECONDARY
   OS_SECONDARY=$(grep -i '^ID=' </etc/os-release | sed -e 's/^ID=//;s/"//g' | tr '[:upper:]' '[:lower:]' || true)
   if [[ "${OS_SECONDARY}" == "" ]]; then
     OS_SECONDARY="unknown"
