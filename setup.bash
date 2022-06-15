@@ -1,53 +1,67 @@
 #!/usr/bin/env bash
-# Bash "strict" mode
-set -euo pipefail
-IFS=$'\n\t'
+# setup.bash - Script to set up a new machine with my dotfiles.
 
-# initialize-settings.sh - Script to set up a new machine with my dotfiles.
+# Bash strict mode
+# shellcheck disable=SC2154
+([[ -n ${ZSH_EVAL_CONTEXT} && ${ZSH_EVAL_CONTEXT} =~ :file$ ]] ||
+ [[ -n ${BASH_VERSION} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
+if ! ${SOURCED}; then
+  set -o errexit # same as set -e
+  set -o nounset # same as set -u
+  set -o errtrace # same as set -E
+  set -o pipefail
+  set -o posix
+  #set -o xtrace # same as set -x, turn on for debugging
 
-DOTFILES="$(cd -P "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+  shopt -s extdebug
+  IFS=$(printf '\n\t')
+fi
+# END Bash scrict mode
 
-# shellcheck source=/home/brennan/.dotfiles/bash/base-colors.bash
-source "$DOTFILES/bash/base-colors.bash"
-# shellcheck source=/home/brennan/.dotfiles/bash/base-functions.bash
-source "$DOTFILES/bash/base-functions.bash"
+# Current directory
+dotfiles="$(cd -P "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-SetOsEnvironmentVariables
+# shellcheck source=/home/brennan/.dotfiles/bash/base-profile.bash
+source "${dotfiles}/bash/base-profile.bash"
+
+dotfiles=$(xdg-user-dir DOTFILES)
+dotfiles_private=$(xdg-user-dir DOTFILESPRIVATE)
 
 echo ""
-echo -e "${color_green}Starting setup...${color_normal}"
+echo -e "${text_green}Starting setup...${text_normal}"
 echo ""
 
-if ! command_exists rcup; then
-  echo -e "${color_red}RCM is not installed.  Please install it and try again.${color_normal}"
+if ! command -v "rcup" &>/dev/null; then
+  echo -e "${text_red}RCM is not installed.  Please install it and try again.${text_normal}"
   exit 1
 fi
 
-if ! command_exists curl; then
-  echo -e "${color_red}Curl is not installed.  Please install it and try again.${color_normal}"
+if ! command -v "curl" &>/dev/null; then
+  echo -e "${text_red}Curl is not installed.  Please install it and try again.${text_normal}"
   exit 1
 fi
 
-rcup -f -K -d "$HOME/.dotfiles/rcs" -d "$HOME/.dotfiles-private/rcs" rcrc
+rcup -f -K -d "${dotfiles}/rcs" -d "${dotfiles_private}/rcs" rcrc
 
-if [[ -f "$HOME/.rcrc" ]]; then
-  echo -e "${color_yellow}Home .rcrc is in place.${color_normal}"
+if [[ -f "${HOME}/.rcrc" ]]; then
+  echo -e "${text_yellow}Home .rcrc is in place.${text_normal}"
   echo ""
 else
-  echo -e "${color_white}Creating new ~/.rcrc file.${color_normal}"
+  echo -e "${text_white}Creating new ~/.rcrc file.${text_normal}"
   echo ""
-  cp "$DOTFILES/base-rcrc" "$HOME/.rcrc"
+  cp "${dotfiles}/base-rcrc" "${HOME}/.rcrc"
 
-  if [[ $OS_PRIMARY == "linux" ]]; then
-    echo "TAGS=\"$OS_PRIMARY $OS_SECONDARY home\"" >>"$HOME/.rcrc"
+  if [[ ${OS_PRIMARY} == "linux" ]]; then
+    echo "TAGS=\"${OS_PRIMARY} ${OS_SECONDARY} home\"" >>"${HOME}/.rcrc"
   else
-    echo "TAGS=\"$OS_PRIMARY home\"" >>"$HOME/.rcrc"
+    echo "TAGS=\"${OS_PRIMARY} home\"" >>"${HOME}/.rcrc"
   fi
 
-  echo -e "${color_yellow}~/.rcrc file created.  You will need to add it with mkrc -o ~/.rcrc${color_normal}"
+  echo -e "${text_yellow}~/.rcrc file created.  You will need to add it with mkrc -o ~/.rcrc${text_normal}"
 fi
 
-echo -e "${color_green}Done!  Edit the ~/.rcrc as needed then run 'rcup'${color_normal}"
+echo -e "${text_green}Done!  Edit the ~/.rcrc as needed then run 'rcup'${text_normal}"
 echo ""
 
-unset DOTFILES
+unset dotfiles
+unset dotfiles_private

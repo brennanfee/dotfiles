@@ -1,1 +1,1 @@
-DOTFILES_DIRS="$HOME/.dotfiles/rcs $HOME/.dotfiles-private/rcs"
+DOTFILES_DIRS="$DOTFILES/rcs $DOTFILES_PRIVATE/rcs"
