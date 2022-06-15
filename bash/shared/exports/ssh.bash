@@ -18,15 +18,15 @@ fi
 # END Bash scrict mode
 
 # Configure ask pass
-if command_exists ksshaskpass; then
+if type ksshaskpass >/dev/null 2>&1; then
   SSH_ASKPASS=$(command -v ksshaskpass)
   export SSH_ASKPASS
   export SSH_ASKPASS_REQUIRE=prefer
-elif command_exists x11-ssh-askpass; then
+elif type x11-ssh-askpass >/dev/null 2>&1; then
   SSH_ASKPASS=$(command -v x11-ssh-askpass)
   export SSH_ASKPASS
   export SSH_ASKPASS_REQUIRE=prefer
-elif command_exists ssh-askpass; then
+elif type ssh-askpass >/dev/null 2>&1; then
   SSH_ASKPASS=$(command -v ssh-askpass)
   export SSH_ASKPASS
   export SSH_ASKPASS_REQUIRE=prefer
