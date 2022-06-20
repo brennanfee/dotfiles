@@ -72,7 +72,7 @@ if [[ ${is_wsl} == "true" ]]; then
 fi
 
 # Load bash completions
-for file in "${dotfiles}"/bash/completions/*.{bash,bash-completion}; do
+for file in "${dotfiles}"/bash/completions/*.bash; do
   # shellcheck source=/dev/null
   source "${file}"
 done
