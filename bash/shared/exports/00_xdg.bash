@@ -22,6 +22,7 @@ export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-${HOME}/.config}"
 export XDG_DATA_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}"
 export XDG_CACHE_HOME="${XDG_CACHE_HOME:-${HOME}/.cache}"
 export XDG_STATE_HOME="${XDG_STATE_HOME:-${HOME}/.local/state}"
+export XDG_BIN_HOME="${XDG_BIN_HOME:-${HOME}/.local/bin}"
 
 function xdg-base-dir() {
   case $1 in
@@ -32,6 +33,10 @@ function xdg-base-dir() {
 
     CONFIGDIRS)
       echo "${XDG_CONFIG_DIRS:-"/etc/xdg"}"
+      ;;
+
+    BIN | BINHOME)
+      echo "${XDG_BIN_HOME:-${HOME}/.local/bin}"
       ;;
 
     DATA | DATAHOME)
