@@ -214,3 +214,15 @@ alias cdr="cd-to-git-root-path"
 #  [[ $# -eq 0 ]] && return
 #  builtin cd "$@"
 #}
+
+function cd() {
+  if [[ "$#" != 0 ]]; then
+    builtin cd "$@";
+    return
+  fi
+  if command_exists fzf; then
+    eval "$(__fzf_cd__ || true)"
+  else
+    builtin cd "$@";
+  fi
+}
