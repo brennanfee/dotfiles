@@ -18,6 +18,13 @@ if ! ${SOURCED}; then
 fi
 # END Bash scrict mode
 
+#### Useful function to check if a command exists
+
+# function to make checking executable existence easier
+function command_exists() {
+  command -v "$1" &>/dev/null && return 0 || return 1
+}
+
 #### Profile Environment Variables - Critical locations
 
 # For Windows WSL I use the WSLENV environment variable to pass in the values

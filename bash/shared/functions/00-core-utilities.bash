@@ -76,8 +76,3 @@ function source_if() {
     source "$1"
   fi
 }
-
-# function to make checking executable existence easier
-function command_exists() {
-  command -v "$1" &>/dev/null && return 0 || return 1
-}
