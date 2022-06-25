@@ -1,7 +1,9 @@
 [General]
+Allow Tab Scrolling=false
 Close After Last=false
 Config Revision=10
 Days Meta Infos=30
+Elide Tab Text=false
 Expand Tabs=true
 Modified Notification=false
 Recent File List Entry Count=10
@@ -13,6 +15,7 @@ Show Status Bar=true
 Show Tab Bar=true
 Show Tabs Close Button=true
 Show Url Nav Bar=true
+Show output view for message type=1
 Startup Session=manual
 Stash new unsaved files=true
 Stash unsaved file changes=false
@@ -70,7 +73,7 @@ Fallback Encoding=ISO 8859-15
 Animate Bracket Matching=false
 Auto Color Theme Selection=true
 Color Theme=Breeze Dark
-Font=Hack,16,-1,5,50,0,0,0,0,0
+Font=Monospace,16,-1,5,50,0,0,0,0,0
 Line Height Multiplier=1
 Show Indentation Lines=false
 Show Whole Bracket Expression=false
