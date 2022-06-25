@@ -44,24 +44,59 @@ export ASDF_GOLANG_DEFAULT_PACKAGES_FILE
 
 #### Completions and plugin scripts
 
-asdf_path="${ASDF_DATA_DIR:-${HOME}/.asdf}"
-
-if [[ -d ${asdf_path} ]]; then
+if [[ -d "${ASDF_DATA_DIR:-${HOME}/.asdf}" ]]; then
   # shellcheck source=/dev/null
-  source "${asdf_path}/asdf.sh"
+  source_if "${ASDF_DATA_DIR:-${HOME}/.asdf}/asdf.sh"
 
   # shellcheck source=/dev/null
-  source "${asdf_path}/completions/asdf.bash"
+  source_if "${ASDF_DATA_DIR:-${HOME}/.asdf}/completions/asdf.bash"
 fi
 
 # Java
-if [[ -f "${asdf_path}/plugins/java/set-java-home.bash" ]]; then
-  source "${asdf_path}/plugins/java/set-java-home.bash"
-fi
+source_if "${ASDF_DATA_DIR:-${HOME}/.asdf}/plugins/java/set-java-home.bash"
 
 # DotNet
-if [[ -f "${asdf_path}/plugins/dotnet/set-dotnet-env.bash" ]]; then
-  source "${asdf_path}/plugins/dotnet/set-dotnet-env.bash"
-fi
+source_if "${ASDF_DATA_DIR:-${HOME}/.asdf}/plugins/dotnet/set-dotnet-env.bash"
 
-unset asdf_path
+# fzf integration
+if command_exists fzf; then
+  vmi() {
+    local lang=${1}
+
+    if [[ -z ${lang} ]]; then
+      lang=$(asdf plugin-list | fzf)
+    fi
+
+    if [[ -n ${lang} ]]; then
+      local versions
+      versions=$(asdf list-all "${lang}" | fzf --tac --no-sort --multi)
+      if [[ -n ${versions} ]]; then
+        # shellcheck disable=2116
+        for version in $(echo "${versions}"); do
+          asdf install "${lang}" "${version}";
+        done;
+      fi
+    fi
+  }
+
+  vmc() {
+    local lang=${1}
+
+    if [[ -z ${lang} ]]; then
+      lang=$(asdf plugin-list | fzf)
+    fi
+
+    if [[ -n ${lang} ]]; then
+      local versions
+      versions=$(asdf list "${lang}" | fzf -m)
+      if [[ -n ${versions} ]]; then
+        # shellcheck disable=2116
+        for version in $(echo "${versions}"); do
+          asdf uninstall "${lang}" "${version}";
+        done;
+      fi
+    fi
+  }
+
+  # TODO: Consider adding others
+fi

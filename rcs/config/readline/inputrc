@@ -1,5 +1,8 @@
 ###### Key Mappings
 
+# Don't show the ^C when issuing C-c
+set echo-control-characters off
+
 # Map Ctrl-A and Ctrl-e
 C-a: beginning-of-line
 C-e: end-of-line
@@ -9,11 +12,19 @@ C-e: end-of-line
 # Page up/down search the history
 "\e[5~": history-search-backward
 "\e[6~": history-search-forward
-# Have insert key paste from clipboard
+# Have insert key paste from clipboard (quoted-insert?)
 "\e[2~": paste-from-clipboard
 # Map the delete key to delete (I know strange)
 "\e[3~": delete-char
 DEL: delete-char
+
+"\e[1;5D": backward-word
+"\e[1;5C": forward-word
+
+"\C-h":"cd\n"
+
+# Misc bindings
+
 
 #### 8-bit input/output
 
@@ -35,18 +46,23 @@ set completion-ignore-case on
 # Handle hyphens and underscorse as the same for completion
 set completion-map-case on
 
+set completion-display-width 0
+set completion-query-items 1000
+
 # Show all completions on tab even if there were more than one
 set show-all-if-ambiguous on
 
 # Be more intelligent when autocompleting by also looking at the text after
-# the cursor. For example, when the current line is "cd ~/src/mozil", and
+# the cursor. For example, when the current line is "builtin cd ~/src/mozil", and
 # the cursor is on the "z", pressing Tab will not autocomplete it to "cd
-# ~/src/mozillail", but to "cd ~/src/mozilla". (This is supported by the
+# ~/src/mozillail", but to "builtin cd ~/src/mozilla". (This is supported by the
 # Readline used by Bash 4.)
 set skip-completed-text on
 
 # Use color to indicate file type for completed files
 set colored-stats on
+
+set colored-completion-prefix on
 
 # Allow TAB to cycle through complete options
 TAB: menu-complete
