@@ -25,6 +25,14 @@ function command_exists() {
   command -v "$1" &>/dev/null && return 0 || return 1
 }
 
+# function to make sourcing an optional item easier
+function source_if() {
+  if [[ -f $1 ]]; then
+    # shellcheck source=/dev/null
+    source "$1"
+  fi
+}
+
 #### Profile Environment Variables - Critical locations
 
 # For Windows WSL I use the WSLENV environment variable to pass in the values
@@ -140,7 +148,7 @@ export IS_VAGRANT
 #### Color variables - not to be exported, just loaded into the environment
 
 ## Text effects
-text_rest="$(tput sgr0)"
+text_reset="$(tput sgr0)"
 text_normal="$(tput sgr0)"
 text_clear="$(tput sgr0)"
 
