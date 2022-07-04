@@ -44,5 +44,6 @@
 	"clipperServer.autoStart": true,
 	"editor.codeView": false,
 	"sync.target": 10,
-	"sync.10.username": "brennan+joplin@mailbots.org"
+	"sync.10.username": "brennan+joplin@mailbots.org",
+	"richTextBannerDismissed": true
 }
