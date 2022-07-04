@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-#shellcheck disable=2034
+# shellcheck disable=2034
 
 # Bash strict mode
-# shellcheck disable=SC2154
-([[ -n ${ZSH_EVAL_CONTEXT} && ${ZSH_EVAL_CONTEXT} =~ :file$ ]] ||
- [[ -n ${BASH_VERSION} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
-if ! ${SOURCED}; then
+([[ -n ${ZSH_EVAL_CONTEXT:-} && ${ZSH_EVAL_CONTEXT:-} =~ :file$ ]] ||
+ [[ -n ${BASH_VERSION:-} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
+if ! ${SOURCED}
+then
   set -o errexit # same as set -e
   set -o nounset # same as set -u
   set -o errtrace # same as set -E
@@ -13,6 +13,7 @@ if ! ${SOURCED}; then
   set -o posix
   #set -o xtrace # same as set -x, turn on for debugging
 
+  shopt -s inherit_errexit
   shopt -s extdebug
   IFS=$(printf '\n\t')
 fi
@@ -110,7 +111,7 @@ fi
 
 #### Virtualization Environment Variables - if we are virtual, what type
 
-VIRT_TECH="$(systemd-detect-virt)"
+VIRT_TECH="$(systemd-detect-virt || true)"
 export VIRT_TECH
 
 if [[ $(systemd-detect-virt --vm || true) == "none" ]]; then

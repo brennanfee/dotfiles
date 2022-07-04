@@ -2,10 +2,10 @@
 # setup.bash - Script to set up a new machine with my dotfiles.
 
 # Bash strict mode
-# shellcheck disable=SC2154
-([[ -n ${ZSH_EVAL_CONTEXT} && ${ZSH_EVAL_CONTEXT} =~ :file$ ]] ||
- [[ -n ${BASH_VERSION} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
-if ! ${SOURCED}; then
+([[ -n ${ZSH_EVAL_CONTEXT:-} && ${ZSH_EVAL_CONTEXT:-} =~ :file$ ]] ||
+ [[ -n ${BASH_VERSION:-} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
+if ! ${SOURCED}
+then
   set -o errexit # same as set -e
   set -o nounset # same as set -u
   set -o errtrace # same as set -E
@@ -13,6 +13,7 @@ if ! ${SOURCED}; then
   set -o posix
   #set -o xtrace # same as set -x, turn on for debugging
 
+  shopt -s inherit_errexit
   shopt -s extdebug
   IFS=$(printf '\n\t')
 fi
@@ -26,6 +27,12 @@ source "${dotfiles}/bash/base-profile.bash"
 
 dotfiles=$(xdg-user-dir DOTFILES)
 dotfiles_private=$(xdg-user-dir DOTFILESPRIVATE)
+
+dotfiles=${dotfiles:-${DOTFILES}}
+dotfiles_private=${dotfiles_private:-${DOTFILES_PRIVATE}}
+
+dotfiles=${dotfiles:-${HOME}/.dotfiles}
+dotfiles_private=${dotfiles_private:-${HOME}/.dotfiles-private}
 
 echo ""
 echo -e "${text_green}Starting setup...${text_normal}"

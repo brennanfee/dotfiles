@@ -2,10 +2,10 @@
 # shellcheck shell=bash
 
 # Bash strict mode
-# shellcheck disable=SC2154
-([[ -n ${ZSH_EVAL_CONTEXT} && ${ZSH_EVAL_CONTEXT} =~ :file$ ]] ||
- [[ -n ${BASH_VERSION} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
-if ! ${SOURCED}; then
+([[ -n ${ZSH_EVAL_CONTEXT:-} && ${ZSH_EVAL_CONTEXT:-} =~ :file$ ]] ||
+ [[ -n ${BASH_VERSION:-} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
+if ! ${SOURCED}
+then
   set -o errexit # same as set -e
   set -o nounset # same as set -u
   set -o errtrace # same as set -E
@@ -13,13 +13,15 @@ if ! ${SOURCED}; then
   set -o posix
   #set -o xtrace # same as set -x, turn on for debugging
 
+  shopt -s inherit_errexit
   shopt -s extdebug
   IFS=$(printf '\n\t')
 fi
 # END Bash scrict mode
 
 # If not running interactively, don't do anything
-if [[ $- != *i* ]]; then
+if [[ $- != *i* ]]
+then
   return
 fi
 
@@ -44,11 +46,16 @@ is_wsl="${IS_WSL:-false}" # Assume false
 
 # We want to walk "outside" in... which is to say run all options files first, then all
 # exports, then all functions, etc.
-for folder in "options" "exports" "functions" "third-party" "other" "aliases"; do
-  for base in "shared" "${os_primary}" "distros/${os_secondary}"; do
-    for root in "${dotfiles}/bash" "${dotfiles_private}/bash"; do
-      if [[ -d "${root}/${base}/${folder}" ]]; then
-        for file in "${root}/${base}/${folder}"/*.bash; do
+for folder in "options" "exports" "functions" "third-party" "other" "aliases"
+do
+  for base in "shared" "${os_primary}" "distros/${os_secondary}"
+  do
+    for root in "${dotfiles}/bash" "${dotfiles_private}/bash"
+    do
+      if [[ -d "${root}/${base}/${folder}" ]]
+      then
+        for file in "${root}/${base}/${folder}"/*.bash
+        do
           # shellcheck source=/dev/null
           source "${file}"
         done
@@ -58,11 +65,16 @@ for folder in "options" "exports" "functions" "third-party" "other" "aliases"; d
 done
 
 # On Windows shells runnin in WSL run some overrides
-if [[ ${is_wsl} == "true" ]]; then
-  for folder in "options" "exports" "functions" "third-party" "other" "aliases"; do
-    for root in "${dotfiles}/bash" "${dotfiles_private}/bash"; do
-      if [[ -d "${root}/windows-wsl/${folder}" ]]; then
-        for file in "${root}"/windows-wsl/"${folder}"/*.bash; do
+if [[ ${is_wsl} == "true" ]]
+then
+  for folder in "options" "exports" "functions" "third-party" "other" "aliases"
+  do
+    for root in "${dotfiles}/bash" "${dotfiles_private}/bash"
+    do
+      if [[ -d "${root}/windows-wsl/${folder}" ]]
+      then
+        for file in "${root}"/windows-wsl/"${folder}"/*.bash
+        do
           # shellcheck source=/dev/null
           source "${file}"
         done
@@ -72,7 +84,8 @@ if [[ ${is_wsl} == "true" ]]; then
 fi
 
 # Load bash completions
-for file in "${dotfiles}"/bash/completions/*.bash; do
+for file in "${dotfiles}"/bash/completions/*.bash
+do
   # shellcheck source=/dev/null
   source "${file}"
 done
@@ -81,7 +94,8 @@ done
 profile_path=$(xdg-user-dir PROFILE)
 profile_path="${profile_path:-${PROFILEPATH:-${HOME}/profile}}"
 
-if ! mountpoint -q "${profile_path}/moose"; then
+if ! mountpoint -q "${profile_path}/moose"
+then
   [[ -f "${dotfiles}/bin/mount-shares" ]] && bash "${dotfiles}/bin/mount-shares"
 fi
 
