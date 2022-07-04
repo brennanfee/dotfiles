@@ -1,24 +1,65 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
-# POSIX strict mode (may produce issues in sourced scenarios)
-set -o errexit
-set -o nounset
-#set -o xtrace # same as set -x, turn on for debugging
+# Bash strict mode
+([[ -n ${ZSH_EVAL_CONTEXT:-} && ${ZSH_EVAL_CONTEXT:-} =~ :file$ ]] ||
+ [[ -n ${BASH_VERSION:-} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
+if ! ${SOURCED}
+then
+  set -o errexit # same as set -e
+  set -o nounset # same as set -u
+  set -o errtrace # same as set -E
+  set -o pipefail
+  set -o posix
+  #set -o xtrace # same as set -x, turn on for debugging
 
-IFS=$(printf '\n\t')
-# END POSIX scrict mode
+  shopt -s inherit_errexit
+  shopt -s extdebug
+  IFS=$(printf '\n\t')
+fi
+# END Bash scrict mode
+
+RESET=$(tput sgr0)
+
+error_msg() {
+  local RED
+  local T_COLS
+  RED=$(tput setaf 1)
+  T_COLS=$(tput cols)
+  echo -e "${RED}$1${RESET}" | fold -sw $((T_COLS - 1))
+  exit 0 # We don't want errors from this script, just exit
+}
 
 OPTION_INPUT=${1:-}
 OPTION=""
-if [ "${OPTION_INPUT}" = "-f" ]; then
+if [[ "${OPTION_INPUT}" = "-f" ]]
+then
   OPTION="--force"
-elif [ "${OPTION_INPUT}" = "--force" ]; then
+elif [[ "${OPTION_INPUT}" = "--force" ]]
+then
   OPTION="--force"
 fi
 
-SCRIPT="${HOME}/.dotfiles/bin/mount-moose"
-if [ -f "${SCRIPT}" ]; then
+if ! command -v "kwalletcli" >/dev/null
+then
+  error_msg "ERROR! kwalletcli not installed or on path.  Install it first!"
+fi
+
+if ! command -v "mfsmount" >/dev/null
+then
+  error_msg "ERROR! moosefs is not installed, skipping mounting volumes."
+fi
+
+XDG_DOTFILES="$(xdg-user-dir DOTFILES)"
+SCRIPT="${XDG_DOTFILES:-${DOTFILES}}/bin/mount-moose"
+if [[ -f "${SCRIPT}" ]]
+then
   bash "${SCRIPT}" "files" "${OPTION}"
   bash "${SCRIPT}" "other" "${OPTION}"
   bash "${SCRIPT}" "backups" "${OPTION}"
 fi
+
+unset DOTFILES
+unset OPTION
+unset SCRIPT
+unset OPTION_INPUT
+unset RESET

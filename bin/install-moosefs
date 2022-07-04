@@ -5,10 +5,10 @@
 # This script installs Moosefs in one of four roles.  As a client, as a master server, or as a metalogger server, or as a chunkserver.  Please note this merely installs the repository and the necessary APT packages, it does not configure MooseFS as part of the install.
 
 # Bash strict mode
-# shellcheck disable=SC2154
-([[ -n ${ZSH_EVAL_CONTEXT} && ${ZSH_EVAL_CONTEXT} =~ :file$ ]] ||
- [[ -n ${BASH_VERSION} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
-if ! ${SOURCED}; then
+([[ -n ${ZSH_EVAL_CONTEXT:-} && ${ZSH_EVAL_CONTEXT:-} =~ :file$ ]] ||
+ [[ -n ${BASH_VERSION:-} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
+if ! ${SOURCED}
+then
   set -o errexit # same as set -e
   set -o nounset # same as set -u
   set -o errtrace # same as set -E
@@ -16,17 +16,22 @@ if ! ${SOURCED}; then
   set -o posix
   #set -o xtrace # same as set -x, turn on for debugging
 
+  shopt -s inherit_errexit
   shopt -s extdebug
   IFS=$(printf '\n\t')
 fi
 # END Bash scrict mode
 
-VERSION="0.1 2022-02-03"
+VERSION="0.2 2022-07-03"
+
+RESET=$(tput sgr0)
+RED=$(tput setaf 1)
 
 # Must be root
 USER_ID=$(id -u)
-if [[ "${USER_ID}" -ne 0 ]]; then
-  echo "This script must be run as root."
+if [[ "${USER_ID}" -ne 0 ]]
+then
+  echo -e "${RED}This script must be run as root.${RESET}"
   exit 1
 fi
 
@@ -38,12 +43,34 @@ EDITION_CODENAME=$(lsb_release -c -s | tr "[:upper:]" "[:lower:]")
 SUPPORTED_ROLES=('client' 'master' 'metalogger' 'chunkserver')
 
 ### Helper functions
-contains_element() {
-  #check if an element exist in a string
-  for e in "${@:2}"; do [[ ${e} == "$1" ]] && break; done
+get_exit_code() {
+  # We first disable errexit in the current shell
+  set +e
+  (
+    # Then we set it again inside a subshell
+    set -e;
+    # ...and run the function
+    "$@"
+  )
+  EXIT_CODE=$?
+  # And finally turn errexit back on in the current shell
+  set -e
 }
 
-RESET=$(tput sgr0)
+contains_element() {
+  #check if an element exist in a string
+  for e in "${@:2}"
+  do
+    [[ ${e} == "$1" ]] && break
+  done
+}
+
+package_exists() {
+  apt-cache show "$1" &> /dev/null
+  return $?
+}
+
+### Output helpers
 
 print_info() {
   local T_COLS
@@ -56,15 +83,14 @@ blank_line() {
 }
 
 error_msg() {
-  local RED
   local T_COLS
-  RED=$(tput setaf 1)
   T_COLS=$(tput cols)
-  echo -e "${RED}$1${RESET}\n" | fold -sw $((T_COLS - 1))
+  echo -e "${RED}$1${RESET}" | fold -sw $((T_COLS - 1))
   exit 1
 }
 
 ### Help
+
 show_help() {
   print_info "MooseFS installer, version ${VERSION}"
   blank_line
@@ -89,40 +115,54 @@ fi
 
 # Verify the role, error if not valid
 MOOSE_ROLE=$(echo "${COMMAND_INPUT}" | tr "[:upper:]" "[:lower:]")
-if ! contains_element "${MOOSE_ROLE}" "${SUPPORTED_ROLES[@]}"; then
+get_exit_code contains_element "${MOOSE_ROLE}" "${SUPPORTED_ROLES[@]}"
+if [[ ! ${EXIT_CODE} -eq 0 ]]
+then
   error_msg "Invalid role selected '${MOOSE_ROLE}', please input a valid role: Client, Master, Mettalogger, or Chunkserver."
 fi
 
-# Make sure the keyring folder exists
-mkdir -p /usr/local/share/keyrings
+# Check to see if the packages are available (newer Debians and Ubuntus have them)
+get_exit_code package_exists "moosefs-client"
+if [[ ${EXIT_CODE} -ne 0 ]]
+then
+  # We need to install the repo
 
-# The key
-KEY_FILE="/usr/local/share/keyrings/moosefs-archive-keyring.gpg"
-if [[ ! -f ${KEY_FILE} ]]; then
-  wget -O- https://ppa.moosefs.com/moosefs.key | gpg --dearmor | tee ${KEY_FILE}
-fi
+  # Make sure the keyring folder exists
+  mkdir -p /usr/local/share/keyrings
 
-# This is a hack for the Debian testing edition
-RELEASE=$(lsb_release -r -s)
-if [[ ${RELEASE} == "testing" ]]; then
-  # Moosefs does not create repo's for testing, only stable
-  EDITION_CODENAME=bullseye
-fi
-
-# This is a hack for Ubuntu editions, they only support LTS editions
-if [[ ${DISTRIBUTION} == "ubuntu" ]]; then
-  if [[ ${EDITION_CODENAME} == "hirsute" || ${EDITION_CODENAME} == "impish" || ${EDITION_CODENAME} == "groovy" ]]; then
-    EDITION_CODENAME=focal
+  # The key
+  KEY_FILE="/usr/local/share/keyrings/moosefs-archive-keyring.gpg"
+  if [[ ! -f ${KEY_FILE} ]]
+  then
+    wget -O- https://ppa.moosefs.com/moosefs.key | gpg --dearmor | tee "${KEY_FILE}"
   fi
-fi
 
-# The repo
-REPO_FILE="/etc/apt/sources.list.d/moosefs.list"
-if [[ ! -f ${REPO_FILE} ]]; then
-  echo "deb [arch=${DPKG_ARCH} signed-by=${KEY_FILE}] http://ppa.moosefs.com/moosefs-3/apt/${DISTRIBUTION}/${EDITION_CODENAME} ${EDITION_CODENAME} main" > "${REPO_FILE}"
-fi
+  # This is a hack for the Debian testing edition
+  RELEASE=$(lsb_release -r -s)
+  if [[ ${RELEASE} == "testing" ]]
+  then
+    # Moosefs does not create repo's for testing, only stable
+    EDITION_CODENAME=bullseye
+  fi
 
-apt update
+  # This is a hack for Ubuntu editions, they only support LTS editions
+  if [[ ${DISTRIBUTION} == "ubuntu" ]]
+  then
+    if [[ ${EDITION_CODENAME} == "groovy" || ${EDITION_CODENAME} == "kinetic" ]]
+    then
+      EDITION_CODENAME=jammy
+    fi
+  fi
+
+  # The repo
+  REPO_FILE="/etc/apt/sources.list.d/moosefs.list"
+  if [[ ! -f ${REPO_FILE} ]]
+  then
+    echo "deb [arch=${DPKG_ARCH} signed-by=${KEY_FILE}] http://ppa.moosefs.com/moosefs-3/apt/${DISTRIBUTION}/${EDITION_CODENAME} ${EDITION_CODENAME} main" > "${REPO_FILE}"
+  fi
+
+  apt update
+fi
 
 case "${MOOSE_ROLE}" in
   client)
