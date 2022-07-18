@@ -39,7 +39,7 @@ function yt-helper() {
   fi
 
   echo "Downloading ${url}"
-  ${prog} -i -f "${format}" -o "$2" "${url}" "${@:3}"
+  ${prog} --no-mtime -i -f "${format}" -o "$2" "${url}" "${@:3}"
 }
 
 function yt() {
@@ -72,5 +72,5 @@ function ytm() {
   fi
 
   echo "Downloading ${url}"
-  ${prog} --extract-audio --audio-format mp3 -i -o "${output}" "${url}" "${@:2}"
+  ${prog} --no-mtime --extract-audio --audio-format mp3 -i -o "${output}" "${url}" "${@:2}"
 }
