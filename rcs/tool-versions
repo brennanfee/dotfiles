@@ -2,7 +2,7 @@ dotnet 6.0.301
 golang 1.18.3
 java adoptopenjdk-18.0.1+10
 kotlin 1.7.0
-neovim 0.7.0
+neovim 0.7.2
 nodejs 18.4.0
 packer 1.8.2
 python 3.10.5
