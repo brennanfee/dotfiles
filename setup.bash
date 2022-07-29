@@ -25,12 +25,10 @@ dotfiles="$(cd -P "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=/home/brennan/.dotfiles/bash/base-profile.bash
 source "${dotfiles}/bash/base-profile.bash"
 
-dotfiles=$(xdg-user-dir DOTFILES)
-dotfiles_private=$(xdg-user-dir DOTFILESPRIVATE)
-
-dotfiles=${dotfiles:-${DOTFILES}}
-dotfiles_private=${dotfiles_private:-${DOTFILES_PRIVATE}}
-
+# At this point, the machine may not be fully set up and as a result we can't rely on
+# the bash environment being setup either.  So we can't use xdg-user-dir or expect the
+# environment variables to be there.  These are where I should be putting my dotfiles
+# paths anyway, so hard code them here.
 dotfiles=${dotfiles:-${HOME}/.dotfiles}
 dotfiles_private=${dotfiles_private:-${HOME}/.dotfiles-private}
 
