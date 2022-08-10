@@ -12,7 +12,7 @@ Parent=FALLBACK/
 TerminalCenter=true
 TerminalColumns=125
 TerminalMargin=5
-TerminalRows=32
+TerminalRows=30
 
 [Interaction Options]
 MiddleClickPasteMode=1
