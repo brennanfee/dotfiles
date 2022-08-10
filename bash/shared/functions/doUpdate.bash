@@ -18,7 +18,8 @@ fi
 # END Bash scrict mode
 
 function doUpdate() {
-  if [[ "${OS_SECONDARY}" == "ubuntu" || "${OS_SECONDARY}" == "debian" ]]; then
+  if [[ "${OS_SECONDARY}" == "ubuntu" || "${OS_SECONDARY}" == "debian" ]]
+  then
     DEBIAN_FRONTEND=noninteractive apt-get -y -q update
     DEBIAN_FRONTEND=noninteractive apt-get -y -q full-upgrade
     DEBIAN_FRONTEND=noninteractive apt-get -y -q autoremove
@@ -26,9 +27,15 @@ function doUpdate() {
     echo "Unable to determine os or distribution."
   fi
 
-  if command_exists flatpak; then
+  if command_exists flatpak
+  then
     flatpak upgrade -y --noninteractive --system
     flatpak upgrade -y --noninteractive --user
+  fi
+
+  if command_exists snap
+  then
+    snap refresh
   fi
 }
 
