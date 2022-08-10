@@ -109,6 +109,14 @@ else
   export IS_WSL="false"
 fi
 
+# While my dotfiles aren't designed for Mac, put a variable here for later
+kernel=$(uname -s | tr '[:upper:]' '[:lower:]' || true)
+if [[ ${kernel} == *"darwin"* ]]; then
+  export IS_DARWIN="true"
+else
+  export IS_DARWIN="false"
+fi
+
 #### Virtualization Environment Variables - if we are virtual, what type
 
 VIRT_TECH="$(systemd-detect-virt || true)"
