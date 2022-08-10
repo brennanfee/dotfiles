@@ -19,13 +19,16 @@ fi
 
 function doUpdate() {
   if [[ "${OS_SECONDARY}" == "ubuntu" || "${OS_SECONDARY}" == "debian" ]]; then
-    sudo apt-get update && sudo apt-get full-upgrade -y && sudo apt-get autoremove -y
+    DEBIAN_FRONTEND=noninteractive apt-get -y -q update
+    DEBIAN_FRONTEND=noninteractive apt-get -y -q full-upgrade
+    DEBIAN_FRONTEND=noninteractive apt-get -y -q autoremove
   else
     echo "Unable to determine os or distribution."
   fi
 
   if command_exists flatpak; then
-    flatpak upgrade -y
+    flatpak upgrade -y --noninteractive --system
+    flatpak upgrade -y --noninteractive --user
   fi
 }
 
