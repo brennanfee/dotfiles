@@ -125,7 +125,7 @@ Text Drag And Drop=true
 User Sets Of Chars To Enclose Selection=
 Vi Input Mode Steal Keys=false
 Vi Relative Line Numbers=false
-Word Completion=true
+Word Completion=false
 Word Completion Minimal Word Length=3
 Word Completion Remove Tail=true
 
@@ -138,8 +138,8 @@ RunPrefix=
 SetEditor=false
 
 [MainWindow]
-DisplayPort-0 Height 3840x1080=917
-DisplayPort-0 Width 3840x1080=1496
+DisplayPort-0 Height 3840x1080=954
+DisplayPort-0 Width 3840x1080=1506
 
 [UiSettings]
 ColorScheme=
