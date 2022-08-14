@@ -20,9 +20,9 @@ fi
 function doUpdate() {
   if [[ "${OS_SECONDARY}" == "ubuntu" || "${OS_SECONDARY}" == "debian" ]]
   then
-    DEBIAN_FRONTEND=noninteractive apt-get -y -q update
-    DEBIAN_FRONTEND=noninteractive apt-get -y -q full-upgrade
-    DEBIAN_FRONTEND=noninteractive apt-get -y -q autoremove
+    DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q update
+    DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q full-upgrade
+    DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q autoremove
   else
     echo "Unable to determine os or distribution."
   fi
@@ -35,7 +35,7 @@ function doUpdate() {
 
   if command_exists snap
   then
-    snap refresh
+    sudo snap refresh
   fi
 }
 
