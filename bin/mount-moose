@@ -22,7 +22,7 @@ then
 fi
 # END Bash scrict mode
 
-VERSION="0.4 2022-10-30"
+VERSION="0.5 2022-10-30"
 
 RESET=$(tput sgr0)
 
@@ -106,7 +106,7 @@ fi
 
 case "${SHARE_TO_MOUNT}" in
   files)
-    LOCATION="${PROFILE}/mounts/moose"
+    LOCATION="${PROFILE}/mounts/files"
     REMOTE_FOLDER="/files"
     WALLET_ENTRY="files"
 
@@ -130,7 +130,7 @@ case "${SHARE_TO_MOUNT}" in
     fi
     ;;
   volumes)
-    LOCATION="${PROFILE}/mounts/moose"
+    LOCATION="${PROFILE}/mounts/volumes"
     REMOTE_FOLDER="/volumes"
     WALLET_ENTRY="volumes"
 
@@ -202,7 +202,7 @@ case "${SHARE_TO_MOUNT}" in
     fi
     ;;
   files-ro)
-    LOCATION="${PROFILE}/mounts/files"
+    LOCATION="${PROFILE}/mounts/files-ro"
     REMOTE_FOLDER="/files"
 
     mkdir -p "${LOCATION}"
