@@ -22,7 +22,7 @@ then
 fi
 # END Bash scrict mode
 
-VERSION="0.3 2022-07-03"
+VERSION="0.4 2022-10-30"
 
 RESET=$(tput sgr0)
 
@@ -36,7 +36,7 @@ show_help() {
   echo ""
   echo "    'mount-moose -?'  Show this help"
   echo "    'mount-moose <share name>'  The share to mount, options are:"
-  echo "        files, backups, metadata, files-ro"
+  echo "        files, backups, volumes, metadata, files-ro"
 #  echo ""
 #  echo "Can optional pass an override to the mount location: "
 #  echo "    'mount-moose <share name> <mount location>"
@@ -108,6 +108,30 @@ case "${SHARE_TO_MOUNT}" in
   files)
     LOCATION="${PROFILE}/mounts/moose"
     REMOTE_FOLDER="/files"
+    WALLET_ENTRY="files"
+
+    PWD=$(kwalletcli -f moosefs -e "${WALLET_ENTRY}")
+    if [[ -z "${PWD}" ]]
+    then
+      error_msg "ERROR! The moosefs wallet entry has not been set up correctly."
+    fi
+    mkdir -p "${LOCATION}"
+    if mountpoint -q "${LOCATION}"
+    then
+      # already mounted
+      if [[ "${FORCE}" = 1 ]]
+      then
+        umount -q "${LOCATION}"
+        mfsmount "${LOCATION}" -H "${MOOSE_SRV}" -S "${REMOTE_FOLDER}" -o rw -o mfspassword="${PWD}" -o mfsdelayedinit
+      fi
+    else
+      # not mounted
+      mfsmount "${LOCATION}" -H "${MOOSE_SRV}" -S "${REMOTE_FOLDER}" -o rw -o mfspassword="${PWD}" -o mfsdelayedinit
+    fi
+    ;;
+  volumes)
+    LOCATION="${PROFILE}/mounts/moose"
+    REMOTE_FOLDER="/volumes"
     WALLET_ENTRY="files"
 
     PWD=$(kwalletcli -f moosefs -e "${WALLET_ENTRY}")
