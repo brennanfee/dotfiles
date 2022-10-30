@@ -132,7 +132,7 @@ case "${SHARE_TO_MOUNT}" in
   volumes)
     LOCATION="${PROFILE}/mounts/moose"
     REMOTE_FOLDER="/volumes"
-    WALLET_ENTRY="files"
+    WALLET_ENTRY="volumes"
 
     PWD=$(kwalletcli -f moosefs -e "${WALLET_ENTRY}")
     if [[ -z "${PWD}" ]]
