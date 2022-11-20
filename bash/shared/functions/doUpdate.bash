@@ -37,6 +37,11 @@ function doUpdate() {
   then
     sudo snap refresh
   fi
+
+  if command_exists pipx
+  then
+    pipx upgrade-all
+  fi
 }
 
 alias doup=doUpdate
