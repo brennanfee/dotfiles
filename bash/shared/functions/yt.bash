@@ -44,13 +44,13 @@ function yt-helper() {
 
 function yt() {
   local output
-  output="$(xdg-user-dir VIDEOS)/%(title)s-%(id)s-[%(channel)s].%(ext)s"
+  output="$(xdg-user-dir VIDEOS)/%(title)s-%(id)s-[%(channel,channel_id,creator,uploader)s].%(ext)s"
   yt-helper "high" "${output}" "$@"
 }
 
 function pt() {
   local output
-  output="$(xdg-user-dir PICTURES)/!other/%(title)s-%(id)s-[%(channel)s].%(ext)s"
+  output="$(xdg-user-dir PICTURES)/!other/%(title)s-%(id)s-[%(channel,channel_id,creator,uploader)s].%(ext)s"
   yt-helper "low" "${output}" "$@"
 }
 
