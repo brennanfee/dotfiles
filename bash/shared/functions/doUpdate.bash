@@ -63,6 +63,9 @@ function doUpdate() {
     _write_msg "Updating plugins for asdf"
     asdf plugin update --all
   fi
+
+  # Record last update
+  date +"%Y-%m-%d %r" >> "${HOME}/.cache/updates.txt"
 }
 
 alias doup=doUpdate
