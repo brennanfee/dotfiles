@@ -65,7 +65,7 @@ function doUpdate() {
   fi
 
   # Record last update
-  date +"%Y-%m-%d %r" >> "${HOME}/.cache/updates.txt"
+  date +"%Y-%m-%d %r" >> "${HOME}/.cache/updates.log"
 }
 
 alias doup=doUpdate
