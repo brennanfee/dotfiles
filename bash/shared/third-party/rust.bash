@@ -17,5 +17,5 @@ if ! ${SOURCED}; then
 fi
 # END Bash scrict mode
 
-export RUSTUP_INIT_PATH_CHECK="yes"
+export RUSTUP_INIT_SKIP_PATH_CHECK="yes"
 
