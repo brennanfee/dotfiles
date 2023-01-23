@@ -41,6 +41,8 @@ check_root() {
 }
 
 main() {
+  check_root
+
   local the_hostname
   the_hostname=$(hostname -s)
   local output_file
