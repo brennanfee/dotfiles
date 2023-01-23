@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+# Author: Brennan Fee
+# License: MIT License
+#
+# This script collects information from the current machine using inxi.  By default it places the file in the working directory, but you can pass -S to "stamp" the machine placing the file in the home directory instead
+
+# Bash strict mode
+([[ -n ${ZSH_EVAL_CONTEXT:-} && ${ZSH_EVAL_CONTEXT:-} =~ :file$ ]] ||
+ [[ -n ${BASH_VERSION:-} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
+if ! ${SOURCED}
+then
+  set -o errexit # same as set -e
+  set -o nounset # same as set -u
+  set -o errtrace # same as set -E
+  set -o pipefail
+  set -o posix
+  #set -o xtrace # same as set -x, turn on for debugging
+
+  shopt -s inherit_errexit
+  shopt -s extdebug
+  IFS=$(printf '\n\t')
+fi
+# END Bash scrict mode
+
+VERSION="0.1 2023-01-23"
+
+check_root() {
+  local RESET
+  RESET=$(tput sgr0)
+  local RED
+  RED=$(tput setaf 1)
+
+  # Must be root
+  local USER_ID
+  USER_ID=$(id -u)
+  if [[ "${USER_ID}" -ne 0 ]]
+  then
+    echo -e "${RED}This script must be run as root.${RESET}"
+    exit 1
+  fi
+}
+
+main() {
+  local the_hostname
+  the_hostname=$(hostname -s)
+  local output_file
+  output_file="$(pwd)/${the_hostname}.txt"
+
+  if [[ "${1:-}" == "-S" ]]
+  then
+    local path="${HOME}"
+    if [[ "${PROFILEPATH:-}" != "" ]]
+    then
+      path=${PROFILEPATH}
+    fi
+
+    output_file="${path}/${the_hostname}.txt"
+  fi
+
+  rm -f "${output_file}"
+  inxi -Fdflmopux -c 0 > "${output_file}"
+}
+
+main "$@"
