@@ -1,0 +1,31 @@
+#!/usr/bin/env sh
+
+# POSIX strict mode (may produce issues in sourced scenarios)
+set -o errexit
+set -o nounset
+#set -o xtrace # same as set -x, turn on for debugging
+
+IFS=$(printf '\n\t')
+# END POSIX scrict mode
+
+# TODO: Split some off into a "dev" only installer with a command-line option to install those as well
+
+# Ansible
+pipx install --include-deps ansible
+pipx inject ansible cryptography
+pipx inject ansible paramiko
+
+# Others, simple installs
+pipx install ansible-lint
+pipx install black
+pipx install flake8
+pipx install --include-deps gitlint
+pipx install invoke
+pipx install molecule
+pipx install poetry
+pipx install proselint
+pipx install streamdeck-ui
+pipx install vim-vint
+pipx install yamllint
+pipx install youtube-dl
+pipx install yt-dlp
