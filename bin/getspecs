@@ -22,7 +22,7 @@ then
 fi
 # END Bash scrict mode
 
-VERSION="0.1 2023-01-23"
+VERSION="0.2 2023-01-28"
 
 check_root() {
   local RESET
@@ -40,27 +40,60 @@ check_root() {
   fi
 }
 
+to_system_file="false"
+
+read_options() {
+  local args
+  args=$(getopt --options s --long "system" -- "$@")
+
+  eval set --"${args}"
+
+  while true;
+  do
+    case "$1" in
+      -s|--system)
+        to_system_file="true"
+        shift;;
+      --)
+        break;;
+      *)
+        printf "Unknown option %s\n" "$1"
+        exit 2;;
+    esac
+  done
+}
+
 main() {
   check_root
+  read_options "$@"
 
+  local the_user_home
   local the_hostname
-  the_hostname=$(hostname -s)
   local output_file
+
+  the_user_home=$(grep "${SUDO_USER}" /etc/passwd | cut -d: -f 6)
+  the_hostname=$(hostname -s)
+
+  ## Default is to put in a file right in the directory the script was called from
   output_file="$(pwd)/${the_hostname}.txt"
 
-  if [[ "${1:-}" == "-S" ]]
+  if [[ "${to_system_file}" == true ]]
   then
-    local path="${HOME}"
+    local path="${the_user_home}"
     if [[ "${PROFILEPATH:-}" != "" ]]
     then
       path=${PROFILEPATH}
+    elif [[ -d "${the_user_home}/profile" ]]
+    then
+      path="${the_user_home}/profile"
     fi
 
     output_file="${path}/${the_hostname}.txt"
   fi
 
   rm -f "${output_file}"
-  inxi -Fdflmopux -c 0 > "${output_file}"
+  sudo inxi -Fdflmopux -c 0 | tee "${output_file}" 1> /dev/null
 }
 
 main "$@"
+
