@@ -24,7 +24,7 @@ pipx install invoke
 pipx install molecule
 pipx install poetry
 pipx install proselint
-pipx install streamdeck-ui
+#pipx install streamdeck-ui
 pipx install vim-vint
 pipx install yamllint
 pipx install youtube-dl
