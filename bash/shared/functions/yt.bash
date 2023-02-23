@@ -50,7 +50,7 @@ function yt() {
 
 function pt() {
   local output
-  output="$(xdg-user-dir PICTURES)/!other/%(title)s-%(id)s-[%(channel,channel_id,creator,uploader)s].%(ext)s"
+  output="$(xdg-user-dir PICTURES)/_other/%(title)s-%(id)s-[%(channel,channel_id,creator,uploader)s].%(ext)s"
   yt-helper "low" "${output}" "$@"
 }
 
