@@ -60,6 +60,8 @@ function doUpdate() {
 
   if command_exists asdf
   then
+    _write_msg "Updating asdf"
+    asdf update
     _write_msg "Updating plugins for asdf"
     asdf plugin update --all
   fi
