@@ -2,8 +2,8 @@
 local utils = require("functions")
 
 -- Python interpreter
-if utils.file_exists("~/.asdf/shims/python3") then
-  vim.cmd "let g:python3_host_prog = expand('~/.asdf/shims/python3')"
+if utils.file_exists("~/.local/share/asdf/shims/python") then
+  vim.cmd "let g:python3_host_prog = expand('~/.local/share/asdf/shims/python')"
 elseif utils.file_exists("/usr/bin/python3") then
   vim.cmd "let g:python3_host_prog = '/usr/bin/python3'"
 elseif utils.file_exists("/bin/python3") then
