@@ -22,13 +22,6 @@ nvim_tree.setup {
   respect_buf_cwd = true, -- 0 by default, will change cwd of nvim-tree to that of new buffer's when opening nvim-tree.
   disable_netrw = true,
   hijack_netrw = true,
-  open_on_setup = false,
-  -- will not open on setup if the filetype is in this list
-  ignore_ft_on_setup = {
-    "startify",
-    "dashboard",
-    "alpha",
-  },
   -- opens the tree when changing/opening a new tab if the tree wasn't previously opened
   open_on_tab = true,
   -- hijack the cursor in the tree to put it at the start of the filename
@@ -129,10 +122,8 @@ nvim_tree.setup {
   },
   view = {
     width = 30,
-    height = 30,
     hide_root_folder = false,
     side = "left",
-    auto_resize = true,
     mappings = {
       custom_only = false,
       list = {
