@@ -139,9 +139,9 @@ return packer.startup(function(use)
   use({
     "nvim-treesitter/nvim-treesitter",
     requires = {
-      { "nvim-treesitter/nvim-treesitter-refactor" },
-      { "nvim-treesitter/nvim-treesitter-textobjects" },
-      { "p00f/nvim-ts-rainbow" },
+      --{ "nvim-treesitter/nvim-treesitter-refactor" },
+      --{ "nvim-treesitter/nvim-treesitter-textobjects" },
+      --{ "p00f/nvim-ts-rainbow" },
     },
     config = get_config("treesitter"),
     run = ":TSUpdate",
