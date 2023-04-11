@@ -34,8 +34,14 @@ alias nvim-lazy="NVIM_APPNAME=nvim-LazyVim nvim"
 alias nvim-lunar="NVIM_APPNAME=nvim-LunarVim nvim"
 
 function nvims() {
-  items=("default" "blank" "AstroVim" "NvChad" "Kickstart" "LazyVim" "LunarVim")
-  config=$(printf "%s\n" "${items[@]}" | fzf --prompt=" Neovim Config  " --height=50 --layout=reverse --border --exit-0)
+  local items=("default" "old" "blank" "AstroVim" "NvChad" "Kickstart" "LazyVim" "LunarVim")
+
+  local config="${1:-}"
+  if [[ -z ${config} ]]
+  then
+    config=$(printf "%s\n" "${items[@]}" | fzf --prompt=" Neovim Config  " --height=50 --layout=reverse --border --exit-0)
+  fi
+
   if [[ -z ${config} ]]
   then
     echo "Nothing selected"
@@ -45,6 +51,31 @@ function nvims() {
     nvim "$@"
   else
     NVIM_APPNAME="nvim-${config}" nvim "$@"
+  fi
+}
+
+function wipe-nvim() {
+  items=("default" "old" "blank" "AstroVim" "NvChad" "Kickstart" "LazyVim" "LunarVim")
+
+  local config="${1:-}"
+  if [[ -z ${config} ]]
+  then
+    config=$(printf "%s\n" "${items[@]}" | fzf --prompt=" Neovim Config  " --height=50 --layout=reverse --border --exit-0)
+  fi
+
+  if [[ -z ${config} ]]
+  then
+    echo "Nothing selected"
+    return 0
+  elif [[ ${config} == "default" ]]
+  then
+    echo "Default cannot be wiped"
+    return 0
+  else
+    local folder="nvim-${config}"
+    rm -rf "${HOME}/.cache/${folder}"
+    rm -rf "${XDG_DATA_HOME}/${folder:?}"
+    rm -rf "${XDG_STATE_HOME}/${folder:?}"
   fi
 }
 
