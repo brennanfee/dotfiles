@@ -76,6 +76,8 @@ function wipe-nvim() {
     rm -rf "${HOME}/.cache/${folder}"
     rm -rf "${XDG_DATA_HOME}/${folder:?}"
     rm -rf "${XDG_STATE_HOME}/${folder:?}"
+
+    rm "${XDG_CONFIG_HOME}/${folder:?}/lazy-lock.json"
   fi
 }
 

@@ -3,13 +3,13 @@ local utils = require("functions")
 
 -- Python interpreter
 if utils.file_exists('${XDG_DATA_HOME}/asdf/shims/python') then
-  vim.cmd "let g:python3_host_prog = vim.fs.normalize('${XDG_DATA_HOME}/asdf/shims/python'))"
+  vim.g.python3_host_prog = vim.fs.normalize('${XDG_DATA_HOME}/asdf/shims/python')
 elseif utils.file_exists('~/.local/share/asdf/shims/python') then
-  vim.cmd "let g:python3_host_prog = vim.fs.normalize('~/.local/share/asdf/shims/python'))"
+  vim.g.python3_host_prog = vim.fs.normalize('~/.local/share/asdf/shims/python')
 elseif utils.file_exists("/usr/bin/python3") then
-  vim.cmd "let g:python3_host_prog = '/usr/bin/python3'"
+  vim.g.python3_host_prog = vim.fs.normalize('/usr/bin/python3')
 elseif utils.file_exists("/bin/python3") then
-  vim.cmd "let g:python3_host_prog = '/bin/python3'"
+  vim.g.python3_host_prog = vim.fs.normalize('/bin/python3')
 -- TODO: Add windows paths
 end
 
