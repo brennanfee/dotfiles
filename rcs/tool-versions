@@ -2,7 +2,7 @@ dotnet 7.0.202
 golang 1.20.3
 java adoptopenjdk-19.0.2+7
 kotlin 1.8.20
-neovim nightly
+neovim 0.9.0
 nodejs lts
 packer 1.8.6
 python 3.11.3
