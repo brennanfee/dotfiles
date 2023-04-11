@@ -25,6 +25,7 @@ then
 fi
 
 alias nvim-default="nvim"
+alias nvim-old="NVIM_APPNAME=nvim-old nvim"
 alias nvim-blank="NVIM_APPNAME=nvim-blank nvim"
 alias nvim-astro="NVIM_APPNAME=nvim-AstroVim nvim"
 alias nvim-chad="NVIM_APPNAME=nvim-NvChad nvim"
