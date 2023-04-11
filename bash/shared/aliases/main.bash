@@ -102,10 +102,14 @@ if command_exists io.neovim.vim; then
   alias nvim="io.neovim.vim"
 fi
 
+if command_exists fdfind; then
+  alias fd="fdfind"
+fi
+
 # If bat is installed, make it cat
-# if command_exists bat; then
-#   alias cat="bat"
-# fi
+if command_exists bat; then
+  alias cat="bat"
+fi
 
 if command_exists thefuck; then
   eval "$(thefuck --alias || true)"

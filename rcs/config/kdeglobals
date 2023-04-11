@@ -141,9 +141,9 @@ History Items[$e]=file:$HOME/profile/source/packer-linux
 
 [General]
 BrowserApplication=org.mozilla.firefox.desktop
-ColorSchemeHash=78952f1103f6f2c59b78c6ed5fa382c3f5ec18e7
+ColorSchemeHash=bcce7c1c6181c5e14e633cd8301e7a9036b67ac6
 Name=Breeze Dark
-fixed=JetBrains Mono,12,-1,5,50,0,0,0,0,0
+fixed=JetBrainsMono Nerd Font Mono,12,-1,5,50,0,0,0,0,0
 font=Noto Sans,12,-1,5,50,0,0,0,0,0
 menuFont=Noto Sans,12,-1,5,50,0,0,0,0,0
 shadeSortColumn=true

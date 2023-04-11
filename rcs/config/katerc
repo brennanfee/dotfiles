@@ -140,6 +140,9 @@ Word Completion=false
 Word Completion Minimal Word Length=3
 Word Completion Remove Tail=true
 
+[KTextEditor::Search]
+Search History=user_opts
+
 [Konsole]
 AutoSyncronize=true
 KonsoleEscKeyBehaviour=true
@@ -149,9 +152,9 @@ RunPrefix=
 SetEditor=false
 
 [MainWindow]
-DisplayPort-0 Height 3840x1080=954
+DisplayPort-0 Height 3840x1080=976
 DisplayPort-0 Height 3840x1080 DisplayPort-0=917
-DisplayPort-0 Width 3840x1080=1506
+DisplayPort-0 Width 3840x1080=1526
 DisplayPort-0 Width 3840x1080 DisplayPort-0=1499
 
 [UiSettings]
