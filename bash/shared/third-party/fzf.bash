@@ -18,6 +18,7 @@ if ! ${SOURCED}; then
 fi
 # END Bash scrict mode
 
+source_if "/usr/share/bash-completion/completions/fzf"
 source_if "/usr/share/doc/fzf/examples/key-bindings.bash"
 
 export FZF_DEFAULT_OPTS="--height 40% --layout=reverse --border --bind='ctrl-space:toggle'"
