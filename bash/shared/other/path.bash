@@ -38,16 +38,18 @@ if command_exists ruby && command_exists gem; then
 fi
 
 # Rust
-asdf_path="${ASDF_DATA_DIR:-${HOME}/.asdf}"
-if [[ -d "${asdf_path}/installs/rust/stable/bin" ]]; then
-  path_prepend "${asdf_path}/installs/rust/stable/bin"
+if [[ -d "${CARGO_INSTALL_ROOT}/bin" ]]
+then
+  path_prepend "${CARGO_INSTALL_ROOT}/bin"
 fi
 
 # Flatpak
+#    Global packages
 if [[ -d "/var/lib/flatpak/exports/bin" ]]; then
-  path_append "/var/lib/flatpak/exorts/bin"
+  path_append "/var/lib/flatpak/exports/bin"
 fi
 
+#    User packages
 flatpak_bin="$(xdg-base-dir DATA)/flatpak/exports/bin"
 if [[ -d ${flatpak_bin} ]]; then
   path_append "${flatpak_bin}"
@@ -64,5 +66,4 @@ path_prepend "${HOME}/.bin"
 # WSL (Windows)
 [[ -d "${WIN_HOME:-${HOME}}/winfiles/bin" ]] && path_append "${WIN_HOME:-${HOME}}/winfiles/bin"
 
-unset asdf_path
 unset flatpak_bin

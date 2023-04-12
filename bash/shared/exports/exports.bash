@@ -27,10 +27,9 @@ fi
 # Set languages
 export LANG="en_US.UTF-8"
 export LANGUAGE="en_US:en"
-export LC_ALL="en_US.UTF-8"
 
 # Timezone
-export TZ="US/Central"
+export TZ="America/Chicago"
 
 # Set terminal
 export TERM=screen-256color
@@ -54,3 +53,7 @@ export INPUTRC
 # gnupg
 GNUPGHOME="$(xdg-base-dir DATA)/gnupg"
 export GNUPGHOME
+
+# Cargo installation location
+CARGO_INSTALL_ROOT="$(xdg-base-dir DATA)/cargo"
+export CARGO_INSTALL_ROOT
