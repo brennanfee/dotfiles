@@ -18,3 +18,5 @@ tldr
 joplin
 wsl-open
 markuplint
+@commitlint/cli
+@commitlint/config-conventional
