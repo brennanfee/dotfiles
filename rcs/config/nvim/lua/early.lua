@@ -33,10 +33,10 @@ elseif utils.file_exists("/usr/bin/neovim-node-host") then
 -- TODO: Add windows paths
 end
 
--- Load impatient if it is available
---local status_ok, impatient = pcall(require, "impatient")
---if not status_ok then
---  return
---end
+-- Turn off the perl provider, we'll never use it
+vim.g.loaded_perl_provider = 0
 
---impatient.enable_profile()
+-- Set <space> as the leader key
+-- NOTE: This must be done before plugins or other mappings are required (otherwise the wrong leader will be used)
+vim.g.mapleader = ' '
+vim.g.maplocalleader = ' '

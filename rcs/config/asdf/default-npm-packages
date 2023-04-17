@@ -1,9 +1,9 @@
 neovim
 prettier
 @prettier/plugin-xml
+@prettier/plugin-php
 prettier-plugin-package
 prettier-plugin-toml
-prettier-plugin-sh
 stylelint
 stylelint-prettier
 stylelint-config-prettier
@@ -13,8 +13,8 @@ eslint-plugin-prettier
 htmlhint
 jsonlint
 aws-cdk
-typescript-language-server
 typescript
 tldr
 joplin
 wsl-open
+markuplint
