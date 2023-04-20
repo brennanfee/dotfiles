@@ -32,7 +32,7 @@ export LANGUAGE="en_US:en"
 export TZ="America/Chicago"
 
 # Set terminal
-export TERM=screen-256color
+export TERM=tmux-256color
 
 # Turn on colors
 export CLICOLOR=1
