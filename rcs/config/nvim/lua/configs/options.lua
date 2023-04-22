@@ -48,13 +48,11 @@ o.updatetime = 250 -- faster completion
 vim.g.cursorhold_updatetime = 300 -- faster completion
 
 -- Line numbers
--- if vim.api.nvim_buf_get_option(vim.api.nvim_get_current_buf(), "modifiable")
--- then
---   o.number = utils.safeRead(settings.number, true)
---   o.relativenumber = utils.safeRead(settings.relative_number, false)
--- end
-vim.wo.number = utils.safeRead(settings.number, true)
-vim.wo.relativenumber = utils.safeRead(settings.relative_number, false)
+if vim.api.nvim_buf_get_option(vim.api.nvim_get_current_buf(), "modifiable")
+then
+  o.number = utils.safeRead(settings.number, true)
+  o.relativenumber = utils.safeRead(settings.relative_number, false)
+end
 
 o.expandtab = true -- Use spaces instead of tabs
 o.shiftwidth = 2 -- the number of spaces inserted for each indentation
@@ -148,7 +146,7 @@ o.whichwrap:append "<,>,[,]" -- Wrap movement between lines in edit mode with ar
 o.iskeyword:append "-" -- Add dash to the match keywords
 
 -- GUI settings
--- Block cursor in nomral modes, vertical bean in insert modes
+-- Block cursor in nomral modes, vertical beam in insert modes
 --o.guicursor = "n-v-c-sm:block-blinkwait50-blinkon50-blinkoff50,i-ci-ve:ver25-Cursor-blinkon100-blinkoff100,r-cr-o:hor20"
 
 --o.guifont = "monospace:h17" -- the font used in graphical neovim applications

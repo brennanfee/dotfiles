@@ -6,10 +6,10 @@ require('nvim-treesitter.configs').setup {
     "bash", "bibtex", "c", "c_sharp", "cmake", "comment", "cooklang", "cpp", "css",
     "diff", "dockerfile", "git_rebase", "gitattributes", "gitcommit",
     "gitignore", "go", "graphql", "html", "ini", "java", "javascript", "jq",
-    "jsdoc", "json5", "jsonc", "kotlin", "latex", "ledger", "lua", "luadoc", "make",
-    "markdown", "mermaid", "pascal", "perl", "php", "phpdoc", "python", "regex", "ruby",
-    "rust", "scss", "sql", "svelte", "terraform", "todotxt", "toml", "tsx",
-    "typescript", "vim", "vimdoc", "vue", "yaml"
+    "jsdoc", "json", "json5", "jsonc", "kotlin", "latex", "ledger", "lua", "luadoc",
+    "luap", "make", "markdown", "markdown_inline", "mermaid", "pascal", "perl", "php",
+    "phpdoc", "python", "query", "regex", "ruby", "rust", "scss", "sql", "svelte",
+    "terraform", "todotxt", "toml", "tsx", "typescript", "vim", "vimdoc", "vue", "yaml"
   },
 
   auto_install = true,

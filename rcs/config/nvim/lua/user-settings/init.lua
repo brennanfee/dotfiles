@@ -7,7 +7,8 @@ userSettings.themeMethod = "plugin"
 -- theme options: onedark, darkplus, onedarker, plus any built-in theme
 userSettings.theme = "onedark"
 -- theme variant, if the theme supports variants
-userSettings.themeVariant = "darker"
+--userSettings.themeVariant = "darker"
+userSettings.themeVariant = "dark"
 -- theme for the line bar at bottom (lualine or other plugin)
 userSettings.lineTheme = "onedark"
 

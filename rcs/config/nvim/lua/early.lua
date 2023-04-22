@@ -36,6 +36,9 @@ end
 -- Turn off the perl provider, we'll never use it
 vim.g.loaded_perl_provider = 0
 
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+
 -- Set <space> as the leader key
 -- NOTE: This must be done before plugins or other mappings are required (otherwise the wrong leader will be used)
 vim.g.mapleader = ' '

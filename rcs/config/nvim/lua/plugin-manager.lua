@@ -1,6 +1,18 @@
 -- Install and initialize plugin manager
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
+  vim.api.nvim_echo({
+    {
+      "This is the initial run of Neovim, please wait while plugins load and the close and restart neovim.\n",
+      "MoreMsg"
+    },
+    {
+      "Press any key to continue",
+      "MoreMsg"
+    },
+  }, true, {})
+  vim.fn.getchar()
+
   vim.fn.system({
     "git",
     "clone",
@@ -14,8 +26,18 @@ vim.opt.rtp:prepend(lazypath)
 
 -- Now the plugins
 require("lazy").setup({
-  { import = "plugins" },
-}, {
+  spec = {
+    { import = "plugins" },
+  },
+  checker = { enabled = true }, -- automatically check for plugin updates
+  ui = {
+    icons = {
+      ft = "",
+      lazy = "鈴 ",
+      loaded = "",
+      not_loaded = "",
+    },
+  },
   performance = {
     rtp = {
       --disable some rtp plugins
