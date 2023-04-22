@@ -11,8 +11,8 @@ k.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 
 ------ Normal Mode Mappings ------
 -- Remap for dealing with line wrap
-k.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
-k.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
+k.set({ 'n', 'x' }, 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
+k.set({ 'n', 'x' }, 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
 
 -- Diagnostic keymaps
 k.set('n', '[d', vim.diagnostic.goto_prev, { desc = "Go to previous diagnostic message" })
@@ -41,12 +41,14 @@ k.set("n", "<C-S-l>", ":vertical resize +2<CR>", opts)
 -- Navigate buffers
 k.set("n", "<S-l>", ":bnext<CR>", opts)
 k.set("n", "<S-h>", ":bprevious<CR>", opts)
-k.set("n", "gt", ":bnext<CR>", opts)
-k.set("n", "gT", ":bprevious<CR>", opts)
+--k.set("n", "gt", ":bnext<CR>", opts)
+--k.set("n", "gT", ":bprevious<CR>", opts)
+k.set("n", "gt", "<cmd> BufferLineCycleNext <CR>", opts)
+k.set("n", "gT", "<cmd> BufferLineCyclePrev <CR>", opts)
 k.set("n", "gx", ":lua require('mini.bufremove').delete()<CR>", opts)
 -- Alternates
-k.set("n", "gn", ":bnext<CR>", opts)
-k.set("n", "gN", ":bprevious<CR>", opts)
+k.set("n", "gn", "<cmd> BufferLineCycleNext <CR>", opts)
+k.set("n", "gN", "<cmd> BufferLineCyclePrev <CR>", opts)
 
 -- Move text up and down
 k.set("n", "<A-j>", "<Esc>:m .+1<CR>==gi", opts)

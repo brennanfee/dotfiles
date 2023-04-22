@@ -53,6 +53,7 @@ then
   o.number = utils.safeRead(settings.number, true)
   o.relativenumber = utils.safeRead(settings.relative_number, false)
 end
+o.ruler = false
 
 o.expandtab = true -- Use spaces instead of tabs
 o.shiftwidth = 2 -- the number of spaces inserted for each indentation
@@ -144,6 +145,10 @@ o.wildignore = [[
 
 o.whichwrap:append "<,>,[,]" -- Wrap movement between lines in edit mode with arrows
 o.iskeyword:append "-" -- Add dash to the match keywords
+
+-- add binaries installed by mason.nvim to path
+local is_windows = vim.loop.os_uname().sysname == "Windows_NT"
+vim.env.PATH = vim.env.PATH .. (is_windows and ";" or ":") .. vim.fn.stdpath "data" .. "/mason/bin"
 
 -- GUI settings
 -- Block cursor in nomral modes, vertical beam in insert modes

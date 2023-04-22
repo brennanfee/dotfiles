@@ -2,8 +2,8 @@
 
 return {
   {
-    'echasnovski/mini.nvim',
-    branch = 'stable',
+    'echasnovski/mini.bufremove',
+    verson = '*', -- stable
     config = function()
       --require('mini.surround').setup({})
       require('mini.bufremove').setup({})

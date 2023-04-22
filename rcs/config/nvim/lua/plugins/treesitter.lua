@@ -8,5 +8,6 @@ return {
       'nvim-treesitter/nvim-treesitter-refactor',
     },
     build = ":TSUpdate",
+    event = { "BufReadPre", "BufNewFile" },
   },
 }
