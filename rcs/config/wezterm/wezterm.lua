@@ -4,12 +4,13 @@ local wezterm = require("wezterm")
 local config = {}
 
 -- Appearance
-config.font = wezterm.font_with_fallback {
+config.font = wezterm.font_with_fallback({
   "JetBrains Mono",
-  "Nerd Font Symbols"
-}
+  { family="Symbols Nerd Font Mono", scale = 0.75 },
+  "Noto Color Emoji",
+})
 config.font_size = 16.0
-config.color_scheme = "One Dark (Gogh)"
+config.color_scheme = "OneHalfDark"
 config.window_background_opacity = 1.0
 
 -- Initial state
