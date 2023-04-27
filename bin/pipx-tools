@@ -14,6 +14,13 @@ IFS=$(printf '\n\t')
 pipx install --include-deps ansible
 pipx inject ansible cryptography
 pipx inject ansible paramiko
+pipx inject ansible dnspython
+
+# Molecule
+pipx install molecule
+pipx inject molecule molecule-plugins
+pipx inject molecule molecule-plugins[docker]
+pipx inject molecule docker
 
 # Others, simple installs
 pipx install ansible-lint
@@ -21,7 +28,6 @@ pipx install black
 pipx install flake8
 pipx install --include-deps gitlint
 pipx install invoke
-pipx install molecule
 pipx install poetry
 pipx install proselint
 #pipx install streamdeck-ui
