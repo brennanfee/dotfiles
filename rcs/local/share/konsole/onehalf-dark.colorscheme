@@ -5,7 +5,7 @@ Color=40,44,52
 Color=40,44,52
 
 [BackgroundIntense]
-Color=52,57,68
+Color=40,44,52
 
 [Color0]
 Color=40,44,52
@@ -14,7 +14,7 @@ Color=40,44,52
 Color=40,44,52
 
 [Color0Intense]
-Color=52,57,68
+Color=40,44,52
 
 [Color1]
 Color=224,108,117
@@ -89,8 +89,11 @@ Color=220,223,228
 Color=220,223,228
 
 [General]
+Anchor=0.5,0.5
 Blur=false
 ColorRandomization=false
 Description=OneHalf Dark
+FillStyle=Tile
 Opacity=1
 Wallpaper=
+WallpaperOpacity=1
