@@ -84,6 +84,9 @@ k.set("x", "K", ":move '<-2<CR>gv-gv", opts)
 k.set("x", "<A-j>", ":move '>+1<CR>gv-gv", opts)
 k.set("x", "<A-k>", ":move '<-2<CR>gv-gv", opts)
 
+--TODO: Move to plugin config
+k.set("n", "<leader>n", ":NvimTreeToggle <CR>", opts)
+
 ------ Terminal Mode Mappings ------
 -- Better terminal navigation
 -- k.set("t", "<C-h>", "<C-\\><C-N><C-w>h", term_opts)
