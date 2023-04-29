@@ -17,6 +17,8 @@ typescript
 tldr
 joplin
 wsl-open
+tree-sitter-cli
 markuplint
 @commitlint/cli
 @commitlint/config-conventional
+
