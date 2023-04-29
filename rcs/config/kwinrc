@@ -19,6 +19,9 @@ LatitudeAuto=30.4548
 LongitudeAuto=-97.7664
 NightTemperature=2600
 
+[Plugins]
+kwin4_effect_translucencyEnabled=true
+
 [TabBox]
 DesktopLayout=org.kde.breeze.desktop
 DesktopListLayout=org.kde.breeze.desktop

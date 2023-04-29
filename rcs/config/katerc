@@ -141,7 +141,7 @@ Word Completion Minimal Word Length=3
 Word Completion Remove Tail=true
 
 [KTextEditor::Search]
-Search History=user_opts
+Search History=dnspython,gY,user_opts
 
 [Konsole]
 AutoSyncronize=true

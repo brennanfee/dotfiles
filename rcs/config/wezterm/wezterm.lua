@@ -10,9 +10,12 @@ config.font = wezterm.font_with_fallback({
   "Noto Color Emoji",
 })
 config.font_size = 16.0
+config.adjust_window_size_when_changing_font_size = false
 config.freetype_load_target = 'Light'
+
 config.color_scheme = "OneHalfDark"
 config.window_background_opacity = 1.0
+config.window_decorations = "RESIZE"
 
 -- Initial state
 config.initial_rows = 30
