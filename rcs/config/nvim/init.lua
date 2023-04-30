@@ -1,6 +1,17 @@
 -- Early settings (must be loaded before everything else)
-require("early")
--- Plugin management, plugins, and plugin settings should be first
-require("plugin-manager")
--- Now all the configs
-require("configs")
+require("core.early")
+
+-- Bootstrap lazy.nvim if needed
+local lazypath = vim.fn.stdpath "data" .. "/lazy/lazy.nvim"
+
+if not vim.loop.fs_stat(lazypath) then
+  require("core.bootstrap").lazy(lazypath)
+end
+
+vim.opt.rtp:prepend(lazypath)
+
+-- Load the plugins
+require ("plugins")
+
+-- Now all the my settings
+require("settings")
