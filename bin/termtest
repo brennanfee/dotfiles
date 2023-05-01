@@ -1,8 +1,9 @@
 #/bin/bash
 
-echo -e "\033[0mNormal\033[0m"
-echo -e "\033[2mDark\033[0m"
-echo -e "\033[1mBold\033[0m"
+echo -e "\033[0mNormal\033[0m  \033[0;33mNormal Yellow\033[0m"
+echo -e "\033[2mDark\033[0m    \033[2;33mDark Yellow\033[0m"
+echo -e "\033[1mBold\033[0m    \033[1;33mBold Yellow\033[0m"
+echo -e "\033[0;97mHigh Itensity\033[0m    \033[0;93mHigh Intensity Yellow\033[0m"
 echo -e "\033[3mItalic\033[0m"
 echo -e "\033[3;1mBold Italic\033[0m"
 echo -e "\033[1;3mBold Italic Alt\033[0m"
