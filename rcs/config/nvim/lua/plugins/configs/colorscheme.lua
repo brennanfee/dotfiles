@@ -4,6 +4,27 @@ local settings = require("core/user-settings")
 
 return {
   {
+    "olimorris/onedarkpro.nvim",
+    lazy = false,
+    priority = 1000,
+    config = function()
+      if utils.safeRead(settings.themeMethod, "builtin") == "plugin"
+        and utils.safeRead(settings.theme, "default") == "onedarkpro"
+      then
+        require('onedarkpro').setup({
+          styles = {
+            comments = "italic",
+            keywords = "bold,italic",
+            constants = "underline",
+          },
+        })
+
+        vim.cmd("colorscheme " .. utils.safeRead(settings.themeVariant, "onedark"))
+        --require('onedarkpro').load()
+      end
+    end,
+  },
+  {
     "navarasu/onedark.nvim",
     lazy = false,
     priority = 1000,

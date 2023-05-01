@@ -5,10 +5,10 @@ local userSettings = {}
 -- theme method: builtin or plugin
 userSettings.themeMethod = "plugin"
 -- theme options: onedark, darkplus, onedarker, plus any built-in theme
-userSettings.theme = "onedark"
+userSettings.theme = "onedarkpro"
 -- theme variant, if the theme supports variants
 --userSettings.themeVariant = "darker"
-userSettings.themeVariant = "darker"
+userSettings.themeVariant = "onedark"
 -- theme for the line bar at bottom (lualine or other plugin)
 userSettings.lineTheme = "onedark"
 

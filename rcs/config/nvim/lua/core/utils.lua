@@ -55,9 +55,13 @@ M.lazy_load = function(plugin)
 end
 
 M.theme_colors = function()
-  if M.safeRead(settings.theme, "default") == "onedark"
+  local theme = M.safeRead(settings.theme, "default")
+  if theme == "onedark"
   then
     themeColors = require("onedark.colors")
+  elseif theme == "onedarkpro"
+  then
+    themeColors = require("onedarkpro.helpers").get_colors()
   else
     themeColors = {
       black = "#0e1013",

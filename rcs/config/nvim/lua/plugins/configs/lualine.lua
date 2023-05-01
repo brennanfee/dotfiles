@@ -11,7 +11,7 @@ return {
     opts = {
       options = {
         icons_enabled = true,
-        theme = utils.safeRead(settings.lineTheme, "default"),
+--        theme = utils.safeRead(settings.lineTheme, "default"),
         component_separators = '|',
         section_separators = '',
       },
