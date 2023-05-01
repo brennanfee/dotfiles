@@ -6,8 +6,8 @@ local config = {}
 -- Appearance
 config.font = wezterm.font_with_fallback({
   { family="JetBrains Mono", weight="Regular" },
-  { family="Symbols Nerd Font", scale = 0.75 },
-  "Noto Color Emoji",
+  { family="Symbols Nerd Font" },
+  { family="Noto Color Emoji" },
 })
 config.font_size = 16.0
 config.adjust_window_size_when_changing_font_size = false
@@ -38,8 +38,8 @@ config.font_rules = {
     italic = false,
     font = wezterm.font_with_fallback({
       { family="JetBrains Mono", weight="ExtraBold", italic=false },
-      { family="Symbols Nerd Font", scale = 0.75 },
-      "Noto Color Emoji",
+      { family="Symbols Nerd Font" },
+      { family="Noto Color Emoji" },
     }),
   },
   {
@@ -47,8 +47,8 @@ config.font_rules = {
     italic = true,
     font = wezterm.font_with_fallback({
       { family="JetBrains Mono", weight="ExtraBold", italic=true },
-      { family="Symbols Nerd Font", scale = 0.75 },
-      "Noto Color Emoji",
+      { family="Symbols Nerd Font" },
+      { family="Noto Color Emoji" },
     }),
   },
   {
@@ -56,8 +56,8 @@ config.font_rules = {
     italic = false,
     font = wezterm.font_with_fallback({
       { family="JetBrains Mono", weight="Thin", italic=false },
-      { family="Symbols Nerd Font", scale = 0.75 },
-      "Noto Color Emoji",
+      { family="Symbols Nerd Font" },
+      { family="Noto Color Emoji" },
     }),
   },
   {
@@ -65,8 +65,8 @@ config.font_rules = {
     italic = true,
     font = wezterm.font_with_fallback({
       { family="JetBrains Mono", weight="Thin", italic=true },
-      { family="Symbols Nerd Font", scale = 0.75 },
-      "Noto Color Emoji",
+      { family="Symbols Nerd Font" },
+      { family="Noto Color Emoji" },
     }),
   },
 }
