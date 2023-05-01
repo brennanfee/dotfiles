@@ -5,7 +5,7 @@ local config = {}
 
 -- Appearance
 config.font = wezterm.font_with_fallback({
-  { family="JetBrains Mono", weight="Regular" },
+  { family="JetBrains Mono", weight="Regular", assume_emoji_presentation = false },
   { family="Symbols Nerd Font" },
   { family="Noto Color Emoji" },
 })
@@ -18,19 +18,7 @@ config.window_background_opacity = 1.0
 config.window_decorations = "RESIZE"
 
 config.bold_brightens_ansi_colors = "No"
-
-config.colors = {
-  brights = {
-    '#282c34',
-    '#e06c75',
-    '#98c379',
-    '#ff0000',
-    '#61afef',
-    '#c678dd',
-    '#56b6c2',
-    '#dcdfe4',
-  },
-}
+config.use_cap_height_to_scale_fallback_fonts = true
 
 config.font_rules = {
   {
