@@ -63,11 +63,43 @@ config.font_rules = {
 }
 
 -- Color Scheme And Appearance
-config.color_scheme = "OneHalfDark"
+config.color_scheme = "OneDarkPro"
 config.window_background_opacity = 1.0
 config.window_decorations = "RESIZE"
 config.force_reverse_video_cursor = true
 config.window_padding = { left = 10, right = 10, top = 10, bottom = 5 }
+
+config.color_schemes = {
+  ["OneDarkPro"] = {
+    ansi = {
+      "#282c34", -- black
+      "#e06c75", -- red
+      "#98c379", -- green (lime)
+      "#e5c07b", -- yellow
+      "#61afef", -- blue
+      "#c678dd", -- purple
+      "#56b6c2", -- cyan (aqua)
+      "#abb2bf", -- white
+    },
+    brights = {
+      "#5c6370", -- black (grey)
+      "#e06c75", -- red (maroon)
+      "#98c379", -- green (olive)
+      "#d19a66", -- yellow (orange)
+      "#61afef", -- blue (navy)
+      "#c678dd", -- purple (magenta\fuchsia)
+      "#56b6c2", -- cyan (teal)
+      "#abb2bf", -- white (silver)
+    },
+    foreground = "#abb2bf",
+    background = "#282c34",
+    cursor_fg = '#abb2bf',
+    cursor_bg = '#a3b3cc',
+    cursor_border = '#a3b3cc',
+    selection_fg = "#abb2bf",
+    selection_bg = "#414858",
+  },
+}
 
 -- Bell
 config.audible_bell = "Disabled"
