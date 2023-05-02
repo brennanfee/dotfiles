@@ -1,6 +1,6 @@
 [Appearance]
 BoldIntense=true
-ColorScheme=onehalf-dark
+ColorScheme=onedarkpro
 Font=JetBrainsMono Nerd Font,16,-1,5,50,0,0,0,0,0
 UseFontLineChararacters=true
 

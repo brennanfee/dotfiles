@@ -89,11 +89,11 @@ config.color_schemes = {
       "#61afef", -- blue (navy)
       "#c678dd", -- purple (magenta\fuchsia)
       "#56b6c2", -- cyan (teal)
-      "#abb2bf", -- white (silver)
+      "#dcdfe4", -- white (silver)
     },
     foreground = "#abb2bf",
     background = "#282c34",
-    cursor_fg = '#abb2bf',
+    cursor_fg = '#dcdfe4',
     cursor_bg = '#a3b3cc',
     cursor_border = '#a3b3cc',
     selection_fg = "#abb2bf",
