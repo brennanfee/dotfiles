@@ -1,10 +1,10 @@
 ---
 $schema: https://raw.githubusercontent.com/streetsidesoftware/cspell/main/cspell.schema.json
-version: '0.2'
+version: "0.2"
 language: "en"
 allowCompoundWords: true
 ignorePaths:
-  - 'node_modules/**'
+  - "node_modules/**"
 flagWords:
   - hte
 words:

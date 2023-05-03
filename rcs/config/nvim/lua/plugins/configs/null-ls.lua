@@ -38,7 +38,7 @@ return {
           "prettier",
           "rubocop",
           "rustfmt",
-          "shfmt",
+--          "shfmt",
           "sqlfmt",
           "stylua",
         },
@@ -109,7 +109,7 @@ return {
           null_ls.builtins.formatting.prettier,
           null_ls.builtins.formatting.rubocop,
           null_ls.builtins.formatting.rustfmt,
-          null_ls.builtins.formatting.shfmt,
+--          null_ls.builtins.formatting.shfmt,
           null_ls.builtins.formatting.sqlfluff.with({
             -- change to your dialect
             -- others: athena, mysql, oracle, postgres, redshift, sqlite, tsql
