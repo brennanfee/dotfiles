@@ -99,6 +99,65 @@ config.color_schemes = {
     selection_fg = "#abb2bf",
     selection_bg = "#414858",
   },
+
+["OneDarkProVivid"] = {
+    ansi = {
+      "#282c34", -- black
+      "#ef596f", -- red
+      "#89ca78", -- green (lime)
+      "#e5c07b", -- yellow
+      "#61afef", -- blue
+      "#d55fde", -- purple
+      "#2bbac5", -- cyan (aqua)
+      "#abb2bf", -- white
+    },
+    brights = {
+      "#5c6370", -- black (grey)
+      "#e06c75", -- red (maroon)
+      "#98c379", -- green (olive)
+      "#d19a66", -- yellow (orange)
+      "#61afef", -- blue (navy)
+      "#c678dd", -- purple (magenta\fuchsia)
+      "#56b6c2", -- cyan (teal)
+      "#dcdfe4", -- white (silver)
+    },
+    foreground = "#abb2bf",
+    background = "#282c34",
+    cursor_fg = '#dcdfe4',
+    cursor_bg = '#a3b3cc',
+    cursor_border = '#a3b3cc',
+    selection_fg = "#abb2bf",
+    selection_bg = "#3a404c",
+  },
+  ["OneDarkProLight"] = {
+    ansi = {
+      "#000000", -- black
+      "#ef596f", -- red
+      "#89ca78", -- green (lime)
+      "#e5c07b", -- yellow
+      "#118dc3", -- blue
+      "#d55fde", -- purple
+      "#2bbac5", -- cyan (aqua)
+      "#abb2bf", -- white
+    },
+    brights = {
+      "#434852", -- black (grey)
+      "#ef596f", -- red (maroon)
+      "#89ca78", -- green (olive)
+      "#d19a66", -- yellow (orange)
+      "#118dc3", -- blue (navy)
+      "#d55fde", -- purple (magenta\fuchsia)
+      "#2bbac5", -- cyan (teal)
+      "#fafafa", -- white (silver)
+    },
+    foreground = "#abb2bf",
+    background = "#fafafa",
+    cursor_fg = '#dcdfe4',
+    cursor_bg = '#a3b3cc',
+    cursor_border = '#a3b3cc',
+    selection_fg = "#212121",
+    selection_bg = "#abb2bf",
+  },
 }
 
 -- Bell
