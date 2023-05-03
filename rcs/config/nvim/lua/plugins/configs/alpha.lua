@@ -15,7 +15,6 @@ return {
         "    ██   ████   ████   ██ ██      ██",
       }
       dashboard.section.buttons.val = {
-        -- TODO: Redo
         dashboard.button("f", "  Find file", ":Telescope find_files <CR>"),
         dashboard.button("e", "  New file", ":ene <BAR> startinsert <CR>"),
         dashboard.button("p", "  Find project", ":Telescope projects <CR>"),
