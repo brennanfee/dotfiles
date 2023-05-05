@@ -1,5 +1,30 @@
 #!/usr/bin/env bash
 
-mkdir -p ~/.cache/vim
-mkdir -p ~/.cache/zsh
+# Paths for scratch files
+mkdir -p "${XDG_CACHE_HOME:-$HOME/.cache}/vim"
+mkdir -p "${XDG_CACHE_HOME:-$HOME/.cache}/zsh"
 
+# Profile directories
+THE_PROFILE_DIR="${HOME}/profile"
+mkdir -p "${THE_PROFILE_DIR}/cloud"
+mkdir -p "${THE_PROFILE_DIR}/documents"
+mkdir -p "${THE_PROFILE_DIR}/downloads"
+mkdir -p "${THE_PROFILE_DIR}/installs"
+mkdir -p "${THE_PROFILE_DIR}/mounts"
+mkdir -p "${THE_PROFILE_DIR}/music"
+mkdir -p "${THE_PROFILE_DIR}/pictures"
+mkdir -p "${THE_PROFILE_DIR}/source/github"
+mkdir -p "${THE_PROFILE_DIR}/templates"
+mkdir -p "${THE_PROFILE_DIR}/videos"
+mkdir -p "${THE_PROFILE_DIR}/vms"
+
+rm -rf "${HOME}/Documents"
+rm -rf "${HOME}/Music"
+rm -rf "${HOME}/Pictures"
+rm -rf "${HOME}/Templates"
+rm -rf "${HOME}/Videos"
+
+if [[ ! (-L "${HOME}/Downloads" && -d "${HOME}/Downloads") ]]; then
+  rm -rf "${HOME}/Downloads"
+  ln -s "${THE_PROFILE_DIR}/downloads" "${HOME}/Downloads"
+fi
