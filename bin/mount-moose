@@ -6,11 +6,10 @@
 
 # Bash strict mode
 ([[ -n ${ZSH_EVAL_CONTEXT:-} && ${ZSH_EVAL_CONTEXT:-} =~ :file$ ]] ||
- [[ -n ${BASH_VERSION:-} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
-if ! ${SOURCED}
-then
-  set -o errexit # same as set -e
-  set -o nounset # same as set -u
+  [[ -n ${BASH_VERSION:-} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
+if ! ${SOURCED}; then
+  set -o errexit  # same as set -e
+  set -o nounset  # same as set -u
   set -o errtrace # same as set -E
   set -o pipefail
   set -o posix
@@ -20,7 +19,7 @@ then
   shopt -s extdebug
   IFS=$(printf '\n\t')
 fi
-# END Bash scrict mode
+# END Bash strict mode
 
 VERSION="0.5 2022-10-30"
 
@@ -37,9 +36,9 @@ show_help() {
   echo "    'mount-moose -?'  Show this help"
   echo "    'mount-moose <share name>'  The share to mount, options are:"
   echo "        files, backups, volumes, metadata, files-ro"
-#  echo ""
-#  echo "Can optional pass an override to the mount location: "
-#  echo "    'mount-moose <share name> <mount location>"
+  #  echo ""
+  #  echo "Can optional pass an override to the mount location: "
+  #  echo "    'mount-moose <share name> <mount location>"
   echo ""
   exit 0
 }
@@ -55,21 +54,17 @@ error_msg() {
 
 ### Parse and handle input
 COMMAND_INPUT=${1:-}
-if [[ -z ${COMMAND_INPUT} ]]
-then
+if [[ -z ${COMMAND_INPUT} ]]; then
   show_help
-elif [[ ${COMMAND_INPUT} = "-?" ]]
-then
+elif [[ ${COMMAND_INPUT} = "-?" ]]; then
   show_help
 fi
 
 OPTION_INPUT=${2:-}
 FORCE=0
-if [[ ${OPTION_INPUT} = "-f" ]]
-then
+if [[ ${OPTION_INPUT} = "-f" ]]; then
   FORCE=1
-elif [[ ${OPTION_INPUT} = "--force" ]]
-then
+elif [[ ${OPTION_INPUT} = "--force" ]]; then
   FORCE=1
 fi
 
@@ -77,8 +72,7 @@ fi
 SHARE_TO_MOUNT=$(echo "${COMMAND_INPUT}" | tr "[:upper:]" "[:lower:]")
 
 PROFILE=${PROFILEPATH:-}
-if [[ -z ${PROFILE} ]]
-then
+if [[ -z ${PROFILE} ]]; then
   PROFILE="${HOME}/profile"
 fi
 
@@ -86,187 +80,174 @@ MOOSE_SRV="moose.bfee.org"
 #HOSTNAME=$(hostname -s)
 #if [[ "${HOSTNAME}" == "marx" ]]
 #then
-  # On Marx we need to use the IP not the name as that machine is always VPN'ed out
-  # This may be temporary as once I get my DNS stuff reconfigured this may not be needed
+# On Marx we need to use the IP not the name as that machine is always VPN'ed out
+# This may be temporary as once I get my DNS stuff reconfigured this may not be needed
 #  MOOSE_SRV="10.10.0.51" # An unstable IP but should work 90% of the time
 #fi
 
-if [[ "${SHARE_TO_MOUNT}" != "files-ro" ]]
-then
-  if ! command -v "kwalletcli" >/dev/null
-  then
+if [[ "${SHARE_TO_MOUNT}" != "files-ro" ]]; then
+  if ! command -v "kwalletcli" >/dev/null; then
     error_msg "ERROR! kwalletcli not installed or on path.  Install it first!"
   fi
 fi
 
-if ! command -v "mfsmount" >/dev/null
-then
+if ! command -v "mfsmount" >/dev/null; then
   error_msg "ERROR! moosefs is not installed, skipping mounting volumes."
 fi
 
 case "${SHARE_TO_MOUNT}" in
-  files)
-    LOCATION="${PROFILE}/mounts/files"
-    REMOTE_FOLDER="/files"
-    WALLET_ENTRY="files"
+files)
+  LOCATION="${PROFILE}/mounts/files"
+  REMOTE_FOLDER="/files"
+  WALLET_ENTRY="files"
 
-    PWD=$(kwalletcli -f moosefs -e "${WALLET_ENTRY}")
-    if [[ -z "${PWD}" ]]
-    then
-      error_msg "ERROR! The moosefs wallet entry has not been set up correctly."
+  PWD=$(kwalletcli -f moosefs -e "${WALLET_ENTRY}" 2>/dev/null)
+  if [[ -z "${PWD}" ]]; then
+    error_msg "ERROR! The moosefs wallet entry has not been set up correctly."
+  fi
+  mkdir -p "${LOCATION}"
+  if mountpoint -q "${LOCATION}"; then
+    # already mounted
+    if [[ "${FORCE}" = 1 ]]; then
+      umount -q "${LOCATION}"
+      mfsmount "${LOCATION}" -H "${MOOSE_SRV}" -S "${REMOTE_FOLDER}" -o rw \
+        -o mfspassword="${PWD}" -o mfsdelayedinit
     fi
-    mkdir -p "${LOCATION}"
-    if mountpoint -q "${LOCATION}"
-    then
-      # already mounted
-      if [[ "${FORCE}" = 1 ]]
-      then
-        umount -q "${LOCATION}"
-        mfsmount "${LOCATION}" -H "${MOOSE_SRV}" -S "${REMOTE_FOLDER}" -o rw -o mfspassword="${PWD}" -o mfsdelayedinit
-      fi
-    else
-      # not mounted
-      mfsmount "${LOCATION}" -H "${MOOSE_SRV}" -S "${REMOTE_FOLDER}" -o rw -o mfspassword="${PWD}" -o mfsdelayedinit
-    fi
-    ;;
-  volumes)
-    LOCATION="${PROFILE}/mounts/volumes"
-    REMOTE_FOLDER="/volumes"
-    WALLET_ENTRY="volumes"
+  else
+    # not mounted
+    mfsmount "${LOCATION}" -H "${MOOSE_SRV}" -S "${REMOTE_FOLDER}" -o rw \
+      -o mfspassword="${PWD}" -o mfsdelayedinit
+  fi
+  ;;
+volumes)
+  LOCATION="${PROFILE}/mounts/volumes"
+  REMOTE_FOLDER="/volumes"
+  WALLET_ENTRY="volumes"
 
-    PWD=$(kwalletcli -f moosefs -e "${WALLET_ENTRY}")
-    if [[ -z "${PWD}" ]]
-    then
-      error_msg "ERROR! The moosefs wallet entry has not been set up correctly."
+  PWD=$(kwalletcli -f moosefs -e "${WALLET_ENTRY}" 2>/dev/null)
+  if [[ -z "${PWD}" ]]; then
+    error_msg "ERROR! The moosefs wallet entry has not been set up correctly."
+  fi
+  mkdir -p "${LOCATION}"
+  if mountpoint -q "${LOCATION}"; then
+    # already mounted
+    if [[ "${FORCE}" = 1 ]]; then
+      umount -q "${LOCATION}"
+      mfsmount "${LOCATION}" -H "${MOOSE_SRV}" -S "${REMOTE_FOLDER}" -o rw \
+        -o mfspassword="${PWD}" -o mfsdelayedinit
     fi
-    mkdir -p "${LOCATION}"
-    if mountpoint -q "${LOCATION}"
-    then
-      # already mounted
-      if [[ "${FORCE}" = 1 ]]
-      then
-        umount -q "${LOCATION}"
-        mfsmount "${LOCATION}" -H "${MOOSE_SRV}" -S "${REMOTE_FOLDER}" -o rw -o mfspassword="${PWD}" -o mfsdelayedinit
-      fi
-    else
-      # not mounted
-      mfsmount "${LOCATION}" -H "${MOOSE_SRV}" -S "${REMOTE_FOLDER}" -o rw -o mfspassword="${PWD}" -o mfsdelayedinit
-    fi
-    ;;
-  backups)
-    LOCATION="${PROFILE}/mounts/backups"
-    REMOTE_FOLDER="/backups"
-    WALLET_ENTRY="backups"
+  else
+    # not mounted
+    mfsmount "${LOCATION}" -H "${MOOSE_SRV}" -S "${REMOTE_FOLDER}" -o rw \
+      -o mfspassword="${PWD}" -o mfsdelayedinit
+  fi
+  ;;
+backups)
+  LOCATION="${PROFILE}/mounts/backups"
+  REMOTE_FOLDER="/backups"
+  WALLET_ENTRY="backups"
 
-    PWD=$(kwalletcli -f moosefs -e "${WALLET_ENTRY}")
-    if [[ -z "${PWD}" ]]
-    then
-      error_msg "ERROR! The moosefs wallet entry has not been set up correctly."
+  PWD=$(kwalletcli -f moosefs -e "${WALLET_ENTRY}" 2>/dev/null)
+  if [[ -z "${PWD}" ]]; then
+    error_msg "ERROR! The moosefs wallet entry has not been set up correctly."
+  fi
+  mkdir -p "${LOCATION}"
+  if mountpoint -q "${LOCATION}"; then
+    # already mounted
+    if [[ "${FORCE}" = 1 ]]; then
+      umount -q "${LOCATION}"
+      mfsmount "${LOCATION}" -H "${MOOSE_SRV}" -S "${REMOTE_FOLDER}" -o rw \
+        -o mfspassword="${PWD}" -o mfsdelayedinit
     fi
-    mkdir -p "${LOCATION}"
-    if mountpoint -q "${LOCATION}"
-    then
-      # already mounted
-      if [[ "${FORCE}" = 1 ]]
-      then
-        umount -q "${LOCATION}"
-        mfsmount "${LOCATION}" -H "${MOOSE_SRV}" -S "${REMOTE_FOLDER}" -o rw -o mfspassword="${PWD}" -o mfsdelayedinit
-      fi
-    else
-      # not mounted
-      mfsmount "${LOCATION}" -H "${MOOSE_SRV}" -S "${REMOTE_FOLDER}" -o rw -o mfspassword="${PWD}" -o mfsdelayedinit
-    fi
-    ;;
-  other)
-    LOCATION="${PROFILE}/mounts/other"
-    REMOTE_FOLDER="/other"
-    WALLET_ENTRY="other"
+  else
+    # not mounted
+    mfsmount "${LOCATION}" -H "${MOOSE_SRV}" -S "${REMOTE_FOLDER}" -o rw \
+      -o mfspassword="${PWD}" -o mfsdelayedinit
+  fi
+  ;;
+other)
+  LOCATION="${PROFILE}/mounts/other"
+  REMOTE_FOLDER="/other"
+  WALLET_ENTRY="other"
 
-    PWD=$(kwalletcli -f moosefs -e "${WALLET_ENTRY}")
-    if [[ -z "${PWD}" ]]
-    then
-      error_msg "ERROR! The moosefs wallet entry has not been set up correctly."
+  PWD=$(kwalletcli -f moosefs -e "${WALLET_ENTRY}" 2>/dev/null)
+  if [[ -z "${PWD}" ]]; then
+    error_msg "ERROR! The moosefs wallet entry has not been set up correctly."
+  fi
+  mkdir -p "${LOCATION}"
+  if mountpoint -q "${LOCATION}"; then
+    # already mounted
+    if [[ "${FORCE}" = 1 ]]; then
+      umount -q "${LOCATION}"
+      mfsmount "${LOCATION}" -H "${MOOSE_SRV}" -S "${REMOTE_FOLDER}" -o rw \
+        -o mfspassword="${PWD}" -o mfsdelayedinit
     fi
-    mkdir -p "${LOCATION}"
-    if mountpoint -q "${LOCATION}"
-    then
-      # already mounted
-      if [[ "${FORCE}" = 1 ]]
-      then
-        umount -q "${LOCATION}"
-        mfsmount "${LOCATION}" -H "${MOOSE_SRV}" -S "${REMOTE_FOLDER}" -o rw -o mfspassword="${PWD}" -o mfsdelayedinit
-      fi
-    else
-      # not mounted
-      mfsmount "${LOCATION}" -H "${MOOSE_SRV}" -S "${REMOTE_FOLDER}" -o rw -o mfspassword="${PWD}" -o mfsdelayedinit
-    fi
-    ;;
-  files-ro)
-    LOCATION="${PROFILE}/mounts/files-ro"
-    REMOTE_FOLDER="/files"
+  else
+    # not mounted
+    mfsmount "${LOCATION}" -H "${MOOSE_SRV}" -S "${REMOTE_FOLDER}" -o rw \
+      -o mfspassword="${PWD}" -o mfsdelayedinit
+  fi
+  ;;
+files-ro)
+  LOCATION="${PROFILE}/mounts/files-ro"
+  REMOTE_FOLDER="/files"
 
-    mkdir -p "${LOCATION}"
-    if mountpoint -q "${LOCATION}"
-    then
-      # already mounted
-      if [[ "${FORCE}" = 1 ]]
-      then
-        umount -q "${LOCATION}"
-        mfsmount "${LOCATION}" -H "${MOOSE_SRV}" -S "${REMOTE_FOLDER}" -o ro -o mfsdelayedinit
-      fi
-    else
-      # not mounted
+  mkdir -p "${LOCATION}"
+  if mountpoint -q "${LOCATION}"; then
+    # already mounted
+    if [[ "${FORCE}" = 1 ]]; then
+      umount -q "${LOCATION}"
       mfsmount "${LOCATION}" -H "${MOOSE_SRV}" -S "${REMOTE_FOLDER}" -o ro -o mfsdelayedinit
     fi
-    ;;
-  metadata)
-    LOCATION="${PROFILE}/mounts/moose-meta"
-    REMOTE_FOLDER="."
-    WALLET_ENTRY="metadata"
+  else
+    # not mounted
+    mfsmount "${LOCATION}" -H "${MOOSE_SRV}" -S "${REMOTE_FOLDER}" -o ro -o mfsdelayedinit
+  fi
+  ;;
+metadata)
+  LOCATION="${PROFILE}/mounts/moose-meta"
+  REMOTE_FOLDER="."
+  WALLET_ENTRY="metadata"
 
-    PWD=$(kwalletcli -f moosefs -e "${WALLET_ENTRY}")
-    if [[ -z "${PWD}" ]]
-    then
-      error_msg "ERROR! The moosefs wallet entry has not been set up correctly."
+  PWD=$(kwalletcli -f moosefs -e "${WALLET_ENTRY}" 2>/dev/null)
+  if [[ -z "${PWD}" ]]; then
+    error_msg "ERROR! The moosefs wallet entry has not been set up correctly."
+  fi
+  mkdir -p "${LOCATION}"
+  if mountpoint -q "${LOCATION}"; then
+    # already mounted
+    if [[ "${FORCE}" = 1 ]]; then
+      umount -q "${LOCATION}"
+      mfsmount "${LOCATION}" -H "${MOOSE_SRV}" --meta -o rw -o mfspassword="${PWD}" \
+        -o mfsdelayedinit
     fi
-    mkdir -p "${LOCATION}"
-    if mountpoint -q "${LOCATION}"
-    then
-      # already mounted
-      if [[ "${FORCE}" = 1 ]]
-      then
-        umount -q "${LOCATION}"
-        mfsmount "${LOCATION}" -H "${MOOSE_SRV}" --meta -o rw -o mfspassword="${PWD}" -o mfsdelayedinit
-      fi
-    else
-      # not mounted
-      mfsmount "${LOCATION}" -H "${MOOSE_SRV}" --meta -o rw -o mfspassword="${PWD}" -o mfsdelayedinit
-    fi
-    ;;
-  root)
-    LOCATION="${PROFILE}/mounts/moose-root"
-    WALLET_ENTRY="root"
+  else
+    # not mounted
+    mfsmount "${LOCATION}" -H "${MOOSE_SRV}" --meta -o rw -o mfspassword="${PWD}" \
+      -o mfsdelayedinit
+  fi
+  ;;
+root)
+  LOCATION="${PROFILE}/mounts/moose-root"
+  WALLET_ENTRY="root"
 
-    PWD=$(kwalletcli -f moosefs -e "${WALLET_ENTRY}")
-    if [[ -z "${PWD}" ]]
-    then
-      error_msg "ERROR! The moosefs wallet entry has not been set up correctly."
-    fi
-    mkdir -p "${LOCATION}"
-    if mountpoint -q "${LOCATION}"
-    then
-      # already mounted
-      if [[ "${FORCE}" = 1 ]]
-      then
-        umount -q "${LOCATION}"
-        mfsmount "${LOCATION}" -H "${MOOSE_SRV}" -o rw -o mfspassword="${PWD}" -o mfsdelayedinit
-      fi
-    else
-      # not mounted
+  PWD=$(kwalletcli -f moosefs -e "${WALLET_ENTRY}" 2>/dev/null)
+  if [[ -z "${PWD}" ]]; then
+    error_msg "ERROR! The moosefs wallet entry has not been set up correctly."
+  fi
+  mkdir -p "${LOCATION}"
+  if mountpoint -q "${LOCATION}"; then
+    # already mounted
+    if [[ "${FORCE}" = 1 ]]; then
+      umount -q "${LOCATION}"
       mfsmount "${LOCATION}" -H "${MOOSE_SRV}" -o rw -o mfspassword="${PWD}" -o mfsdelayedinit
     fi
-    ;;
-  *)
-    error_msg "Invalid share option detected '${SHARE_TO_MOUNT}', please use a valid share option."
-    ;;
+  else
+    # not mounted
+    mfsmount "${LOCATION}" -H "${MOOSE_SRV}" -o rw -o mfspassword="${PWD}" -o mfsdelayedinit
+  fi
+  ;;
+*)
+  error_msg "Invalid share option detected '${SHARE_TO_MOUNT}', please use a valid share option."
+  ;;
 esac
