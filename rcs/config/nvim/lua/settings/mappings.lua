@@ -85,7 +85,7 @@ k.set('n', "<C-c>", "<cmd> %y+ <CR>", opts) -- copy whole file
 k.set('n', "<leader>n", "<cmd> set nu! <CR>", opts) -- toggle line number
 k.set('n', "<leader>rn", "<cmd> set rnu! <CR>", opts) -- toggle relative number
 
-k.set('n', "<leader>b", "<cmd> enew <CR>", opts) -- new buffer
+k.set('n', "<leader>en", "<cmd> enew <CR>", opts) -- new buffer
 
 ------ Insert Mode Mappings ------
 -- Press jk fast to exit insert mode

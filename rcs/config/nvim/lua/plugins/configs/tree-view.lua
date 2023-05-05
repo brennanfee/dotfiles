@@ -37,7 +37,7 @@ return {
     cmd = { "NvimTreeToggle", "NvimTreeFocus" },
     init = function()
       vim.keymap.set("n", "<C-n>", "<cmd> NvimTreeToggle <CR>", { desc = "Toggle nvimtree"})
-      vim.keymap.set("n", "<leader>n", "<cmd> NvimTreeToggle <CR>", { desc = "Toggle nvimtree"})
+      vim.keymap.set("n", "<leader>t", "<cmd> NvimTreeToggle <CR>", { desc = "Toggle nvimtree"})
 
       vim.keymap.set("n", "<leader>e", "<cmd> NvimTreeFocus <CR>", { desc = "Focus nvimtree"})
     end,

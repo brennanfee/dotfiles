@@ -11,3 +11,12 @@ words:
   - neovim
   - nvim
   - netrw
+  - posix
+  - xtrace
+  - shopt
+  - tput
+  - setaf
+  - flatpak
+  - pipx
+  - doup
+  - vimrc

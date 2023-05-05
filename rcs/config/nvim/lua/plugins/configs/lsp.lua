@@ -25,7 +25,7 @@ local server_configs = {
 }
 
 --  This function gets run when an LSP connects to a particular buffer.
-local on_attach = function(_, bufnr)
+local on_attach = function(clientId, bufnr)
   local nmap = function(keys, func, desc)
     if desc then
       desc = 'LSP: ' .. desc
@@ -34,7 +34,11 @@ local on_attach = function(_, bufnr)
     vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
   end
 
-  nmap("gD", vim.lsp.buf.declaration(), "[G]oto [D]eclaration")
+  local client = vim.lsp.get_client_by_id(args.data.client_id)
+
+  if client.server_capabilities.definitionProvider then
+    nmap("gD", vim.lsp.buf.declaration(), "[G]oto [D]eclaration")
+  end
   nmap("gd", vim.lsp.buf.definition(), "[G]oto [D]efinition")
   nmap("K", vim.lsp.buf.hover(), "Hover")
   namp("gi", vim.lsp.buf.implementation, "[G]oto [I]mplementation")
@@ -43,7 +47,7 @@ local on_attach = function(_, bufnr)
   --nmap("<leader>ra", equire("nvchad_ui.renamer").open(), "[R]en[a]me")
   nmap("<leader>ca", vim.lsp.buf.code_action(), "[C]ode [A]ction")
   nmap("gr", vim.lsp.buf.references(), "[G]oto [R]eferences")
-  nmap("<leader>f", vim.diagnostic.open_float { border = "rounded" },
+  nmap("<leader>of", vim.diagnostic.open_float { border = "rounded" },
     "[F]loating Diagnostics")
   nmap("[d", vim.diagnostic.goto_prev(), "Goto Previous [D]iagnostic")
   nmap("]d", vim.diagnostic.goto_next(), "Goto Next [D]iagnostic")

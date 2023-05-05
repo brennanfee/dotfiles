@@ -54,6 +54,14 @@ M.lazy_load = function(plugin)
   })
 end
 
+M.map_key = function(mode, lhs, rhs, opts)
+  local options = { } -- noremap already default to true for vim.keymap.set
+  if opts then
+      options = vim.tbl_extend("force", options, opts)
+  end
+  vim.keymap.set(mode, lhs, rhs, options)
+end
+
 M.theme_colors = function()
   local theme = M.safeRead(settings.theme, "default")
   if theme == "onedark"

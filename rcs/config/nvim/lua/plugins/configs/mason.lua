@@ -75,7 +75,7 @@ return {
     })
 
     vim.api.nvim_create_user_command("UpdateAll", function()
-      vim.cmd("Lazy sync")
+      require("lazy").sync({ wait = true, show = false })
       vim.cmd("MasonToolsUpdate")
     end, {})
 

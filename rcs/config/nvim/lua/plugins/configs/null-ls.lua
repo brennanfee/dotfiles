@@ -9,44 +9,8 @@ return {
     dependencies = {
       "nvim-lua/plenary.nvim",
       "williamboman/mason.nvim",
-      "jay-babu/mason-null-ls.nvim"
     },
     config = function()
-      require("mason-null-ls").setup({
-        ensure_installed = {
-          -- Linters
-          "ansible-lint",
-          "cfn-lint",
-          "cmakelint",
-          "commitlint",
-          "flake8",
-          "jsonlint",
-          "luacheck",
-          "markdownlint",
-          "shellcheck",
-          "sqlfluff",
-          "stylelint",
-          "vint",
-          "write-good",
-          "yamllint",
-          -- Formatters
-          "black",
-          "clang-format",
-          "gofumpt",
-          "google-java-format",
-          "ktlint",
-          "prettier",
-          "rubocop",
-          "rustfmt",
---          "shfmt",
-          "sqlfmt",
-          "stylua",
-        },
-        automatic_installation = false,
-        automatic_setup = true,
-        handlers = {},
-      })
-
       local augroup = vim.api.nvim_create_augroup("LspFormatting", { })
       local null_ls = require("null-ls")
       null_ls.setup({
