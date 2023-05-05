@@ -40,11 +40,10 @@ return {
       "write-good", "yamllint",
 
       -- Formatters
-      "beautysh", "blackd-client", "buf", "cbfmt", "clang-format", "cmakelang",
+      "blackd-client", "buf", "cbfmt", "clang-format", "cmakelang",
       "csharpier", "fixjson", "gofumpt", "google-java-format", "luaformatter",
       "markdown-toc", "php-cs-fixer", "prettierd", "rubocop", "rustfmt",
-      -- "shfmt",
-      "sqlfmt", "stylua", "yamlfmt",
+      "shfmt", "sqlfmt", "stylua", "yamlfmt",
 
       -- Other tools
       "gh", "gitui", "glow", "jq", "yq",
