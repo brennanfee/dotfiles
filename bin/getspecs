@@ -6,11 +6,10 @@
 
 # Bash strict mode
 ([[ -n ${ZSH_EVAL_CONTEXT:-} && ${ZSH_EVAL_CONTEXT:-} =~ :file$ ]] ||
- [[ -n ${BASH_VERSION:-} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
-if ! ${SOURCED}
-then
-  set -o errexit # same as set -e
-  set -o nounset # same as set -u
+  [[ -n ${BASH_VERSION:-} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
+if ! ${SOURCED}; then
+  set -o errexit  # same as set -e
+  set -o nounset  # same as set -u
   set -o errtrace # same as set -E
   set -o pipefail
   set -o posix
@@ -20,7 +19,7 @@ then
   shopt -s extdebug
   IFS=$(printf '\n\t')
 fi
-# END Bash scrict mode
+# END Bash strict mode
 
 VERSION="0.2 2023-01-28"
 
@@ -33,8 +32,7 @@ check_root() {
   # Must be root
   local USER_ID
   USER_ID=$(id -u)
-  if [[ "${USER_ID}" -ne 0 ]]
-  then
+  if [[ "${USER_ID}" -ne 0 ]]; then
     echo -e "${RED}This script must be run as root.${RESET}"
     exit 1
   fi
@@ -48,17 +46,19 @@ read_options() {
 
   eval set --"${args}"
 
-  while true;
-  do
+  while true; do
     case "$1" in
-      -s|--system)
-        to_system_file="true"
-        shift;;
-      --)
-        break;;
-      *)
-        printf "Unknown option %s\n" "$1"
-        exit 2;;
+    -s | --system)
+      to_system_file="true"
+      shift
+      ;;
+    --)
+      break
+      ;;
+    *)
+      printf "Unknown option %s\n" "$1"
+      exit 2
+      ;;
     esac
   done
 }
@@ -77,14 +77,11 @@ main() {
   ## Default is to put in a file right in the directory the script was called from
   output_file="$(pwd)/${the_hostname}.txt"
 
-  if [[ "${to_system_file}" == true ]]
-  then
+  if [[ "${to_system_file}" == true ]]; then
     local path="${the_user_home}"
-    if [[ "${PROFILEPATH:-}" != "" ]]
-    then
+    if [[ "${PROFILEPATH:-}" != "" ]]; then
       path=${PROFILEPATH}
-    elif [[ -d "${the_user_home}/profile" ]]
-    then
+    elif [[ -d "${the_user_home}/profile" ]]; then
       path="${the_user_home}/profile"
     fi
 
@@ -92,8 +89,7 @@ main() {
   fi
 
   rm -f "${output_file}"
-  sudo inxi -Fdflmopux -c 0 | tee "${output_file}" 1> /dev/null
+  sudo inxi -Fdflmopux -c 0 | tee "${output_file}" 1>/dev/null
 }
 
 main "$@"
-

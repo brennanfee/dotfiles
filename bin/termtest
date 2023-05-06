@@ -1,4 +1,4 @@
-#/bin/bash
+#!/usr/bin/env bash
 
 echo -e "\033[0mNormal\033[0m  \033[0;33mNormal Yellow\033[0m"
 echo -e "\033[1mBold\033[0m    \033[1;33mBold Yellow\033[0m"
@@ -23,3 +23,4 @@ echo ""
 echo "Ligatures: == === !== >= <= =>"
 echo "Font icons:  契            勒  鈴  "
 echo "Color emojis:  😄  💜  🎵  💾  💩  ⛔"
+

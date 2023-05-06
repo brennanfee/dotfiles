@@ -4,10 +4,10 @@
 # Bash strict mode
 # shellcheck disable=SC2154
 ([[ -n ${ZSH_EVAL_CONTEXT} && ${ZSH_EVAL_CONTEXT} =~ :file$ ]] ||
- [[ -n ${BASH_VERSION} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
+  [[ -n ${BASH_VERSION} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
 if ! ${SOURCED}; then
-  set -o errexit # same as set -e
-  set -o nounset # same as set -u
+  set -o errexit  # same as set -e
+  set -o nounset  # same as set -u
   set -o errtrace # same as set -E
   set -o pipefail
   set -o posix
@@ -16,7 +16,7 @@ if ! ${SOURCED}; then
   shopt -s extdebug
   IFS=$(printf '\n\t')
 fi
-# END Bash scrict mode
+# END Bash strict mode
 
 unset base
 unset exchangeTo
@@ -27,36 +27,33 @@ currencyCodes=(AUD BGN BRL CAD CHF CNY CZK DKK
   JPY KRW MXN MYR NOK NZD PHP PLN
   RON RUB SEK SGD THB TRY USD ZAR)
 
-  ## This function determines which http get tool the system has installed and returns an error if there isnt one
-  getConfiguredClient()
-  {
-    if command -v curl &>/dev/null; then
-      configuredClient="curl"
-    elif command -v wget &>/dev/null; then
-      configuredClient="wget"
-    elif command -v http &>/dev/null; then
-      configuredClient="httpie"
-    elif command -v fetch &>/dev/null; then
-      configuredClient="fetch"
-    else
-      echo "Error: This tool reqires either curl, wget, httpie or fetch to be installed." >&2
-      return 1
-    fi
-  }
+## This function determines which http get tool the system has installed and returns an error if there isnt one
+getConfiguredClient() {
+  if command -v curl &>/dev/null; then
+    configuredClient="curl"
+  elif command -v wget &>/dev/null; then
+    configuredClient="wget"
+  elif command -v http &>/dev/null; then
+    configuredClient="httpie"
+  elif command -v fetch &>/dev/null; then
+    configuredClient="fetch"
+  else
+    echo "Error: This tool reqires either curl, wget, httpie or fetch to be installed." >&2
+    return 1
+  fi
+}
 
-  ## Allows to call the users configured client without if statements everywhere
-  httpGet()
-  {
-    case "$configuredClient" in
-      curl)  curl -A curl -s "$@" ;;
-      wget)  wget -qO- "$@" ;;
-      httpie) http -b GET "$@" ;;
-      fetch) fetch -q "$@" ;;
-    esac
-  }
+## Allows to call the users configured client without if statements everywhere
+httpGet() {
+  case "$configuredClient" in
+  curl) curl -A curl -s "$@" ;;
+  wget) wget -qO- "$@" ;;
+  httpie) http -b GET "$@" ;;
+  fetch) fetch -q "$@" ;;
+  esac
+}
 
-checkValidCurrency()
-{
+checkValidCurrency() {
   if [[ "${currencyCodes[*]}" == *"$(echo "${@}" | tr -d '[:space:]')"* ]]; then
     echo "0"
   else
@@ -66,8 +63,7 @@ checkValidCurrency()
 
 ## Grabs the base currency from the user and validates it with all the possible currency
 ## types available on the API and guides user through input (doesnt take in arguments)
-getBase()
-{
+getBase() {
   echo -n "What is the base currency: "
   read -r base
   base=$(echo $base | tr /a-z/ /A-Z/)
@@ -80,8 +76,7 @@ getBase()
 
 ## Checks base currency from the user and validates it with all the possible currency
 ## types available on the API (requires argument)
-checkBase()
-{
+checkBase() {
   base=$1
   base=$(echo $base | tr /a-z/ /A-Z/)
   if [[ $(checkValidCurrency $base) == "1" ]]; then
@@ -93,8 +88,7 @@ checkBase()
 
 ## Grabs the exchange to currency from the user and validates it with all the possible currency
 ## types available on the API and guides user through input (doesnt take in arguments)
-getExchangeTo()
-{
+getExchangeTo() {
   echo -n "What currency to exchange to: "
   read -r exchangeTo
   exchangeTo=$(echo $exchangeTo | tr /a-z/ /A-Z/)
@@ -107,8 +101,7 @@ getExchangeTo()
 
 ## Grabs the exchange to currency from the user and validates it with all the possible currency
 ## types available on the API (requires arguments)
-checkExchangeTo()
-{
+checkExchangeTo() {
   exchangeTo=$1
   exchangeTo=$(echo $exchangeTo | tr /a-z/ /A-Z/)
   if [[ $(checkValidCurrency $exchangeTo) == "1" ]]; then
@@ -120,12 +113,10 @@ checkExchangeTo()
 
 ## Get the amount that will be exchanged and validate that the user has entered a number (decimals are allowed)
 ## doesnt take in argument, it guides user through input
-getAmount()
-{
+getAmount() {
   echo -n "What is the amount being exchanged: "
   read -r amount
-  if [[ ! "$amount" =~ ^[0-9]+(\.[0-9]+)?$ ]]
-  then
+  if [[ ! "$amount" =~ ^[0-9]+(\.[0-9]+)?$ ]]; then
     echo "The amount has to be a number"
     unset amount
     getAmount
@@ -134,34 +125,33 @@ getAmount()
 
 ## Get the amount that will be exchanged
 ## validate that the user has entered a number (decimals are allowed and requires argument)
-checkAmount()
-{
+checkAmount() {
   amount=$1
-  if [[ ! "$amount" =~ ^[0-9]+(\.[0-9]+)?$ ]]
-  then
+  if [[ ! "$amount" =~ ^[0-9]+(\.[0-9]+)?$ ]]; then
     echo "The amount has to be a number"
     unset amount
     exit 1
   fi
 }
 
-checkInternet()
-{
-  httpGet github.com > /dev/null 2>&1 || { echo "Error: no active internet connection" >&2; return 1; } # query github with a get request
+checkInternet() {
+  httpGet github.com >/dev/null 2>&1 || {
+    echo "Error: no active internet connection" >&2
+    return 1
+  } # query github with a get request
 }
 
 ## Grabs the exchange rate and does the math for converting the currency
-convertCurrency()
-{
-  exchangeRate=$(httpGet "http://api.fixer.io/latest?base=$base&symbols=$exchangeTo" | grep -Eo "[0-9]*[.][0-9]*") > /dev/null
+convertCurrency() {
+  exchangeRate=$(httpGet "http://api.fixer.io/latest?base=$base&symbols=$exchangeTo" | grep -Eo "[0-9]*[.][0-9]*") >/dev/null
   if ! command -v bc &>/dev/null; then
     oldRate=$exchangeRate
-    exchangeRate=$(echo $exchangeRate | grep -Eo "^[0-9]*" )
-    amount=$(echo $amount | grep -Eo "^[0-9]*" )
-    exchangeAmount=$(( $exchangeRate * $amount ))
+    exchangeRate=$(echo $exchangeRate | grep -Eo "^[0-9]*")
+    amount=$(echo $amount | grep -Eo "^[0-9]*")
+    exchangeAmount=$(($exchangeRate * $amount))
     exchangeRate=$oldRate
   else
-    exchangeAmount=$( echo "$exchangeRate * $amount" | bc )
+    exchangeAmount=$(echo "$exchangeRate * $amount" | bc)
   fi
 
   cat <<EOF
@@ -175,15 +165,14 @@ convertCurrency()
 EOF
 }
 
-update()
-{
+update() {
   # Author: Alexander Epstein https://github.com/alexanderepstein
   # Update utility version 2.2.0
   # To test the tool enter in the defualt values that are in the examples for each variable
-  repositoryName="Bash-Snippets" #Name of repostiory to be updated ex. Sandman-Lite
-  githubUserName="alexanderepstein" #username that hosts the repostiory ex. alexanderepstein
-  nameOfInstallFile="install.sh" # change this if the installer file has a different name be sure to include file extension if there is one
-  latestVersion=$(httpGet https://api.github.com/repos/$githubUserName/$repositoryName/tags | grep -Eo '"name":.*?[^\\]",'| head -1 | grep -Eo "[0-9.]+" ) #always grabs the tag without the v option
+  repositoryName="Bash-Snippets"                                                                                                                           #Name of repostiory to be updated ex. Sandman-Lite
+  githubUserName="alexanderepstein"                                                                                                                        #username that hosts the repostiory ex. alexanderepstein
+  nameOfInstallFile="install.sh"                                                                                                                           # change this if the installer file has a different name be sure to include file extension if there is one
+  latestVersion=$(httpGet https://api.github.com/repos/$githubUserName/$repositoryName/tags | grep -Eo '"name":.*?[^\\]",' | head -1 | grep -Eo "[0-9.]+") #always grabs the tag without the v option
 
   if [[ $currentVersion == "" || $repositoryName == "" || $githubUserName == "" || $nameOfInstallFile == "" ]]; then
     echo "Error: update utility has not been configured correctly." >&2
@@ -197,19 +186,37 @@ update()
       echo -n "Do you wish to update $repositoryName [Y/n]: "
       read -r answer
       if [[ "$answer" == [Yy] ]]; then
-        cd ~ || { echo 'Update Failed'; exit 1; }
-        if [[ -d  ~/$repositoryName ]]; then rm -r -f $repositoryName || { echo "Permissions Error: try running the update as sudo"; exit 1; } ; fi
+        cd ~ || {
+          echo 'Update Failed'
+          exit 1
+        }
+        if [[ -d ~/$repositoryName ]]; then rm -r -f $repositoryName || {
+          echo "Permissions Error: try running the update as sudo"
+          exit 1
+        }; fi
         echo -n "Downloading latest version of: $repositoryName."
-        git clone -q "https://github.com/$githubUserName/$repositoryName" && touch .BSnippetsHiddenFile || { echo "Failure!"; exit 1; } &
-        while [ ! -f .BSnippetsHiddenFile ]; do { echo -n "."; sleep 2; };done
+        git clone -q "https://github.com/$githubUserName/$repositoryName" && touch .BSnippetsHiddenFile || {
+          echo "Failure!"
+          exit 1
+        } &
+        while [ ! -f .BSnippetsHiddenFile ]; do {
+          echo -n "."
+          sleep 2
+        }; done
         rm -f .BSnippetsHiddenFile
         echo "Success!"
-        cd $repositoryName || { echo 'Update Failed'; exit 1; }
-        git checkout "v$latestVersion" 2> /dev/null || git checkout "$latestVersion" 2> /dev/null || echo "Couldn't git checkout to stable release, updating to latest commit."
+        cd $repositoryName || {
+          echo 'Update Failed'
+          exit 1
+        }
+        git checkout "v$latestVersion" 2>/dev/null || git checkout "$latestVersion" 2>/dev/null || echo "Couldn't git checkout to stable release, updating to latest commit."
         chmod a+x install.sh #this might be necessary in your case but wasnt in mine.
         ./$nameOfInstallFile "update" || exit 1
         cd ..
-        rm -r -f $repositoryName || { echo "Permissions Error: update succesfull but cannot delete temp files located at ~/$repositoryName delete this directory with sudo"; exit 1; }
+        rm -r -f $repositoryName || {
+          echo "Permissions Error: update succesfull but cannot delete temp files located at ~/$repositoryName delete this directory with sudo"
+          exit 1
+        }
       else
         exit 1
       fi
@@ -219,9 +226,7 @@ update()
   fi
 }
 
-
-usage()
-{
+usage() {
   cat <<EOF
 Currency
 Description: A realtime currency converter.
@@ -249,34 +254,38 @@ EOF
 
 getConfiguredClient || exit 1
 
-
 while getopts "uvh" opt; do
   case "$opt" in
-    \?) echo "Invalid option: -$OPTARG" >&2
-        exit 1
-        ;;
-    h)  usage
-        exit 0
-        ;;
-    v)  echo "Version $currentVersion"
-        exit 0
-        ;;
-    u)  checkInternet || exit 1 # check if we have a valid internet connection if this isnt true the rest of the script will not work so stop here
-        update
-        exit 0
-        ;;
-    :)  echo "Option -$OPTARG requires an argument." >&2
-        exit 1
-        ;;
+  \?)
+    echo "Invalid option: -$OPTARG" >&2
+    exit 1
+    ;;
+  h)
+    usage
+    exit 0
+    ;;
+  v)
+    echo "Version $currentVersion"
+    exit 0
+    ;;
+  u)
+    checkInternet || exit 1 # check if we have a valid internet connection if this isnt true the rest of the script will not work so stop here
+    update
+    exit 0
+    ;;
+  :)
+    echo "Option -$OPTARG requires an argument." >&2
+    exit 1
+    ;;
   esac
 done
 
 if [[ $# == 0 ]]; then
   checkInternet || exit 1 # check if we have a valid internet connection if this isnt true the rest of the script will not work so stop here
-  getBase # get base currency
-  getExchangeTo # get exchange to currency
-  getAmount # get the amount to be converted
-  convertCurrency # grab the exhange rate and perform the conversion
+  getBase                 # get base currency
+  getExchangeTo           # get exchange to currency
+  getAmount               # get the amount to be converted
+  convertCurrency         # grab the exhange rate and perform the conversion
   exit 0
 elif [[ $# == "1" ]]; then
   if [[ $1 == "update" ]]; then

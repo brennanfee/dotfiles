@@ -6,7 +6,7 @@ set -o nounset
 #set -o xtrace # same as set -x, turn on for debugging
 
 IFS=$(printf '\n\t')
-# END POSIX scrict mode
+# END POSIX strict mode
 
 # TODO: Split some off into a "dev" only installer with a command-line option to install those as well
 
