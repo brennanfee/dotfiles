@@ -93,14 +93,14 @@ config.color_schemes = {
     },
     foreground = "#abb2bf",
     background = "#282c34",
-    cursor_fg = '#dcdfe4',
-    cursor_bg = '#a3b3cc',
-    cursor_border = '#a3b3cc',
+    cursor_fg = "#dcdfe4",
+    cursor_bg = "#a3b3cc",
+    cursor_border = "#a3b3cc",
     selection_fg = "#abb2bf",
     selection_bg = "#414858",
   },
 
-["OneDarkProVivid"] = {
+  ["OneDarkProVivid"] = {
     ansi = {
       "#282c34", -- black
       "#ef596f", -- red
@@ -123,9 +123,9 @@ config.color_schemes = {
     },
     foreground = "#abb2bf",
     background = "#282c34",
-    cursor_fg = '#dcdfe4',
-    cursor_bg = '#a3b3cc',
-    cursor_border = '#a3b3cc',
+    cursor_fg = "#dcdfe4",
+    cursor_bg = "#a3b3cc",
+    cursor_border = "#a3b3cc",
     selection_fg = "#abb2bf",
     selection_bg = "#3a404c",
   },
@@ -152,9 +152,9 @@ config.color_schemes = {
     },
     foreground = "#abb2bf",
     background = "#fafafa",
-    cursor_fg = '#dcdfe4',
-    cursor_bg = '#a3b3cc',
-    cursor_border = '#a3b3cc',
+    cursor_fg = "#dcdfe4",
+    cursor_bg = "#a3b3cc",
+    cursor_border = "#a3b3cc",
     selection_fg = "#212121",
     selection_bg = "#abb2bf",
   },
@@ -172,7 +172,7 @@ config.colors = { visual_bell = "#202020" }
 
 -- Initial state
 config.initial_rows = 30
-config.initial_cols = 130
+config.initial_cols = 120
 config.default_cwd = wezterm.home_dir .. "/profile"
 config.default_prog = {
   "tmux",
