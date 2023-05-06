@@ -91,6 +91,11 @@ fi
 # If bat is installed, make it cat
 if command_exists bat; then
   alias cat="bat"
+elif command_exists batcat; then
+  alias bat="batcat"
+  alias cat="batcat"
+else
+  alias bat="cat"
 fi
 
 if command_exists thefuck; then
