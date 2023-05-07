@@ -3,6 +3,7 @@
 return {
   {
     "folke/which-key.nvim",
+    cmd = "WhichKey",
     keys = { "<leader>", '"', "'", "`", "c", "v" },
     init = function()
       vim.keymap.set("n", "<leader>wK", "<cmd> WhichKey <CR>", { desc = "which-key all keymaps"})

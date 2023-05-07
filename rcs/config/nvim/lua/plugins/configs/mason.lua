@@ -18,11 +18,10 @@ return {
       -- "java-language-server",
       "jdtls", "json-lsp", "kotlin-language-server", "lemminx", -- xml language server
       "ltex-ls", "lua-language-server", "marksman", "nginx-language-server",
-      "perlnavigator", "powershell-editor-services", "prosemd-lsp",
-      "pyright", "ruby-lsp", "rust-analyzer", "salt-lsp", "sqlls",
-      "svelte-language-server", "taplo", "terraform-ls",
-      "typescript-language-server", "vim-language-server", "vue-language-server",
-      "yaml-language-server",
+      "perlnavigator", "powershell-editor-services", "pyright", "ruby-lsp",
+      "rust-analyzer", "salt-lsp", "sqlls", "svelte-language-server", "taplo",
+      "terraform-ls", "typescript-language-server", "vim-language-server",
+      "vue-language-server", "yaml-language-server",
 
       -- Debug Adapters
       "bash-debug-adapter", -- "chrome-debug-adapter", -- doesn't seem to work
