@@ -17,26 +17,30 @@ if ! ${SOURCED}; then
 fi
 # END Bash strict mode
 
-## TODO: Setup for neovim instead of vim
-
-export VIM_VER
 VIM_VER="$($(command -v vim) --version | grep "Vi IMproved" | awk '{print $5}' | sed -e 's/\.//g' || true)"
+export VIM_VER
 
 if command_exists nvim || command_exists io.neovim.vim; then
-  export EDITOR='nvim'
-  export GIT_EDITOR='nvim'
-  export SVN_EDITOR='nvim'
-  export LESSEDIT='nvim'
+  EDITOR='nvim'
+  GIT_EDITOR='nvim'
+  SVN_EDITOR='nvim'
+  LESSEDIT='nvim'
 
-  export VISUAL='nvim'
+  VISUAL='nvim'
 else
-  export EDITOR='vim'
-  export GIT_EDITOR='vim'
-  export SVN_EDITOR='vim'
-  export LESSEDIT='vim'
+  EDITOR='vim'
+  GIT_EDITOR='vim'
+  SVN_EDITOR='vim'
+  LESSEDIT='vim'
 
-  export VISUAL='vim'
+  VISUAL='vim'
 fi
+
+export EDITOR
+export GIT_EDITOR
+export SVN_EDITOR
+export LESSEDIT
+export VISUAL
 
 # For now I don't want any visual editor
 # if command_exists code; then

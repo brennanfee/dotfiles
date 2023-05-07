@@ -38,8 +38,6 @@ export TERM=tmux-256color
 export CLICOLOR=1
 export LS_OPTIONS="-hv --color=auto --group-directories-first --time-style=long-iso"
 
-# Editors
-
 # shellcheck disable=SC2154
 export SUDO_PROMPT="${i_fa_lock} password for %u@%h: "
 

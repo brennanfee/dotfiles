@@ -3,11 +3,10 @@
 
 # Bash strict mode
 ([[ -n ${ZSH_EVAL_CONTEXT:-} && ${ZSH_EVAL_CONTEXT:-} =~ :file$ ]] ||
- [[ -n ${BASH_VERSION:-} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
-if ! ${SOURCED}
-then
-  set -o errexit # same as set -e
-  set -o nounset # same as set -u
+  [[ -n ${BASH_VERSION:-} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
+if ! ${SOURCED}; then
+  set -o errexit  # same as set -e
+  set -o nounset  # same as set -u
   set -o errtrace # same as set -E
   set -o pipefail
   set -o posix
@@ -17,17 +16,16 @@ then
   shopt -s extdebug
   IFS=$(printf '\n\t')
 fi
-# END Bash scrict mode
+# END Bash strict mode
 
 # If not running interactively, don't do anything
-if [[ $- != *i* ]]
-then
+if [[ $- != *i* ]]; then
   return
 fi
 
 # Most other places need to ONLY use the xdg-user-dir or my custom xdg-base-dir
 # functions, but this directory is so critical and may not be loaded until after
-# the base-profile.bash script has been run.  So I am being overly cautions with
+# the base-profile.bash script has been run.  So I am being overly cautious with
 # defaults on top of defaults here.  AFTER the base-profile is loaded the xdg
 # functions should work and ALWAYS return valid paths.
 dotfiles=$(xdg-user-dir DOTFILES)
@@ -36,26 +34,22 @@ dotfiles="${dotfiles:-${DOTFILES:-${HOME}/.dotfiles}}"
 # shellcheck source=/dev/null
 source "${dotfiles}/bash/base-profile.bash"
 
+# Reload them, now with the benefit of base-profile
 dotfiles=$(xdg-user-dir DOTFILES)
 dotfiles_private=$(xdg-user-dir DOTFILESPRIVATE)
 
 # Again, defaults here just to be overly cautious
-os_primary="${OS_PRIMARY:-linux}" # Assume linux
+os_primary="${OS_PRIMARY:-linux}"      # Assume linux
 os_secondary="${OS_SECONDARY:-debian}" # Assume debian
-is_wsl="${IS_WSL:-false}" # Assume false
+is_wsl="${IS_WSL:-false}"              # Assume false
 
 # We want to walk "outside" in... which is to say run all options files first, then all
 # exports, then all functions, etc.
-for folder in "options" "exports" "functions" "third-party" "other" "aliases"
-do
-  for base in "shared" "${os_primary}" "distros/${os_secondary}"
-  do
-    for root in "${dotfiles}/bash" "${dotfiles_private}/bash"
-    do
-      if [[ -d "${root}/${base}/${folder}" ]]
-      then
-        for file in "${root}/${base}/${folder}"/*.bash
-        do
+for folder in "first" "options" "exports" "functions" "third-party" "other" "aliases"; do
+  for base in "shared" "${os_primary}" "distros/${os_secondary}"; do
+    for root in "${dotfiles}/bash" "${dotfiles_private}/bash"; do
+      if [[ -d "${root}/${base}/${folder}" ]]; then
+        for file in "${root}/${base}/${folder}"/*.bash; do
           # shellcheck source=/dev/null
           source "${file}"
         done
@@ -64,17 +58,12 @@ do
   done
 done
 
-# On Windows shells runnin in WSL run some overrides
-if [[ ${is_wsl} == "true" ]]
-then
-  for folder in "options" "exports" "functions" "third-party" "other" "aliases"
-  do
-    for root in "${dotfiles}/bash" "${dotfiles_private}/bash"
-    do
-      if [[ -d "${root}/windows-wsl/${folder}" ]]
-      then
-        for file in "${root}"/windows-wsl/"${folder}"/*.bash
-        do
+# On Windows shells running in WSL run some overrides
+if [[ ${is_wsl} == "true" ]]; then
+  for folder in "first" "options" "exports" "functions" "third-party" "other" "aliases"; do
+    for root in "${dotfiles}/bash" "${dotfiles_private}/bash"; do
+      if [[ -d "${root}/windows-wsl/${folder}" ]]; then
+        for file in "${root}"/windows-wsl/"${folder}"/*.bash; do
           # shellcheck source=/dev/null
           source "${file}"
         done
@@ -84,8 +73,7 @@ then
 fi
 
 # Load bash completions
-for file in "${dotfiles}"/bash/completions/*.bash
-do
+for file in "${dotfiles}"/bash/completions/*.bash; do
   # shellcheck source=/dev/null
   source "${file}"
 done
@@ -94,8 +82,7 @@ done
 profile_path=$(xdg-user-dir PROFILE)
 profile_path="${profile_path:-${PROFILEPATH:-${HOME}/profile}}"
 
-if ! mountpoint -q "${profile_path}/moose"
-then
+if ! mountpoint -q "${profile_path}/moose"; then
   [[ -f "${dotfiles}/bin/mount-shares" ]] && bash "${dotfiles}/bin/mount-shares"
 fi
 

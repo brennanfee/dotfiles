@@ -16,6 +16,13 @@ words:
   - shopt
   - tput
   - setaf
+  - setab
+  - smul
+  - rmul
+  - smso
+  - rmso
+  - sitm
+  - ritm
   - flatpak
   - pipx
   - doup
@@ -28,3 +35,11 @@ words:
   - bfee
   - mfspassword
   - mfsdelayedinit
+  - dotfiles
+  - rcup
+  - mkrc
+  - wslenv
+  - virt
+  - distro
+  - distros
+  - chroot

@@ -25,9 +25,6 @@ ASDF_CONFIG_HOME="$(xdg-base-dir CONFIG)/asdf"
 # The main config file
 ASDF_CONFIG_FILE="${ASDF_CONFIG_HOME}/asdfrc"
 
-# The location where asdf should be installed to and all the data lives
-ASDF_DATA_DIR="$(xdg-base-dir DATA)/asdf"
-
 # The default packages files
 ASDF_PYTHON_DEFAULT_PACKAGES_FILE="${ASDF_CONFIG_HOME}/default-python-packages"
 ASDF_NPM_DEFAULT_PACKAGES_FILE="${ASDF_CONFIG_HOME}/default-npm-packages"
@@ -36,21 +33,10 @@ ASDF_GOLANG_DEFAULT_PACKAGES_FILE="${ASDF_CONFIG_HOME}/default-golang-packages"
 
 export ASDF_CONFIG_HOME
 export ASDF_CONFIG_FILE
-export ASDF_DATA_DIR
 export ASDF_PYTHON_DEFAULT_PACKAGES_FILE
 export ASDF_NPM_DEFAULT_PACKAGES_FILE
 export ASDF_GEM_DEFAULT_PACKAGES_FILE
 export ASDF_GOLANG_DEFAULT_PACKAGES_FILE
-
-#### Completions and plugin scripts
-
-if [[ -d "${ASDF_DATA_DIR:-${HOME}/.asdf}" ]]; then
-  # shellcheck source=/dev/null
-  source_if "${ASDF_DATA_DIR:-${HOME}/.asdf}/asdf.sh"
-
-  # shellcheck source=/dev/null
-  source_if "${ASDF_DATA_DIR:-${HOME}/.asdf}/completions/asdf.bash"
-fi
 
 # Java
 source_if "${ASDF_DATA_DIR:-${HOME}/.asdf}/plugins/java/set-java-home.bash"
