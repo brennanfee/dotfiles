@@ -67,6 +67,7 @@
       "virt",
       "distro",
       "distros",
+      "rcrc",
       "chroot"
     ]
   }
