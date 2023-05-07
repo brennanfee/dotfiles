@@ -59,7 +59,9 @@ return {
           null_ls.builtins.diagnostics.trail_space,
           null_ls.builtins.diagnostics.tsc,
           null_ls.builtins.diagnostics.vint, -- vimscript
-          null_ls.builtins.diagnostics.write_good,
+          null_ls.builtins.diagnostics.write_good.with({
+            extra_args = { "--no-passive" },
+          }),
           null_ls.builtins.diagnostics.yamllint,
           -- Formatting
           null_ls.builtins.formatting.black,
