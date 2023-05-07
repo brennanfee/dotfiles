@@ -19,6 +19,7 @@ joplin
 wsl-open
 tree-sitter-cli
 markuplint
+husky
 @commitlint/cli
 @commitlint/config-conventional
 
