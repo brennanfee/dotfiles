@@ -2,6 +2,8 @@
 
 My personal and work [dotfiles](https://dotfiles.github.io/) for Mac, Linux, and Windows (WSL).
 
+${toc}
+
 ## Overview
 
 I use the [RCM](https://github.com/thoughtbot/rcm) from Thoughtbot to manage my dotfiles. This tool
