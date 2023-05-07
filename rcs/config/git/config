@@ -10,8 +10,9 @@
   newNormal = green bold
   newHighlight = green bold 22
 [color "diff"]
-  meta = yellow
+  meta = 11
   frag = magenta bold
+  func = 146 bold
   commit = yellow bold
   old = red bold
   new = green bold
@@ -21,7 +22,12 @@
   eol = lf
   autocrlf = input
   gvfs = true
-  pager = diff-so-fancy | less --tabs=4 -RFX
+  pager = diff-so-fancy | less --tabs=2 -RFX
+[interactive]
+  diffFilter = diff-so-fancy --patch
+[diff-so-fancy]
+  markEmptyLines = false
+  rulerWidth = 100
 [fetch]
   prune = true
   pruneTags = true
@@ -50,9 +56,9 @@
   path = ~/.config/git/gitconfig.wsl
   path = ~/.config/git/gitconfig.local
 [pull]
-	rebase = false
-	ff = only
+  rebase = false
+  ff = only
 [init]
-	defaultBranch = main
+  defaultBranch = main
 [mergetool]
-	keepBackup = false
+  keepBackup = false
