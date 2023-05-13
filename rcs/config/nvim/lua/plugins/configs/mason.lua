@@ -79,6 +79,7 @@ return {
       "ktlint",
       "luacheck",
       "markdownlint",
+      "misspell",
       "phpstan",
       "proselint",
       "shellcheck",

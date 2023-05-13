@@ -23,6 +23,8 @@ return {
           null_ls.builtins.code_actions.shellcheck,
           -- completions
           null_ls.builtins.completion.luasnip,
+          null_ls.builtins.completion.spell,
+          null_ls.builtins.completion.tags,
           -- diagnostics (linting)
           null_ls.builtins.diagnostics.ansiblelint,
           null_ls.builtins.diagnostics.cfn_lint,
@@ -42,6 +44,9 @@ return {
           null_ls.builtins.diagnostics.luacheck,
           null_ls.builtins.diagnostics.markdownlint,
           null_ls.builtins.diagnostics.markuplint, -- html
+          null_ls.builtins.diagnostics.misspell.with({
+            extra_args = { "-locale", "US" },
+          }),
           null_ls.builtins.diagnostics.php,
           null_ls.builtins.diagnostics.rubocop,
           null_ls.builtins.diagnostics.shellcheck,
