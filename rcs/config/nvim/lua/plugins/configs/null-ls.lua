@@ -11,12 +11,11 @@ return {
       "williamboman/mason.nvim",
     },
     config = function()
-      local augroup = vim.api.nvim_create_augroup("LspFormatting", { })
+      local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
       local null_ls = require("null-ls")
       null_ls.setup({
         sources = {
           -- code actions
-          null_ls.builtins.code_actions.cspell,
           null_ls.builtins.code_actions.eslint,
           null_ls.builtins.code_actions.gitrebase,
           null_ls.builtins.code_actions.gitsigns,
@@ -35,7 +34,6 @@ return {
           null_ls.builtins.diagnostics.clang_check,
           null_ls.builtins.diagnostics.cmake_lint,
           null_ls.builtins.diagnostics.commitlint,
-          null_ls.builtins.diagnostics.cspell,
           null_ls.builtins.diagnostics.eslint,
           null_ls.builtins.diagnostics.flake8,
           null_ls.builtins.diagnostics.hadolint, -- dockerfile
@@ -90,8 +88,7 @@ return {
         on_attach = function(client, bufnr)
           if client.supports_method("textDocument/formatting") then
             vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
-            if utils.safeRead(settings.formatOnSave, false)
-            then
+            if utils.safeRead(settings.formatOnSave, false) then
               vim.api.nvim_create_autocmd("BufWritePre", {
                 group = augroup,
                 buffer = bufnr,
@@ -100,7 +97,7 @@ return {
                     bufnr = bufnr,
                     filter = function(client)
                       return client.name == "null-ls"
-                    end
+                    end,
                   })
                 end,
               })
@@ -113,5 +110,5 @@ return {
         -- end
       })
     end,
-  }
+  },
 }
