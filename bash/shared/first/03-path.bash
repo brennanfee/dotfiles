@@ -71,6 +71,9 @@ if command_exists ruby && command_exists gem; then
   path_append "${ruby_path}/bin"
 fi
 
+# Neovim Mason bin path (for all the linters and other dev tools)
+path_append "${base_data_dir}/nvim/mason/bin"
+
 unset yarn_path
 unset npm_path
 unset ruby_path
