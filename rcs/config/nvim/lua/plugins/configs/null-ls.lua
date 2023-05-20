@@ -27,7 +27,9 @@ return {
           null_ls.builtins.completion.tags,
           -- diagnostics (linting)
           null_ls.builtins.diagnostics.ansiblelint,
-          null_ls.builtins.diagnostics.cfn_lint,
+          null_ls.builtins.diagnostics.cfn_lint.with({
+            filetypes = { "cloudformation", "cfn" },
+          }),
           null_ls.builtins.diagnostics.checkmake,
           null_ls.builtins.diagnostics.checkstyle.with({
             extra_args = { "-c", "/google_checks.xml" }, -- or "/sun_checks.xml" or path to self written rules
