@@ -36,10 +36,10 @@ return {
     },
     cmd = { "NvimTreeToggle", "NvimTreeFocus" },
     init = function()
-      vim.keymap.set("n", "<C-n>", "<cmd> NvimTreeToggle <CR>", { desc = "Toggle nvimtree"})
-      vim.keymap.set("n", "<leader>t", "<cmd> NvimTreeToggle <CR>", { desc = "Toggle nvimtree"})
+      vim.keymap.set("n", "<C-n>", "<cmd> NvimTreeToggle <CR>", { desc = "Toggle nvimtree" })
+      vim.keymap.set("n", "<leader>t", "<cmd> NvimTreeToggle <CR>", { desc = "Toggle nvimtree" })
 
-      vim.keymap.set("n", "<leader>e", "<cmd> NvimTreeFocus <CR>", { desc = "Focus nvimtree"})
+      vim.keymap.set("n", "<leader>e", "<cmd> NvimTreeFocus <CR>", { desc = "Focus nvimtree" })
     end,
     opts = {
       hijack_cursor = true,
@@ -50,7 +50,7 @@ return {
         update_root = true,
       },
       view = {
-        width = 35,
+        width = 30,
         relativenumber = true,
         preserve_window_proportions = true,
       },
@@ -59,5 +59,5 @@ return {
       require("nvim-tree").setup(opts)
       vim.g.nvimtree_side = opts.view.side
     end,
-  }
+  },
 }
