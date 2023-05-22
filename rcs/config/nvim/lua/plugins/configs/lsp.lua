@@ -1,25 +1,25 @@
 -- LSP plugins and config
-local utils = require("core/utils")
+local utils = require("core.utils")
 local settings = require("core/user-settings")
 
 return {
   {
     "neovim/nvim-lspconfig",
     dependencies = {
-      'williamboman/mason.nvim',
-      'williamboman/mason-lspconfig.nvim',
+      "williamboman/mason.nvim",
+      "williamboman/mason-lspconfig.nvim",
       -- Useful status updates for LSP
-      { 'j-hui/fidget.nvim', opts = {} },
+      { "j-hui/fidget.nvim", opts = {} },
       -- Additional lua configuration, makes nvim stuff amazing!
-      'folke/neodev.nvim',
+      "folke/neodev.nvim",
     },
     init = function()
-      require("core.utils").lazy_load "nvim-lspconfig"
+      utils.lazy_load("nvim-lspconfig")
       local map = utils.map_key
 
       -- Global mappings
       map("n", "<leader>of", function()
-        vim.diagnostic.open_float { border = "rounded" }
+        vim.diagnostic.open_float({ border = "rounded" })
       end, { desc = "LSP: [F]loating Diagnostics" })
       map("n", "[d", function()
         vim.diagnostic.goto_prev()
@@ -38,15 +38,15 @@ return {
       -- Language Server customizations
       --   Add any additional override configuration will be passed to the `settings`
       --   field of the server config.
-      server_configs = {
+      local server_configs = {
         lua_ls = { -- filetypes: lua
           Lua = {
             runtime = {
-              version = 'LuaJIT',
+              version = "LuaJIT",
             },
             diagnostics = {
               -- Get the language server to recognize the `vim` global
-              globals = { 'vim' },
+              globals = { "vim" },
             },
             workspace = {
               checkThirdParty = false,
@@ -55,10 +55,31 @@ return {
             telemetry = { enable = false },
           },
         },
+        docker_compose_language_service = {
+          filetypes = { "none" },
+        },
+        yamlls = {
+          yaml = {
+            format = {
+              enable = false, -- using prettier instead
+            },
+            keyOrdering = false,
+            redhat = {
+              telemetry = {
+                enabled = false,
+              },
+            },
+          },
+          redhat = {
+            telemetry = {
+              enabled = false,
+            },
+          },
+        },
       }
 
       --  This function gets run when an LSP connects to a particular buffer.
-      on_attach_callback = function(client, bufnr)
+      local on_attach_callback = function(_, bufnr)
         -- vim.notify("attach client: " .. vim.inspect(client.id))
         -- vim.notify("attach buffer: " .. vim.inspect(bufnr))
         local map = utils.map_key
@@ -124,52 +145,49 @@ return {
         -- end, '[W]orkspace [L]ist Folders')
 
         -- Create a command `:Format` local to the LSP buffer
-        vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
+        vim.api.nvim_buf_create_user_command(bufnr, "Format", function(_)
           vim.lsp.buf.format()
-        end, { desc = 'LSP: Format current buffer with LSP' })
+        end, { desc = "LSP: Format current buffer with LSP" })
 
         -- vim.notify("attach done: " .. vim.inspect(bufnr))
       end
 
       -- nvim-cmp supports additional completion capabilities, so broadcast that to servers
-      capability_settings = vim.lsp.protocol.make_client_capabilities()
-      capability_settings = require('cmp_nvim_lsp').default_capabilities(capability_settings)
+      local capability_settings = vim.lsp.protocol.make_client_capabilities()
+      capability_settings = require("cmp_nvim_lsp").default_capabilities(capability_settings)
       capability_settings.textDocument.completion.completionItem.snippetSupport = true
 
-      mason_lspconfig = require('mason-lspconfig')
+      local mason_lspconfig = require("mason-lspconfig")
 
       mason_lspconfig.setup({
---        ensure_installed = vim.tbl_keys(servers),
+        --        ensure_installed = vim.tbl_keys(servers),
         automatic_installation = false,
         automatic_setup = false,
       })
 
-      get_servers = mason_lspconfig.get_installed_servers
+      local get_servers = mason_lspconfig.get_installed_servers
 
-      for _, server_name in ipairs(get_servers())
-      do
+      for _, server_name in ipairs(get_servers()) do
         settings = {}
-        if server_configs[server_name] ~= nil
-        then
+        if server_configs[server_name] ~= nil then
           settings = server_configs[server_name]
         end
 
-        if settings.filetypes ~= nil
-        then
-          require('lspconfig')[server_name].setup {
+        if settings.filetypes ~= nil then
+          require("lspconfig")[server_name].setup({
             capabilities = capability_settings,
             on_attach = on_attach_callback,
             settings = settings,
             filetypes = settings.filetypes,
-          }
+          })
         else
-          require('lspconfig')[server_name].setup {
+          require("lspconfig")[server_name].setup({
             capabilities = capability_settings,
             on_attach = on_attach_callback,
             settings = settings,
-          }
+          })
         end
       end
-    end
-  }
+    end,
+  },
 }
