@@ -71,6 +71,10 @@ k.set("n", "<A-k>", "<Esc>:m .-2<CR>==gi", opts)
 k.set("n", "gO", "O<Esc>j", opts)
 k.set("n", "go", "o<Esc>k", opts)
 
+-- Add a space before and after the cursor
+k.set("n", "]<Space>", "a<Space><Esc>h", opts)
+k.set("n", "[<Space>", "i<Space><Esc>l", opts)
+
 -- Better movements to start and end of line
 k.set("n", "gh", "0", opts)
 k.set("n", "gl", "$", opts)
