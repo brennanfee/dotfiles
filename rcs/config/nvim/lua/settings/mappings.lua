@@ -68,8 +68,8 @@ k.set("n", "<A-j>", "<Esc>:m .+1<CR>==gi", opts)
 k.set("n", "<A-k>", "<Esc>:m .-2<CR>==gi", opts)
 
 -- Add add blank line above/below current line
-k.set("n", "gO", "O<Esc>", opts)
-k.set("n", "go", "o<Esc>2k", opts)
+k.set("n", "gO", "O<Esc>j", opts)
+k.set("n", "go", "o<Esc>k", opts)
 
 -- Better movements to start and end of line
 k.set("n", "gh", "0", opts)
@@ -80,6 +80,15 @@ k.set("n", "gs", "^", opts)
 utils.map_key("n", "<leader>z", function()
   vim.opt_local.spell = not vim.opt_local.spell:get()
 end, { desc = "Toggle Spell Checking" })
+
+utils.map_key("n", "zy", "1z=e", { desc = "Fix spelling with first word" })
+
+-- TODO: Convert to LUA
+vim.cmd[[
+  " :w!! to save a file as sudo when you forgot to open the file as sudo
+  command WriteSudo w !sudo tee % > /dev/null
+  cnoremap w!! WriteSudo
+]]
 
 -- From NvChad
 k.set('n', "<Esc>", ":noh <CR>", opts) -- clear highlights

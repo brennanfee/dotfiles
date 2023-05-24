@@ -35,6 +35,7 @@ vim.opt.fileformats = "unix" -- only work in "unixy" files with <CR>
 vim.opt.endofline = true
 vim.opt.endoffile = false
 vim.opt.fixendofline = true
+vim.opt.modeline = true
 
 vim.opt.conceallevel = 0 -- so that `` is visible in markdown files
 
@@ -75,6 +76,7 @@ else
 end
 
 vim.opt.hlsearch = true
+vim.opt.gdefault = true
 vim.opt.smartcase = true
 vim.opt.ignorecase = true -- ignore case in search patterns
 vim.opt.inccommand = "split" -- Get a preview of replacements
@@ -84,6 +86,9 @@ vim.opt.splitright = true -- force all vertical splits to go to the right of cur
 
 vim.opt.scrolloff = 5 -- Minimal number of screen lines to keep above and below the cursor
 vim.opt.sidescrolloff = 5 -- The minimal number of columns to scroll horizontally
+
+vim.opt.hidden = true
+vim.opt.visualbell = true
 
 vim.opt.mouse = "a" -- Enable mouse mode
 
@@ -96,7 +101,7 @@ else
   vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
 end
 
-vim.opt.numberwidth = 4 -- set line number column width
+vim.opt.numberwidth = 5 -- set line number column width
 vim.opt.signcolumn = "yes:2" -- always show signcolumns
 
 vim.opt.list = true
@@ -108,6 +113,8 @@ vim.opt.listchars =
 vim.opt.wrap = true
 vim.opt.linebreak = true
 vim.opt.showbreak = "++ "
+
+vim.opt.iskeyword:remove('_')
 
 vim.opt.shortmess:append("c") -- prevent "pattern not found" messages
 

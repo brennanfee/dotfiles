@@ -10,7 +10,7 @@ local TrimWhiteSpaceGrp = api.nvim_create_augroup("TrimWhiteSpaceGrp", { clear =
 api.nvim_create_autocmd("BufWritePre", {
   group = TrimWhiteSpaceGrp,
   callback = function()
-    bufnr = vim.api.nvim_get_current_buf()
+    local bufnr = vim.api.nvim_get_current_buf()
     if vim.b[bufnr].editorconfig == nil or
       vim.b[bufnr].editorconfig["trim_trailing_whitespace"] == nil
     then
@@ -70,9 +70,50 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
+-- TODO: Convert to lua
 vim.cmd [[
   augroup _alpha
     autocmd!
     autocmd User AlphaReady set showtabline=0 | autocmd BufUnload <buffer> set showtabline=2
   augroup end
+]]
+
+vim.cmd [[
+  " Close vim if buffer is closed and there are no more buffers
+  function! CloseOnLastBuffer()
+    let cnt = 0
+    for nr in range(1, bufnr("$"))
+      if buflisted(nr) && ! empty(bufname(nr)) || getbufvar(nr, '&buftype') ==# 'help'
+        let cnt += 1
+      endif
+    endfor
+
+    if cnt == 1
+      :q
+    endif
+  endfunction
+
+  augroup close_on_last_buffer
+    autocmd!
+    autocmd BufDelete * call CloseOnLastBuffer()
+  augroup END
+]]
+
+-- File specific settings
+-- TODO: Convert to lua
+vim.cmd [[
+  augroup filetypes_mappings
+    autocmd!
+    autocmd BufNewFile,BufFilePre,BufRead LICENSE setlocal filetype=text
+    autocmd BufNewFile,BufFilePre,BufRead license setlocal filetype=text
+    autocmd BufNewFile,BufFilePre,BufRead * if match(getline(1), "---") >= 0 | setlocal filetype=yaml | endif
+  augroup END
+]]
+
+vim.cmd[[
+  " Git commits - Turn spellcheck on
+  augroup gitcommit_group
+    autocmd!
+    autocmd FileType git,gitcommit,gitsendemail,*commit*,*COMMIT* setlocal spell
+  augroup END
 ]]
