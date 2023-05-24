@@ -122,6 +122,7 @@ if utils.isNotEmpty(settings.grepprg) then
 end
 
 vim.opt.spelllang = { "en_us,en" }
+vim.opt.spell = false -- off by default
 
 -- A comma separated list of options for Insert mode completion
 vim.opt.completeopt = { "menu", "menuone", "noselect", "noinsert" }

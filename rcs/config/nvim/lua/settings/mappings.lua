@@ -1,8 +1,9 @@
+local utils = require("core.utils")
 local opts = { noremap = true, silent = true }
-local expr_opts = { expr = true }
 
 local term_opts = { silent = true }
 
+-- TODO: Convert all to new method and remove this local variable
 -- Shorten function name
 local k = vim.keymap
 
@@ -74,6 +75,11 @@ k.set("n", "go", "o<Esc>2k", opts)
 k.set("n", "gh", "0", opts)
 k.set("n", "gl", "$", opts)
 k.set("n", "gs", "^", opts)
+
+-- Toggle spelling
+utils.map_key("n", "<leader>z", function()
+  vim.opt_local.spell = not vim.opt_local.spell:get()
+end, { desc = "Toggle Spell Checking" })
 
 -- From NvChad
 k.set('n', "<Esc>", ":noh <CR>", opts) -- clear highlights
