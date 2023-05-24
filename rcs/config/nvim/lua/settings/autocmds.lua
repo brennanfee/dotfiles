@@ -117,3 +117,24 @@ vim.cmd[[
     autocmd FileType git,gitcommit,gitsendemail,*commit*,*COMMIT* setlocal spell
   augroup END
 ]]
+
+local function open_nvim_tree(data)
+  -- buffer is a directory
+  local directory = vim.fn.isdirectory(data.file) == 1
+
+  if not directory then
+    return
+  end
+
+  -- change to the directory
+  vim.cmd.cd(data.file)
+
+  -- open the tree
+  require("nvim-tree.api").tree.open()
+end
+
+local dir_tree_group = vim.api.nvim_create_augroup('DirTreeGroup', { clear = true })
+vim.api.nvim_create_autocmd({ "VimEnter" }, {
+  group = dir_tree_group,
+  callback = open_nvim_tree,
+})

@@ -1,5 +1,4 @@
 -- File tree plugin
-local utils = require("core/utils")
 
 -- return {
 --   {
