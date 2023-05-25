@@ -4,3 +4,5 @@
 [user]
   name = Brennan Fee
   email = febrenna@amazon.com
+[user]
+  signingKey = key::ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGkUsLX+FgjPqyMXZERuIKN253kic9GXH8jtIk4egXer febrenna@amazon.com

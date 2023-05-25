@@ -62,3 +62,13 @@
   defaultBranch = main
 [mergetool]
   keepBackup = false
+[user]
+  signingKey = key::ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDjsVSJqSUjNd/KZkf43z17OG5lUlwqOLmBZKOjFHK1x brennan.github@mailbots.org
+[gpg]
+  format = ssh
+[gpg "ssh"]
+  allowedSignersFile = ~/.config/git/allowed_signers
+[commit]
+  gpgsign = true
+[tag]
+  gpgsign = true
