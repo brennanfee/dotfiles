@@ -1,5 +1,5 @@
-local utils = require("core/utils")
-local settings = require("core/user-settings")
+local utils = require("core.utils")
+local settings = require("core.user-settings")
 
 require("lazy").setup("plugins/configs", {
   defaults = { lazy = true },

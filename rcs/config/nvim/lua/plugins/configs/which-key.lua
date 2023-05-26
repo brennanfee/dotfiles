@@ -6,11 +6,11 @@ return {
     cmd = "WhichKey",
     keys = { "<leader>", '"', "'", "`", "c", "v" },
     init = function()
-      vim.keymap.set("n", "<leader>wK", "<cmd> WhichKey <CR>", { desc = "which-key all keymaps"})
+      vim.keymap.set("n", "<leader>wK", "<cmd> WhichKey <CR>", { desc = "which-key all keymaps" })
       vim.keymap.set("n", "<leader>wk", function()
-        local input = vim.fn.input "WhichKey: "
+        local input = vim.fn.input("WhichKey: ")
         vim.cmd("WhichKey " .. input)
-      end, { desc = "which-key query lookup"})
+      end, { desc = "which-key query lookup" })
     end,
     opts = {
       icons = {
@@ -40,5 +40,5 @@ return {
         v = { "j", "k" },
       },
     },
-  }
+  },
 }

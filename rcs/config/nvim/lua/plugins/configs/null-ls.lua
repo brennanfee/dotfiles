@@ -1,6 +1,6 @@
 -- Null-ls
-local utils = require("core/utils")
-local settings = require("core/user-settings")
+local utils = require("core.utils")
+local settings = require("core.user-settings")
 
 return {
   {

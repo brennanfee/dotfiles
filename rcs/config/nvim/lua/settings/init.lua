@@ -1,8 +1,8 @@
------- Non-plugin related options and settings
+-- Non-plugin related options and settings
 
 -- Basic vim options\settings
-require("settings/options")
+require("settings.options")
 -- Final keyboard mappings/overrides
-require("settings/mappings")
+require("settings.mappings")
 -- Vim autocommands/autogroups
-require("settings/autocmds")
+require("settings.autocmds")

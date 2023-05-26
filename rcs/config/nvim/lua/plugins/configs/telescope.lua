@@ -3,10 +3,10 @@
 return {
   {
     "nvim-telescope/telescope.nvim",
-    verson = '*', -- stable
+    verson = "*", -- stable
     cmd = "Telescope",
     dependencies = {
-      'nvim-lua/plenary.nvim',
+      "nvim-lua/plenary.nvim",
       "nvim-telescope/telescope-dap.nvim",
       "nvim-telescope/telescope-file-browser.nvim",
       "nvim-telescope/telescope-symbols.nvim",
@@ -20,33 +20,39 @@ return {
       "tsakirist/telescope-lazy.nvim",
       "nvim-tree/nvim-web-devicons",
       {
-        'nvim-telescope/telescope-fzf-native.nvim',
-        build = 'make',
+        "nvim-telescope/telescope-fzf-native.nvim",
+        build = "make",
         cond = function()
-          return vim.fn.executable 'make' == 1
+          return vim.fn.executable("make") == 1
         end,
       },
     },
     init = function()
       local nmap = function(keys, func, desc)
         if desc then
-          desc = 'Telescope: ' .. desc
+          desc = "Telescope: " .. desc
         end
 
-        vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
+        vim.keymap.set("n", keys, func, { desc = desc })
       end
 
       -- Find
       nmap("<leader>ff", "<cmd> Telescope find_files <CR>", "[F]ind [F]iles")
-      nmap("<leader>fa", "<cmd> Telescope find_files follow=true no_ignore=true hidden=true <CR>",
-        "[F]ind [A]ll")
+      nmap(
+        "<leader>fa",
+        "<cmd> Telescope find_files follow=true no_ignore=true hidden=true <CR>",
+        "[F]ind [A]ll"
+      )
       nmap("<leader>ft", "<cmd> Telescope live_grep <CR>", "[F]ind [T]ext With Grep")
       nmap("<leader>fb", "<cmd> Telescope buffers <CR>", "[F]ind [B]uffers")
       nmap("<leader>fh", "<cmd> Telescope help_tags <CR>", "[F]ind [H]elp Page")
       nmap("<leader>fr", "<cmd> Telescope oldfiles <CR>", "[F]ind [R]ecently Used Files")
       nmap("<leader>fp", "<cmd> Telescope projects <CR>", "[F]ind [P]rojects")
-      nmap("<leader>fz", "<cmd> Telescope current_buffer_fuzzy_find <CR>",
-        "[F]uzzy [F]ind In Current Buffer")
+      nmap(
+        "<leader>fz",
+        "<cmd> Telescope current_buffer_fuzzy_find <CR>",
+        "[F]uzzy [F]ind In Current Buffer"
+      )
 
       -- Git
       nmap("<leader>cm", "<cmd> Telescope git_commits <CR>", "Git [C]o[m]mits")
@@ -73,17 +79,26 @@ return {
         path_display = { "truncate" },
         set_env = { ["COLORTERM"] = "truecolor" },
         mappings = {
-          n = { ["q"] = "close", },
+          n = { ["q"] = "close" },
           i = {
-            ['<C-u>'] = false,
-            ['<C-d>'] = false,
+            ["<C-u>"] = false,
+            ["<C-d>"] = false,
           },
         },
       },
 
       extensions_list = {
-        "dap", "file_browser", "fzf", "gh", "software-licenses", "heading",
-        "env", "color_names", "filelinks", "luasnip", "lazy",
+        "dap",
+        "file_browser",
+        "fzf",
+        "gh",
+        "software-licenses",
+        "heading",
+        "env",
+        "color_names",
+        "filelinks",
+        "luasnip",
+        "lazy",
       },
     },
     config = function(_, opts)

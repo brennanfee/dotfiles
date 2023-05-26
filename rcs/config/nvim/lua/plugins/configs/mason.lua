@@ -69,7 +69,7 @@ return {
       "ansible-lint",
       "cfn-lint",
       "cmakelint",
-      "commitlint",
+      --"commitlint", I'll manually install this (with asdf and node)
       "cpplint",
       "editorconfig-checker",
       "eslint_d",

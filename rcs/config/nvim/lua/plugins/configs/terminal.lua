@@ -30,13 +30,13 @@ return {
       })
 
       function _G.set_terminal_keymaps()
-        local opts = {noremap = true}
-        vim.api.nvim_buf_set_keymap(0, 't', '<esc>', [[<C-\><C-n>]], opts)
-        vim.api.nvim_buf_set_keymap(0, 't', 'jk', [[<C-\><C-n>]], opts)
-        vim.api.nvim_buf_set_keymap(0, 't', '<C-h>', [[<C-\><C-n><C-W>h]], opts)
-        vim.api.nvim_buf_set_keymap(0, 't', '<C-j>', [[<C-\><C-n><C-W>j]], opts)
-        vim.api.nvim_buf_set_keymap(0, 't', '<C-k>', [[<C-\><C-n><C-W>k]], opts)
-        vim.api.nvim_buf_set_keymap(0, 't', '<C-l>', [[<C-\><C-n><C-W>l]], opts)
+        local opts = { noremap = true }
+        vim.api.nvim_buf_set_keymap(0, "t", "<esc>", [[<C-\><C-n>]], opts)
+        vim.api.nvim_buf_set_keymap(0, "t", "jk", [[<C-\><C-n>]], opts)
+        vim.api.nvim_buf_set_keymap(0, "t", "<C-h>", [[<C-\><C-n><C-W>h]], opts)
+        vim.api.nvim_buf_set_keymap(0, "t", "<C-j>", [[<C-\><C-n><C-W>j]], opts)
+        vim.api.nvim_buf_set_keymap(0, "t", "<C-k>", [[<C-\><C-n><C-W>k]], opts)
+        vim.api.nvim_buf_set_keymap(0, "t", "<C-l>", [[<C-\><C-n><C-W>l]], opts)
       end
 
       --vim.cmd('autocmd! TermOpen term://* lua set_terminal_keymaps()')
@@ -44,7 +44,7 @@ return {
       vim.api.nvim_create_autocmd("TermOpen", {
         pattern = "term://*",
         callback = function()
-          set_terminal_keymaps()
+          _G.set_terminal_keymaps()
         end,
         desc = "Mappings for navigation with a terminal",
       })
@@ -53,33 +53,37 @@ return {
 
       local lazygit = Terminal:new({ cmd = "lazygit", hidden = true })
 
-      function _LAZYGIT_TOGGLE()
+      vim.api.nvim_create_user_command("LazyGitToggle", function()
         lazygit:toggle()
-      end
+      end, { desc = "Toggle LazyGit terminal" })
 
       local node = Terminal:new({ cmd = "node", hidden = true })
 
-      function _NODE_TOGGLE()
+      vim.api.nvim_create_user_command("NodeToggle", function()
         node:toggle()
-      end
+      end, { desc = "Toggle Node terminal" })
 
       local ncdu = Terminal:new({ cmd = "ncdu", hidden = true })
 
-      function _NCDU_TOGGLE()
+      vim.api.nvim_create_user_command("NCDUToggle", function()
         ncdu:toggle()
-      end
+      end, { desc = "Toggle NCDU terminal" })
+
+      vim.api.nvim_create_user_command("NcduToggle", function()
+        ncdu:toggle()
+      end, { desc = "Toggle NCDU terminal" })
 
       local htop = Terminal:new({ cmd = "htop", hidden = true })
 
-      function _HTOP_TOGGLE()
+      vim.api.nvim_create_user_command("HtopToggle", function()
         htop:toggle()
-      end
+      end, { desc = "Toggle htop terminal" })
 
       local python = Terminal:new({ cmd = "python", hidden = true })
 
-      function _PYTHON_TOGGLE()
+      vim.api.nvim_create_user_command("PythonToggle", function()
         python:toggle()
-      end
+      end, { desc = "Toggle Python terminal" })
     end,
-  }
+  },
 }

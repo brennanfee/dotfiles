@@ -9,17 +9,33 @@ local k = vim.keymap
 
 ------ Multiple Mode Mappings ------
 -- Make sure the leader key doesn't do anything else
-k.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
+k.set({ "n", "v" }, "<Space>", "<Nop>", { silent = true })
 
 -- Remap for dealing with line wrap
-k.set({ 'n', 'x' }, 'j', 'v:count || mode(1)[0:1] == "no" ? "j" : "gj"',
-  { expr = true, silent = true }) -- move down
-k.set({ 'n', 'x' }, 'k', 'v:count || mode(1)[0:1] == "no" ? "k" : "gk"',
-  { expr = true, silent = true }) -- move up
-k.set({ 'n', 'v' }, '<Down>', 'v:count || mode(1)[0:1] == "no" ? "j" : "gj"',
-  { expr = true, silent = true }) -- move down
-k.set({ 'n', 'v' }, '<Up>', 'v:count || mode(1)[0:1] == "no" ? "k" : "gk"',
-  { expr = true, silent = true }) -- move up
+k.set(
+  { "n", "x" },
+  "j",
+  'v:count || mode(1)[0:1] == "no" ? "j" : "gj"',
+  { expr = true, silent = true }
+) -- move down
+k.set(
+  { "n", "x" },
+  "k",
+  'v:count || mode(1)[0:1] == "no" ? "k" : "gk"',
+  { expr = true, silent = true }
+) -- move up
+k.set(
+  { "n", "v" },
+  "<Down>",
+  'v:count || mode(1)[0:1] == "no" ? "j" : "gj"',
+  { expr = true, silent = true }
+) -- move down
+k.set(
+  { "n", "v" },
+  "<Up>",
+  'v:count || mode(1)[0:1] == "no" ? "k" : "gk"',
+  { expr = true, silent = true }
+) -- move up
 
 ------ Normal Mode Mappings ------
 -- Diagnostic keymaps
@@ -30,10 +46,11 @@ k.set({ 'n', 'v' }, '<Up>', 'v:count || mode(1)[0:1] == "no" ? "k" : "gk"',
 --k.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = "Open diagnostics list" })
 
 -- Better window navigation
-k.set('n', "<C-h>", "<C-w>h", opts) -- window left
-k.set('n', "<C-j>", "<C-w>j", opts) -- window down
-k.set('n', "<C-k>", "<C-w>k", opts) -- window up
-k.set('n', "<C-l>", "<C-w>l", opts) -- window right
+-- Now handled by Vim Tmux Navigator plugin
+-- k.set('n', "<C-h>", "<C-w>h", opts) -- window left
+-- k.set('n', "<C-j>", "<C-w>j", opts) -- window down
+-- k.set('n', "<C-k>", "<C-w>k", opts) -- window up
+-- k.set('n', "<C-l>", "<C-w>l", opts) -- window right
 
 -- Resize with arrows
 k.set("n", "<C-Up>", ":resize -2<CR>", opts)
@@ -88,23 +105,23 @@ end, { desc = "Toggle Spell Checking" })
 utils.map_key("n", "zy", "1z=e", { desc = "Fix spelling with first word" })
 
 -- TODO: Convert to LUA
-vim.cmd[[
+vim.cmd([[
   " :w!! to save a file as sudo when you forgot to open the file as sudo
   command WriteSudo w !sudo tee % > /dev/null
   cnoremap w!! WriteSudo
-]]
+]])
 
 -- From NvChad
-k.set('n', "<Esc>", ":noh <CR>", opts) -- clear highlights
+k.set("n", "<Esc>", ":noh <CR>", opts) -- clear highlights
 
-k.set('n', "<C-s>", "<cmd> w <CR>", opts) -- save file
+k.set("n", "<C-s>", "<cmd> w <CR>", opts) -- save file
 
-k.set('n', "<C-c>", "<cmd> %y+ <CR>", opts) -- copy whole file
+k.set("n", "<C-c>", "<cmd> %y+ <CR>", opts) -- copy whole file
 
-k.set('n', "<leader>n", "<cmd> set nu! <CR>", opts) -- toggle line number
-k.set('n', "<leader>rn", "<cmd> set rnu! <CR>", opts) -- toggle relative number
+k.set("n", "<leader>n", "<cmd> set nu! <CR>", opts) -- toggle line number
+k.set("n", "<leader>rn", "<cmd> set rnu! <CR>", opts) -- toggle relative number
 
-k.set('n', "<leader>en", "<cmd> enew <CR>", opts) -- new buffer
+k.set("n", "<leader>en", "<cmd> enew <CR>", opts) -- new buffer
 
 ------ Insert Mode Mappings ------
 -- Press jk fast to exit insert mode
@@ -143,8 +160,7 @@ k.set("x", "p", 'p:let @+=@0<CR>:let @"=@0<CR>', opts) -- don't copy replaced te
 
 ------ Terminal Mode Mappings ------
 -- From NvChad
-k.set("t", "<C-x>", vim.api.nvim_replace_termcodes("<C-\\><C-N>", true, true, true),
-  term_opts) -- escape terminal mode
+k.set("t", "<C-x>", vim.api.nvim_replace_termcodes("<C-\\><C-N>", true, true, true), term_opts) -- escape terminal mode
 
 -- Better terminal navigation
 -- k.set("t", "<C-h>", "<C-\\><C-N><C-w>h", term_opts)

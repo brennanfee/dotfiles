@@ -1,5 +1,5 @@
-local utils = require("core/utils")
-local settings = require("core/user-settings")
+local utils = require("core.utils")
+local settings = require("core.user-settings")
 
 -- Directories for backup files, swaps, and undo files
 vim.o.backupdir = vim.fn.stdpath("cache") .. "/backup//"
@@ -115,7 +115,7 @@ vim.opt.wrap = true
 vim.opt.linebreak = true
 vim.opt.showbreak = "++ "
 
-vim.opt.iskeyword:remove('_')
+vim.opt.iskeyword:remove("_")
 
 vim.opt.shortmess:append("c") -- prevent "pattern not found" messages
 

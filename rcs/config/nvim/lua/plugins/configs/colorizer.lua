@@ -3,19 +3,14 @@
 return {
   {
     "NvChad/nvim-colorizer.lua",
-    init = function()
-      require("core.utils").lazy_load "nvim-colorizer.lua"
-    end,
-    config = function()
-      require("colorizer").setup({
+    lazy = false,
+    opts = {
+      user_default_options = {
+        css = true,
+        sass = { enable = true, parsers = { "css" } },
         mode = "virtualtext", -- Set the display mode.
         tailwind = true, -- Enable tailwind colors
-      })
-
-      -- execute colorizer as soon as possible
-      vim.defer_fn(function()
-        require("colorizer").attach_to_buffer(0)
-      end, 0)
-    end,
+      },
+    },
   },
 }

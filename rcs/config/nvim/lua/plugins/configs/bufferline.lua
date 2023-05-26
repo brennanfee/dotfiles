@@ -1,5 +1,5 @@
 -- Buffer line (tab line)
-local utils = require("core/utils")
+local utils = require("core.utils")
 
 return {
   {
@@ -7,7 +7,7 @@ return {
     lazy = false,
     dependencies = "nvim-tree/nvim-web-devicons",
     config = function()
-      require("bufferline").setup {
+      require("bufferline").setup({
         options = {
           numbers = "none", -- | "ordinal" | "buffer_id" | "both" | function({ ordinal, id, lower, raise }): string,
           close_command = utils.bufdelete, -- can be a string | function, see "Mouse actions"
@@ -51,8 +51,7 @@ return {
               return true
             end
             -- filter out by buffer name
-            if vim.fn.bufname(buf_number) ~= "[No Name]"
-            then
+            if vim.fn.bufname(buf_number) ~= "[No Name]" then
               return true
             end
             -- filter out based on arbitrary rules
@@ -67,7 +66,8 @@ return {
               text = " File Explorer",
               highlight = "Directory",
               text_align = "left",
-              padding = 1 }
+              padding = 1,
+            },
           },
           show_buffer_icons = true, -- disable filetype icons for buffers
           show_buffer_close_icons = true,
@@ -85,7 +85,7 @@ return {
           -- end
           sort_by = "id",
         },
-      }
+      })
     end,
-  }
+  },
 }

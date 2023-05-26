@@ -1,34 +1,39 @@
-
 return {
   {
-    'phaazon/hop.nvim',
+    "phaazon/hop.nvim",
     lazy = false,
-    branch = 'v2', -- optional but strongly recommended
+    branch = "v2", -- optional but strongly recommended
 
     init = function()
       local map = require("core/utils").map_key
-      local hop = require('hop')
-      local directions = require('hop.hint').HintDirection
-      local positions = require('hop.hint').HintPosition
+      local hop = require("hop")
+      local directions = require("hop.hint").HintDirection
+      local positions = require("hop.hint").HintPosition
 
       -- Better f and t
       map("n", "f", function()
         hop.hint_char1({ direction = directions.AFTER_CURSOR, current_line_only = true })
-      end, { remap = true, desc = "Search [F]or Letter In Line"})
+      end, { remap = true, desc = "Search [F]or Letter In Line" })
 
       map("n", "F", function()
         hop.hint_char1({ direction = directions.BEFORE_CURSOR, current_line_only = true })
-      end, { remap = true, desc = "Search [F]or Letter In Line (Backwards)"})
+      end, { remap = true, desc = "Search [F]or Letter In Line (Backwards)" })
 
       map("n", "t", function()
-        hop.hint_char1({ direction = directions.AFTER_CURSOR,
-          current_line_only = true, hint_offset = -1 })
-      end, { remap = true, desc = "Search Up [T]o Letter In Line"})
+        hop.hint_char1({
+          direction = directions.AFTER_CURSOR,
+          current_line_only = true,
+          hint_offset = -1,
+        })
+      end, { remap = true, desc = "Search Up [T]o Letter In Line" })
 
       map("n", "T", function()
-        hop.hint_char1({ direction = directions.BEFORE_CURSOR,
-          current_line_only = true, hint_offset = -1 })
-      end, { remap = true, desc = "Search Up [T]o Letter In Line (Backwards)"})
+        hop.hint_char1({
+          direction = directions.BEFORE_CURSOR,
+          current_line_only = true,
+          hint_offset = -1,
+        })
+      end, { remap = true, desc = "Search Up [T]o Letter In Line (Backwards)" })
 
       -- Hop mappings
       map("n", "<leader>hc", function()
@@ -62,6 +67,6 @@ return {
 
     config = function()
       require("hop").setup()
-    end
+    end,
   },
 }

@@ -1,5 +1,4 @@
-local settings = require("core/user-settings")
-local cmd = vim.cmd
+local settings = require("core.user-settings")
 local fn = vim.fn
 local fs = vim.fs
 
@@ -11,7 +10,7 @@ M.isNotEmpty = function(s)
 end
 
 M.safeRead = function(s, default)
-  if s == nill or s == "" then
+  if s == nil or s == "" then
     return default
   else
     return s
@@ -23,14 +22,14 @@ M.file_exists = function(name)
 end
 
 M.bufdelete = function(bufnum)
-  require('mini.bufremove').delete(bufnum, true)
+  require("mini.bufremove").delete(bufnum, true)
 end
 
 M.lazy_load = function(plugin)
   vim.api.nvim_create_autocmd({ "BufRead", "BufWinEnter", "BufNewFile" }, {
     group = vim.api.nvim_create_augroup("BeLazyOnFileOpen" .. plugin, {}),
     callback = function()
-      local file = vim.fn.expand "%"
+      local file = vim.fn.expand("%")
       local condition = file ~= "NvimTree_1" and file ~= "[lazy]" and file ~= ""
 
       if condition then
@@ -40,14 +39,14 @@ M.lazy_load = function(plugin)
         -- This deferring only happens only when we do "nvim filename"
         if plugin ~= "nvim-treesitter" then
           vim.schedule(function()
-            require("lazy").load { plugins = plugin }
+            require("lazy").load({ plugins = plugin })
 
             if plugin == "nvim-lspconfig" then
-              vim.cmd "silent! do FileType"
+              vim.cmd("silent! do FileType")
             end
-          end, 0)
+          end)
         else
-          require("lazy").load { plugins = plugin }
+          require("lazy").load({ plugins = plugin })
         end
       end
     end,
@@ -55,20 +54,19 @@ M.lazy_load = function(plugin)
 end
 
 M.map_key = function(mode, lhs, rhs, opts)
-  local options = { } -- noremap already default to true for vim.keymap.set
+  local options = {} -- noremap already default to true for vim.keymap.set
   if opts then
-      options = vim.tbl_extend("force", options, opts)
+    options = vim.tbl_extend("force", options, opts)
   end
   vim.keymap.set(mode, lhs, rhs, options)
 end
 
 M.theme_colors = function()
   local theme = M.safeRead(settings.theme, "default")
-  if theme == "onedark"
-  then
+  local themeColors
+  if theme == "onedark" then
     themeColors = require("onedark.colors")
-  elseif theme == "onedarkpro"
-  then
+  elseif theme == "onedarkpro" then
     themeColors = require("onedarkpro.helpers").get_colors()
   else
     themeColors = {

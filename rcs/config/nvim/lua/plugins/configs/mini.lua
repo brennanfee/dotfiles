@@ -2,12 +2,12 @@
 
 return {
   {
-    'echasnovski/mini.bufremove',
+    "echasnovski/mini.bufremove",
     lazy = false,
-    verson = '*', -- stable
+    verson = "*", -- stable
     config = function()
       --require('mini.surround').setup({})
-      require('mini.bufremove').setup({})
+      require("mini.bufremove").setup({})
     end,
-  }
+  },
 }

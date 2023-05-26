@@ -1,16 +1,17 @@
 -- Indent guides
+local utils = require("core.utils")
 
 -- Add indentation guides even on blank lines
 -- See `:help indent_blankline.txt`
 return {
   {
-    'lukas-reineke/indent-blankline.nvim',
+    "lukas-reineke/indent-blankline.nvim",
     init = function()
-      require("core.utils").lazy_load "indent-blankline.nvim"
+      utils.lazy_load("indent-blankline.nvim")
     end,
     opts = {
       indentLine_enabled = 1,
-      char = '┊',
+      char = "┊",
       filetype_exclude = {
         "alpha",
         "dashboard",
@@ -39,7 +40,7 @@ return {
 
         if ok then
           vim.api.nvim_win_set_cursor(vim.api.nvim_get_current_win(), { start, 0 })
-          vim.cmd [[normal! _]]
+          vim.cmd([[normal! _]])
         end
       end, { desc = "Jump to current_context" })
 

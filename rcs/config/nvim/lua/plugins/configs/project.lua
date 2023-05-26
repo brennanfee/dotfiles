@@ -9,8 +9,17 @@ return {
         -- All the patterns used to detect root dir, when **"pattern"** is in
         -- detection_methods
         patterns = {
-          ".git", "_darcs", ".hg", ".bzr", ".svn", "package.json", ".terraform",
-          "go.mod", "Makefile", "requirements.yml", "pyproject.toml",
+          ".git",
+          "_darcs",
+          ".hg",
+          ".bzr",
+          ".svn",
+          "package.json",
+          ".terraform",
+          "go.mod",
+          "Makefile",
+          "requirements.yml",
+          "pyproject.toml",
         },
 
         ---@ Show hidden files in telescope when searching for files in a project
@@ -26,7 +35,7 @@ return {
         return
       end
 
-      telescope.load_extension('projects')
+      telescope.load_extension("projects")
     end,
-  }
+  },
 }

@@ -1,6 +1,6 @@
 -- LSP plugins and config
 local utils = require("core.utils")
-local settings = require("core/user-settings")
+local settings = require("core.user-settings")
 
 return {
   {

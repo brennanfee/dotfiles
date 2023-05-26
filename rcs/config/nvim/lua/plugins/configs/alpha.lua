@@ -2,7 +2,7 @@
 
 return {
   {
-    'goolord/alpha-nvim',
+    "goolord/alpha-nvim",
     lazy = false,
     dependencies = "nvim-tree/nvim-web-devicons",
     config = function()
@@ -27,8 +27,11 @@ return {
       local function footer()
         -- NOTE: requires the fortune-mod package to work
         local handle = io.popen("fortune")
-        local fortune = handle:read("*a")
-        handle:close()
+        local fortune
+        if handle ~= nil then
+          fortune = handle:read("*a")
+          handle:close()
+        end
         return fortune
       end
 
@@ -42,5 +45,5 @@ return {
 
       require("alpha").setup(dashboard.opts)
     end,
-  }
+  },
 }
