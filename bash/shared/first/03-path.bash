@@ -24,25 +24,11 @@ base_data_dir=$(xdg-base-dir DATA)
 base_dotfiles_dir=$(xdg-base-dir DOTFILES)
 base_dotfilesprivate_dir=$(xdg-base-dir DOTFILESPRIVATE)
 
+### PREPENDS (order critical)
+
 # Python
 path_prepend "${HOME}/.local/bin"
 path_prepend "${HOME}/.poetry/bin"
-
-# Rust
-if [[ -d "${CARGO_INSTALL_ROOT}/bin" ]]; then
-  path_append "${CARGO_INSTALL_ROOT}/bin"
-fi
-
-# Flatpak
-#    Global packages
-if [[ -d "/var/lib/flatpak/exports/bin" ]]; then
-  path_append "/var/lib/flatpak/exports/bin"
-fi
-
-#    User packages
-if [[ -d "${base_data_dir}/flatpak/exports/bin" ]]; then
-  path_append "${base_data_dir}/flatpak/exports/bin"
-fi
 
 # Dotfiles
 path_prepend "${base_dotfiles_dir}/bin"
@@ -55,14 +41,35 @@ path_prepend "${HOME}/.bin"
 # WSL (Windows)
 [[ -d "${WIN_HOME:-${HOME}}/winfiles/bin" ]] && path_prepend "${WIN_HOME:-${HOME}}/winfiles/bin"
 
+### APPENDS (order less important)
+
+# Flatpak
+#    Global packages
+if [[ -d "/var/lib/flatpak/exports/bin" ]]; then
+  path_append "/var/lib/flatpak/exports/bin"
+fi
+
+#    User packages
+if [[ -d "${base_data_dir}/flatpak/exports/bin" ]]; then
+  path_append "${base_data_dir}/flatpak/exports/bin"
+fi
+
+# Neovim Mason bin path (for all the linters and other dev tools)
+# I want this to be "first" among the dev language tooling so it takes precedence
+path_append "${base_data_dir}/nvim/mason/bin"
+
+# Rust
+if [[ -d "${CARGO_INSTALL_ROOT}/bin" ]]; then
+  path_append "${CARGO_INSTALL_ROOT}/bin"
+fi
+
 # Node
 if command_exists yarn; then
   yarn_path=$(yarn global bin)
   path_append "${yarn_path}"
 fi
 if command_exists npm; then
-  npm_path=$(npm config --global get prefix)
-  path_append "${npm_path}/bin"
+  path_append "${base_data_dir}/npm/bin"
 fi
 
 # Ruby & Gems
@@ -70,9 +77,6 @@ if command_exists ruby && command_exists gem; then
   ruby_path=$(ruby -r rubygems -e 'puts Gem.user_dir')
   path_append "${ruby_path}/bin"
 fi
-
-# Neovim Mason bin path (for all the linters and other dev tools)
-path_append "${base_data_dir}/nvim/mason/bin"
 
 unset yarn_path
 unset npm_path
