@@ -16,7 +16,7 @@ return {
       null_ls.setup({
         sources = {
           -- code actions
-          null_ls.builtins.code_actions.eslint,
+          null_ls.builtins.code_actions.eslint_d,
           null_ls.builtins.code_actions.gitrebase,
           null_ls.builtins.code_actions.gitsigns,
           null_ls.builtins.code_actions.refactoring,
@@ -38,7 +38,7 @@ return {
           null_ls.builtins.diagnostics.clang_check,
           null_ls.builtins.diagnostics.cmake_lint,
           null_ls.builtins.diagnostics.commitlint,
-          null_ls.builtins.diagnostics.eslint,
+          null_ls.builtins.diagnostics.eslint_d,
           null_ls.builtins.diagnostics.flake8,
           null_ls.builtins.diagnostics.hadolint, -- dockerfile
           null_ls.builtins.diagnostics.jsonlint,
