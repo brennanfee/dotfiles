@@ -25,6 +25,7 @@ end
 
 -- Ensure editorconfig integration is turned on
 vim.g.editorconfig = true
+vim.g.awk_is_gawk = 1
 
 vim.opt.clipboard = "unnamedplus" -- allows neovim to access the system clipboard
 

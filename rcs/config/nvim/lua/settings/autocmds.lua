@@ -78,26 +78,26 @@ vim.cmd [[
   augroup end
 ]]
 
-vim.cmd [[
-  " Close vim if buffer is closed and there are no more buffers
-  function! CloseOnLastBuffer()
-    let cnt = 0
-    for nr in range(1, bufnr("$"))
-      if buflisted(nr) && ! empty(bufname(nr)) || getbufvar(nr, '&buftype') ==# 'help'
-        let cnt += 1
-      endif
-    endfor
+-- vim.cmd [[
+--   " Close vim if buffer is closed and there are no more buffers
+--   function! CloseOnLastBuffer()
+--     let cnt = 0
+--     for nr in range(1, bufnr("$"))
+--       if buflisted(nr) && ! empty(bufname(nr)) || getbufvar(nr, '&buftype') ==# 'help'
+--         let cnt += 1
+--       endif
+--     endfor
 
-    if cnt == 1
-      :q
-    endif
-  endfunction
+--     if cnt == 1
+--       :q
+--     endif
+--   endfunction
 
-  augroup close_on_last_buffer
-    autocmd!
-    autocmd BufDelete * call CloseOnLastBuffer()
-  augroup END
-]]
+--   augroup close_on_last_buffer
+--     autocmd!
+--     autocmd BufDelete * call CloseOnLastBuffer()
+--   augroup END
+-- ]]
 
 -- File specific settings
 -- TODO: Convert to lua

@@ -8,10 +8,8 @@ return {
     lazy = false,
     dependencies = {
       "nvim-lua/plenary.nvim",
-      "williamboman/mason.nvim",
     },
     config = function()
-      local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
       local null_ls = require("null-ls")
       null_ls.setup({
         sources = {
@@ -92,8 +90,10 @@ return {
           -- Hover
           null_ls.builtins.hover.printenv,
         },
+
         on_attach = function(client, bufnr)
           if client.supports_method("textDocument/formatting") then
+            local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
             vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
             if utils.safeRead(settings.formatOnSave, false) then
               vim.api.nvim_create_autocmd("BufWritePre", {
@@ -102,8 +102,8 @@ return {
                 callback = function()
                   vim.lsp.buf.format({
                     bufnr = bufnr,
-                    filter = function(client)
-                      return client.name == "null-ls"
+                    filter = function(server)
+                      return server.name == "null-ls"
                     end,
                   })
                 end,
@@ -112,9 +112,18 @@ return {
           end
         end,
 
-        -- should_attach = function(bufnr)
-        --   return false
-        -- end
+        should_attach = function(bufnr)
+          local bt = vim.bo[bufnr].bt
+          local ft = vim.bo[bufnr].ft
+          if bt ~= "" then
+            return false
+          end
+          if ft == "" or ft == "NvimTree" or ft == "alpha" then
+            return false
+          end
+
+          return true
+        end,
       })
     end,
   },
