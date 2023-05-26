@@ -63,7 +63,7 @@
 [mergetool]
   keepBackup = false
 [user]
-  signingKey = key::ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDjsVSJqSUjNd/KZkf43z17OG5lUlwqOLmBZKOjFHK1x brennan.github@mailbots.org
+  signingKey = ~/.ssh/id_ed25519_git.pub
 [gpg]
   format = ssh
 [gpg "ssh"]
