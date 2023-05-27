@@ -6,12 +6,22 @@ override any system-wide installed versions of the tools.
 
 ## Install Pipx
 
+New way:
+
+```sh
+sudo apt install pipx
+```
+
+Old way:
+
 ```sh
 python3 -m pip install --user pipx
 python3 -m pipx ensurepath
 ```
 
 ## Upgrading Pipx
+
+Old way:
 
 ```sh
 python3 -m pip install --user -U pipx
@@ -21,11 +31,18 @@ python3 -m pip install --user -U pipx
 
 ```sh
 pipx install --include-deps ansible
-pipx install ansible-lint
-pipx install black
-pipx install flake8
+pipx inject ansible cryptography
+pipx inject ansible paramiko
+pipx inject ansible dnspython
+
 pipx install molecule
+pipx inject molecule molecule-plugins
+pipx inject molecule molecule-plugins[vagrant]
+pipx inject molecule python-vagrant
+
+pipx install invoke
 pipx install poetry
-pipx install yamllint
+#pipx install streamdeck-ui
 pipx install youtube-dl
+pipx install yt-dlp
 ```

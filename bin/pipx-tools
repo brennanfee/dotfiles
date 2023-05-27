@@ -19,19 +19,12 @@ pipx inject ansible dnspython
 # Molecule
 pipx install molecule
 pipx inject molecule molecule-plugins
-pipx inject molecule molecule-plugins[docker]
-pipx inject molecule docker
+pipx inject molecule molecule-plugins[vagrant]
+pipx inject molecule python-vagrant
 
 # Others, simple installs
-pipx install ansible-lint
-pipx install black
-pipx install flake8
-pipx install --include-deps gitlint
 pipx install invoke
 pipx install poetry
-pipx install proselint
 #pipx install streamdeck-ui
-pipx install vim-vint
-pipx install yamllint
 pipx install youtube-dl
 pipx install yt-dlp
