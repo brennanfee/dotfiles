@@ -18,3 +18,4 @@ CommitLint
 Neovim
 linters
 pipx
+idempotently
