@@ -2,7 +2,9 @@
 # Author: Brennan Fee
 # License: MIT License
 #
-# This script installs Moosefs in one of four roles.  As a client, as a master server, or as a metalogger server, or as a chunkserver.  Please note this merely installs the repository and the necessary APT packages, it does not configure MooseFS as part of the install.
+# This script will copy the names of files from a source folder to the files in a destination
+# folder.  I use this a lot for overwritting new versions of files like tv show episodes.
+#
 
 # Bash strict mode
 ([[ -n ${ZSH_EVAL_CONTEXT:-} && ${ZSH_EVAL_CONTEXT:-} =~ :file$ ]] ||
@@ -24,6 +26,10 @@ fi
 lhs_files=("${1}"/*.mp4)
 rhs_files=("${2}"/*.mp4)
 
+# Sort them just in case
+readarray -t lhs_files < <(for a in "${lhs_files[@]}"; do echo "$a"; done | sort)
+readarray -t rhs_files < <(for a in "${rhs_files[@]}"; do echo "$a"; done | sort)
+
 if [[ ${#lhs_files[@]} -ne ${#rhs_files[@]} ]]; then
   echo "Sides do not have the same number of files, exiting."
   exit 1
@@ -34,7 +40,7 @@ echo "Renaming..."
 for ((i = 0; i < ${#lhs_files[@]}; i++)); do
   new_name=$(basename "${lhs_files[$i]}")
   path_name=$(dirname "${rhs_files[$i]}")
-  mv ${rhs_files[$i]} ${path_name}/${new_name}
+  mv "${rhs_files[$i]}" "${path_name}/${new_name}"
 done
 
 echo "Done"
