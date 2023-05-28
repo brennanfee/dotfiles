@@ -50,6 +50,7 @@
   unstage = 'reset HEAD --'
   last = 'log -1 HEAD'
   patch = !git --no-pager diff --no-color
+  clone = clone --recurse-submodules
 [include]
   path = ~/.config/git/gitconfig.os
   path = ~/.config/git/gitconfig.user
