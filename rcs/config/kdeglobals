@@ -141,8 +141,10 @@ History Items[$e]=file:$HOME/profile/source/packer-linux
 
 [General]
 BrowserApplication=org.mozilla.firefox.desktop
-ColorSchemeHash=bcce7c1c6181c5e14e633cd8301e7a9036b67ac6
+ColorSchemeHash=7e27a66e6ec46638e4fb9d9f6caa72c4f044c338
 Name=Breeze Dark
+TerminalApplication=/usr/bin/flatpak run --branch=stable --arch=x86_64 --command=wezterm org.wezfurlong.wezterm start --cwd .
+TerminalService=org.wezfurlong.wezterm.desktop
 fixed=JetBrainsMono Nerd Font Mono,12,-1,5,50,0,0,0,0,0
 font=Noto Sans,12,-1,5,50,0,0,0,0,0
 menuFont=Noto Sans,12,-1,5,50,0,0,0,0,0
