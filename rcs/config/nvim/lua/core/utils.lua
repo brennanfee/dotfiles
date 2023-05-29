@@ -1,6 +1,4 @@
 local settings = require("core.user-settings")
-local fn = vim.fn
-local fs = vim.fs
 
 local M = {}
 
@@ -18,7 +16,7 @@ M.safeRead = function(s, default)
 end
 
 M.file_exists = function(name)
-  return fn.filereadable(fs.normalize(name)) ~= 0
+  return vim.fn.filereadable(vim.fs.normalize(name)) ~= 0
 end
 
 M.bufdelete = function(bufnum)
