@@ -83,13 +83,13 @@ config.color_schemes = {
     },
     brights = {
       "#5c6370", -- black (grey)
-      "#e06c75", -- red (maroon)
-      "#98c379", -- green (olive)
-      "#d19a66", -- yellow (orange)
-      "#61afef", -- blue (navy)
-      "#c678dd", -- purple (magenta\fuchsia)
-      "#56b6c2", -- cyan (teal)
-      "#dcdfe4", -- white (silver)
+      "#e9969d", -- red (maroon)
+      "#b3d39c", -- green (olive)
+      "#edd4a6", -- yellow (orange)
+      "#8fc6f4", -- blue (navy)
+      "#d7a1e7", -- purple (magenta\fuchsia)
+      "#7bc6d0", -- cyan (teal)
+      "#c8cdd5", -- white (silver)
     },
     foreground = "#abb2bf",
     background = "#282c34",
@@ -97,7 +97,8 @@ config.color_schemes = {
     cursor_bg = "#a3b3cc",
     cursor_border = "#a3b3cc",
     selection_fg = "#abb2bf",
-    selection_bg = "#414858",
+    selection_bg = "#c678dd",
+    --selection_bg = "#414858",
   },
 
   ["OneDarkProVivid"] = {
@@ -113,50 +114,81 @@ config.color_schemes = {
     },
     brights = {
       "#5c6370", -- black (grey)
-      "#e06c75", -- red (maroon)
-      "#98c379", -- green (olive)
-      "#d19a66", -- yellow (orange)
-      "#61afef", -- blue (navy)
-      "#c678dd", -- purple (magenta\fuchsia)
-      "#56b6c2", -- cyan (teal)
-      "#dcdfe4", -- white (silver)
+      "#f38897", -- red (maroon)
+      "#a9d89d", -- green (olive)
+      "#edd4a6", -- yellow (orange)
+      "#8fc6f4", -- blue (navy)
+      "#e089e7", -- purple (magenta\fuchsia)
+      "#4bced8", -- cyan (teal)
+      "#c8cdd5", -- white (silver)
     },
     foreground = "#abb2bf",
     background = "#282c34",
     cursor_fg = "#dcdfe4",
     cursor_bg = "#a3b3cc",
     cursor_border = "#a3b3cc",
+    -- selection_fg = "#abb2bf",
+    -- selection_bg = "#3a404c",
     selection_fg = "#abb2bf",
-    selection_bg = "#3a404c",
+    selection_bg = "#d55fde",
   },
   ["OneDarkProLight"] = {
+    ansi = {
+      "#6a6a6a", -- black
+      "#e05661", -- red
+      "#1da912", -- green (lime)
+      "#eea825", -- yellow
+      "#118dc3", -- blue
+      "#9a77cf", -- purple
+      "#56b6c2", -- cyan (aqua)
+      "#fafafa", -- white
+    },
+    brights = {
+      "#bebebe", -- black (grey)
+      "#e88189", -- red (maroon)
+      "#25d717", -- green (olive)
+      "#f2bb54", -- yellow (orange)
+      "#1caceb", -- blue (navy)
+      "#b69ddc", -- purple (magenta\fuchsia)
+      "#7bc6d0", -- cyan (teal)
+      "#ffffff", -- white (silver)
+    },
+    foreground = "#6a6a6a",
+    background = "#fafafa",
+    cursor_fg = "#dcdfe4",
+    cursor_bg = "#a3b3cc",
+    cursor_border = "#a3b3cc",
+    selection_fg = "#fafafa",
+    selection_bg = "#9a77cf",
+  },
+  ["OneDarkProDark"] = {
     ansi = {
       "#000000", -- black
       "#ef596f", -- red
       "#89ca78", -- green (lime)
       "#e5c07b", -- yellow
-      "#118dc3", -- blue
+      "#61afef", -- blue
       "#d55fde", -- purple
       "#2bbac5", -- cyan (aqua)
       "#abb2bf", -- white
     },
     brights = {
       "#434852", -- black (grey)
-      "#ef596f", -- red (maroon)
-      "#89ca78", -- green (olive)
-      "#d19a66", -- yellow (orange)
-      "#118dc3", -- blue (navy)
-      "#d55fde", -- purple (magenta\fuchsia)
-      "#2bbac5", -- cyan (teal)
-      "#fafafa", -- white (silver)
+      "#f38897", -- red (maroon)
+      "#a9d89d", -- green (olive)
+      "#edd4a6", -- yellow (orange)
+      "#8fc6f4", -- blue (navy)
+      "#e089e7", -- purple (magenta\fuchsia)
+      "#4bced8", -- cyan (teal)
+      "#c8cdd5", -- white (silver)
     },
     foreground = "#abb2bf",
-    background = "#fafafa",
+    background = "#000000",
     cursor_fg = "#dcdfe4",
     cursor_bg = "#a3b3cc",
     cursor_border = "#a3b3cc",
-    selection_fg = "#212121",
-    selection_bg = "#abb2bf",
+    selection_fg = "#abb2bf",
+    selection_bg = "#d55fde",
   },
 }
 
