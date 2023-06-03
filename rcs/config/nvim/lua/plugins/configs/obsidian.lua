@@ -1,7 +1,7 @@
 return {
   "epwalsh/obsidian.nvim",
   lzy = true,
-  event = { "BufReadPre " .. vim.fn.expand("~") .. "/profile/cloud/notes/brain/**.md" },
+  event = { "BufReadPre " .. vim.fn.expand("~") .. "/profile/cloud/notes/brain/**/*.md" },
   dependencies = {
     "nvim-lua/plenary.nvim",
     "hrsh7th/nvim-cmp",
@@ -9,10 +9,11 @@ return {
   },
   opts = {
     dir = "~/profile/cloud/notes/brain",
+    notes_subdir = "2-notes",
 
     daily_notes = {
-      folder = "200-calendar/daily-notes",
-      date_format = "%Y-%m-%d"
+      folder = "3-timeline/daily-notes",
+      date_format = "%Y-%m-%d",
     },
 
     completion = {
@@ -20,7 +21,7 @@ return {
     },
 
     templates = {
-      subdir = "400-extra/templates",
+      subdir = "4-resources/templates",
       date_format = "%Y-%m-%d",
       time_format = "%I:%M:%S %p",
     },
@@ -28,14 +29,14 @@ return {
     -- For external urls
     follow_url_func = function(url)
       -- Open the URL in the default web browser
-      vim.fn.jobstart({"xdg-open", url})
+      vim.fn.jobstart({ "xdg-open", url })
     end,
 
     use_advanced_uri = false,
     open_app_foreground = false,
     finder = "telescope.nvim",
   },
-  config = function (_, opts)
+  config = function(_, opts)
     require("obsidian").setup(opts)
 
     -- Optional, override the 'gf' keymap to utilize Obsidian's search functionality.

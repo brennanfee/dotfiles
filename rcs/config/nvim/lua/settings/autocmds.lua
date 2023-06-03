@@ -106,9 +106,10 @@ vim.cmd([[
     autocmd!
     autocmd BufNewFile,BufFilePre,BufRead LICENSE setlocal filetype=text
     autocmd BufNewFile,BufFilePre,BufRead license setlocal filetype=text
-    autocmd BufNewFile,BufFilePre,BufRead * if match(getline(1), "---") >= 0 | setlocal filetype=yaml | endif
+    autocmd BufNewFile,BufFilePre,BufRead License setlocal filetype=text
   augroup END
 ]])
+--   autocmd BufNewFile,BufFilePre,BufRead * if match(getline(1), "---") >= 0 | setlocal filetype=yaml | endif
 
 vim.cmd([[
   " Git commits - Turn spellcheck on
