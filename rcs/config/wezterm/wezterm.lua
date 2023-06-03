@@ -173,7 +173,6 @@ config.colors = { visual_bell = "#202020" }
 -- Initial state
 config.initial_rows = 32 -- Leaves a few lines of screen space above/below the window
 config.initial_cols = 140 -- Wide enough for 100 Neovim columns plus 30 for tree view
-config.default_cwd = wezterm.home_dir .. "/profile"
 config.default_prog = {
   "tmux",
   "new-session",
