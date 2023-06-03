@@ -2,6 +2,14 @@ scriptencoding utf-8
 
 """ Main settings
 
+if empty($MYVIMRC) | let $MYVIMRC = expand('<sfile>:p') | endif
+
+" XDG Support
+if empty($XDG_CACHE_HOME)  | let $XDG_CACHE_HOME  = $HOME."/.cache"       | endif
+if empty($XDG_CONFIG_HOME) | let $XDG_CONFIG_HOME = $HOME."/.config"      | endif
+if empty($XDG_DATA_HOME)   | let $XDG_DATA_HOME   = $HOME."/.local/share" | endif
+if empty($XDG_STATE_HOME)  | let $XDG_STATE_HOME  = $HOME."/.local/state" | endif
+
 " Vim 8 defaults
 unlet! skip_defaults_vim
 silent! source $VIMRUNTIME/defaults.vim
@@ -65,15 +73,15 @@ set visualbell
 set clipboard=unnamedplus
 
 set backup
-set backupdir=$XDG_STATE_HOME/vim/backup//,$TEMP/vim//,$TMP/vim// | call mkdir(&backupdir, 'p')
+set backupdir=$XDG_CACHE_HOME/vim/backup//,$TEMP/vim//,$TMP/vim// | call mkdir(&backupdir, 'p')
 
 set swapfile
-set directory=$XDG_STATE_HOME/vim/swap//,$TEMP/vim//,$TMP/vim// | call mkdir(&directory, 'p')
+set directory=$XDG_CACHE_HOME/vim/swap//,$TEMP/vim//,$TMP/vim// | call mkdir(&directory, 'p')
 
 set undofile
-set undodir=$XDG_STATE_HOME/vim/undo//,$TEMP/vim//,$TMP/vim// | call mkdir(&undodir,   'p')
+set undodir=$XDG_CACHE_HOME/vim/undo//,$TEMP/vim//,$TMP/vim// | call mkdir(&undodir,   'p')
 
-set viewdir=$XDG_STATE_HOME/vim/view | call mkdir(&viewdir,   'p')
+set viewdir=$XDG_CACHE_HOME/vim/view | call mkdir(&viewdir,   'p')
 
 if !has('nvim')
   set viminfofile=$XDG_STATE_HOME/vim/viminfo
