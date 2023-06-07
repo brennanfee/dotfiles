@@ -19,3 +19,4 @@ Neovim
 linters
 pipx
 idempotently
+PostgreSQL
