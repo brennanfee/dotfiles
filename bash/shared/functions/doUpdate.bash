@@ -104,7 +104,7 @@ function doUpdate() {
       fi
 
       if [[ -f ${HOME}/.vim/vimrc.bundles ]]; then
-        vim -N -u "${HOME}/.vim/vimrc.bundles" +PlugUpdate +PlugClean! +qa!
+        /usr/bin/vim -N -u "${HOME}/.vim/vimrc.bundles" +PlugUpdate +PlugClean! +qa!
       fi
 
       # Create the scratch directories

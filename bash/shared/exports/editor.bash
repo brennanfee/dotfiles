@@ -20,21 +20,66 @@ fi
 VIM_VER="$($(command -v vim) --version | grep "Vi IMproved" | awk '{print $5}' | sed -e 's/\.//g' || true)"
 export VIM_VER
 
-if command_exists nvim || command_exists io.neovim.vim; then
-  EDITOR='nvim'
-  GIT_EDITOR='nvim'
-  SVN_EDITOR='nvim'
-  LESSEDIT='nvim'
+NEOVIM_BIN=""
+HAVE_NVIM=0
 
-  VISUAL='nvim'
+if command_exists nvim; then
+  NEOVIM_BIN=$(which nvim)
+  HAVE_NVIM=1
+fi
+
+if command_exists io.neovim.vim; then
+  alias nvim="io.neovim.vim"
+  NEOVIM_BIN=$(which io.neovim.vim)
+  HAVE_NVIM=1
+fi
+
+if [[ -x ~/Applications/nvim.appimage ]]; then
+  alias nvim="~/Applications/nvim.appimage"
+  NEOVIM_BIN="${HOME}/Applications/nvim.appimage"
+  HAVE_NVIM=1
+fi
+
+export NEOVIM_BIN
+export HAVE_NVIM
+
+if [[ "${HAVE_NVIM}" == "1" ]]; then
+  # Setup for nvim
+  alias vi='"${NEOVIM_BIN}"'
+  alias vim='"${NEOVIM_BIN}"'
+  alias ogvim="/usr/bin/vim"
+  alias v='"${NEOVIM_BIN}" -R'
+  alias view='"${NEOVIM_BIN}" -R'
+
+  EDITOR="${NEOVIM_BIN}"
+  GIT_EDITOR="${NEOVIM_BIN}"
+  SVN_EDITOR="${NEOVIM_BIN}"
+  LESSEDIT="${NEOVIM_BIN}"
+
+  VISUAL="${NEOVIM_BIN}"
 else
+  # Setup for vim
+  alias vi="vim"
+  alias ogvim="/usr/bin/vim"
+  alias v="vim -R"
+  alias view="vim -R"
+
   EDITOR='vim'
   GIT_EDITOR='vim'
   SVN_EDITOR='vim'
   LESSEDIT='vim'
 
-  VISUAL='vim'
+  if command_exists gvim; then
+    VISUAL='gvim'
+  else
+    VISUAL='vim'
+  fi
 fi
+
+# For now I don't want to override visual editor with VS Code
+# if command_exists code; then
+#   export VISUAL='code'
+# fi
 
 export EDITOR
 export GIT_EDITOR
@@ -42,13 +87,9 @@ export SVN_EDITOR
 export LESSEDIT
 export VISUAL
 
-# For now I don't want any visual editor
-# if command_exists code; then
-#   export VISUAL='code'
-# elif command_exists atom; then
-#   export VISUAL='atom'
-# elif command_exists gvim; then
-#   export VISUAL='gvim'
-# else
-#   export VISUAL='vim'
-# fi
+# Editor mappings
+alias e='"$EDITOR"'
+alias edit='"$EDITOR"'
+alias eg='"$VISUAL"'
+alias ev='"$VISUAL"'
+alias vis='"$VISUAL"'
