@@ -21,10 +21,11 @@ pipx install molecule
 pipx inject molecule molecule-plugins
 pipx inject molecule molecule-plugins[vagrant]
 pipx inject molecule python-vagrant
+pipx inject molecule dnspython
 
 # Others, simple installs
 pipx install invoke
 pipx install poetry
 #pipx install streamdeck-ui
-pipx install youtube-dl
+#pipx install youtube-dl
 pipx install yt-dlp
