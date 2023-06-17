@@ -41,6 +41,7 @@ if ! command -v asdf &>/dev/null; then
   msg="${msg} Re-run this script again after re-opening the terminal to install asdf tools."
 
   print_warning "${msg}"
+  exit 0
 fi
 
 add_if_needed() {
