@@ -17,4 +17,6 @@ if ! ${SOURCED}; then
 fi
 # END Bash strict mode
 
-complete -W "$(cat ~//appman/list 2> /dev/null)" appman
+if command_exists appman; then
+  complete -W "$(cat ~//appman/list 2> /dev/null)" appman
+fi
