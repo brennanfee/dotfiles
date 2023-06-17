@@ -17,6 +17,8 @@ if ! ${SOURCED}; then
 fi
 # END Bash strict mode
 
+# Page to look for apps to install: https://portable-linux-apps.github.io/apps.html
+
 # TODO: Split some off into a "dev" only installer with a command-line option to install those as well
 
 if ! command -v zsync &>/dev/null; then
@@ -30,7 +32,18 @@ if ! command -v appman &>/dev/null; then
   chmod +x ~/.local/bin/appman
 fi
 
+install_if_needed() {
+  if [[ ! -x "${HOME}/.local/bin/${1}" ]]; then
+    appman -i "${1}"
+  fi
+}
+
 # Update appman itself first
 appman -s
 
-# TODO: Add apps to install
+# Install the applications
+install_if_needed nvim
+install_if_needed obsidian
+
+# Update all of them
+appman -U
