@@ -27,8 +27,11 @@ base_dotfilesprivate_dir=$(xdg-base-dir DOTFILESPRIVATE)
 ### PREPENDS (order critical)
 
 # Python
-path_prepend "${HOME}/.local/bin"
+path_prepend "${HOME}/.local/pipx/bin"
 path_prepend "${HOME}/.poetry/bin"
+
+# Local bin
+path_prepend "${HOME}/.local/bin"
 
 # Dotfiles
 path_prepend "${base_dotfiles_dir}/bin"
@@ -42,6 +45,9 @@ path_prepend "${HOME}/.bin"
 [[ -d "${WIN_HOME:-${HOME}}/winfiles/bin" ]] && path_prepend "${WIN_HOME:-${HOME}}/winfiles/bin"
 
 ### APPENDS (order less important)
+
+# Games
+path_append "/usr/local/games"
 
 # Flatpak
 #    Global packages
