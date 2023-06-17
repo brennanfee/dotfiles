@@ -17,6 +17,4 @@ if ! ${SOURCED}; then
 fi
 # END Bash strict mode
 
-if command_exists gh; then
-  eval "$(gh completion -s bash || true)"
-fi
+complete -W "$(cat ~//appman/list 2> /dev/null)" appman
