@@ -73,6 +73,26 @@ function doUpdate() {
     fi
   fi
 
+  # AppMan (AppImage manager)
+  if [[ "${toUpdate}" == "all" || "${toUpdate}" == "appimages" ]]; then
+    if command_exists appman; then
+      # sync
+      appman -s
+      # update
+      appman -u
+    fi
+  fi
+
+  # am (big brother of AppMan, this one installs globally so sudo is required)
+  if [[ "${toUpdate}" == "all" || "${toUpdate}" == "appimages" ]]; then
+    if command_exists am; then
+      # sync
+      sudo appman -s
+      # update
+      sudo appman -u
+    fi
+  fi
+
   # Tmux Updates
   if [[ "${toUpdate}" == "all" || "${toUpdate}" == "tmux" ]]; then
     if command_exists tmux; then
