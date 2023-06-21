@@ -18,5 +18,9 @@ fi
 # END Bash strict mode
 
 if command_exists pipx; then
-  eval "$(register-python-argcomplete3 pipx || true)"
+  if command_exists register-python-argcomplete3; then
+    eval "$(register-python-argcomplete3 pipx || true)"
+  elif command_exists register-python-argcomplete; then
+    eval "$(register-python-argcomplete pipx || true)"
+  fi
 fi
