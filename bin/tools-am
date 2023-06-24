@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 # Author: Brennan Fee
 # License: MIT License
+# Version: 0.2
+# Date: 2023-06-23
+
+# AppMan (and am) are tools for installing, updating, and managing AppImages
+# Page to look for apps to install: https://portable-linux-apps.github.io/apps.html
 
 # Bash strict mode
 ([[ -n ${ZSH_EVAL_CONTEXT:-} && ${ZSH_EVAL_CONTEXT:-} =~ :file$ ]] ||
@@ -17,13 +22,95 @@ if ! ${SOURCED}; then
   shopt -s extdebug
   IFS=$(printf '\n\t')
 fi
+
+SCRIPT_DIR="$(cd -P "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # END Bash strict mode
 
+SCRIPT_APP=$(basename "$0")
+SCRIPT_AUTHOR="Brennan Fee"
+SCRIPT_LICENSE="MIT License"
+SCRIPT_VERSION="0.2"
+SCRIPT_DATE="2023-06-23"
+
+source "$(xdg-user-dir DOTFILES)/bash/script-tools.bash"
+
+## Defaults
+INCLUDE_DEV_TOOLS="false"
+
+#### START: Process arguments
+
+ARGS=$(getopt --name "${SCRIPT_APP}" --options dhv --longoptions "include-dev,help,version" -- "$@")
+
+eval set -- "${ARGS}"
+unset ARGS
+
+## Process "options" and "flags"
+while true; do
+  case "$1" in
+  '-h' | '--help')
+    show_help
+    ;;
+  '-v' | '--version')
+    show_version
+    ;;
+  '-d' | '--include-dev')
+    INCLUDE_DEV_TOOLS="true"
+    shift
+    continue
+    ;;
+  '--')
+    shift
+    break
+    ;;
+  *)
+    error_msg "Unknown option: $1"
+    ;;
+  esac
+done
+
+#### END: Process arguments
+
+#### START: Help
+
+function show_version() {
+  print_status "${SCRIPT_APP}"
+  print_status "Author: ${SCRIPT_AUTHOR}    License: ${SCRIPT_LICENSE}"
+  print_stauts "Version: ${SCRIPT_VERSION}    Date: ${SCRIPT_DATE}"
+  blank_line
+
+  exit 0
+}
+
+function show_help() {
+  print_status "${SCRIPT_APP}"
+  print_status "Author: ${SCRIPT_AUTHOR}    License: ${SCRIPT_LICENSE}"
+  print_stauts "Version: ${SCRIPT_VERSION}    Date: ${SCRIPT_DATE}"
+  blank_line
+
+  print_status "  ${APP} [options]"
+  blank_line
+  print_status "This program sets up AppMan and installs my desired applications/tools."
+  print_status "AppMan is a tool for managing Linux AppImages."
+  blank_line
+  print_status "Options:"
+  blank_line
+  print_status "  -h or --help"
+  print_status "      Show this help screen."
+  blank_line
+  print_status "  -v or --version"
+  print_stauts "     Show the version number."
+  blank_line
+  print_status "  -d or --include-dev"
+  print_status "     Also install the tools for a development environment."
+  blank_line
+
+  exit 0
+}
+
+#### END: Help
+
 # Page to look for apps to install: https://portable-linux-apps.github.io/apps.html
-
-# TODO: Split some off into a "dev" only installer with a command-line option to install those as well
-
-check_prerequisites() {
+function check_prerequisites() {
   if ! command -v zsync &>/dev/null; then
     DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q update
     DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q install zsync
@@ -36,24 +123,35 @@ check_prerequisites() {
   fi
 }
 
-install_if_needed() {
+function install_if_needed() {
   if [[ ! -x "${HOME}/.local/bin/${1}" ]]; then
     appman -i "${1}"
   fi
 }
 
-main() {
+function install_common_tools() {
+  install_if_needed nvim
+  install_if_needed obsidian
+}
+
+function install_dev_tools() {
+  noop # Nothing at present
+}
+
+function main() {
   check_prerequisites
 
   # Update appman itself first
   appman -s
 
-  # Install the applications
-  install_if_needed nvim
-  install_if_needed obsidian
+  install_common_tools
+
+  if [[ "${INCLUDE_DEV_TOOLS}" == "true" ]]; then
+    install_dev_tools
+  fi
 
   # Update all of them
   appman -U
 }
 
-main
+main "$@"

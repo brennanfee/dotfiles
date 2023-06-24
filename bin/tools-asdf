@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 # Author: Brennan Fee
 # License: MIT License
+# Version: 0.2
+# Date: 2023-06-23
 
 # Bash strict mode
 ([[ -n ${ZSH_EVAL_CONTEXT:-} && ${ZSH_EVAL_CONTEXT:-} =~ :file$ ]] ||
@@ -17,50 +19,121 @@ if ! ${SOURCED}; then
   shopt -s extdebug
   IFS=$(printf '\n\t')
 fi
+
+SCRIPT_DIR="$(cd -P "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # END Bash strict mode
 
-# TODO: Split some off into a "dev" only installer with a command-line option to install those as well
+SCRIPT_APP=$(basename "$0")
+SCRIPT_AUTHOR="Brennan Fee"
+SCRIPT_LICENSE="MIT License"
+SCRIPT_VERSION="0.2"
+SCRIPT_DATE="2023-06-23"
 
-### START Utility functions
+source "$(xdg-user-dir DOTFILES)/bash/script-tools.bash"
 
-# Text modifiers
-TEXT_RESET="$(tput sgr0)"
-TEXT_YELLOW="$(tput setaf 3)"
+## Defaults
+INCLUDE_DEV_TOOLS="false"
 
-print_warning() {
-  local T_COLS
-  T_COLS=$(tput cols)
-  T_COLS=$((T_COLS - 1))
-  echo -e "${TEXT_YELLOW}$1${TEXT_RESET}" | fold -sw "${T_COLS}"
+#### START: Process arguments
+
+ARGS=$(getopt --name "${SCRIPT_APP}" --options dhv --longoptions "include-dev,help,version" -- "$@")
+
+eval set -- "${ARGS}"
+unset ARGS
+
+while true; do
+  case "$1" in
+  '-h' | '--help')
+    show_help
+    ;;
+  '-v' | '--version')
+    show_version
+    ;;
+  '-d' | '--include-dev')
+    INCLUDE_DEV_TOOLS="true"
+    shift
+    continue
+    ;;
+  '--')
+    shift
+    break
+    ;;
+  *)
+    error_msg "Unknown option: $1"
+    ;;
+  esac
+done
+
+#### END: Process arguments
+
+#### START: Help
+
+function show_version() {
+  print_status "${SCRIPT_APP}"
+  print_status "Author: ${SCRIPT_AUTHOR}    License: ${SCRIPT_LICENSE}"
+  print_stauts "Version: ${SCRIPT_VERSION}    Date: ${SCRIPT_DATE}"
+  blank_line
+
+  exit 0
 }
 
-### END Utility functions
+function show_help() {
+  print_status "${SCRIPT_APP}"
+  print_status "Author: ${SCRIPT_AUTHOR}    License: ${SCRIPT_LICENSE}"
+  print_stauts "Version: ${SCRIPT_VERSION}    Date: ${SCRIPT_DATE}"
+  blank_line
 
-check_prerequisites() {
+  print_status "  ${APP} [options]"
+  blank_line
+  print_status "This program sets up ASDF version manager and installs my desired"
+  print_status "applications/tools."
+  blank_line
+  print_status "Options:"
+  blank_line
+  print_status "  -h or --help"
+  print_status "      Show this help screen."
+  blank_line
+  print_status "  -v or --version"
+  print_stauts "     Show the version number."
+  blank_line
+  print_status "  -d or --include-dev"
+  print_status "     Also install the tools for a development environment."
+  blank_line
+
+  exit 0
+}
+
+#### END: Help
+
+function check_prerequisites() {
   if ! command -v asdf &>/dev/null; then
-    git clone https://github.com/asdf-vm/asdf.git "${XDG_DATA_HOME}/asdf" --branch v0.9.0
+    git clone https://github.com/asdf-vm/asdf.git "${XDG_DATA_HOME}/asdf" --branch v0.12.0
 
     msg="The 'asdf' utility was installed.  You will need to close and re-open the terminal."
     msg="${msg} Re-run this script again after re-opening the terminal to install asdf tools."
 
     print_warning "${msg}"
-    exit 0
+    exit 10
   fi
 }
 
-add_if_needed() {
+function add_if_needed() {
   local installed
   installed=$(asdf plugin list | grep -i -c "${1}")
-  if [[ "${installed}" != 1 ]]; then
+  if [[ "${installed}" -ne 1 ]]; then
     asdf plugin add "${1}"
   fi
 }
 
-main() {
-  # Update asdf itself
-  asdf update
+# TODO: To support a separate list of common tools and "dev" tools, I will
+# need to have two separate ~/.tool-versions files in my dotfiles.  So, for the
+# time being I have them all in common tools
+#
+# The split that I would like is to have only the following in "common":
+#   golang, nodejs, python, packer, terraform
+# With all the rest being for "dev" environments only
 
-  # Install the plugins, if needed
+function install_common_tools() {
   add_if_needed dotnet
   add_if_needed golang
   add_if_needed java
@@ -72,6 +145,23 @@ main() {
   add_if_needed rust
   add_if_needed semver
   add_if_needed terraform
+}
+
+function install_dev_tools() {
+  noop # Nothing at this time
+}
+
+function main() {
+  check_prerequisites
+
+  # Update asdf itself
+  asdf update
+
+  install_common_tools
+
+  if [[ "${INCLUDE_DEV_TOOLS}" == "true" ]]; then
+    install_dev_tools
+  fi
 
   # Now update all plugins
   asdf plugin update --all
@@ -80,4 +170,4 @@ main() {
   asdf install
 }
 
-main
+main "$@"

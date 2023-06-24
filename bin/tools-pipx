@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 # Author: Brennan Fee
 # License: MIT License
+# Version: 0.2
+# Date: 2023-06-23
 
 # Bash strict mode
 ([[ -n ${ZSH_EVAL_CONTEXT:-} && ${ZSH_EVAL_CONTEXT:-} =~ :file$ ]] ||
@@ -17,12 +19,92 @@ if ! ${SOURCED}; then
   shopt -s extdebug
   IFS=$(printf '\n\t')
 fi
+
+SCRIPT_DIR="$(cd -P "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # END Bash strict mode
 
-AUTHOR="Brennan A. Fee"
-VERSION="0.2 2023-06-23"
+SCRIPT_APP=$(basename "$0")
+SCRIPT_AUTHOR="Brennan Fee"
+SCRIPT_LICENSE="MIT License"
+SCRIPT_VERSION="0.2"
+SCRIPT_DATE="2023-06-23"
 
-check_prerequisites() {
+source "$(xdg-user-dir DOTFILES)/bash/script-tools.bash"
+
+## Defaults
+INCLUDE_DEV_TOOLS="false"
+
+#### START: Process arguments
+
+ARGS=$(getopt --name "${SCRIPT_APP}" --options dhv --longoptions "include-dev,help,version" -- "$@")
+
+eval set -- "${ARGS}"
+unset ARGS
+
+while true; do
+  case "$1" in
+  '-h' | '--help')
+    show_help
+    ;;
+  '-v' | '--version')
+    show_version
+    ;;
+  '-d' | '--include-dev')
+    INCLUDE_DEV_TOOLS="true"
+    shift
+    continue
+    ;;
+  '--')
+    shift
+    break
+    ;;
+  *)
+    error_msg "Unknown option: $1"
+    ;;
+  esac
+done
+
+#### END: Process arguments
+
+#### START: Help
+
+function show_version() {
+  print_status "${SCRIPT_APP}"
+  print_status "Author: ${SCRIPT_AUTHOR}    License: ${SCRIPT_LICENSE}"
+  print_stauts "Version: ${SCRIPT_VERSION}    Date: ${SCRIPT_DATE}"
+  blank_line
+
+  exit 0
+}
+
+function show_help() {
+  print_status "${SCRIPT_APP}"
+  print_status "Author: ${SCRIPT_AUTHOR}    License: ${SCRIPT_LICENSE}"
+  print_stauts "Version: ${SCRIPT_VERSION}    Date: ${SCRIPT_DATE}"
+  blank_line
+
+  print_status "  ${APP} [options]"
+  blank_line
+  print_status "This program sets up Pipx and installs my desired applications/tools."
+  blank_line
+  print_status "Options:"
+  blank_line
+  print_status "  -h or --help"
+  print_status "      Show this help screen."
+  blank_line
+  print_status "  -v or --version"
+  print_stauts "     Show the version number."
+  blank_line
+  print_status "  -d or --include-dev"
+  print_status "     Also install the tools for a development environment."
+  blank_line
+
+  exit 0
+}
+
+#### END: Help
+
+function check_prerequisites() {
   # Check for pipx itself, if needed install it
   if ! command -v pipx &>/dev/null; then
     DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q update
@@ -30,14 +112,14 @@ check_prerequisites() {
   fi
 }
 
-install_common() {
+function install_common_tools() {
   # Common tools for all installations
   pipx install invoke
   pipx install yt-dlp
   #pipx install streamdeck-ui
 }
 
-install_dev_tools() {
+function install_dev_tools() {
   # Tools mostly needed only in dev environments
 
   # Ansible
@@ -56,12 +138,17 @@ install_dev_tools() {
   pipx install poetry
 }
 
-main() {
+function main() {
   check_prerequisites
 
-  install_common
+  install_common_tools
 
-  install_dev_tools
+  if [[ "${INCLUDE_DEV_TOOLS}" == "true" ]]; then
+    install_dev_tools
+  fi
+
+  # Upgrade them all
+  pipx upgrade-all
 }
 
 main "$@"

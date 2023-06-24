@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 # Author: Brennan Fee
 # License: MIT License
+# Version: 0.2
+# Date: 2023-06-23
+
+# Page to look for apps to install: https://flathub.org
 
 # Bash strict mode
 ([[ -n ${ZSH_EVAL_CONTEXT:-} && ${ZSH_EVAL_CONTEXT:-} =~ :file$ ]] ||
@@ -17,6 +21,165 @@ if ! ${SOURCED}; then
   shopt -s extdebug
   IFS=$(printf '\n\t')
 fi
+
+SCRIPT_DIR="$(cd -P "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # END Bash strict mode
 
-# Page to look for apps to install: https://flathub.org
+SCRIPT_APP=$(basename "$0")
+SCRIPT_AUTHOR="Brennan Fee"
+SCRIPT_LICENSE="MIT License"
+SCRIPT_VERSION="0.2"
+SCRIPT_DATE="2023-06-23"
+
+source "$(xdg-user-dir DOTFILES)/bash/script-tools.bash"
+
+## Defaults
+INCLUDE_DEV_TOOLS="false"
+DESKTOP_ENVIRONMENT="kde"
+
+#### START: Process arguments
+
+ARGS=$(getopt --name "${SCRIPT_APP}" --options de:hv --longoptions "include-dev,desktop-environment:,help,version" -- "$@")
+
+eval set -- "${ARGS}"
+unset ARGS
+
+while true; do
+  case "$1" in
+  '-h' | '--help')
+    show_help
+    ;;
+  '-v' | '--version')
+    show_version
+    ;;
+  '-d' | '--include-dev')
+    INCLUDE_DEV_TOOLS="true"
+    shift
+    continue
+    ;;
+  '-e' | '--desktop-environment')
+    DESKTOP_ENVIRONMENT=$(echo "$2" | tr "[:upper:]" "[:lower:]")
+    shift 2
+    continue
+    ;;
+  '--')
+    shift
+    break
+    ;;
+  *)
+    error_msg "Unknown option: $1"
+    ;;
+  esac
+done
+
+#### END: Process arguments
+
+#### START: Help
+
+function show_version() {
+  print_status "${SCRIPT_APP}"
+  print_status "Author: ${SCRIPT_AUTHOR}    License: ${SCRIPT_LICENSE}"
+  print_stauts "Version: ${SCRIPT_VERSION}    Date: ${SCRIPT_DATE}"
+  blank_line
+
+  exit 0
+}
+
+function show_help() {
+  print_status "${SCRIPT_APP}"
+  print_status "Author: ${SCRIPT_AUTHOR}    License: ${SCRIPT_LICENSE}"
+  print_stauts "Version: ${SCRIPT_VERSION}    Date: ${SCRIPT_DATE}"
+  blank_line
+
+  print_status "  ${APP} [options]"
+  blank_line
+  print_status "This program sets up Flatpak and installs my desired applications/tools."
+  blank_line
+  print_status "Options:"
+  blank_line
+  print_status "  -h or --help"
+  print_status "      Show this help screen."
+  blank_line
+  print_status "  -v or --version"
+  print_stauts "     Show the version number."
+  blank_line
+  print_status "  -d or --include-dev"
+  print_status "     Also install the tools for a development environment."
+  blank_line
+
+  exit 0
+}
+
+#### END: Help
+
+function check_prerequisites() {
+  # Check for flatpak itself, if needed install it
+  if ! command -v flatpak &>/dev/null; then
+    DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q update
+    DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q install \
+      flatpak flatpak-xdg-utils xdg-desktop-portal
+
+    case "${DESKTOP_ENVIRONMENT}" in
+    "kde")
+      DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q install \
+        xdg-desktop-portal-kde plasma-discover-backend-flatpak \
+        qt5-xdgdesktopportal-platformtheme qt6-xdgdesktopportal-platformtheme
+      ;;
+    "gnome")
+      DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q install \
+        xdg-desktop-portal-gnome gnome-software-plugin-flatpak
+      ;;
+    *)
+      print_warning "Unknown desktop environment requested."
+      ;;
+    esac
+
+    # Setup flathub repo
+    sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+  fi
+}
+
+function install_if_needed() {
+  if [[ $(flatpak list --columns=application | grep -i -c "${1}") -eq 0 ]]; then
+    sudo flatpak install flathub "${1}"
+  fi
+}
+
+function install_common_tools() {
+  install_if_needed com.github.tchx84.Flatseal
+  install_if_needed com.bitwarden.desktop
+  install_if_needed com.jgraph.drawio.desktop
+  install_if_needed com.plexamp.Plexamp
+  install_if_needed org.libreoffice.LibreOffice
+  install_if_needed org.mozilla.firefox
+  install_if_needed org.signal.Signal
+  install_if_needed org.speedcrunch.SpeecCrunch
+  install_if_needed org.videolan.VLC
+  install_if_needed org.wezfurlong.wezterm
+  install_if_needed tv.plex.PlexDesktop
+  install_if_needed tv.plex.PlexHTPC
+  install_if_needed org.kde.okular
+  install_if_needed org.bleachbit.BleachBit
+  install_if_needed com.rafaelmardojai.Blanket
+  install_if_needed com.github.tenderowl.frog
+}
+
+function install_dev_tools() {
+  noop
+}
+
+function main() {
+  check_prerequisites
+
+  install_common_tools
+
+  if [[ "${INCLUDE_DEV_TOOLS}" == "true" ]]; then
+    install_dev_tools
+  fi
+
+  # Upgrade all installed
+  flatpak upgrade -y --noninteractive --system
+  flatpak upgrade -y --noninteractive --user
+}
+
+main "$@"
