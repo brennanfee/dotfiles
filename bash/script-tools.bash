@@ -239,7 +239,10 @@ function check_root() {
 
 function check_root_with_error() {
   if ! check_root; then
-    local error_message=${1:-"ERROR!  You must execute this script as the 'root' user."}
+    local error_message=${1:-""}
+    if [[ "${error_message}" == "" ]]; then
+      error_message="ERROR!  You must execute this script as the 'root' user."
+    fi
     local error_code=${2:-"1"}
 
     local T_COLS
