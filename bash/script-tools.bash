@@ -281,13 +281,13 @@ text_italic_off="$(tput ritm)"
 
 text_reverse="$(tput rev)"
 text_secure="$(tput invis)"
-text_conceal="${text_secure}"
+text_conceal="$(tput invis)"
 text_blink="$(tput blink)"
 
-text_subscript="$(tput ssubm)"       # Not many terminals support this
-text_subscript_off="$(tput rsubm)"   # Not many terminals support this
-text_superscript="$(tput ssupm)"     # Not many terminals support this
-text_superscript_off="$(tput rsupm)" # Not many terminals support this
+# text_subscript="$(tput ssubm)"       # Not many terminals support this
+# text_subscript_off="$(tput rsubm)"   # Not many terminals support this
+# text_superscript="$(tput ssupm)"     # Not many terminals support this
+# text_superscript_off="$(tput rsupm)" # Not many terminals support this
 
 ## Text Colors
 
