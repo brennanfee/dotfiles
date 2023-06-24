@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# Author: Brennan Fee
+# License: MIT License
 
 # Bash strict mode
 ([[ -n ${ZSH_EVAL_CONTEXT:-} && ${ZSH_EVAL_CONTEXT:-} =~ :file$ ]] ||
@@ -34,15 +36,17 @@ print_warning() {
 
 ### END Utility functions
 
-if ! command -v asdf &>/dev/null; then
-  git clone https://github.com/asdf-vm/asdf.git "${XDG_DATA_HOME}/asdf" --branch v0.9.0
+check_prerequisites() {
+  if ! command -v asdf &>/dev/null; then
+    git clone https://github.com/asdf-vm/asdf.git "${XDG_DATA_HOME}/asdf" --branch v0.9.0
 
-  msg="The 'asdf' utility was installed.  You will need to close and re-open the terminal."
-  msg="${msg} Re-run this script again after re-opening the terminal to install asdf tools."
+    msg="The 'asdf' utility was installed.  You will need to close and re-open the terminal."
+    msg="${msg} Re-run this script again after re-opening the terminal to install asdf tools."
 
-  print_warning "${msg}"
-  exit 0
-fi
+    print_warning "${msg}"
+    exit 0
+  fi
+}
 
 add_if_needed() {
   local installed
@@ -52,24 +56,28 @@ add_if_needed() {
   fi
 }
 
-# Update asdf itself
-asdf update
+main() {
+  # Update asdf itself
+  asdf update
 
-# Install the plugins, if needed
-add_if_needed dotnet
-add_if_needed golang
-add_if_needed java
-add_if_needed kotlin
-add_if_needed nodejs
-add_if_needed packer
-add_if_needed python
-add_if_needed ruby
-add_if_needed rust
-add_if_needed semver
-add_if_needed terraform
+  # Install the plugins, if needed
+  add_if_needed dotnet
+  add_if_needed golang
+  add_if_needed java
+  add_if_needed kotlin
+  add_if_needed nodejs
+  add_if_needed packer
+  add_if_needed python
+  add_if_needed ruby
+  add_if_needed rust
+  add_if_needed semver
+  add_if_needed terraform
 
-# Now update all plugins
-asdf plugin update --all
+  # Now update all plugins
+  asdf plugin update --all
 
-# Now install the tools
-asdf install
+  # Now install the tools
+  asdf install
+}
+
+main
