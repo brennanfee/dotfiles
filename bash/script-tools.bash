@@ -261,10 +261,6 @@ function check_root_with_error() {
 
 ## Text effects
 
-text_reset="$(tput sgr0)"
-text_normal="$(tput sgr0)"
-text_clear="$(tput sgr0)"
-
 text_bold="$(tput bold)"
 #text_bold_off="$(tput bold)"
 text_dim="$(tput dim)"
@@ -283,6 +279,8 @@ text_reverse="$(tput rev)"
 text_secure="$(tput invis)"
 text_conceal="$(tput invis)"
 text_blink="$(tput blink)"
+
+: "$(tput sgr0)"
 
 # text_subscript="$(tput ssubm)"       # Not many terminals support this
 # text_subscript_off="$(tput rsubm)"   # Not many terminals support this
@@ -351,6 +349,10 @@ text_bg_bright_white="$(tput setab 15)"
 text_bg_pink="${text_bg_bright_magenta}" # bright magenta
 text_bg_purple="${text_bg_magenta}"      # regular magenta
 text_bg_orange="${text_bg_yellow}"       # regular yellow
+
+text_reset="$(tput sgr0)"
+text_normal="$(tput sgr0)"
+text_clear="$(tput sgr0)"
 
 #### END: Terminal Text Manipulation And Color Variables
 

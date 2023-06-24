@@ -42,7 +42,7 @@ SUPPORTED_SHARES=("files" "backups" "volumes" "metadata" "files-ro" "other" "roo
 
 #### START: Process arguments
 
-ARGS=$(getopt --name "${SCRIPT_APP}" --options fs:l:hv --longoptions "force,server:,location:,help,version" -- "$@")
+ARGS=$(getopt --name "${SCRIPT_APP}" --options fs:l::hv --longoptions "force,server:,location:,help,version" -- "$@")
 
 # shellcheck disable=SC2181
 if [[ $? -ne 0 ]]; then
@@ -180,20 +180,26 @@ function mount_the_share() {
     location="${LOCATION}"
   fi
   local remote_folder="${2}"
-  local pwd
+  local pword
 
-  pwd=$(kwalletcli -f moosefs -e "${SHARE_TO_MOUNT}" 2>/dev/null)
-  if [[ -z "${pwd}" ]]; then
+  pword=$(kwalletcli -f moosefs -e "${SHARE_TO_MOUNT}" 2>/dev/null)
+  if [[ -z "${pword}" ]]; then
     error_msg "ERROR! The moosefs wallet entry has not been set up correctly. No password provided."
   fi
 
   mkdir -p "${location}"
-  if [[ "${FORCE}" -eq 1 ]] && mountpoint -q "${location}"; then
-    umount -q -f "${location}"
-  fi
 
-  mfsmount "${location}" -H "${SERVER}" -S "${remote_folder}" -o rw \
-    -o mfspassword="${pwd}" -o mfsdelayedinit
+  if mountpoint -q "${location}"; then
+    # Already mounted
+    if [[ "${FORCE}" == "true" ]]; then
+      umount -q -f "${location}"
+      mfsmount "${location}" -H "${SERVER}" -S "${remote_folder}" -o rw \
+        -o mfspassword="${pword}" -o mfsdelayedinit
+    fi
+  else
+    mfsmount "${location}" -H "${SERVER}" -S "${remote_folder}" -o rw \
+      -o mfspassword="${pword}" -o mfsdelayedinit
+  fi
 }
 
 function mount_ro_share_no_password() {
@@ -207,31 +213,41 @@ function mount_ro_share_no_password() {
   local remote_folder="${2}"
 
   mkdir -p "${location}"
-  if [[ "${FORCE}" -eq 1 ]] && mountpoint -q "${location}"; then
-    umount -q -f "${location}"
-  fi
 
-  mfsmount "${location}" -H "${SERVER}" -S "${remote_folder}" -o ro -o mfsdelayedinit
+  if mountpoint -q "${location}"; then
+    # Already mounted
+    if [[ "${FORCE}" == "true" ]]; then
+      umount -q -f "${location}"
+      mfsmount "${location}" -H "${SERVER}" -S "${remote_folder}" -o ro -o mfsdelayedinit
+    fi
+  else
+    mfsmount "${location}" -H "${SERVER}" -S "${remote_folder}" -o ro -o mfsdelayedinit
+  fi
 }
 
 function mount_root() {
-  local location="${PROFILE}/mounts/moose-root"
+  local location="${1}"
   if [[ "${LOCATION}" != "" ]]; then
     location="${LOCATION}"
   fi
-  local pwd
+  local pword
 
-  pwd=$(kwalletcli -f moosefs -e "${SHARE_TO_MOUNT}" 2>/dev/null)
-  if [[ -z "${pwd}" ]]; then
+  pword=$(kwalletcli -f moosefs -e "${SHARE_TO_MOUNT}" 2>/dev/null)
+  if [[ -z "${pword}" ]]; then
     error_msg "ERROR! The moosefs wallet entry has not been set up correctly. No password provided."
   fi
 
   mkdir -p "${location}"
-  if [[ "${FORCE}" -eq 1 ]] && mountpoint -q "${location}"; then
-    umount -q -f "${location}"
-  fi
 
-  mfsmount "${location}" -H "${SERVER}" -o rw -o mfspassword="${pwd}" -o mfsdelayedinit
+  if mountpoint -q "${location}"; then
+    # Already mounted
+    if [[ "${FORCE}" == "true" ]]; then
+      umount -q -f "${location}"
+      mfsmount "${location}" -H "${SERVER}" -o rw -o mfspassword="${pword}" -o mfsdelayedinit
+    fi
+  else
+    mfsmount "${location}" -H "${SERVER}" -o rw -o mfspassword="${pword}" -o mfsdelayedinit
+  fi
 }
 
 function main() {
@@ -239,31 +255,34 @@ function main() {
 
   verify_prereqs
 
+  local profile
+  profile="$(xdg-user-dir PROFILE)"
+
   case "${SHARE_TO_MOUNT}" in
-    files)
-      mount_the_share "${PROFILE}/mounts/files" "/files"
-      ;;
-    volumes)
-      mount_the_share "${PROFILE}/mounts/volumes" "/volumes"
-      ;;
-    backups)
-      mount_the_share "${PROFILE}/mounts/backups" "/backups"
-      ;;
-    other)
-      mount_the_share "${PROFILE}/mounts/other" "/other"
-      ;;
-    files-ro)
-      mount_ro_share_no_password "${PROFILE}/mounts/files-ro" "/files"
-      ;;
-    metadata)
-      mount_the_share "${PROFILE}/mounts/moose-meta" "."
-      ;;
-    root)
-      mount_root
-      ;;
-    *)
-      error_msg "Invalid share option detected '${SHARE_TO_MOUNT}', please use a valid share option."
-      ;;
+  files)
+    mount_the_share "${profile}/mounts/files" "/files"
+    ;;
+  volumes)
+    mount_the_share "${profile}/mounts/volumes" "/volumes"
+    ;;
+  backups)
+    mount_the_share "${profile}/mounts/backups" "/backups"
+    ;;
+  other)
+    mount_the_share "${profile}/mounts/other" "/other"
+    ;;
+  files-ro)
+    mount_ro_share_no_password "${profile}/mounts/files-ro" "/files"
+    ;;
+  metadata)
+    mount_the_share "${profile}/mounts/moose-meta" "."
+    ;;
+  root)
+    mount_root "${profile}/mounts/moose-root"
+    ;;
+  *)
+    error_msg "Invalid share option detected '${SHARE_TO_MOUNT}', please use a valid share option."
+    ;;
   esac
 }
 
