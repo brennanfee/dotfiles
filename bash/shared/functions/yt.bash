@@ -2,11 +2,11 @@
 
 # Bash strict mode
 # shellcheck disable=SC2154
-([[ -n ${ZSH_EVAL_CONTEXT} && ${ZSH_EVAL_CONTEXT} =~ :file$ ]] ||
- [[ -n ${BASH_VERSION} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
+([[ -n ${ZSH_EVAL_CONTEXT} && ${ZSH_EVAL_CONTEXT} =~ :file$ ]] \
+  || [[ -n ${BASH_VERSION} ]] && (return 0 2> /dev/null)) && SOURCED=true || SOURCED=false
 if ! ${SOURCED}; then
-  set -o errexit # same as set -e
-  set -o nounset # same as set -u
+  set -o errexit  # same as set -e
+  set -o nounset  # same as set -u
   set -o errtrace # same as set -E
   set -o pipefail
   set -o posix
@@ -19,7 +19,7 @@ fi
 
 function yt-helper() {
   local url
-  if [[ ${IS_WSL} == "1" ]]; then
+  if is_wsl; then
     url=$(powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -Command Get-Clipboard)
   else
     url=$(xsel -o --clipboard)
@@ -34,7 +34,7 @@ function yt-helper() {
   fi
 
   prog="youtube-dl"
-  if command -v "yt-dlp" &>/dev/null; then
+  if command -v "yt-dlp" &> /dev/null; then
     prog="yt-dlp"
   fi
 
@@ -60,14 +60,14 @@ function ytm() {
   output="$(xdg-user-dir VIDEOS)/%(title)s-%(id)s-youtube.%(ext)s"
 
   local url
-  if [[ ${IS_WSL} == "1" ]]; then
+  if is_wsl; then
     url=$(powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -Command Get-Clipboard)
   else
     url=$(xsel -o --clipboard)
   fi
 
   prog="youtube-dl"
-  if command -v "yt-dlp" &>/dev/null; then
+  if command -v "yt-dlp" &> /dev/null; then
     prog="yt-dlp"
   fi
 

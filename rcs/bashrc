@@ -41,7 +41,6 @@ dotfiles_private=$(xdg-user-dir DOTFILESPRIVATE)
 # Again, defaults here just to be overly cautious
 os_primary="${OS_PRIMARY:-linux}"      # Assume linux
 os_secondary="${OS_SECONDARY:-debian}" # Assume debian
-is_wsl="${IS_WSL:-false}"              # Assume false
 
 # We want to walk "outside" in... which is to say run all options files first, then all
 # exports, then all functions, etc.
@@ -59,7 +58,7 @@ for folder in "first" "options" "exports" "functions" "third-party" "other" "ali
 done
 
 # On Windows shells running in WSL run some overrides
-if [[ ${is_wsl} == "true" ]]; then
+if is_wsl; then
   for folder in "first" "options" "exports" "functions" "third-party" "other" "aliases"; do
     for root in "${dotfiles}/bash" "${dotfiles_private}/bash"; do
       if [[ -d "${root}/windows-wsl/${folder}" ]]; then
@@ -100,4 +99,3 @@ unset dotfiles_private
 unset os_primary
 unset os_secondary
 unset profile_path
-unset is_wsl

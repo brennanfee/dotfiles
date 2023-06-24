@@ -17,7 +17,7 @@ if ! ${SOURCED}; then
 fi
 # END Bash scrict mode
 
-if [[ ${IS_WSL} == "1" ]]; then
+if is_wsl; then
   # WSL SSH is being handled completely differently from Linux
   exit
 fi
