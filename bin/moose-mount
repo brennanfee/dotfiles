@@ -1,0 +1,270 @@
+#!/usr/bin/env bash
+# Author: Brennan Fee
+# License: MIT License
+# Version: 0.6
+# Date: 2023-06-23
+
+# Bash strict mode
+([[ -n ${ZSH_EVAL_CONTEXT:-} && ${ZSH_EVAL_CONTEXT:-} =~ :file$ ]] ||
+  [[ -n ${BASH_VERSION:-} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
+if ! ${SOURCED}; then
+  set -o errexit  # same as set -e
+  set -o nounset  # same as set -u
+  set -o errtrace # same as set -E
+  set -o pipefail
+  set -o posix
+  #set -o xtrace # same as set -x, turn on for debugging
+
+  shopt -s inherit_errexit
+  shopt -s extdebug
+  IFS=$(printf '\n\t')
+fi
+
+SCRIPT_DIR="$(cd -P "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# END Bash strict mode
+
+SCRIPT_APP=$(basename "$0")
+SCRIPT_AUTHOR="Brennan Fee"
+SCRIPT_LICENSE="MIT License"
+SCRIPT_VERSION="0.6"
+SCRIPT_DATE="2023-06-23"
+
+source "$(xdg-user-dir DOTFILES)/bash/script-tools.bash"
+
+## Defaults
+FORCE="false"
+SERVER="moose.bfee.org"
+LOCATION=""
+SHARE_TO_MOUNT=""
+
+# The last two are considered "hidden" options as they are not listed in the help
+SUPPORTED_SHARES=("files" "backups" "volumes" "metadata" "files-ro" "other" "root")
+
+#### START: Process arguments
+
+ARGS=$(getopt --name "${SCRIPT_APP}" --options fs:l:hv --longoptions "force,server:,location:,help,version" -- "$@")
+
+# shellcheck disable=SC2181
+if [[ $? -ne 0 ]]; then
+  show_help
+fi
+
+eval set -- "${ARGS}"
+unset ARGS
+
+while true; do
+  case "$1" in
+  '-h' | '--help')
+    show_help
+    ;;
+  '-v' | '--version')
+    show_version
+    ;;
+  '-f' | '--force')
+    FORCE="true"
+    shift
+    continue
+    ;;
+  '-s' | '--server')
+    SERVER=$(echo "${2}" | tr "[:upper:]" "[:lower:]")
+    shift 2
+    continue
+    ;;
+  '-l' | '--location')
+    LOCATION=$2
+    shift 2
+    continue
+    ;;
+  '--')
+    shift
+    break
+    ;;
+  *)
+    error_msg "Unknown option: $1"
+    ;;
+  esac
+done
+
+## Now process positional arguments
+
+ARG_COUNT=1
+for arg; do
+  case "${ARG_COUNT}" in
+  1)
+    # Example, normalize to lower case
+    SHARE_TO_MOUNT=$(echo "${arg}" | tr "[:upper:]" "[:lower:]")
+    ;;
+  2)
+    break
+    ;;
+  *)
+    error_msg "Internal Argument Error"
+    ;;
+  esac
+  ARG_COUNT=$((ARG_COUNT + 1))
+done
+unset ARG_COUNT
+
+#### END: Process arguments
+
+#### START: Help
+
+function show_version() {
+  print_status "${SCRIPT_APP} - Moose Mounter"
+  print_status "Author: ${SCRIPT_AUTHOR}    License: ${SCRIPT_LICENSE}"
+  print_stauts "Version: ${SCRIPT_VERSION}    Date: ${SCRIPT_DATE}"
+  blank_line
+
+  exit 0
+}
+
+function show_help() {
+  print_status "${SCRIPT_APP} - Moose Mounter"
+  print_status "Author: ${SCRIPT_AUTHOR}    License: ${SCRIPT_LICENSE}"
+  print_stauts "Version: ${SCRIPT_VERSION}    Date: ${SCRIPT_DATE}"
+  blank_line
+  print_status "Little utility to mount my MooseFS volumes just the way I like."
+  blank_line
+  print_status "  ${APP} [options] <share name>"
+  blank_line
+  print_status "Options:"
+  blank_line
+  print_status "  -h or --help"
+  print_status "    Show this help screen."
+  blank_line
+  print_status "  -f or --force"
+  print_status "    Force mount (rarely needed)."
+  blank_line
+  print_status "  -s or --server"
+  print_status "    Override for the moosefs server location (fqdn)."
+  blank_line
+  print_status "  -l or --location"
+  print_status "    Override for the mount location, each share has it's own"
+  print_status "    default location if no override is provided."
+  blank_line
+  print_status "  <share name>"
+  print_stauts "     Which share to mount, optoins are: files, backups, volumes,"
+  print_stauts "     metadata, and files-ro."
+  blank_line
+
+  exit 0
+}
+
+#### END: Help
+
+function verify_share_to_mount() {
+  get_exit_code contains_element "${SHARE_TO_MOUNT}" "${SUPPORTED_SHARES[@]}"
+  if [[ ! ${EXIT_CODE} == "0" ]]; then
+    error_msg "Invalid share option, please use a valid share.  Check the help for a list of valid options."
+  fi
+}
+
+function verify_prereqs() {
+  if ! command -v "mfsmount" >/dev/null; then
+    error_msg "ERROR! moosefs is not installed, skipping mounting volumes."
+  fi
+
+  if [[ "${SHARE_TO_MOUNT}" != "files-ro" ]]; then
+    if ! command -v "kwalletcli" >/dev/null; then
+      error_msg "ERROR! kwalletcli not installed or on path.  Install it first!"
+    fi
+  fi
+}
+
+function mount_the_share() {
+  # $1 = default location
+  # $2 = remote_folder
+
+  local location="${1}"
+  if [[ "${LOCATION}" != "" ]]; then
+    location="${LOCATION}"
+  fi
+  local remote_folder="${2}"
+  local pwd
+
+  pwd=$(kwalletcli -f moosefs -e "${SHARE_TO_MOUNT}" 2>/dev/null)
+  if [[ -z "${pwd}" ]]; then
+    error_msg "ERROR! The moosefs wallet entry has not been set up correctly. No password provided."
+  fi
+
+  mkdir -p "${location}"
+  if [[ "${FORCE}" -eq 1 ]] && mountpoint -q "${location}"; then
+    umount -q -f "${location}"
+  fi
+
+  mfsmount "${location}" -H "${SERVER}" -S "${remote_folder}" -o rw \
+    -o mfspassword="${pwd}" -o mfsdelayedinit
+}
+
+function mount_ro_share_no_password() {
+  # $1 = default location
+  # $2 = remote_folder
+
+  local location="${1}"
+  if [[ "${LOCATION}" != "" ]]; then
+    location="${LOCATION}"
+  fi
+  local remote_folder="${2}"
+
+  mkdir -p "${location}"
+  if [[ "${FORCE}" -eq 1 ]] && mountpoint -q "${location}"; then
+    umount -q -f "${location}"
+  fi
+
+  mfsmount "${location}" -H "${SERVER}" -S "${remote_folder}" -o ro -o mfsdelayedinit
+}
+
+function mount_root() {
+  local location="${PROFILE}/mounts/moose-root"
+  if [[ "${LOCATION}" != "" ]]; then
+    location="${LOCATION}"
+  fi
+  local pwd
+
+  pwd=$(kwalletcli -f moosefs -e "${SHARE_TO_MOUNT}" 2>/dev/null)
+  if [[ -z "${pwd}" ]]; then
+    error_msg "ERROR! The moosefs wallet entry has not been set up correctly. No password provided."
+  fi
+
+  mkdir -p "${location}"
+  if [[ "${FORCE}" -eq 1 ]] && mountpoint -q "${location}"; then
+    umount -q -f "${location}"
+  fi
+
+  mfsmount "${location}" -H "${SERVER}" -o rw -o mfspassword="${pwd}" -o mfsdelayedinit
+}
+
+function main() {
+  verify_share_to_mount
+
+  verify_prereqs
+
+  case "${SHARE_TO_MOUNT}" in
+    files)
+      mount_the_share "${PROFILE}/mounts/files" "/files"
+      ;;
+    volumes)
+      mount_the_share "${PROFILE}/mounts/volumes" "/volumes"
+      ;;
+    backups)
+      mount_the_share "${PROFILE}/mounts/backups" "/backups"
+      ;;
+    other)
+      mount_the_share "${PROFILE}/mounts/other" "/other"
+      ;;
+    files-ro)
+      mount_ro_share_no_password "${PROFILE}/mounts/files-ro" "/files"
+      ;;
+    metadata)
+      mount_the_share "${PROFILE}/mounts/moose-meta" "."
+      ;;
+    root)
+      mount_root
+      ;;
+    *)
+      error_msg "Invalid share option detected '${SHARE_TO_MOUNT}', please use a valid share option."
+      ;;
+  esac
+}
+
+main "$@"

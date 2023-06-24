@@ -21,3 +21,4 @@ pipx
 idempotently
 PostgreSQL
 Calibre
+MooseFS

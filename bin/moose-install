@@ -1,0 +1,224 @@
+#!/usr/bin/env bash
+# Author: Brennan Fee
+# License: MIT License
+# Version: 0.3
+# Date: 2023-06-23
+
+# Bash strict mode
+([[ -n ${ZSH_EVAL_CONTEXT:-} && ${ZSH_EVAL_CONTEXT:-} =~ :file$ ]] ||
+  [[ -n ${BASH_VERSION:-} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
+if ! ${SOURCED}; then
+  set -o errexit  # same as set -e
+  set -o nounset  # same as set -u
+  set -o errtrace # same as set -E
+  set -o pipefail
+  set -o posix
+  #set -o xtrace # same as set -x, turn on for debugging
+
+  shopt -s inherit_errexit
+  shopt -s extdebug
+  IFS=$(printf '\n\t')
+fi
+
+SCRIPT_DIR="$(cd -P "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# END Bash strict mode
+
+SCRIPT_APP=$(basename "$0")
+SCRIPT_AUTHOR="Brennan Fee"
+SCRIPT_LICENSE="MIT License"
+SCRIPT_VERSION="0.3"
+SCRIPT_DATE="2023-06-23"
+
+source "$(xdg-user-dir DOTFILES)/bash/script-tools.bash"
+
+## Defaults
+HELP="false"
+ROLE_NAME=""
+
+SUPPORTED_ROLES=('client' 'master' 'metalogger' 'chunkserver')
+
+#### START: Process arguments
+
+ARGS=$(getopt --name "${SCRIPT_APP}" --options hv --longoptions "help,version" -- "$@")
+
+# shellcheck disable=SC2181
+if [[ $? -ne 0 ]]; then
+  show_help
+fi
+
+eval set -- "${ARGS}"
+unset ARGS
+
+while true; do
+  case "$1" in
+  '-h' | '--help')
+    HELP="true"
+    show_help
+    ;;
+  '-v' | '--version')
+    show_version
+    ;;
+  '--')
+    shift
+    break
+    ;;
+  *)
+    error_msg "Unknown option: $1"
+    ;;
+  esac
+done
+
+## Now process positional arguments
+
+ARG_COUNT=1
+for arg; do
+  case "${ARG_COUNT}" in
+  1)
+    # Example, normalize to lower case
+    ROLE_NAME=$(echo "${arg}" | tr "[:upper:]" "[:lower:]")
+    ;;
+  2)
+    break
+    ;;
+  *)
+    error_msg "Internal Argument Error"
+    ;;
+  esac
+  ARG_COUNT=$((ARG_COUNT + 1))
+done
+unset ARG_COUNT
+
+#### END: Process arguments
+
+#### START: Help
+
+function show_version() {
+  print_status "${SCRIPT_APP} - MooseFS Installer"
+  print_status "Author: ${SCRIPT_AUTHOR}    License: ${SCRIPT_LICENSE}"
+  print_stauts "Version: ${SCRIPT_VERSION}    Date: ${SCRIPT_DATE}"
+  blank_line
+
+  exit 0
+}
+
+function show_help() {
+  if [[ "${HELP}" == "false" ]]; then
+    print_warning "Incorrect parameters or options provided."
+    blank_line
+  fi
+
+  print_status "${SCRIPT_APP} - MooseFS Installer"
+  print_status "Author: ${SCRIPT_AUTHOR}    License: ${SCRIPT_LICENSE}"
+  print_stauts "Version: ${SCRIPT_VERSION}    Date: ${SCRIPT_DATE}"
+  blank_line
+
+  print_info "This will install the binaries needed for MooseFS to perform one of three roles:"
+  print_info "A client, the master server, or a metalogger server.  Both the master and metalogger"
+  print_fino "roles also install the client binaries."
+  blank_line
+  print_status "  ${APP} [options] <role name>"
+  blank_line
+  print_status "Options:"
+  blank_line
+  print_status "  -h or --help"
+  print_status "      Show this help screen."
+  blank_line
+  print_status "  -v or --version"
+  print_stauts "     Show the version number."
+  blank_line
+  print_status "  <role name>"
+  print_status "     The role to install, options are: client, master, metalogger, chunkserver."
+  blank_line
+
+  if [[ "${HELP}" == "false" ]]; then
+    exit 1
+  else
+    exit 0
+  fi
+}
+
+#### END: Help
+
+function verify_role() {
+  get_exit_code contains_element "${ROLE_NAME}" "${SUPPORTED_ROLES[@]}"
+  if [[ ! ${EXIT_CODE} == "0" ]]; then
+    error_msg "Invalid role selected '${ROLE_NAME}', please input a valid role: Client, Master, Mettalogger, or Chunkserver."
+  fi
+}
+
+function check_repo() {
+  get_exit_code apt_package_exists "moosefs-client"
+  if [[ ${EXIT_CODE} -ne 0 ]]; then
+    # We need to install the repo
+    local dpkg_arch
+    dpkg_arch=$(dpkg --print-architecture)
+    local release
+    release=$(lsb_release -r -s)
+    local distribution
+    distribution=$(lsb_release -i -s | tr "[:upper:]" "[:lower:]")
+    local edition_codename
+    edition_codename=$(lsb_release -c -s | tr "[:upper:]" "[:lower:]")
+
+    # Make sure the keyring folder exists
+    mkdir -p /usr/local/share/keyrings
+
+    # The key
+    local key_file="/usr/local/share/keyrings/moosefs-archive-keyring.gpg"
+    if [[ ! -f ${key_file} ]]; then
+      wget -O- https://ppa.moosefs.com/moosefs.key | gpg --dearmor | tee "${key_file}"
+    fi
+
+    # This is a hack for the Debian testing edition
+    if [[ ${release} == "testing" ]]; then
+      # Moosefs does not create repo's for testing, only stable
+      edition_codename=bookworm
+    fi
+
+    # This is a hack for Ubuntu editions, they only support LTS editions
+    if [[ ${distribution} == "ubuntu" ]]; then
+      if [[ ${edition_codename} == "kinetic" || ${edition_codename} == "lunar" ]]; then
+        edition_codename=jammy
+      fi
+    fi
+
+    # The repo
+    local repo_file="/etc/apt/sources.list.d/moosefs.list"
+    if [[ ! -f ${repo_file} ]]; then
+      echo "deb [arch=${dpkg_arch} signed-by=${key_file}] https://ppa.moosefs.com/moosefs-3/apt/${distribution}/${edition_codename} ${edition_codename} main" >"${repo_file}"
+    fi
+  fi
+
+  # Update apt
+  DEBIAN_FRONTEND=noninteractive apt-get -y -q update
+}
+
+function main() {
+  check_root_with_error ""
+  verify_role
+
+  check_repo
+
+  case "${ROLE_NAME}" in
+  client)
+    DEBIAN_FRONTEND=noninteractive apt-get -y -q install \
+      moosefs-client
+    ;;
+  master)
+    DEBIAN_FRONTEND=noninteractive apt-get -y -q install \
+      moosefs-master moosefs-cgi moosefs-cgiserv moosefs-cli moosefs-client
+    ;;
+  metalogger)
+    DEBIAN_FRONTEND=noninteractive apt-get -y -q install \
+      moosefs-metalogger moosefs-client
+    ;;
+  chunkserver)
+    DEBIAN_FRONTEND=noninteractive apt-get -y -q install \
+      moosefs-chunkserver moosefs-client
+    ;;
+  *)
+    error_msg "Invalid role detected '${ROLE_NAME}', something must have gone wrong."
+    ;;
+  esac
+}
+
+main "$@"

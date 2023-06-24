@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+
+# Bash strict mode
+([[ -n ${ZSH_EVAL_CONTEXT:-} && ${ZSH_EVAL_CONTEXT:-} =~ :file$ ]] ||
+  [[ -n ${BASH_VERSION:-} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
+if ! ${SOURCED}; then
+  set -o errexit  # same as set -e
+  set -o nounset  # same as set -u
+  set -o errtrace # same as set -E
+  set -o pipefail
+  set -o posix
+  #set -o xtrace # same as set -x, turn on for debugging
+
+  shopt -s inherit_errexit
+  shopt -s extdebug
+  IFS=$(printf '\n\t')
+fi
+
+SCRIPT_DIR="$(cd -P "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# END Bash strict mode
+
+source "$(xdg-user-dir DOTFILES)/bash/script-tools.bash"
+
+function main() {
+  local profile
+  profile=$(xdg-user-dir PROFILE)
+
+  [ -d "${profile}/mounts/moose" ] && umount -q -l "${profile}/mounts/moose"
+  [ -d "${profile}/mounts/backups" ] && umount -q -l "${profile}/mounts/backups"
+  [ -d "${profile}/mounts/other" ] && umount -q -l "${profile}/mounts/other"
+  [ -d "${profile}/mounts/files" ] && umount -q -l "${profile}/mounts/files"
+  [ -d "${profile}/mounts/files-iot" ] && umount -q -l "${profile}/mounts/files-iot"
+  [ -d "${profile}/mounts/moose-meta" ] && umount -q -l "${profile}/mounts/moose-meta"
+  [ -d "${profile}/mounts/moose-root" ] && umount -q -l "${profile}/mounts/moose-root"
+}
+
+main "$@"

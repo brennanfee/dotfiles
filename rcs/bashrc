@@ -81,8 +81,8 @@ done
 profile_path=$(xdg-user-dir PROFILE)
 profile_path="${profile_path:-${PROFILEPATH:-${HOME}/profile}}"
 
-if ! mountpoint -q "${profile_path}/moose"; then
-  [[ -f "${dotfiles}/bin/mount-shares" ]] && bash "${dotfiles}/bin/mount-shares"
+if ! mountpoint -q "${profile_path}/mounts/files"; then
+  [[ -x "${dotfiles}/bin/moose-mount-shares" ]] && "${dotfiles}/bin/moose-mount-shares"
 fi
 
 # Local config, this should be last and never checked into source control (or if it is it should be host specific)
