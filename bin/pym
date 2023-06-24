@@ -18,7 +18,7 @@ fi
 # END Bash strict mode
 
 # pym --- run python, with poetry if applicable
-# Can use an environnement variable (PY_PYTHON) to override which command is the fallback
+# Can use an environment variable (PY_PYTHON) to override which command is the fallback
 
 start="${PWD}"
 
