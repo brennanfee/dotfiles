@@ -4,6 +4,13 @@ return {
     init = function()
       require("core.utils").lazy_load("cutlass.nvim")
     end,
-    opts = {},
+    opts = {
+      cut_key = "gm",
+      registers = {
+        select = "s",
+        delete = "d",
+        change = "c",
+      },
+    },
   },
 }
