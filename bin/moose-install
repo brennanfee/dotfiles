@@ -19,8 +19,6 @@ if ! ${SOURCED}; then
   shopt -s extdebug
   IFS=$(printf '\n\t')
 fi
-
-SCRIPT_DIR="$(cd -P "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # END Bash strict mode
 
 SCRIPT_APP=$(basename "$0")
@@ -116,7 +114,7 @@ function show_help() {
   print_info "A client, the master server, or a metalogger server.  Both the master and metalogger"
   print_fino "roles also install the client binaries."
   blank_line
-  print_status "  ${APP} [options] <role name>"
+  print_status "  ${SCRIPT_APP} [options] <role name>"
   blank_line
   print_status "Options:"
   blank_line

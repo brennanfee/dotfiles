@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 # Author: Brennan Fee
 # License: MIT License
+# Version: 0.2
+# Date: 2023-06-27
 #
 # This script sets up a new Debian repo.  It is to replace the deprecated pattern of
 # using add-apt-key and instead downloads the key and sets the sources file to point
@@ -25,12 +27,17 @@ if ! ${SOURCED}; then
 fi
 # END Bash strict mode
 
-AUTHOR="Brennan A. Fee"
-VERSION="0.1 2023-06-15"
+source "$(xdg-user-dir DOTFILES)/bash/script-tools.bash"
+
+SCRIPT_APP=$(basename "$0")
+SCRIPT_AUTHOR="Brennan Fee"
+SCRIPT_LICENSE="MIT License"
+SCRIPT_VERSION="0.2"
+SCRIPT_DATE="2023-06-27"
 
 KEY_FILE=""
 REPO_URL=""
-KEY_PATH="/usr/local/share/keyrings"
+KEY_PATH="/etc/apt/keyrings"
 # override for the application name the repo belongs to, defaults to the key filename
 # without extension
 APP_NAME=""
@@ -55,165 +62,14 @@ SUPPORTED_STATES=("present" "absent" "latest")
 DEFAULT_GPG_BIN="/usr/bin/gpg"
 GPG_BIN_EXE=""
 
-APP_NAME=""
 KEY_FILE_FULLPATH=""
 SOURCES_FILE_FULLPATH=""
 
 FILES_PRESENT=0
 
-#### START: Utility methods
+#### START: Process arguments
 
-# Text modifiers
-TEXT_RESET="$(tput sgr0)"
-TEXT_RED="$(tput setaf 1)"
-TEXT_YELLOW="$(tput setaf 3)"
-
-blank_line() {
-  echo ""
-}
-
-print_status() {
-  local T_COLS
-  T_COLS=$(tput cols)
-  T_COLS=$((T_COLS - 1))
-  echo -e "$1${TEXT_RESET}" | fold -sw "${T_COLS}"
-}
-
-print_warning() {
-  local T_COLS
-  T_COLS=$(tput cols)
-  T_COLS=$((T_COLS - 1))
-  echo -e "${TEXT_YELLOW}$1${TEXT_RESET}" | fold -sw "${T_COLS}"
-}
-
-print_error() {
-  local T_COLS
-  T_COLS=$(tput cols)
-  T_COLS=$((T_COLS - 1))
-  echo -e "${TEXT_RED}$1${TEXT_RESET}" | fold -sw "${T_COLS}"
-}
-
-error_msg() {
-  print_error "$1"
-  if [[ ${2:-} != "" ]]; then
-    exit "$2"
-  else
-    exit 1
-  fi
-}
-
-get_exit_code() {
-  EXIT_CODE=0
-  # We first disable errexit in the current shell
-  set +e
-  (
-    # Then we set it again inside a subshell
-    set -e
-    # ...and run the function
-    "$@"
-  )
-  # shellcheck disable=2034
-  EXIT_CODE=$?
-  # And finally turn errexit back on in the current shell
-  set -e
-}
-
-contains_element() {
-  #check if an element exist in a string
-  for e in "${@:2}"; do
-    [[ ${e} == "$1" ]] && break
-  done
-}
-
-#### END: Utility methods
-
-check_root() {
-  local user_id
-  user_id=$(id -u)
-  if [[ "${user_id}" != "0" ]]; then
-    error_msg "ERROR! You must execute the script as the 'root' user."
-  fi
-}
-
-show_help() {
-  if [[ "${HELP_REQUESTED}" == "0" ]]; then
-    print_warning "Incorrect parameters or options provided."
-    blank_line
-  fi
-
-  print_status "deb-add-repo Help"
-  print_status "Version: ${VERSION}    Author: ${AUTHOR}"
-  blank_line
-  print_status "  deb-add-repo [options] <key file or url> <repo url>"
-  blank_line
-  print_status "This program sets up a Debian (or derivative) repository using the new method of"
-  print_status "downloading a GPG key and setting up the sources.list.d file to use the 'signed-by'"
-  print_status "setting to indicate the repo is signed by that key.  This replaces the older"
-  print_status "method of using 'apt-key' to add the keys globally.  This method is more secure."
-  blank_line
-  print_status "Prerequisites:  lsb_release, gnupg, and wget must all be installed or accessible."
-  blank_line
-  print_status "Options:"
-  blank_line
-  print_status "  -h or --help"
-  print_status "      Show this help screen."
-  blank_line
-  print_status "  -v or --version"
-  print_stauts "     Show the version number."
-  blank_line
-  print_status "  --gpg-bin-path <path>"
-  print_status "      Location where the gpg executable can be found.  By default, it looks using"
-  print_status "      the system path and if not found in the path then attempts to use "
-  print_status "      /usr/bin/gpg.  If your GPG setup is somehow different and not in your path,"
-  print_status "      you will need to provide a valid path here."
-  blank_line
-  print_status "  --app-name <string>"
-  print_status "      The application name the repo is intended for.  Will default to the filename"
-  print_stauts "      of the key file without extension."
-  blank_line
-  print_status "  --key-path <path>"
-  print_status "      Location where the key file will be placed. Default is "
-  print_status "      /usr/local/share/keyrings."
-  blank_line
-  print_status "  --output-key-name <filename>"
-  print_status "      Key filename to use, otherwise will default to the downloaded file name."
-  print_status "      This should end in '.gpg', if it doesn't .gpg will be added automatically."
-  blank_line
-  print_status "  --sources-name <filename>"
-  print_status "      Name of the APT sources list file, otherwise will default to the downloaded"
-  print_status "      file name of the key."
-  blank_line
-  print_status "  -i or --include-sources"
-  print_status "      Toggle to include deb-src in the sources file. Default is to not include it."
-  blank_line
-  print_status "  --sources-distribution <string>"
-  print_status "      Override for the distribution name to use, will default to the current"
-  print_status "      systems distribution version codename."
-  blank_line
-  print_status "  --sources-components <string>"
-  print_status "      The components of packages to include, defaults to just 'main'.  This is a"
-  print_status "      space separated list so you will likely need to wrap this in quotes."
-  blank_line
-  print_status "  --state <present/absent/latest>"
-  print_status "      To support idempotent execution.  The default is 'present' and will do nothing"
-  print_status "      if the key and sources file already exist.  'Absent' will remove them or do"
-  print_status "      nothing.  Latest will still pull the key down and re-install it even if the"
-  print_status "      files are present, ensuring you have the latest signing key for the repo."
-
-  if [[ "${HELP_REQUESTED}" == "0" ]]; then
-    exit 1
-  else
-    exit 0
-  fi
-}
-
-show_version() {
-  print_status "deb-add-repo"
-  print_status "Version: ${VERSION}    Author: ${AUTHOR}"
-  exit 0
-}
-
-ARGS=$(getopt -n "deb-add-repo" --options "vhis:" --longoptions "version,help,include-sources,state:,app-name:,key-path:,gpg-bin-path:,output-key-name:,sources-name:,sources-distribution:,sources-components:" -- "$@")
+ARGS=$(getopt -n "${SCRIPT_APP}" --options "vhis:" --longoptions "version,help,include-sources,state:,app-name:,key-path:,gpg-bin-path:,output-key-name:,sources-name:,sources-distribution:,sources-components:" -- "$@")
 
 # Show help if no parameters were passed
 # shellcheck disable=SC2181
@@ -307,14 +163,101 @@ for arg; do
   ARG_COUNT=$((ARG_COUNT + 1))
 done
 
-verify_state() {
+#### END: Process arguments
+
+#### START: Help
+
+function show_version() {
+  print_status "${SCRIPT_APP}"
+  print_status "Author: ${SCRIPT_AUTHOR}    License: ${SCRIPT_LICENSE}"
+  print_stauts "Version: ${SCRIPT_VERSION}    Date: ${SCRIPT_DATE}"
+  exit 0
+}
+
+function show_help() {
+  if [[ "${HELP_REQUESTED}" == "0" ]]; then
+    print_warning "Incorrect parameters or options provided."
+    blank_line
+  fi
+
+  print_status "${SCRIPT_APP}"
+  print_status "Author: ${SCRIPT_AUTHOR}    License: ${SCRIPT_LICENSE}"
+  print_stauts "Version: ${SCRIPT_VERSION}    Date: ${SCRIPT_DATE}"
+  blank_line
+
+  print_status "  ${SCRIPT_APP} [options] <key file or url> <repo url>"
+  blank_line
+  print_status "This program sets up a Debian (or derivative) repository using the new method of"
+  print_status "downloading a GPG key and setting up the sources.list.d file to use the 'signed-by'"
+  print_status "setting to indicate the repo is signed by that key.  This replaces the older"
+  print_status "method of using 'apt-key' to add the keys globally.  This method is more secure."
+  blank_line
+  print_status "Prerequisites:  lsb_release, gnupg, and wget must all be installed or accessible."
+  blank_line
+  print_status "Options:"
+  blank_line
+  print_status "  -h or --help"
+  print_status "      Show this help screen."
+  blank_line
+  print_status "  -v or --version"
+  print_stauts "     Show the version number."
+  blank_line
+  print_status "  --gpg-bin-path <path>"
+  print_status "      Location where the gpg executable can be found.  By default, it looks using"
+  print_status "      the system path and if not found in the path then attempts to use "
+  print_status "      /usr/bin/gpg.  If your GPG setup is somehow different and not in your path,"
+  print_status "      you will need to provide a valid path here."
+  blank_line
+  print_status "  --app-name <string>"
+  print_status "      The application name the repo is intended for.  Will default to the filename"
+  print_stauts "      of the key file without extension."
+  blank_line
+  print_status "  --key-path <path>"
+  print_status "      Location where the key file will be placed. Default is "
+  print_status "      /usr/local/share/keyrings."
+  blank_line
+  print_status "  --output-key-name <filename>"
+  print_status "      Key filename to use, otherwise will default to the downloaded file name."
+  print_status "      This should end in '.gpg', if it doesn't .gpg will be added automatically."
+  blank_line
+  print_status "  --sources-name <filename>"
+  print_status "      Name of the APT sources list file, otherwise will default to the downloaded"
+  print_status "      file name of the key."
+  blank_line
+  print_status "  -i or --include-sources"
+  print_status "      Toggle to include deb-src in the sources file. Default is to not include it."
+  blank_line
+  print_status "  --sources-distribution <string>"
+  print_status "      Override for the distribution name to use, will default to the current"
+  print_status "      systems distribution version codename."
+  blank_line
+  print_status "  --sources-components <string>"
+  print_status "      The components of packages to include, defaults to just 'main'.  This is a"
+  print_status "      space separated list so you will likely need to wrap this in quotes."
+  blank_line
+  print_status "  --state <present/absent/latest>"
+  print_status "      To support idempotent execution.  The default is 'present' and will do nothing"
+  print_status "      if the key and sources file already exist.  'Absent' will remove them or do"
+  print_status "      nothing.  Latest will still pull the key down and re-install it even if the"
+  print_status "      files are present, ensuring you have the latest signing key for the repo."
+
+  if [[ "${HELP_REQUESTED}" == "0" ]]; then
+    exit 1
+  else
+    exit 0
+  fi
+}
+
+#### END: Help
+
+function verify_state() {
   get_exit_code contains_element "${STATE}" "${SUPPORTED_STATES[@]}"
   if [[ ! "${EXIT_CODE}" == "0" ]]; then
     error_msg "Invalid 'State' argument value. Use one of 'present', 'absent', or 'latest'."
   fi
 }
 
-set_gpg_exe() {
+function set_gpg_exe() {
   if [[ "${GPG_BIN}" == "" || ! -x "${GPG_BIN}" ]]; then
     if command -v "gpg" &>/dev/null; then
       GPG_BIN_EXE=$(command -v gpg)
@@ -330,9 +273,15 @@ set_gpg_exe() {
   fi
 }
 
+function ensure_key_path() {
+  mkdir -p "${KEY_PATH}"
+  chmod "0755" "${KEY_PATH}"
+}
+
 verify_parameters() {
   verify_state
   set_gpg_exe
+  ensure_key_path
 
   if [[ "${KEY_FILE:-}" == "" ]]; then
     error_msg "A key file must be provided."
@@ -407,9 +356,6 @@ setup_key() {
     cp "${KEY_FILE}" "${tmp_file}"
   fi
 
-  # Create the key file path if it doesn't already exist
-  mkdir -p "${KEY_PATH}"
-
   # Check the file type
   file_type=$(file -b "${tmp_file}")
 
@@ -472,7 +418,7 @@ download_and_setup() {
 }
 
 main() {
-  check_root
+  check_root_with_error ""
   verify_parameters
 
   check_files_present

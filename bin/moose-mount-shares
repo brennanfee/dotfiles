@@ -19,8 +19,6 @@ if ! ${SOURCED}; then
   shopt -s extdebug
   IFS=$(printf '\n\t')
 fi
-
-SCRIPT_DIR="$(cd -P "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # END Bash strict mode
 
 SCRIPT_APP=$(basename "$0")
@@ -83,7 +81,7 @@ function show_help() {
   print_stauts "Version: ${SCRIPT_VERSION}    Date: ${SCRIPT_DATE}"
   blank_line
 
-  print_status "  ${APP} [options]"
+  print_status "  ${SCRIPT_APP} [options]"
   blank_line
   print_status "This script mounts my MooseFS shares into the profile directory tree."
   blank_line
