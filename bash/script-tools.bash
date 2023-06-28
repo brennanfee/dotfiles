@@ -96,17 +96,36 @@ function contains_element() {
 # list of all available packages.  The first version, 'apt_package_exists'
 # checks the current machine, while the other uses arch-chroot to check.
 #
-# This should be used with the get_exit_code function above.  Like so:
+# This should be used like so:
 #
-# get_exit_code apt_package_exists "some-package"
-# if [[ ${EXIT_CODE} -eq 0 ]]
+# if apt_package_exists "my-package"; then
 # then
 #   <package exists, code goes here>
 # fi
 #
 function apt_package_exists() {
-  apt-cache show "$1" &> /dev/null
-  return $?
+  local apt
+  apt=$(apt-cache -q=2 show "$1" 2>&1 | head -n 1 || true)
+  if [[ "${apt}" == Package* ]]; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+# Works just like apt_package_exists but does a chroot first.  This is
+# mostly usable in installation scenarios.  By default it chroot's to /mnt
+# but you can pass a second argument to override that.  The first argument is
+# the package to check for.
+#
+function arch_chroot_apt_package_exists() {
+  local apt
+  apt=$(arch-chroot /mnt apt-cache -q=2 show "$1" 2>&1 | head -n 1 || true)
+  if [[ "${apt}" == Package* ]]; then
+    return 0
+  else
+    return 1
+  fi
 }
 
 # Whether a package is actually installed
@@ -120,16 +139,7 @@ function apt_package_installed() {
   fi
 }
 
-# Works just like apt_package_exists but does a chroot first.  This is
-# mostly usable in installation scenarios.  By default it chroot's to /mnt
-# but you can pass a second argument to override that.  The first argument is
-# the package to check for.
-#
-function arch_chroot_apt_package_exists() {
-  arch-chroot "${2:-/mnt}" apt-cache show "$1" &> /dev/null
-  return $?
-}
-
+# chroot version of the above function
 function arch_chroot_apt_package_installed() {
   local pkg_count
   pkg_count=$(arch-chroot "${2:-/mnt}" dpkg --get-selections | grep -c "${1}")
