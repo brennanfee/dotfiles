@@ -4,11 +4,11 @@
 
 # Bash strict mode
 # shellcheck disable=SC2154
-([[ -n ${ZSH_EVAL_CONTEXT} && ${ZSH_EVAL_CONTEXT} =~ :file$ ]] ||
- [[ -n ${BASH_VERSION} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
+([[ -n ${ZSH_EVAL_CONTEXT} && ${ZSH_EVAL_CONTEXT} =~ :file$ ]] \
+  || [[ -n ${BASH_VERSION} ]] && (return 0 2> /dev/null)) && SOURCED=true || SOURCED=false
 if ! ${SOURCED}; then
-  set -o errexit # same as set -e
-  set -o nounset # same as set -u
+  set -o errexit  # same as set -e
+  set -o nounset  # same as set -u
   set -o errtrace # same as set -E
   set -o pipefail
   set -o posix
@@ -46,8 +46,7 @@ shopt -s inherit_errexit
 
 # Changes to the given alias directory
 # or executes a command based on the arguments.
-goto()
-{
+goto() {
   local target
   _goto_resolve_db
 
@@ -60,31 +59,31 @@ goto()
   subcommand="$1"
   shift
   case "${subcommand}" in
-    -c|--cleanup)
+    -c | --cleanup)
       _goto_cleanup "$@"
       ;;
-    -r|--register) # Register an alias
+    -r | --register) # Register an alias
       _goto_register_alias "$@"
       ;;
-    -u|--unregister) # Unregister an alias
+    -u | --unregister) # Unregister an alias
       _goto_unregister_alias "$@"
       ;;
-    -p|--push) # Push the current directory onto the pushd stack, then goto
+    -p | --push) # Push the current directory onto the pushd stack, then goto
       _goto_directory_push "$@"
       ;;
-    -o|--pop) # Pop the top directory off of the pushd stack, then change that directory
+    -o | --pop) # Pop the top directory off of the pushd stack, then change that directory
       _goto_directory_pop
       ;;
-    -l|--list)
+    -l | --list)
       _goto_list_aliases
       ;;
-    -x|--expand) # Expand an alias
+    -x | --expand) # Expand an alias
       _goto_expand_alias "$@"
       ;;
-    -h|--help)
+    -h | --help)
       _goto_usage
       ;;
-    -v|--version)
+    -v | --version)
       _goto_version
       ;;
     *)
@@ -94,8 +93,7 @@ goto()
   return $?
 }
 
-_goto_resolve_db()
-{
+_goto_resolve_db() {
   local CONFIG_DEFAULT="${XDG_CONFIG_HOME:-${HOME}/.config}/goto"
   GOTO_DB="${GOTO_DB:-${CONFIG_DEFAULT}}"
   GOTO_DB_CONFIG_DIRNAME=$(dirname "${GOTO_DB}")
@@ -105,9 +103,8 @@ _goto_resolve_db()
   touch -a "${GOTO_DB}"
 }
 
-_goto_usage()
-{
-  cat <<\USAGE
+_goto_usage() {
+  cat << \USAGE
 usage: goto [<option>] <alias> [<directory>]
 
 default usage:
@@ -136,21 +133,18 @@ USAGE
 }
 
 # Displays version
-_goto_version()
-{
+_goto_version() {
   echo "goto version 2.1.0"
 }
 
 # Expands directory.
 # Helpful for ~, ., .. paths
-_goto_expand_directory()
-{
-  builtin cd "$1" 2>/dev/null && pwd
+_goto_expand_directory() {
+  builtin cd "$1" 2> /dev/null && pwd
 }
 
 # Lists registered aliases.
-_goto_list_aliases()
-{
+_goto_list_aliases() {
   local IFS=$' '
   if [[ -f "${GOTO_DB}" ]]; then
     local maxlength=0
@@ -169,8 +163,7 @@ _goto_list_aliases()
 }
 
 # Expands a registered alias.
-_goto_expand_alias()
-{
+_goto_expand_alias() {
   if [[ "$#" -ne "1" ]]; then
     _goto_error "usage: goto -x|--expand <alias>"
     return
@@ -188,17 +181,15 @@ _goto_expand_alias()
 }
 
 # Lists duplicate directory aliases
-_goto_find_duplicate()
-{
+_goto_find_duplicate() {
   local duplicates=
 
-  duplicates=$(sed -n 's:[^ ]* '"$1"'$:&:p' "${GOTO_DB}" 2>/dev/null)
+  duplicates=$(sed -n 's:[^ ]* '"$1"'$:&:p' "${GOTO_DB}" 2> /dev/null)
   echo "${duplicates}"
 }
 
 # Registers and alias.
-_goto_register_alias()
-{
+_goto_register_alias() {
   if [[ "$#" -ne "2" ]]; then
     _goto_error "usage: goto -r|--register <alias> <directory>"
     return 1
@@ -236,8 +227,7 @@ _goto_register_alias()
 }
 
 # Unregisters the given alias.
-_goto_unregister_alias()
-{
+_goto_unregister_alias() {
   if [[ "$#" -ne "1" ]]; then
     _goto_error "usage: goto -u|--unregister <alias>"
     return 1
@@ -258,27 +248,24 @@ _goto_unregister_alias()
 }
 
 # Pushes the current directory onto the stack, then goto
-_goto_directory_push()
-{
+_goto_directory_push() {
   if [[ "$#" -ne "1" ]]; then
     _goto_error "usage: goto -p|--push <alias>"
     return
   fi
 
-  { pushd . || return; } 1>/dev/null 2>&1
+  { pushd . || return; } 1> /dev/null 2>&1
 
   _goto_directory "$@"
 }
 
 # Pops the top directory from the stack, then goto
-_goto_directory_pop()
-{
-  { popd || return; } 1>/dev/null 2>&1
+_goto_directory_pop() {
+  { popd || return; } 1> /dev/null 2>&1
 }
 
 # Unregisters aliases whose directories no longer exist.
-_goto_cleanup()
-{
+_goto_cleanup() {
   if ! [[ -f "${GOTO_DB}" ]]; then
     return
   fi
@@ -291,60 +278,54 @@ _goto_cleanup()
 }
 
 # Changes to the given alias' directory
-_goto_directory()
-{
+_goto_directory() {
   # directly goto the special name that is unable to be registered due to invalid alias, eg: ~
   if ! [[ $1 =~ ^[[:alnum:]]+[a-zA-Z0-9_-]*$ ]]; then
-    { builtin cd "$1" 2> /dev/null && return 0; } || \
-    { _goto_error "Failed to goto '$1'" && return 1; }
+    { builtin cd "$1" 2> /dev/null && return 0; } \
+      || { _goto_error "Failed to goto '$1'" && return 1; }
   fi
 
   local target
 
   target=$(_goto_resolve_alias "$1") || return 1
 
-  builtin cd "${target}" 2> /dev/null || \
-    { _goto_error "Failed to goto '${target}'" && return 1; }
+  builtin cd "${target}" 2> /dev/null \
+    || { _goto_error "Failed to goto '${target}'" && return 1; }
 }
 
 # Fetches the alias directory.
-_goto_find_alias_directory()
-{
+_goto_find_alias_directory() {
   local resolved
 
-  resolved=$(sed -n "s/^$1 \\(.*\\)/\\1/p" "${GOTO_DB}" 2>/dev/null)
+  resolved=$(sed -n "s/^$1 \\(.*\\)/\\1/p" "${GOTO_DB}" 2> /dev/null)
   echo "${resolved}"
 }
 
 # Displays the given error.
 # Used for common error output.
-_goto_error()
-{
-  (>&2 echo -e "goto error: $1")
+_goto_error() {
+  (echo >&2 -e "goto error: $1")
 }
 
 # Displays the given warning.
 # Used for common warning output.
-_goto_warning()
-{
-  (>&2 echo -e "goto warning: $1")
+_goto_warning() {
+  (echo >&2 -e "goto warning: $1")
 }
 
 # Displays entries with aliases starting as the given one.
-_goto_print_similar()
-{
+_goto_print_similar() {
   local similar
 
-  similar=$(sed -n "/^$1[^ ]* .*/p" "${GOTO_DB}" 2>/dev/null)
+  similar=$(sed -n "/^$1[^ ]* .*/p" "${GOTO_DB}" 2> /dev/null)
   if [[ -n "${similar}" ]]; then
-    (>&2 echo "Did you mean:")
-    (>&2 column -t <<< "${similar}")
+    (echo >&2 "Did you mean:")
+    (column >&2 -t <<< "${similar}")
   fi
 }
 
 # Fetches alias directory, errors if it doesn't exist.
-_goto_resolve_alias()
-{
+_goto_resolve_alias() {
   local resolved
 
   resolved=$(_goto_find_alias_directory "$1")
@@ -359,8 +340,7 @@ _goto_resolve_alias()
 }
 
 # Completes the goto function with the available commands
-_complete_goto_commands()
-{
+_complete_goto_commands() {
   local IFS=$' \t\n'
 
   # shellcheck disable=SC2207
@@ -368,24 +348,23 @@ _complete_goto_commands()
 }
 
 # Completes the goto function with the available aliases
-_complete_goto_aliases()
-{
+_complete_goto_aliases() {
   local IFS=$'\n' matches
   _goto_resolve_db
 
   # shellcheck disable=SC2207
-  matches=($(sed -n "/^$1/p" "${GOTO_DB}" 2>/dev/null))
+  matches=($(sed -n "/^$1/p" "${GOTO_DB}" 2> /dev/null))
 
   if [[ "${#matches[@]}" -eq "1" ]]; then
     # remove the filenames attribute from the completion method
-    compopt +o filenames 2>/dev/null
+    compopt +o filenames 2> /dev/null
 
     # if you find only one alias don't append the directory
-    COMPREPLY=("${matches[0]// *}")
+    COMPREPLY=("${matches[0]// */}")
   else
     for i in "${!matches[@]}"; do
       # remove the filenames attribute from the completion method
-      compopt +o filenames 2>/dev/null
+      compopt +o filenames 2> /dev/null
 
       if ! [[ $(uname -s || true) =~ Darwin* ]]; then
         matches[${i}]=$(printf '%*s' "-${COLUMNS}" "${matches[${i}]}")
@@ -399,8 +378,7 @@ _complete_goto_aliases()
 }
 
 # Bash programmable completion for the goto function
-_complete_goto_bash()
-{
+_complete_goto_bash() {
   local cur="${COMP_WORDS[${COMP_CWORD}]}" prev
 
   if [[ "${COMP_CWORD}" -eq "1" ]]; then
@@ -441,13 +419,12 @@ _complete_goto_bash()
 }
 
 # Zsh programmable completion for the goto function
-_complete_goto_zsh()
-{
+_complete_goto_zsh() {
   local all_aliases=()
   _goto_resolve_db
   while IFS= read -r line; do
     all_aliases+=("${line}")
-  done <<< "$(sed -e 's/ /:/g' ${GOTO_DB} 2>/dev/null || true)"
+  done <<< "$(sed -e 's/ /:/g' ${GOTO_DB} 2> /dev/null || true)"
 
   local state
   local -a options=(
@@ -466,19 +443,19 @@ _complete_goto_zsh()
     "${options[@]}" \
     '1:alias:->aliases' \
     '2:dir:_files' \
-  && ret=0
+    && ret=0
 
   case ${state} in
-    (aliases)
+    aliases)
       _describe -t aliases 'goto aliases:' all_aliases && ret=0
-    ;;
-
-    (unregister)
-      _describe -t aliases 'unregister alias:' all_aliases && ret=0
-    ;;
-
-    *)
       ;;
+
+    unregister)
+      _describe -t aliases 'unregister alias:' all_aliases && ret=0
+      ;;
+
+    *) ;;
+
   esac
   return "${ret}"
 }
@@ -486,9 +463,8 @@ _complete_goto_zsh()
 goto_aliases=($(alias | sed -n "s/.*\s\(.*\)='goto'/\1/p"))
 goto_aliases+=("goto")
 
-for i in "${goto_aliases[@]}"
-  do
-    # Register the goto completions.
+for i in "${goto_aliases[@]}"; do
+  # Register the goto completions.
   if [[ -n "${BASH_VERSION}" ]]; then
     if ! [[ $(uname -s || true) =~ Darwin* ]]; then
       complete -o filenames -F _complete_goto_bash "${i}"

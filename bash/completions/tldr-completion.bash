@@ -2,11 +2,11 @@
 
 # Bash strict mode
 # shellcheck disable=SC2154
-([[ -n ${ZSH_EVAL_CONTEXT} && ${ZSH_EVAL_CONTEXT} =~ :file$ ]] ||
- [[ -n ${BASH_VERSION} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
+([[ -n ${ZSH_EVAL_CONTEXT} && ${ZSH_EVAL_CONTEXT} =~ :file$ ]] \
+  || [[ -n ${BASH_VERSION} ]] && (return 0 2> /dev/null)) && SOURCED=true || SOURCED=false
 if ! ${SOURCED}; then
-  set -o errexit # same as set -e
-  set -o nounset # same as set -u
+  set -o errexit  # same as set -e
+  set -o nounset  # same as set -u
   set -o errtrace # same as set -E
   set -o pipefail
   set -o posix
@@ -54,45 +54,42 @@ OPTIONS='-v
 --help'
 
 function _tldr_autocomplete {
-  OPTS_NOT_USED=$( comm -23 <( echo "${OPTIONS}" | sort || true ) <( printf '%s\n' "${COMP_WORDS[@]}" | sort || true ) )
+  OPTS_NOT_USED=$(comm -23 <(echo "${OPTIONS}" | sort || true) <(printf '%s\n' "${COMP_WORDS[@]}" | sort || true))
 
   cur="${COMP_WORDS[${COMP_CWORD}]}"
   COMPREPLY=()
-  if [[ "${cur}" =~ ^-.* ]]
-  then
+  if [[ "${cur}" =~ ^-.* ]]; then
     # shellcheck disable=2207
     COMPREPLY=($(compgen -W "${OPTS_NOT_USED}" -- "${cur}"))
   else
-    if [[ ${COMP_CWORD} -eq 0 ]]
-    then
+    if [[ ${COMP_CWORD} -eq 0 ]]; then
       prev=""
     else
-      prev=${COMP_WORDS[${COMP_CWORD}-1]}
+      prev=${COMP_WORDS[${COMP_CWORD} - 1]}
     fi
     case "${prev}" in
-      -f|--render)
+      -f | --render)
         # shellcheck disable=2207
         COMPREPLY=($(compgen -f "${cur}"))
         ;;
 
-      -o|--os)
+      -o | --os)
         # shellcheck disable=2207
         COMPREPLY=($(compgen -W "${OS_TYPES}" "${cur}"))
         ;;
 
-      -t|--theme)
+      -t | --theme)
         # No suggestions for these, they take arbitrary values
         # shellcheck disable=2207
         SUGGESTED_BUILTINS=($(compgen -W "${BUILTIN_THEMES}" "${cur}"))
-        if [[ ${#SUGGESTED_BUILTINS[@]} -eq 0 ]]
-        then
+        if [[ ${#SUGGESTED_BUILTINS[@]} -eq 0 ]]; then
           COMPREPLY=()
         else
           COMPREPLY=("<custom theme name>" "${SUGGESTED_BUILTINS[@]}")
         fi
         ;;
 
-      -s|--search)
+      -s | --search)
         # No suggestions for these, they take arbitrary values
         COMPREPLY=("")
         ;;

@@ -2,11 +2,11 @@
 
 # Bash strict mode
 # shellcheck disable=SC2154
-([[ -n ${ZSH_EVAL_CONTEXT} && ${ZSH_EVAL_CONTEXT} =~ :file$ ]] ||
- [[ -n ${BASH_VERSION} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
+([[ -n ${ZSH_EVAL_CONTEXT} && ${ZSH_EVAL_CONTEXT} =~ :file$ ]] \
+  || [[ -n ${BASH_VERSION} ]] && (return 0 2> /dev/null)) && SOURCED=true || SOURCED=false
 if ! ${SOURCED}; then
-  set -o errexit # same as set -e
-  set -o nounset # same as set -u
+  set -o errexit  # same as set -e
+  set -o nounset  # same as set -u
   set -o errtrace # same as set -E
   set -o pipefail
   set -o posix
@@ -40,7 +40,7 @@ function git-branch-name() {
 }
 
 function in-a-git-repo() {
-  if [[ $(git rev-parse --is-inside-work-tree 2>/dev/null || true) == 'true' ]]; then
+  if [[ $(git rev-parse --is-inside-work-tree 2> /dev/null || true) == 'true' ]]; then
     return 0
   else
     return 1

@@ -1,12 +1,11 @@
 #!/usr/bin/env bash
 
 # Bash strict mode
-([[ -n ${ZSH_EVAL_CONTEXT} && ${ZSH_EVAL_CONTEXT} =~ :file$ ]] ||
- [[ -n ${BASH_VERSION} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
-if ! ${SOURCED}
-then
-  set -o errexit # same as set -e
-  set -o nounset # same as set -u
+([[ -n ${ZSH_EVAL_CONTEXT} && ${ZSH_EVAL_CONTEXT} =~ :file$ ]] \
+  || [[ -n ${BASH_VERSION} ]] && (return 0 2> /dev/null)) && SOURCED=true || SOURCED=false
+if ! ${SOURCED}; then
+  set -o errexit  # same as set -e
+  set -o nounset  # same as set -u
   set -o errtrace # same as set -E
   set -o pipefail
   set -o posix
@@ -27,12 +26,10 @@ fi
 # available.
 check_network_connection() {
   # Check localhost first (if network stack is up at all)
-  if ping -q -w 3 -c 2 localhost &> /dev/null
-  then
+  if ping -q -w 3 -c 2 localhost &> /dev/null; then
     # Test the gateway
     gateway_ip=$(ip r | grep default | awk 'NR==1 {print $3}')
-    if ping -q -w 3 -c 2 "${gateway_ip}" &> /dev/null
-    then
+    if ping -q -w 3 -c 2 "${gateway_ip}" &> /dev/null; then
       # Should we also ping the install mirror?
       return 0
     else
@@ -46,8 +43,7 @@ check_network_connection() {
 check_network_connection_with_error() {
   get_exit_code check_network_connection
   # shellcheck disable=2154
-  if [[ ${EXIT_CODE} -ne 0 ]]
-  then
+  if [[ ${EXIT_CODE} -ne 0 ]]; then
     local error_message=${1:-"ERROR!  Network is not accessible."}
     local error_code=${2:-"1"}
 
@@ -69,11 +65,9 @@ check_network_connection_with_error() {
 # available.
 check_internet_connection() {
   # Check localhost first (if network stack is up at all)
-  if ping -q -w 3 -c 2 localhost &> /dev/null
-  then
+  if ping -q -w 3 -c 2 localhost &> /dev/null; then
     # Test the gateway
-    if ping -q -w 3 -c 2 "google.com" &> /dev/null
-    then
+    if ping -q -w 3 -c 2 "google.com" &> /dev/null; then
       return 0
     else
       return 1
@@ -85,8 +79,7 @@ check_internet_connection() {
 
 check_internet_connection_with_error() {
   get_exit_code check_internet_connection "$3"
-  if [[ ${EXIT_CODE} -ne 0 ]]
-  then
+  if [[ ${EXIT_CODE} -ne 0 ]]; then
     local error_message=${1:-"ERROR!  Internet is not accessible."}
     local error_code=${2:-"1"}
 
@@ -107,17 +100,14 @@ check_internet_connection_with_error() {
 # will produce an error message and exit if the internet connection is not
 # available.
 check_site_connection() {
-  if [[ -n $1 ]]
-  then
+  if [[ -n $1 ]]; then
     return 2
   fi
 
   # Check localhost first (if network stack is up at all)
-  if ping -q -w 3 -c 2 localhost &> /dev/null
-  then
+  if ping -q -w 3 -c 2 localhost &> /dev/null; then
     # Test the gateway
-    if ping -q -w 3 -c 2 "$1" &> /dev/null
-    then
+    if ping -q -w 3 -c 2 "$1" &> /dev/null; then
       return 0
     else
       return 1
@@ -134,15 +124,13 @@ check_site_connection_with_error() {
 
   get_exit_code check_site_connection "$1"
 
-  if [[ ${EXIT_CODE} -eq 2 ]]
-  then
+  if [[ ${EXIT_CODE} -eq 2 ]]; then
     local msg="You must pass in a site to check."
     echo -e "${text_red}${msg}${text_reset}\n" | fold -sw "${T_COLS}"
     exit 2
   fi
 
-  if [[ ${EXIT_CODE} -ne 0 ]]
-  then
+  if [[ ${EXIT_CODE} -ne 0 ]]; then
     local error_message=${1:-"ERROR!  Site '${1}' is not accessible."}
     local error_code=${2:-"1"}
 
