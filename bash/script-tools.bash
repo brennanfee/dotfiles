@@ -366,8 +366,12 @@ text_clear="$(tput sgr0)"
 
 #### START: Terminal Print Functions
 
-function blank_line() {
+function print_blank_line() {
   echo ""
+}
+
+function print_separator() {
+  print_line "$@"
 }
 
 function print_line() {
