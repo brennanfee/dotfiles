@@ -376,11 +376,19 @@ function print_line() {
   printf "%${T_COLS}s\n" | tr ' ' '-'
 }
 
+function print_white() {
+  print_status "$@"
+}
+
 function print_status() {
   local T_COLS
   T_COLS=$(tput cols)
   T_COLS=$((T_COLS - 1))
-  echo -e "$1${text_reset}" | fold -sw "${T_COLS}"
+  echo -e "${text_reset}$1${text_reset}" | fold -sw "${T_COLS}"
+}
+
+function print_bold() {
+  print_info "$@"
 }
 
 function print_info() {
@@ -390,11 +398,19 @@ function print_info() {
   echo -e "${text_bold}$1${text_reset}" | fold -sw "${T_COLS}"
 }
 
+function print_yellow() {
+  print_warning "$@"
+}
+
 function print_warning() {
   local T_COLS
   T_COLS=$(tput cols)
   T_COLS=$((T_COLS - 1))
   echo -e "${text_yellow}$1${text_reset}" | fold -sw "${T_COLS}"
+}
+
+function print_green() {
+  print_success "$@"
 }
 
 function print_success() {
@@ -404,11 +420,40 @@ function print_success() {
   echo -e "${text_green}$1${text_reset}" | fold -sw "${T_COLS}"
 }
 
+function print_red() {
+  print_error "$@"
+}
+
 function print_error() {
   local T_COLS
   T_COLS=$(tput cols)
   T_COLS=$((T_COLS - 1))
   echo -e "${text_red}$1${text_reset}" | fold -sw "${T_COLS}"
+}
+
+function print_blue() {
+  local T_COLS
+  T_COLS=$(tput cols)
+  T_COLS=$((T_COLS - 1))
+  echo -e "${text_blue}$1${text_reset}" | fold -sw "${T_COLS}"
+}
+
+function print_magenta {
+  print_heading "$@"
+}
+
+function print_heading {
+  local T_COLS
+  T_COLS=$(tput cols)
+  T_COLS=$((T_COLS - 1))
+  echo -e "${text_magenta}$1${text_reset}" | fold -sw "${T_COLS}"
+}
+
+function print_cyan {
+  local T_COLS
+  T_COLS=$(tput cols)
+  T_COLS=$((T_COLS - 1))
+  echo -e "${text_cyan}$1${text_reset}" | fold -sw "${T_COLS}"
 }
 
 function pause_output() {
