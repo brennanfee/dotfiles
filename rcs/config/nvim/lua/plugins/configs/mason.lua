@@ -106,7 +106,6 @@ return {
       "php-cs-fixer",
       "prettierd",
       "rubocop",
-      "rustfmt",
       "shfmt",
       "sqlfmt",
       "stylua",
