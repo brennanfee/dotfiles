@@ -239,26 +239,35 @@ function is_wsl() {
 function check_root() {
   local user_id
   user_id=$(id -u)
-  if [[ "${user_id}" == "0" ]]; then
+  if [[ ${user_id} -ne 0 ]]; then
     return 0
   fi
   return 1
 }
 
 function check_root_with_error() {
-  if ! check_root; then
-    local error_message=${1:-""}
+  local user_id
+  user_id=$(id -u)
+
+  if [[ ${user_id} -ne 0 ]]; then
+    local error_message=${1:=""}
     if [[ "${error_message}" == "" ]]; then
       error_message="ERROR!  You must execute this script as the 'root' user."
     fi
-    local error_code=${2:-"1"}
+    local error_code=${2:="1"}
 
     local T_COLS
     T_COLS=$(tput cols)
     T_COLS=$((T_COLS - 1))
 
+    # Only here for portability, this method can be copy/pasted from here to anywhere else
+    local RED
+    local RESET
+    RED="$(tput setaf 1)"
+    RESET="$(tput sgr0)"
+
     # shellcheck disable=2154
-    echo -e "${text_red}${error_message}${text_reset}\n" | fold -sw "${T_COLS}"
+    echo -e "${RED}${error_message}${RESET}\n" | fold -sw "${T_COLS}"
     exit "${error_code}"
   fi
 }
