@@ -20,7 +20,8 @@ fi
 function vagrant_cmd() {
   # Check we are in a directory with a Vagrantfile
   if [[ ! -f "./Vagrantfile" ]]; then
-    error_msg "Not in a directory with a Vagrantfile!"
+    print_error "Not in a directory with a Vagrantfile!"
+    return 0
   fi
 
   vagrant "$@"
@@ -53,7 +54,8 @@ alias vsd='vagrant_cmd snapshot destroy'
 function packer_build() {
   # Check we are in a directory packer directory
   if [[ ! -f "./build.bash" ]]; then
-    error_msg "Not in a packer build directory!"
+    print_error "Not in a packer build directory!"
+    return 0
   fi
 
   ./build.bash "$@"
@@ -62,7 +64,8 @@ function packer_build() {
 function packer_clean() {
   # Check we are in a directory packer directory
   if [[ ! -f "./clean.bash" ]]; then
-    error_msg "Not in a packer build or test directory!"
+    print_error "Not in a packer build or test directory!"
+    print 0
   fi
 
   ./clean.bash "$@"
@@ -71,7 +74,8 @@ function packer_clean() {
 function packer_test() {
   # Check we are in a directory packer directory
   if [[ ! -f "./test.bash" ]]; then
-    error_msg "Not in a packer test directory!"
+    print_error "Not in a packer test directory!"
+    print 0
   fi
 
   "./test.bash" "$@"
@@ -80,7 +84,8 @@ function packer_test() {
 function packer_run_all_tests() {
   # Check we are in a directory packer directory
   if [[ ! -f "./run-all-tests.bash" ]]; then
-    error_msg "Not in a packer test directory!"
+    print_error "Not in a packer test directory!"
+    print 0
   fi
 
   "./run-all-tests.bash" "$@"
