@@ -1,49 +1,49 @@
 local M = {}
 
 M.lspkind = {
-  Namespace = "",
-  Text = "",
-  Method = "",
-  Function = "",
+  Namespace = "󰌗",
+  Text = "󰉿",
+  Method = "󰆧",
+  Function = "󰆧",
   Constructor = "",
-  Field = "ﰠ",
+  Field = "󰜢",
   Variable = "",
-  Class = "ﴯ",
+  Class = "󰠱",
   Interface = "",
   Module = "",
-  Property = "ﰠ",
-  Unit = "塞",
-  Value = "",
+  Property = "󰜢",
+  Unit = "󰑭",
+  Value = "󰎠",
   Enum = "",
-  Keyword = "",
+  Keyword = "󰌋",
   Snippet = "",
-  Color = "",
-  File = "",
-  Reference = "",
-  Folder = "",
+  Color = "󰏘",
+  File = "󰈙",
+  Reference = "󰈇",
+  Folder = "󰉋",
   EnumMember = "",
-  Constant = "",
-  Struct = "פּ",
+  Constant = "󰏿",
+  Struct = "󰙅",
   Event = "",
-  Operator = "",
-  TypeParameter = "",
+  Operator = "󰆕",
+  TypeParameter = "󰊄",
   Table = "",
-  Object = "",
+  Object = "󰅩",
   Tag = "",
   Array = "[]",
   Boolean = "",
   Number = "",
-  Null = "ﳠ",
-  String = "",
+  Null = "󰟢",
+  String = "󰉿",
   Calendar = "",
-  Watch = "",
+  Watch = "󰥔",
   Package = "",
   Copilot = "",
 }
 
 M.devicons = {
   default_icon = {
-    icon = "",
+    icon = "󰈙",
     name = "Default",
   },
   c = {
@@ -67,15 +67,15 @@ M.devicons = {
     name = "html",
   },
   jpeg = {
-    icon = "",
+    icon = "󰉏",
     name = "jpeg",
   },
   jpg = {
-    icon = "",
+    icon = "󰉏",
     name = "jpg",
   },
   js = {
-    icon = "",
+    icon = "󰌞",
     name = "js",
   },
   kt = {
@@ -83,7 +83,7 @@ M.devicons = {
     name = "kt",
   },
   lock = {
-    icon = "",
+    icon = "󰌾",
     name = "lock",
   },
   lua = {
@@ -91,7 +91,7 @@ M.devicons = {
     name = "lua",
   },
   mp3 = {
-    icon = "",
+    icon = "󰎆",
     name = "mp3",
   },
   mp4 = {
@@ -103,7 +103,7 @@ M.devicons = {
     name = "out",
   },
   png = {
-    icon = "",
+    icon = "󰉏",
     name = "png",
   },
   py = {
@@ -111,7 +111,7 @@ M.devicons = {
     name = "py",
   },
   ["robots.txt"] = {
-    icon = "ﮧ",
+    icon = "󰚩",
     name = "robots",
   },
   toml = {
@@ -119,7 +119,7 @@ M.devicons = {
     name = "toml",
   },
   ts = {
-    icon = "ﯤ",
+    icon = "󰛦",
     name = "ts",
   },
   ttf = {
@@ -135,7 +135,7 @@ M.devicons = {
     name = "rpm",
   },
   vue = {
-    icon = "﵂",
+    icon = "󰡄",
     name = "vue",
   },
   woff = {
