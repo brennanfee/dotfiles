@@ -14,6 +14,7 @@ config.font = wezterm.font_with_fallback({
   { family = "Noto Color Emoji" },
 })
 config.font_size = 16.0
+config.warn_about_missing_glyphs = false
 config.adjust_window_size_when_changing_font_size = false
 config.freetype_interpreter_version = 40
 config.freetype_load_target = "Light"
