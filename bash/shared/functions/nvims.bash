@@ -37,7 +37,7 @@ function nvims() {
 
   local config="${1:-}"
   if [[ -z ${config} ]]; then
-    config=$(printf "%s\n" "${items[@]}" | fzf --prompt=" Neovim Config  " --height=50 --layout=reverse --border --exit-0)
+    config=$(printf "%s\n" "${items[@]}" | fzf --prompt=" Neovim Config 󰄾 " --height=50 --layout=reverse --border --exit-0)
   fi
 
   if [[ -z ${config} ]]; then
@@ -55,7 +55,7 @@ function wipe-nvim() {
 
   local config="${1:-}"
   if [[ -z ${config} ]]; then
-    config=$(printf "%s\n" "${items[@]}" | fzf --prompt=" Neovim Config  " --height=50 --layout=reverse --border --exit-0)
+    config=$(printf "%s\n" "${items[@]}" | fzf --prompt=" Neovim Config 󰄾 " --height=50 --layout=reverse --border --exit-0)
   fi
 
   if [[ -z ${config} ]]; then

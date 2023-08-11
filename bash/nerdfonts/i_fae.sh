@@ -1,5 +1,4 @@
-#!/bin/bash
-# shellcheck disable=SC2034
+#!/usr/bin/env bash
 # Font Awesome Extension (170 icons)
 # Codepoints: Nerd Fonts moved E000-E0A9 → E200-E2A9
 test -n "$__i_fae_loaded" && return || __i_fae_loaded=1
@@ -103,7 +102,7 @@ i='' i_fae_chess_king=$i
 i='' i_fae_chess_pawn=$i
 i='' i_fae_chess_queen=$i
 i='' i_fae_chess_tower=$i
-i='' i_fae_chesse=$i
+i='' i_fae_cheese=$i
 i='' i_fae_chilli=$i
 i='' i_fae_chip=$i
 i='' i_fae_cicling=$i

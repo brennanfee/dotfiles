@@ -1,15 +1,14 @@
-#!/bin/bash
-# shellcheck disable=SC2034
-# Powerline Extra Symbols (37 icons, 3 aliases)
+#!/usr/bin/env bash
+# Powerline Extra Symbols (38 icons, 3 aliases)
 # Codepoints: E0A0-E0A3 E0B0-E0BF E0C0-E0C8 E0CC-E0CF E0D0-E0D2 E0D4
 test -n "$__i_ple_loaded" && return || __i_ple_loaded=1
 i='' i_pl_branch=$i
 i='' i_pl_line_number=$i
-i_pl_current_line=$i_pl_line_number
+      i_pl_current_line=$i_pl_line_number
 i='' i_pl_hostname=$i
-i_pl_readonly=$i_pl_hostname
+      i_pl_readonly=$i_pl_hostname
 i='' i_ple_column_number=$i
-i_ple_current_column=$i_ple_column_number
+      i_ple_current_column=$i_ple_column_number
 i='' i_pl_left_hard_divider=$i
 i='' i_pl_left_soft_divider=$i
 i='' i_pl_right_hard_divider=$i
