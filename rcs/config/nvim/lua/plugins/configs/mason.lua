@@ -92,6 +92,7 @@ return {
       "yamllint",
 
       -- Formatters
+      "black",
       "blackd-client",
       "buf",
       "cbfmt",
