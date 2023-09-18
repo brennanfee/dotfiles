@@ -70,6 +70,8 @@ function doUpdate() {
       asdf update
       _write_msg "Updating plugins for asdf"
       asdf plugin update --all
+      _write_msg "Updating asdf tools"
+      asdf install
     fi
   fi
 
