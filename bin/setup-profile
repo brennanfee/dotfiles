@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+# Author: Brennan Fee
+# License: MIT License
+# Version: 0.1
+# Date: 2023-09-26
+
+# Bash strict mode
+([[ -n ${ZSH_EVAL_CONTEXT:-} && ${ZSH_EVAL_CONTEXT:-} =~ :file$ ]] ||
+  [[ -n ${BASH_VERSION:-} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
+if ! ${SOURCED}; then
+  set -o errexit  # same as set -e
+  set -o nounset  # same as set -u
+  set -o errtrace # same as set -E
+  set -o pipefail
+  set -o posix
+  #set -o xtrace # same as set -x, turn on for debugging
+
+  shopt -s inherit_errexit
+  shopt -s extdebug
+  IFS=$(printf '\n\t')
+fi
+# END Bash strict mode
+
+# Create the mount directories
+mkdir -p "${HOME}/mounts/backups" "${HOME}/mounts/files" "${HOME}/mounts/other"
+
+# Create the profile directories
+mkdir -p "${HOME}/profile/cloud" "${HOME}/profile/documents" "${HOME}/profile/downloads" "${HOME}/profile/installs" "${HOME}/profile/music" "${HOME}/profile/pictures" "${HOME}/profile/public" "${HOME}/profile/source/github" "${HOME}/profile/templates" "${HOME}/profile/videos" "${HOME}/profile/vms"
+
+# Symlink the downloads folder
+if [[ ! -L "${HOME}/Downloads" || ! -d "${HOME}/Downloads" ]]; then
+  rm -rf "${HOME}/Downloads"
+  ln -s "${HOME}/profile/downloads" "${HOME}/Downloads"
+fi
