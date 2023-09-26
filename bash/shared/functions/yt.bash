@@ -39,7 +39,7 @@ function yt-helper() {
   fi
 
   echo "Downloading ${url}"
-  ${prog} --no-mtime -i -f "${format}" -o "$2" "${url}" "${@:3}"
+  ${prog} --cookies-from-browser firefox --embed-metadata --mark-watched --embed-thumbnail --no-mtime -i -f "${format}" -o "$2" "${url}" "${@:3}"
 }
 
 function yt() {
@@ -49,8 +49,11 @@ function yt() {
 }
 
 function pt() {
+  local folder
   local output
-  output="$(xdg-user-dir PICTURES)/_other/%(title)s-%(id)s-[%(channel,channel_id,creator,uploader)s].%(ext)s"
+  folder="$(xdg-user-dir PICTURES)/_other"
+  mkdir -p "${folder}"
+  output="${folder}/%(title)s-%(id)s-[%(channel,channel_id,creator,uploader)s].%(ext)s"
   yt-helper "low" "${output}" "$@"
 }
 
@@ -72,5 +75,5 @@ function ytm() {
   fi
 
   echo "Downloading ${url}"
-  ${prog} --no-mtime --extract-audio --audio-format mp3 -i -o "${output}" "${url}" "${@:2}"
+  ${prog} --cookies-from-browser firefox --embed-metadata --embed-thumbnail --no-mtime --extract-audio --audio-format mp3 -i -o "${output}" "${url}" "${@:2}"
 }
