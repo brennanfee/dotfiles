@@ -4,13 +4,14 @@
 mkdir -p "${XDG_CACHE_HOME:-$HOME/.cache}/vim"
 mkdir -p "${XDG_CACHE_HOME:-$HOME/.cache}/zsh"
 
+mkdir -p "${HOME}/mounts"
+
 # Profile directories
 THE_PROFILE_DIR="${HOME}/profile"
 mkdir -p "${THE_PROFILE_DIR}/cloud"
 mkdir -p "${THE_PROFILE_DIR}/documents"
 mkdir -p "${THE_PROFILE_DIR}/downloads"
 mkdir -p "${THE_PROFILE_DIR}/installs"
-mkdir -p "${THE_PROFILE_DIR}/mounts"
 mkdir -p "${THE_PROFILE_DIR}/music"
 mkdir -p "${THE_PROFILE_DIR}/pictures"
 mkdir -p "${THE_PROFILE_DIR}/source/github"

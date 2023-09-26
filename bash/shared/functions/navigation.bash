@@ -171,22 +171,22 @@ alias cdpl="cdmp"
 
 # Mounts folder
 function cdmt() {
-  xdg-go-to-dir "MOUNTS" "${PROFILEPATH}/mounts" "${1:-}"
+  xdg-go-to-dir "MOUNTS" "${HOME}/mounts" "${1:-}"
 }
 
 # Mount "files"
 function cdmf() {
-  xdg-cd-sub "MOUNTS" "${PROFILEPATH}/mounts" "files" "files" "${1:-}"
+  xdg-cd-sub "MOUNTS" "${HOME}/mounts" "files" "files" "${1:-}"
 }
 
 # Mount "other"
 function cdmo() {
-  xdg-cd-sub "MOUNTS" "${PROFILEPATH}/mounts" "other" "other" "${1:-}"
+  xdg-cd-sub "MOUNTS" "${HOME}/mounts" "other" "other" "${1:-}"
 }
 
 # Mount "backups"
 function cdmb() {
-  xdg-cd-sub "MOUNTS" "${PROFILEPATH}/mounts" "backups" "backups" "${1:-}"
+  xdg-cd-sub "MOUNTS" "${HOME}/mounts" "backups" "backups" "${1:-}"
 }
 
 # Videos folder

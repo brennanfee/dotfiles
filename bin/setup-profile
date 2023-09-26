@@ -32,3 +32,10 @@ if [[ ! -L "${HOME}/Downloads" || ! -d "${HOME}/Downloads" ]]; then
   rm -rf "${HOME}/Downloads"
   ln -s "${HOME}/profile/downloads" "${HOME}/Downloads"
 fi
+
+# Remove the other default xdg folders in the $HOME
+rm -rf "${HOME}/Documents"
+rm -rf "${HOME}/Music"
+rm -rf "${HOME}/Pictures"
+rm -rf "${HOME}/Templates"
+rm -rf "${HOME}/Videos"

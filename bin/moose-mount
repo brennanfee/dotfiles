@@ -253,30 +253,29 @@ function main() {
 
   verify_prereqs
 
-  local profile
-  profile="$(xdg-user-dir PROFILE)"
+  mkdir -p "$HOME/mounts"
 
   case "${SHARE_TO_MOUNT}" in
   files)
-    mount_the_share "${profile}/mounts/files" "/files"
+    mount_the_share "${HOME}/mounts/files" "/files"
     ;;
   volumes)
-    mount_the_share "${profile}/mounts/volumes" "/volumes"
+    mount_the_share "${HOME}/mounts/volumes" "/volumes"
     ;;
   backups)
-    mount_the_share "${profile}/mounts/backups" "/backups"
+    mount_the_share "${HOME}/mounts/backups" "/backups"
     ;;
   other)
-    mount_the_share "${profile}/mounts/other" "/other"
+    mount_the_share "${HOME}/mounts/other" "/other"
     ;;
   files-ro)
-    mount_ro_share_no_password "${profile}/mounts/files-ro" "/files"
+    mount_ro_share_no_password "${HOME}/mounts/files-ro" "/files"
     ;;
   metadata)
-    mount_the_share "${profile}/mounts/moose-meta" "."
+    mount_the_share "${HOME}/mounts/moose-meta" "."
     ;;
   root)
-    mount_root "${profile}/mounts/moose-root"
+    mount_root "${HOME}/mounts/moose-root"
     ;;
   *)
     error_msg "Invalid share option detected '${SHARE_TO_MOUNT}', please use a valid share option."
