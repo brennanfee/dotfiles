@@ -140,7 +140,7 @@ function doUpdate() {
   if [[ "${toUpdate}" == "all" || "${toUpdate}" == "nvim" || "${toUpdate}" == "neovim" ]]; then
     if command_exists nvim; then
       _write_msg "Updating nvim plugins"
-      nvim --headless "+Lazy! sync" +qa!
+      nvim --headless "+Lazy! sync" +qa
     fi
   fi
 
