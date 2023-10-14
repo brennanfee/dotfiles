@@ -144,7 +144,12 @@ return {
       run_on_start = false,
     })
 
-    vim.api.nvim_create_user_command("UpdateAll", function()
+    vim.api.nvim_create_user_command("AutoUpdate", function()
+      require("lazy").sync({ wait = true, show = false })
+      --vim.cmd("MasonToolsUpdate")
+    end, {})
+
+    vim.api.nvim_create_user_command("DoUpdate", function()
       require("lazy").sync({ wait = true, show = false })
       vim.cmd("MasonToolsUpdate")
     end, {})
