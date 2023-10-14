@@ -89,9 +89,9 @@ function doUpdate() {
   if [[ "${toUpdate}" == "all" || "${toUpdate}" == "appimages" ]]; then
     if command_exists am; then
       # sync
-      sudo appman -s
+      sudo am -s
       # update
-      sudo appman -u
+      sudo am -u
     fi
   fi
 
