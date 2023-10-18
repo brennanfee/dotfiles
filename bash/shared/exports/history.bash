@@ -17,8 +17,8 @@ if ! ${SOURCED}; then
 fi
 # END Bash scrict mode
 
-export HISTCONTROL=${HISTCONTROL}${HISTCONTROL+,}ignoredups
-export HISTCONTROL=${HISTCONTROL}${HISTCONTROL+,}ignorespace
+export HISTCONTROL=${HISTCONTROL:-}${HISTCONTROL+,}ignoredups
+export HISTCONTROL=${HISTCONTROL:-}${HISTCONTROL+,}ignorespace
 export HISTIGNORE=$'[ \t]*:&:[fb]g:exit:ls:ls -la:sl:ll:la:lls:lla:pwd:cd:cdp:cdpp:cdd:cdi:cdt:cdtp:cdm:cdmp:cdv:cdb:cdc:cdx:cdh:cdr:cdw:* --help *'
 export HISTTIMEFORMAT="%Y-%m-%d %H:%M:%S  "
 export HISTFILESIZE=5000

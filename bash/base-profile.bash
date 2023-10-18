@@ -25,6 +25,8 @@ if [[ -f "${SCRIPT_DIR}/script-tools.bash" ]]; then
   source "${SCRIPT_DIR}/script-tools.bash"
 fi
 
+unset SCRIPT_DIR
+
 #### Profile Environment Variables - Critical locations
 
 # For Windows WSL I use the WSLENV environment variable to pass in the values
