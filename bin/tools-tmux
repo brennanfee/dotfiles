@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+# Author: Brennan Fee
+# License: MIT License
+# Version: 0.1
+# Date: 2023-10-18
+
+# Bash strict mode
+([[ -n ${ZSH_EVAL_CONTEXT:-} && ${ZSH_EVAL_CONTEXT:-} =~ :file$ ]] ||
+  [[ -n ${BASH_VERSION:-} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
+if ! ${SOURCED}; then
+  set -o errexit  # same as set -e
+  set -o nounset  # same as set -u
+  set -o errtrace # same as set -E
+  set -o pipefail
+  set -o posix
+  #set -o xtrace # same as set -x, turn on for debugging
+
+  shopt -s inherit_errexit
+  shopt -s extdebug
+  IFS=$(printf '\n\t')
+fi
+# END Bash strict mode
+
+function main() {
+  local TMUX_PLUGIN_MANAGER_PATH="${HOME}/.config/tmux/plugins"
+
+  # Download the tmux plugin manager if it isn't already there
+  if [[ ! -d "${TMUX_PLUGIN_MANAGER_PATH}/tpm" ]]; then
+    git clone https://github.com/tmux-plugins/tpm "${TMUX_PLUGIN_MANAGER_PATH}/tpm"
+  fi
+
+  if [[ -f "${TMUX_PLUGIN_MANAGER_PATH}/tpm/bin/install_plugins" ]]; then
+    "${TMUX_PLUGIN_MANAGER_PATH}/tpm/bin/install_plugins"
+  fi
+}
+
+main "$@"
