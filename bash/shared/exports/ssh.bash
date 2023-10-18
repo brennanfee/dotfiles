@@ -19,7 +19,7 @@ fi
 
 if is_wsl; then
   # WSL SSH is being handled completely differently from Linux
-  noop
+  true
 else
   # Configure ask pass
   if type ksshaskpass > /dev/null 2>&1; then
