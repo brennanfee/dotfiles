@@ -19,8 +19,6 @@ if ! ${SOURCED}; then
   shopt -s extdebug
   IFS=$(printf '\n\t')
 fi
-
-SCRIPT_DIR="$(cd -P "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # END Bash strict mode
 
 SCRIPT_APP=$(basename "$0")
@@ -120,7 +118,7 @@ function check_prerequisites() {
 function add_if_needed() {
   local installed
   installed=$(asdf plugin list | grep -i -c "${1}")
-  if [[ "${installed}" -ne 1 ]]; then
+  if [[ "${installed}" != "${1}" ]]; then
     asdf plugin add "${1}"
   fi
 }

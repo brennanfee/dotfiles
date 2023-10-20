@@ -37,7 +37,7 @@ function ensurePlugInstalled() {
 
 function updateBundles() {
   if [[ -f "${HOME}/.vim/vimrc.bundles" ]]; then
-    vim -N -u "${HOME}/.vim/vimrc.bundles" +PlugUpdate +PlugClean! +qa -
+    vim -N -u "${HOME}/.vim/vimrc.bundles" +PlugUpdate +PlugClean! +qa
   fi
 }
 

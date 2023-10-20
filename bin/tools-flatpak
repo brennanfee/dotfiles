@@ -21,8 +21,6 @@ if ! ${SOURCED}; then
   shopt -s extdebug
   IFS=$(printf '\n\t')
 fi
-
-SCRIPT_DIR="$(cd -P "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # END Bash strict mode
 
 SCRIPT_APP=$(basename "$0")
@@ -133,10 +131,10 @@ function check_prerequisites() {
       print_warning "Unknown desktop environment requested."
       ;;
     esac
-
-    # Setup flathub repo
-    sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
   fi
+
+  # Setup flathub repo
+  sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 }
 
 function install_if_needed() {
