@@ -38,11 +38,11 @@ fi
 SSH_ENV="${HOME}/.ssh/environment"
 
 function start_agent() {
-  #  echo "Initializing new SSH agent..."
+  echo "Initializing new SSH agent..."
+
   [[ -f ${SSH_ENV} ]] && rm "${SSH_ENV}" > /dev/null
   touch "${SSH_ENV}"
   chmod 600 "${SSH_ENV}"
-  #/usr/bin/ssh-agent | sed 's/^echo/#echo/' >> "${SSH_ENV}"
   /usr/bin/ssh-agent | tee "${SSH_ENV}"
   sed -i 's/^echo/#echo/' "${SSH_ENV}" || true
   # shellcheck source=/dev/null
@@ -57,15 +57,12 @@ function start_agent() {
 if [[ -f "${SSH_ENV}" ]]; then
   # shellcheck source=/dev/null
   source "${SSH_ENV}" > /dev/null
-  agent_pid=${SSH_AGENT_PID:-}
-  if [[ -z ${agent_pid} ]]; then
-    kill -0 "${agent_pid}" 2> /dev/null || {
-      start_agent
-    }
+  cmd=$(ps --no-headers -o command -p "${SSH_AGENT_PID:-}" || true)
+  if [[ ! "${cmd}" == "/usr/bin/ssh-agent" ]]; then
+    start_agent
   fi
 else
   start_agent
 fi
 
 unset SSH_ENV
-unset agent_pid
