@@ -57,10 +57,16 @@ else
   if [[ -f "${SSH_ENV}" ]]; then
     # shellcheck source=/dev/null
     source "${SSH_ENV}" > /dev/null
-    kill -0 "${SSH_AGENT_PID}" 2> /dev/null || {
-      start_agent
-    }
+    agent_pid=${SSH_AGENT_PID:-}
+    if [[ -z ${agent_pid} ]]; then
+      kill -0 "${agent_pid}" 2> /dev/null || {
+        start_agent
+      }
+    fi
   else
     start_agent
   fi
 fi
+
+unset SSH_ENV
+unset agent_pid
