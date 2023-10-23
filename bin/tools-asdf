@@ -117,7 +117,7 @@ function check_prerequisites() {
 
 function add_if_needed() {
   local installed
-  installed=$(asdf plugin list | grep -i -c "${1}")
+  installed=$(asdf plugin list | grep -i "${1}" || true)
   if [[ "${installed}" != "${1}" ]]; then
     asdf plugin add "${1}"
   fi
@@ -146,7 +146,7 @@ function install_common_tools() {
 }
 
 function install_dev_tools() {
-  noop # Nothing at this time
+  true # Nothing at this time
 }
 
 function main() {

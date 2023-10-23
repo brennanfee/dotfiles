@@ -139,7 +139,7 @@ function check_prerequisites() {
 
 function install_if_needed() {
   if [[ $(flatpak list --columns=application | grep -i -c "${1}") -eq 0 ]]; then
-    sudo flatpak install flathub "${1}"
+    sudo flatpak install -y --noninteractive flathub "${1}"
   fi
 }
 
@@ -151,7 +151,7 @@ function install_common_tools() {
   install_if_needed org.libreoffice.LibreOffice
   install_if_needed org.mozilla.firefox
   install_if_needed org.signal.Signal
-  install_if_needed org.speedcrunch.SpeecCrunch
+  install_if_needed org.speedcrunch.SpeedCrunch
   install_if_needed org.videolan.VLC
   install_if_needed org.wezfurlong.wezterm
   install_if_needed tv.plex.PlexDesktop
