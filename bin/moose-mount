@@ -159,14 +159,18 @@ function verify_share_to_mount() {
 
 function verify_prereqs() {
   if ! command -v "mfsmount" >/dev/null; then
-    error_msg "ERROR! moosefs is not installed, skipping mounting volumes."
+    print_warning "WARNING! moosefs is not installed, skipping mounting volumes."
+    return 1
   fi
 
   if [[ "${SHARE_TO_MOUNT}" != "files-ro" ]]; then
     if ! command -v "kwalletcli" >/dev/null; then
-      error_msg "ERROR! kwalletcli not installed or on path.  Install it first!"
+      print_warning "WARNING! kwalletcli not installed or on path.  Install it first!"
+      return 1
     fi
   fi
+
+  return 0
 }
 
 function mount_the_share() {
@@ -249,9 +253,12 @@ function mount_root() {
 }
 
 function main() {
+  if ! verify_prereqs; then
+    return 0
+  fi
+
   verify_share_to_mount
 
-  verify_prereqs
 
   mkdir -p "$HOME/mounts"
 

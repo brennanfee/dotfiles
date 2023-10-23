@@ -112,11 +112,13 @@ function main() {
   fi
 
   if ! command -v "kwalletcli" >/dev/null; then
-    error_msg "ERROR! kwalletcli not installed or on path.  Install it first!"
+    print_warning "WARNING! kwalletcli not installed or on path.  Install it first!"
+    return 0
   fi
 
   if ! command -v "mfsmount" >/dev/null; then
-    error_msg "ERROR! moosefs is not installed, skipping mounting volumes."
+    print_warning "WARNING! moosefs is not installed, skipping mounting volumes."
+    return 0
   fi
 
   xdg_dotfiles="$(xdg-user-dir DOTFILES)"
