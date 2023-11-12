@@ -31,7 +31,7 @@ source "$(xdg-user-dir DOTFILES)/bash/script-tools.bash"
 
 ## Defaults
 FORCE="false"
-SERVER="moose.bfee.org"
+SERVER="moose.fee.casa"
 LOCATION=""
 SHARE_TO_MOUNT=""
 
@@ -258,7 +258,6 @@ function main() {
   fi
 
   verify_share_to_mount
-
 
   mkdir -p "$HOME/mounts"
 
