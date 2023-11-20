@@ -36,6 +36,10 @@ return {
       end, { remap = true, desc = "Search Up [T]o Letter In Line (Backwards)" })
 
       -- Hop mappings
+      map("n", "gj", function()
+        hop.hint_char2()
+      end, { desc = "[G]o To [C]haracter Combination" })
+
       map("n", "<leader>hc", function()
         hop.hint_char2()
       end, { desc = "[H]op To [C]haracter Combination" })
