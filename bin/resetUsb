@@ -21,13 +21,13 @@ if ! ${SOURCED}; then
 fi
 # END Bash strict mode
 
-source "$(xdg-user-dir DOTFILES)/bash/script-tools.bash"
+source "/home/brennan/.dotfiles/bash/script-tools.bash"
 
 check_root_with_error
 
-if ! command -v usbreset &>/dev/null; then
-  DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q update
-  DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q install usbutils
-fi
+for i in /sys/bus/pci/drivers/[uoex]hci_hcd/*:*; do
+  [ -e "$i" ] || continue
+  echo "${i##*/}" > "${i%/*}/unbind"
+  echo "${i##*/}" > "${i%/*}/bind"
+done
 
-usbreset "Arctis Pro Wireless"
