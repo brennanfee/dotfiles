@@ -250,11 +250,11 @@ function check_root_with_error() {
   user_id=$(id -u)
 
   if [[ ${user_id} -ne 0 ]]; then
-    local error_message=${1:=""}
+    local error_message="${1:-""}"
     if [[ "${error_message}" == "" ]]; then
       error_message="ERROR!  You must execute this script as the 'root' user."
     fi
-    local error_code=${2:="1"}
+    local error_code="${2:-"1"}"
 
     local T_COLS
     T_COLS=$(tput cols)
