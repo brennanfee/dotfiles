@@ -60,7 +60,7 @@ function doUpdate() {
   if [[ "${toUpdate}" == "all" || "${toUpdate}" == "pipx" ]]; then
     if command_exists pipx; then
       _write_msg "Getting updates with pipx"
-      pipx upgrade-all
+      pipx upgrade-all --include-injected
     fi
   fi
 
