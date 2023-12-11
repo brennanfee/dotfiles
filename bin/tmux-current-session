@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+
+# Bash strict mode
+# shellcheck disable=SC2154
+([[ -n ${ZSH_EVAL_CONTEXT} && ${ZSH_EVAL_CONTEXT} =~ :file$ ]] ||
+  [[ -n ${BASH_VERSION} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
+if ! ${SOURCED}; then
+  set -o errexit  # same as set -e
+  set -o nounset  # same as set -u
+  set -o errtrace # same as set -E
+  set -o pipefail
+  set -o posix
+  #set -o xtrace # same as set -x, turn on for debugging
+
+  shopt -s extdebug
+  IFS=$(printf '\n\t')
+fi
+# END Bash strict mode
+
+## Internal tools
+
+function print_error() {
+  local T_COLS
+  local text_red
+  local text_reset
+  text_red="$(tput setaf 1)"
+  text_reset="$(tput sgr0)"
+  T_COLS=$(tput cols)
+  T_COLS=$((T_COLS - 1))
+  echo -e "${text_red}$1${text_reset}" | fold -sw "${T_COLS}"
+}
+
+function error_msg() {
+  print_error "$1"
+  if [[ ${2:-} != "" ]]; then
+    exit "$2"
+  else
+    exit 1
+  fi
+}
+
+function main() {
+  if [[ -z "${TMUX:-}" ]]; then
+    error_msg "Not inside a tmux session."
+  fi
+
+  local current_tty
+  current_tty=$(tty)
+
+  local current_session
+  CUR_IFS=$IFS
+  IFS=$'\n'
+  for s in $(tmux list-panes -F '#{pane_tty} #{session_name}'); do
+    if [[ "${s}" == ${current_tty}* ]]; then
+      current_session=$(echo "${s}" | cut -d' ' -f2)
+    fi
+  done
+  IFS=$CUR_IFS
+
+  echo "${current_session}"
+}
+
+main "$@"
