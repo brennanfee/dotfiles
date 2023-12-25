@@ -134,6 +134,13 @@ function install_dev_tools() {
   pipx inject molecule dnspython
 
   pipx install poetry
+
+  pipx install checkov
+  pipx install semgrep
+  pipx install bandit
+  pipx install black
+  pipx install pipreqs
+  pipx install pip-licenses
 }
 
 function main() {

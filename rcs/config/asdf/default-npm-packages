@@ -20,3 +20,4 @@ husky
 @commitlint/cli
 @commitlint/config-conventional
 commitlint-format-json
+license-report
