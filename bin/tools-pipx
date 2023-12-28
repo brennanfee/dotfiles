@@ -153,7 +153,7 @@ function main() {
   fi
 
   # Upgrade them all
-  pipx upgrade-all
+  pipx upgrade-all --include-injected
 }
 
 main "$@"
