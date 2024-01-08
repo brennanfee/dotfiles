@@ -131,6 +131,7 @@ function install_if_needed() {
 function install_common_tools() {
   install_if_needed nvim
   install_if_needed obsidian
+  install_if_needed espanso
 }
 
 function install_dev_tools() {
