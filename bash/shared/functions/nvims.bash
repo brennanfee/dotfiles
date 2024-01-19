@@ -25,15 +25,11 @@ fi
 
 alias nvim-default="nvim"
 alias nvim-old="NVIM_APPNAME=nvim-old nvim"
+alias nvim-test="NVIM_APPNAME=nvim-old nvim"
 alias nvim-blank="NVIM_APPNAME=nvim-blank nvim"
-alias nvim-astro="NVIM_APPNAME=nvim-AstroVim nvim"
-alias nvim-chad="NVIM_APPNAME=nvim-NvChad nvim"
-alias nvim-kick="NVIM_APPNAME=nvim-Kickstart nvim" # Kickstart
-alias nvim-lazy="NVIM_APPNAME=nvim-LazyVim nvim"
-alias nvim-lunar="NVIM_APPNAME=nvim-LunarVim nvim"
 
 function nvims() {
-  local items=("default" "old" "blank" "AstroVim" "NvChad" "Kickstart" "LazyVim" "LunarVim")
+  local items=("default" "old" "test" "blank")
 
   local config="${1:-}"
   if [[ -z ${config} ]]; then
