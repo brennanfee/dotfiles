@@ -25,8 +25,11 @@ fi
 
 alias nvim-default="nvim"
 alias nvim-old="NVIM_APPNAME=nvim-old nvim"
-alias nvim-test="NVIM_APPNAME=nvim-old nvim"
+alias nvimo="NVIM_APPNAME=nvim-old nvim"
+alias nvim-test="NVIM_APPNAME=nvim-test nvim"
+alias nvimt="NVIM_APPNAME=nvim-test nvim"
 alias nvim-blank="NVIM_APPNAME=nvim-blank nvim"
+alias nvimb="NVIM_APPNAME=nvim-blank nvim"
 
 function nvims() {
   local items=("default" "old" "test" "blank")
@@ -34,6 +37,7 @@ function nvims() {
   local config="${1:-}"
   if [[ -z ${config} ]]; then
     config=$(printf "%s\n" "${items[@]}" | fzf --prompt=" Neovim Config 󰄾 " --height=50 --layout=reverse --border --exit-0)
+    shift
   fi
 
   if [[ -z ${config} ]]; then
@@ -47,7 +51,7 @@ function nvims() {
 }
 
 function wipe-nvim() {
-  items=("default" "old" "blank" "AstroVim" "NvChad" "Kickstart" "LazyVim" "LunarVim")
+  items=("default" "old" "test" "blank")
 
   local config="${1:-}"
   if [[ -z ${config} ]]; then
@@ -65,8 +69,7 @@ function wipe-nvim() {
     rm -rf "${XDG_CACHE_HOME}/${folder:?}"
     rm -rf "${XDG_DATA_HOME}/${folder:?}"
     rm -rf "${XDG_STATE_HOME}/${folder:?}"
-
-    rm "${XDG_CONFIG_HOME}/${folder:?}/lazy-lock.json"
+    rm -rf "${XDG_CONFIG_HOME}/${folder:?}"
   fi
 }
 

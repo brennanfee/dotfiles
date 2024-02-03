@@ -31,6 +31,14 @@ local api = vim.api
 --   command = [[set formatoptions-=cro]],
 -- })
 
+-- Don't auto-comment new lines, this must be done as an autocmd because NeoVim overwites it
+-- otherwise
+api.nvim_create_autocmd({ "BufWinEnter" }, {
+  callback = function()
+    vim.cmd("set formatoptions-=cro")
+  end,
+})
+
 -- Only show the cursor in the active buffer
 local CursorActiveBufferGrp = api.nvim_create_augroup("CursorActiveBufferGrp", { clear = true })
 api.nvim_create_autocmd({ "BufEnter", "WinEnter", "FocusGained" }, {
