@@ -184,7 +184,7 @@ function M.config()
 
   require("mason-tool-installer").setup({
     ensure_installed = servers,
-    run_on_start = false,
+    run_on_start = true,
   })
 
   vim.api.nvim_create_user_command("AutoUpdate", function()
