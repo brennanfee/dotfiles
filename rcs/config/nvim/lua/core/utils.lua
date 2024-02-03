@@ -1,6 +1,21 @@
-local settings = require("core.user-settings")
-
 local M = {}
+
+M.themePackage = "onedarkpro"
+M.theme = "onedark"
+
+function M.setColorScheme(colorscheme)
+  vim.o.background = "dark"
+  local ok, _ = pcall(vim.cmd, "colorscheme " .. colorscheme)
+  if not ok then
+    vim.notify("Colorscheme " .. colorscheme .. " not found.")
+  end
+end
+
+M.lazyPluginSpecs = {}
+
+function M.plugin(item)
+  table.insert(M.lazyPluginSpecs, { import = item })
+end
 
 -- check if a variable is not empty nor nil
 M.isNotEmpty = function(s)
@@ -20,38 +35,15 @@ M.file_exists = function(name)
 end
 
 M.bufdelete = function(bufnum)
-  require("mini.bufremove").delete(bufnum, true)
+  local ok, mini = pcall(require, "mini.bufremove")
+  if ok then
+    mini.delete(bufnum, true)
+  else
+    vim.cmd("bdelete " .. bufnum)
+  end
 end
 
-M.lazy_load = function(plugin)
-  vim.api.nvim_create_autocmd({ "BufRead", "BufWinEnter", "BufNewFile" }, {
-    group = vim.api.nvim_create_augroup("BeLazyOnFileOpen" .. plugin, {}),
-    callback = function()
-      local file = vim.fn.expand("%")
-      local condition = file ~= "NvimTree_1" and file ~= "[lazy]" and file ~= ""
-
-      if condition then
-        vim.api.nvim_del_augroup_by_name("BeLazyOnFileOpen" .. plugin)
-
-        -- dont defer for treesitter as it will show slow highlighting
-        -- This deferring only happens only when we do "nvim filename"
-        if plugin ~= "nvim-treesitter" then
-          vim.schedule(function()
-            require("lazy").load({ plugins = plugin })
-
-            if plugin == "nvim-lspconfig" then
-              vim.cmd("silent! do FileType")
-            end
-          end)
-        else
-          require("lazy").load({ plugins = plugin })
-        end
-      end
-    end,
-  })
-end
-
-M.map_key = function(mode, lhs, rhs, opts)
+M.keymap = function(mode, lhs, rhs, opts)
   local options = {} -- noremap already default to true for vim.keymap.set
   if opts then
     options = vim.tbl_extend("force", options, opts)
@@ -60,13 +52,14 @@ M.map_key = function(mode, lhs, rhs, opts)
 end
 
 M.theme_colors = function()
-  local theme = M.safeRead(settings.theme, "default")
+  local theme = M.themePackage
   local themeColors
   if theme == "onedark" then
     themeColors = require("onedark.colors")
   elseif theme == "onedarkpro" then
     themeColors = require("onedarkpro.helpers").get_colors()
   else
+    -- these should match the default Neovim theme
     themeColors = {
       black = "#0e1013",
       bg0 = "#1f2329",
