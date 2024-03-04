@@ -215,7 +215,7 @@ function main() {
       'vim' )
         updateVim
         ;;
-      'nvim' )
+      'nvim' | 'neovim' )
         updateNvim
         ;;
       '--')
