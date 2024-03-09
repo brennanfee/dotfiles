@@ -160,6 +160,7 @@ function install_common_tools() {
   install_if_needed org.bleachbit.BleachBit
   install_if_needed com.rafaelmardojai.Blanket
   install_if_needed com.github.tenderowl.frog
+  install_if_needed org.localsend.localsend_app
 }
 
 function install_dev_tools() {
