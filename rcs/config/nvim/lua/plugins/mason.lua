@@ -29,7 +29,7 @@ function M.config()
     "jsonls",
     "kotlin_language_server",
     "lemminx", -- xml language server
-    -- "ltex",
+    "ltex",
     "lua_ls",
     "marksman",
     -- "nginx-language-server",

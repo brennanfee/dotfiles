@@ -21,7 +21,7 @@ function M.config()
       actions.gitrebase,
       actions.gitsigns,
       actions.refactoring,
-      actions.shellcheck,
+      -- actions.shellcheck, -- using bashls language server instead
       -- completions
       completions.luasnip,
       completions.spell,
@@ -35,24 +35,26 @@ function M.config()
       diagnostics.checkstyle.with({
         extra_args = { "-c", "/google_checks.xml" }, -- or "/sun_checks.xml" or path to self written rules
       }),
-      diagnostics.chktex,
-      diagnostics.clang_check,
+      -- diagnostics.chktex, -- using texlab instead
+      -- diagnostics.clang_check, -- using clangd instead
+      diagnostics.clangd,
       diagnostics.cmake_lint,
       diagnostics.commitlint,
       -- diagnostics.eslint_d, -- using the lsp server instead
-      diagnostics.flake8,
+      -- diagnostics.flake8, -- using ruff instead
       diagnostics.hadolint, -- dockerfile
       -- diagnostics.jsonlint,  -- using the lsp server instead
       diagnostics.ktlint,
       -- diagnostics.luacheck, -- using the lsp server instead
       diagnostics.markdownlint,
       diagnostics.markuplint, -- html
-      diagnostics.misspell.with({
-        extra_args = { "-locale", "US" },
-      }),
+      -- diagnostics.misspell.with({
+      --   extra_args = { "-locale", "US" },
+      -- }),
       diagnostics.php,
       diagnostics.rubocop,
-      diagnostics.shellcheck,
+      diagnostics.ruff,
+      -- diagnostics.shellcheck, -- using bashls language server instead
       diagnostics.sqlfluff.with({
         -- change to your dialect
         -- others: athena, mysql, oracle, postgres, redshift, sqlite, t-sql
@@ -60,10 +62,11 @@ function M.config()
       }),
       diagnostics.stylelint,
       diagnostics.terraform_validate,
+      diagnostics.texlab,
       diagnostics.tfsec,
       diagnostics.tidy,
       diagnostics.trail_space,
-      diagnostics.tsc,
+      -- diagnostics.tsc, -- using tsserver language server instead
       diagnostics.vint, -- vimscript
       diagnostics.write_good.with({
         extra_args = { "--no-passive" },
@@ -77,10 +80,10 @@ function M.config()
       formatting.google_java_format,
       formatting.ktlint,
       formatting.packer, -- hcl files
-      formatting.perltidy,
+      -- formatting.perltidy, -- using PerlNavigator language server instead
       formatting.prettier,
       formatting.rubocop,
-      formatting.rustfmt,
+      -- formatting.rustfmt, -- using rust_analyzer language server instead
       formatting.shfmt,
       formatting.sqlfluff.with({
         -- change to your dialect
@@ -88,7 +91,7 @@ function M.config()
         extra_args = { "--dialect", "postgres" },
       }),
       formatting.stylua,
-      formatting.taplo, -- toml
+      -- formatting.taplo, -- using taplo language server instead
       formatting.terraform_fmt,
       -- Hover
       null_ls.builtins.hover.printenv,

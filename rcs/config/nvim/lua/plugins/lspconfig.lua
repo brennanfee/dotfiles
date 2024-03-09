@@ -70,15 +70,23 @@ function M.config()
   local icons = require("core.icons")
 
   local servers = {
-    "lua_ls",
-    "cssls",
-    "html",
-    "tsserver",
-    "eslint",
-    "tsserver",
-    "pyright",
+    "ansiblels",
+    "autotools_ls",
+    "awk_ls",
     "bashls",
+    "biome",
+    "cssls",
+    "eslint",
+    "html",
     "jsonls",
+    "ltex",
+    "lua_ls",
+    "perlnavigator",
+    "pyright",
+    "ruff_lsp",
+    "rust_analyzer",
+    "taplo",
+    "tsserver",
     "yamlls",
   }
 

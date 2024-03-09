@@ -48,7 +48,7 @@ utils.plugin("plugins.extras.noice")
 utils.plugin("plugins.extras.oil")
 utils.plugin("plugins.extras.tabby")
 utils.plugin("plugins.extras.tabnine")
-utils.plugin("plugins.extras.ufo")
+-- utils.plugin("plugins.extras.ufo")
 
 -- Vim: These are old (non-Lua) vim plugins, if native alternatives can be found
 -- I should switch to those
