@@ -68,6 +68,7 @@ function M.config()
       "xml",
       "yaml",
     },
+    auto_installed = true,
     highlight = { enable = true },
     indent = { enable = true },
   })
