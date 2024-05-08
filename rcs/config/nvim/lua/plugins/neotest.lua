@@ -1,6 +1,8 @@
 local M = {
   "nvim-neotest/neotest",
   dependencies = {
+    "nvim-neotest/nvim-nio",
+    "nvim-lua/plenary.nvim",
     "nvim-treesitter/nvim-treesitter",
     -- general tests
     "vim-test/vim-test",
@@ -9,9 +11,10 @@ local M = {
     "marilari88/neotest-vitest",
     "nvim-neotest/neotest-python",
     "nvim-neotest/neotest-plenary",
-    "rouge8/neotest-rust",
     "lawrence-laz/neotest-zig",
+    "rouge8/neotest-rust",
     "rcasia/neotest-bash",
+    "akinsho/neotest-go",
   },
 }
 

@@ -37,7 +37,7 @@ function M.config()
       }),
       -- diagnostics.chktex, -- using texlab instead
       -- diagnostics.clang_check, -- using clangd instead
-      diagnostics.clangd,
+      -- diagnostics.clangd,
       diagnostics.cmake_lint,
       diagnostics.commitlint,
       -- diagnostics.eslint_d, -- using the lsp server instead
@@ -51,9 +51,9 @@ function M.config()
       -- diagnostics.misspell.with({
       --   extra_args = { "-locale", "US" },
       -- }),
-      diagnostics.php,
+      -- diagnostics.php,
       diagnostics.rubocop,
-      diagnostics.ruff,
+      -- diagnostics.ruff,
       -- diagnostics.shellcheck, -- using bashls language server instead
       diagnostics.sqlfluff.with({
         -- change to your dialect
@@ -62,7 +62,7 @@ function M.config()
       }),
       diagnostics.stylelint,
       diagnostics.terraform_validate,
-      diagnostics.texlab,
+      -- diagnostics.texlab,
       diagnostics.tfsec,
       diagnostics.tidy,
       diagnostics.trail_space,
