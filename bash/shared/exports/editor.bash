@@ -2,8 +2,8 @@
 
 # Bash strict mode
 # shellcheck disable=SC2154
-([[ -n ${ZSH_EVAL_CONTEXT} && ${ZSH_EVAL_CONTEXT} =~ :file$ ]] \
-  || [[ -n ${BASH_VERSION} ]] && (return 0 2> /dev/null)) && SOURCED=true || SOURCED=false
+([[ -n ${ZSH_EVAL_CONTEXT} && ${ZSH_EVAL_CONTEXT} =~ :file$ ]] ||
+  [[ -n ${BASH_VERSION} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
 if ! ${SOURCED}; then
   set -o errexit  # same as set -e
   set -o nounset  # same as set -u
@@ -28,22 +28,28 @@ if command_exists nvim; then
   HAVE_NVIM=1
 fi
 
+if command_exists nvim-nightly; then
+  alias nvim="nvim-nightly"
+  NEOVIM_BIN=$(which nvim-nightly)
+  HAVE_NVIM=1
+fi
+
 if command_exists io.neovim.vim; then
   alias nvim="io.neovim.vim"
   NEOVIM_BIN=$(which io.neovim.vim)
   HAVE_NVIM=1
 fi
 
-if [[ -x ~/Applications/nvim.appimage ]]; then
-  alias nvim="~/Applications/nvim.appimage"
-  NEOVIM_BIN="${HOME}/Applications/nvim.appimage"
-  HAVE_NVIM=1
-fi
+# if [[ -x ~/Applications/nvim.appimage ]]; then
+#   alias nvim="~/Applications/nvim.appimage"
+#   NEOVIM_BIN="${HOME}/Applications/nvim.appimage"
+#   HAVE_NVIM=1
+# fi
 
 export NEOVIM_BIN
 export HAVE_NVIM
 
-if [[ "${HAVE_NVIM}" == "1" ]]; then
+if [[ ${HAVE_NVIM} == "1" ]]; then
   # Setup for nvim
   alias vi='"${NEOVIM_BIN}"'
   alias vim='"${NEOVIM_BIN}"'
