@@ -72,6 +72,12 @@ function M.config()
     highlight = { enable = true },
     indent = { enable = true },
   })
+
+  -- Mappings
+  local wk = require("which-key")
+  wk.add({
+    { "<leader>T", group = "Treesitter" },
+  })
 end
 
 return M

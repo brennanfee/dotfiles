@@ -19,19 +19,27 @@ keymap("n", "<C-i>", "<C-i>", opts)
 
 -- Remap for dealing with line wrap
 keymap(
-  { "n", "x" }, "j", 'v:count || mode(1)[0:1] == "no" ? "j" : "gj"',
+  { "n", "x" },
+  "j",
+  'v:count || mode(1)[0:1] == "no" ? "j" : "gj"',
   { expr = true, silent = true }
 ) -- move down
 keymap(
-  { "n", "x" }, "k", 'v:count || mode(1)[0:1] == "no" ? "k" : "gk"',
+  { "n", "x" },
+  "k",
+  'v:count || mode(1)[0:1] == "no" ? "k" : "gk"',
   { expr = true, silent = true }
 ) -- move up
 keymap(
-  { "n", "v" }, "<Down>", 'v:count || mode(1)[0:1] == "no" ? "j" : "gj"',
+  { "n", "v" },
+  "<Down>",
+  'v:count || mode(1)[0:1] == "no" ? "j" : "gj"',
   { expr = true, silent = true }
 ) -- move down
 keymap(
-  { "n", "v" }, "<Up>", 'v:count || mode(1)[0:1] == "no" ? "k" : "gk"',
+  { "n", "v" },
+  "<Up>",
+  'v:count || mode(1)[0:1] == "no" ? "k" : "gk"',
   { expr = true, silent = true }
 ) -- move up
 
@@ -112,8 +120,6 @@ keymap("n", "<C-c>", "<cmd> %y+ <CR>", opts) -- copy whole file
 
 keymap("n", "<leader>n", "<cmd> set nu! <CR>", opts) -- toggle line number
 keymap("n", "<leader>rn", "<cmd> set rnu! <CR>", opts) -- toggle relative number
-
-keymap("n", "<leader>en", "<cmd> enew <CR>", opts) -- new buffer
 
 -- Mouse mappings
 vim.cmd([[:amenu 10.100 mousemenu.Goto\ Definition <cmd>lua vim.lsp.buf.definition()<CR>]])

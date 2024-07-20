@@ -42,6 +42,12 @@ function M.config()
     hop.hint_char2()
   end, { desc = "[G]o To [C]haracter Combination" })
 
+  -- Mappings
+  local wk = require("which-key")
+  wk.add({
+    { "<leader>h", group = "Hop" },
+  })
+
   map("n", "<leader>hc", function()
     hop.hint_char2()
   end, { desc = "[H]op To [C]haracter Combination" })

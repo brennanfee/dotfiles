@@ -10,34 +10,44 @@ function M.config()
     use_diagnostic_signs = true,
   })
 
-  vim.keymap.set("n", "<leader>xx", function()
-    require("trouble").toggle()
-  end)
-  vim.keymap.set("n", "<leader>xw", function()
-    require("trouble").toggle("workspace_diagnostics")
-  end)
-  vim.keymap.set("n", "<leader>xd", function()
-    require("trouble").toggle("document_diagnostics")
-  end)
-  vim.keymap.set("n", "<leader>xq", function()
-    require("trouble").toggle("quickfix")
-  end)
-  vim.keymap.set("n", "<leader>xl", function()
-    require("trouble").toggle("loclist")
-  end)
-  vim.keymap.set("n", "gR", function()
-    require("trouble").toggle("lsp_references")
-  end)
+  -- Mappings
+  local wk = require("which-key")
+  wk.add({
+    { "<leader>x", group = "Diagnostics" },
+    { "<leader>xx", "<cmd>lua require('trouble').toggle()<cr>", desc = "Dialog" },
+    {
+      "<leader>xw",
+      "<cmd>lua require('trouble').toggle('workspace_diagnostics')<cr>",
+      desc = "Workspace Diagnostics",
+    },
+    {
+      "<leader>xd",
+      "<cmd>lua require('trouble').toggle('document_diagnostics')<cr>",
+      desc = "Document Diagnostics",
+    },
+    { "<leader>xq", "<cmd>lua require('trouble').toggle('quickfix')<cr>", desc = "Quickfix" },
+    { "<leader>xl", "<cmd>lua require('trouble').toggle('loclist')<cr>", desc = "Loclist" },
+    {
+      "<leader>gR",
+      "<cmd>lua require('trouble').toggle('lsp_references')<cr>",
+      desc = "LSP References",
+    },
+    {
+      "<leader>lR",
+      "<cmd>lua require('trouble').toggle('lsp_references')<cr>",
+      desc = "LSP References",
+    },
+  })
 
   -- Custom action for Telescope
-  local trouble = require("trouble.providers.telescope")
+  local trouble = require("trouble.sources.telescope")
   local ok, telescope = pcall(require, "telescope")
   if ok then
     telescope.setup({
       defaults = {
         mappings = {
-          i = { ["<c-t>"] = trouble.open_with_trouble },
-          n = { ["<c-t>"] = trouble.open_with_trouble },
+          i = { ["<c-t>"] = trouble.open },
+          n = { ["<c-t>"] = trouble.open },
         },
       },
     })

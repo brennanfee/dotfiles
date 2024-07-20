@@ -49,15 +49,22 @@ function M.config()
     handlers = {},
   })
 
-  -- Basic debugging keymaps
-  vim.keymap.set("n", "<F5>", dap.step_into)
-  vim.keymap.set("n", "<F6>", dap.step_over)
-  vim.keymap.set("n", "<F7>", dap.step_out)
-  vim.keymap.set("n", "<F8>", dap.continue)
-  vim.keymap.set("n", "<leader>b", dap.toggle_breakpoint)
-  vim.keymap.set("n", "<leader>B", function()
-    dap.set_breakpoint(vim.fn.input("Breakpoint condition: "))
-  end)
+  -- Mappings
+  local wk = require("which-key")
+  wk.add({
+    { "<leader>d", group = "Debug" },
+    { "<F5>", "<cmd>require('dap').step_into<CR>", desc = "Step Into" },
+    { "<F6>", "<cmd>require('dap').step_over<CR>", desc = "Step Over" },
+    { "<F7>", "<cmd>require('dap').step_out<CR>", desc = "Step Out" },
+    { "<F8>", "<cmd>require('dap').continue<CR>", desc = "Continue" },
+    { "<leader>di", "<cmd>require('dap').step_into<CR>", desc = "Step Into" },
+    { "<leader>do", "<cmd>require('dap').step_over<CR>", desc = "Step Over" },
+    { "<leader>dt", "<cmd>require('dap').step_out<CR>", desc = "Step Out" },
+    { "<leader>dc", "<cmd>require('dap').continue<CR>", desc = "Continue" },
+    { "<leader>db", "<cmd>require('dap').toggle_breakpoint<CR>", desc = "Toggle Breakpoint" },
+    { "<leader>dB", "<cmd>require('dap').set_breakpoint(vim.fn.input('Breakpoint condition: '))<CR>",
+      desc = "Breakpoint (with condition)" },
+  })
 
   -- Dap UI setup
   -- For more information, see |:help nvim-dap-ui|

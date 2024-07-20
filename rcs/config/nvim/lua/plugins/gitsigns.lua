@@ -7,71 +7,72 @@ M.config = function()
   local icons = require("core.icons")
 
   local wk = require("which-key")
-  wk.register({
-    ["<leader>gj"] = {
+  wk.add({
+    { "<leader>s", group = "Source/Git" },
+    {
+      "<leader>sj",
       "<cmd>lua require 'gitsigns'.next_hunk({navigation_message = false})<cr>",
-      "Next Hunk",
+      desc = "Next Hunk",
     },
-    ["<leader>gk"] = {
+    {
+      "<leader>sk",
       "<cmd>lua require 'gitsigns'.prev_hunk({navigation_message = false})<cr>",
-      "Prev Hunk",
+      desc = "Prev Hunk",
     },
-    ["<leader>gp"] = { "<cmd>lua require 'gitsigns'.preview_hunk()<cr>", "Preview Hunk" },
-    ["<leader>gr"] = { "<cmd>lua require 'gitsigns'.reset_hunk()<cr>", "Reset Hunk" },
-    ["<leader>gl"] = { "<cmd>lua require 'gitsigns'.blame_line()<cr>", "Blame" },
-    ["<leader>gR"] = { "<cmd>lua require 'gitsigns'.reset_buffer()<cr>", "Reset Buffer" },
-    ["<leader>gs"] = { "<cmd>lua require 'gitsigns'.stage_hunk()<cr>", "Stage Hunk" },
-    ["<leader>gu"] = {
+    { "<leader>sp", "<cmd>lua require 'gitsigns'.preview_hunk()<cr>", desc = "Preview Hunk" },
+    { "<leader>sr", "<cmd>lua require 'gitsigns'.reset_hunk()<cr>", desc = "Reset Hunk" },
+    { "<leader>sl", "<cmd>lua require 'gitsigns'.blame_line()<cr>", desc = "Blame" },
+    { "<leader>sR", "<cmd>lua require 'gitsigns'.reset_buffer()<cr>", desc = "Reset Buffer" },
+    { "<leader>sh", "<cmd>lua require 'gitsigns'.stage_hunk()<cr>", desc = "Stage Hunk" },
+    {
+      "<leader>su",
       "<cmd>lua require 'gitsigns'.undo_stage_hunk()<cr>",
-      "Undo Stage Hunk",
+      desc = "Undo Stage Hunk",
     },
-    ["<leader>gd"] = {
-      "<cmd>Gitsigns diffthis HEAD<cr>",
-      "Git Diff",
-    },
+    { "<leader>sd", "<cmd>Gitsigns diffthis HEAD<cr>", desc = "Git Diff" },
   })
 
   require("gitsigns").setup({
     signs = {
-      add = {
-        hl = "GitSignsAdd",
-        text = icons.ui.BoldLineMiddle,
-        numhl = "GitSignsAddNr",
-        linehl = "GitSignsAddLn",
-      },
-      change = {
-        hl = "GitSignsChange",
-        text = icons.ui.BoldLineDashedMiddle,
-        numhl = "GitSignsChangeNr",
-        linehl = "GitSignsChangeLn",
-      },
-      delete = {
-        hl = "GitSignsDelete",
-        text = icons.ui.TriangleShortArrowRight,
-        numhl = "GitSignsDeleteNr",
-        linehl = "GitSignsDeleteLn",
-      },
-      topdelete = {
-        hl = "GitSignsDelete",
-        text = icons.ui.TriangleShortArrowRight,
-        numhl = "GitSignsDeleteNr",
-        linehl = "GitSignsDeleteLn",
-      },
-      changedelete = {
-        hl = "GitSignsChange",
-        text = icons.ui.BoldLineMiddle,
-        numhl = "GitSignsChangeNr",
-        linehl = "GitSignsChangeLn",
-      },
+      add = { text = icons.git.SignsAdd },
+      change = { text = icons.git.SignsChange },
+      delete = { text = icons.git.SignsDelete },
+      topdelete = { text = icons.git.SignsTopDelete },
+      changedelete = { text = icons.git.SignsChangeDelete },
+      untracked = { text = icons.git.SignsUntracked },
     },
+    signs_staged = {
+      add = { text = icons.git.SignsAdd },
+      change = { text = icons.git.SignsChange },
+      delete = { text = icons.git.SignsDelete },
+      topdelete = { text = icons.git.SignsTopDelete },
+      changedelete = { text = icons.git.SignsChangeDelete },
+      untracked = { text = icons.git.SignsUntracked },
+    },
+    signs_staged_enable = true,
+    signcolumn = true, -- Toggle with `:Gitsigns toggle_signs`
+    numhl = false, -- Toggle with `:Gitsigns toggle_numhl`
+    linehl = false, -- Toggle with `:Gitsigns toggle_linehl`
+    word_diff = false, -- Toggle with `:Gitsigns toggle_word_diff`
     watch_gitdir = {
       interval = 1000,
       follow_files = true,
     },
+    auto_attach = true,
     attach_to_untracked = true,
-    current_line_blame_formatter = "<author>, <author_time:%Y-%m-%d> - <summary>",
+    current_line_blame = false, -- Toggle with `:Gitsigns toggle_current_line_blame`
+    current_line_blame_opts = {
+      virt_text = true,
+      virt_text_pos = "eol", -- 'eol' | 'overlay' | 'right_align'
+      delay = 1000,
+      ignore_whitespace = false,
+      virt_text_priority = 100,
+    },
+    current_line_blame_formatter = "<author>, <author_time:%R> - <summary>",
+    sign_priority = 6,
     update_debounce = 200,
-    max_file_length = 40000,
+    status_formatter = nil, -- Use default
+    max_file_length = 40000, -- Disable if file is longer than this (in lines)
     preview_config = {
       border = "rounded",
       style = "minimal",
