@@ -39,13 +39,13 @@ function yt-helper() {
   fi
 
   echo "Downloading ${url}"
-  ${prog} --cookies-from-browser firefox --embed-metadata --mark-watched --embed-thumbnail --no-mtime -i -S +codec:avc:m4a -f "${format}" -o "$2" "${url}" "${@:3}"
+  ${prog} --cookies-from-browser "$2" --embed-metadata --mark-watched --embed-thumbnail --no-mtime -i -S +codec:avc:m4a -f "${format}" -o "$3" "${url}" "${@:4}"
 }
 
 function yt() {
   local output
   output="$(xdg-user-dir VIDEOS)/%(title)s-%(id)s-[%(channel,channel_id,creator,uploader)s].%(ext)s"
-  yt-helper "high" "${output}" "$@"
+  yt-helper "high" "firefox" "${output}" "$@"
 }
 
 function pt() {
@@ -54,7 +54,7 @@ function pt() {
   folder="$(xdg-user-dir PICTURES)/_other"
   mkdir -p "${folder}"
   output="${folder}/%(title)s-%(id)s-[%(channel,channel_id,creator,uploader)s].%(ext)s"
-  yt-helper "low" "${output}" "$@"
+  yt-helper "low" "chrome" "${output}" "$@"
 }
 
 # To extract an MP3 from a video, requires ffmpeg to be installed
