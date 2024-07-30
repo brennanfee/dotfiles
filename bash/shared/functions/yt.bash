@@ -44,7 +44,7 @@ function yt-helper() {
 
 function yt() {
   local output
-  output="$(xdg-user-dir VIDEOS)/%(title)s-%(id)s-[%(channel,channel_id,creator,uploader)s].%(ext)s"
+  output="$(xdg-user-dir VIDEOS)/%(title).150B-%(id)s-[%(channel,channel_id,creator,uploader)s].%(ext)s"
   yt-helper "high" "firefox" "${output}" "$@"
 }
 
@@ -53,14 +53,14 @@ function pt() {
   local output
   folder="$(xdg-user-dir PICTURES)/_other"
   mkdir -p "${folder}"
-  output="${folder}/%(title)s-%(id)s-[%(channel,channel_id,creator,uploader)s].%(ext)s"
+  output="${folder}/%(title).150B-%(id)s-[%(channel,channel_id,creator,uploader)s].%(ext)s"
   yt-helper "low" "chrome" "${output}" "$@"
 }
 
 # To extract an MP3 from a video, requires ffmpeg to be installed
 function ytm() {
   local output
-  output="$(xdg-user-dir VIDEOS)/%(title)s-%(id)s-youtube.%(ext)s"
+  output="$(xdg-user-dir VIDEOS)/%(title).150B-%(id)s-youtube.%(ext)s"
 
   local url
   if is_wsl; then
