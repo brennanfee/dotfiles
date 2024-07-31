@@ -46,7 +46,8 @@ function M.config()
   ------ Luasnip config ------
   luasnip.config.set_config({
     history = true,
-    updateevents = { "TextChanged,TextChangedI" },
+    --updateevents = { "TextChanged,TextChangedI" },
+    updateevents = { "TextChangedI" },
   })
 
   -- vscode format
