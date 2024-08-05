@@ -2,8 +2,8 @@
 
 # Bash strict mode
 # shellcheck disable=SC2154
-([[ -n ${ZSH_EVAL_CONTEXT} && ${ZSH_EVAL_CONTEXT} =~ :file$ ]] \
-  || [[ -n ${BASH_VERSION} ]] && (return 0 2> /dev/null)) && SOURCED=true || SOURCED=false
+([[ -n ${ZSH_EVAL_CONTEXT} && ${ZSH_EVAL_CONTEXT} =~ :file$ ]] ||
+  [[ -n ${BASH_VERSION} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
 if ! ${SOURCED}; then
   set -o errexit  # same as set -e
   set -o nounset  # same as set -u
@@ -44,7 +44,19 @@ function _write_error() {
 }
 
 function command_exists() {
-  command -v "$1" &> /dev/null && return 0 || return 1
+  command -v "$1" &>/dev/null && return 0 || return 1
+}
+
+function showHelp() {
+  _write_msg "Do Updates (doup) Help"
+  _write_msg ""
+  _write_msg "By default, doup updates all the things."
+  _write_msg ""
+  _write_msg "Optionally you can request a single or a space separated list"
+  _write_msg "of items to update.  The options are:"
+  _write_msg ""
+  _write_msg "apt, flatpak, snaps, pipx, asdf, appman, tmux, vim, nvim"
+  _write_msg ""
 }
 
 function updateApt() {
@@ -171,66 +183,73 @@ function main() {
     updateAll
 
     # Record last update
-    date +"%Y-%m-%d %r : All (default)" >> "${XDG_CACHE_HOME:-$HOME/.cache}/updates.log"
+    date +"%Y-%m-%d %r : All (default)" >>"${XDG_CACHE_HOME:-$HOME/.cache}/updates.log"
 
     return
   fi
 
-  options=( "$@" )
+  options=("$@")
 
   while [[ -n "${1:-}" ]]; do
     case "$1" in
-      'all')
-        updateAll
-        break
-        ;;
-      'apt')
-        updateApt
-        ;;
-      'flatpak')
-        updateFlatpak
-        ;;
-      'snap' | 'snaps' )
-        updateSnaps
-        ;;
-      'pipx' )
-        updatePipx
-        ;;
-      'asdf' )
-        updateAsdf
-        ;;
-      'appimages' )
-        updateAppman
-        updateAm
-        ;;
-      'appman' )
-        updateAppman
-        ;;
-      'am' )
-        updateAm
-        ;;
-      'tmux' )
-        updateTmux
-        ;;
-      'vim' )
-        updateVim
-        ;;
-      'nvim' | 'neovim' )
-        updateNvim
-        ;;
-      '--')
-        break
-        ;;
-      *)
-        _write_error "Unknown option: $1"
-        break
-        ;;
+    'help' | '-h' | '--help')
+      showHelp
+      break
+      ;;
+    'all')
+      updateAll
+      break
+      ;;
+    'apt')
+      updateApt
+      ;;
+    'flatpak')
+      updateFlatpak
+      ;;
+    'snap' | 'snaps')
+      updateSnaps
+      ;;
+    'pipx')
+      updatePipx
+      ;;
+    'asdf')
+      updateAsdf
+      ;;
+    'appimages')
+      updateAppman
+      updateAm
+      ;;
+    'appman')
+      updateAppman
+      ;;
+    'am')
+      updateAm
+      ;;
+    'tmux')
+      updateTmux
+      ;;
+    'vim')
+      updateVim
+      ;;
+    'nvim' | 'neovim')
+      updateNvim
+      ;;
+    '--')
+      break
+      ;;
+    *)
+      _write_error "Unknown option: $1"
+      break
+      ;;
     esac
     shift
   done
 
   # Record last update
-  ( IFS=$' '; date +"%Y-%m-%d %r : ${options[*]}" >> "${XDG_CACHE_HOME:-$HOME/.cache}/updates.log" )
+  (
+    IFS=$' '
+    date +"%Y-%m-%d %r : ${options[*]}" >>"${XDG_CACHE_HOME:-$HOME/.cache}/updates.log"
+  )
 }
 
 main "$@"
