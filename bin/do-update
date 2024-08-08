@@ -163,6 +163,10 @@ function updateNvim() {
     _write_msg "Updating nvim plugins"
     nvim --headless "+Lazy! sync" +qa
   fi
+  if command_exists nvim-nightly; then
+    _write_msg "Updating nvim plugins"
+    nvim-nightly --headless "+Lazy! sync" +qa
+  fi
 }
 
 function updateAll() {
