@@ -10,40 +10,57 @@ local M = {
 function M.config()
   local lsp_servers = {
     "ansiblels",
+    "ast_grep",
+    "autotools_ls",
     "awk_ls",
+    "basedpyright", -- Pyright replacement
     "bashls",
     "biome",
     "clangd",
     "cmake",
+    "cobol_ls",
     "csharp_ls",
     "cssls",
     "cucumber_language_server",
     "docker_compose_language_service",
     "dockerls",
     "eslint",
+    "fortls",
     "gopls",
     "graphql",
+    "harper_ls",
     "html",
-    -- "java_language_server",
-    "jdtls",
+    "htmx",
+    "jdtls", -- Java
+    "jinja_lsp",
     "jsonls",
     "kotlin_language_server",
-    "lemminx", -- xml language server
+    "lemminx", -- Xml language server
     "ltex",
     "lua_ls",
+    "markdown_oxide",
     "marksman",
-    -- "nginx-language-server",
+    "nginx_language_server",
     "perlnavigator",
+    "phpactor",
     "powershell_es",
-    "pyright",
+    "rubocop",
     "ruby_lsp",
+    "ruff", -- Python
     "rust_analyzer",
-    -- "salt_ls",
+    --"salt_ls", -- Seems to be broken
+    "snyk_ls", -- Security scanning
     "sqlls",
+    "stylelint_lsp",
     "svelte",
+    "tailwindcss",
     "taplo", -- TOML language server
     "terraformls",
+    "tflint",
+    "tinymist", -- Typst
     "tsserver",
+    "typos_lsp",
+    "vacuum", -- OpenAPI/Swagger
     "vimls",
     "vuels",
     "yamlls",
@@ -51,49 +68,12 @@ function M.config()
 
   local servers = {
     -- Language Servers
-    "ansiblels",
-    "awk_ls",
-    "bashls",
-    "biome",
-    "clangd",
-    "cmake",
-    "csharp_ls",
-    "cssls",
-    "cucumber_language_server",
-    "docker_compose_language_service",
-    "dockerls",
-    "eslint",
-    "gopls",
-    "graphql",
-    "html",
-    -- "java_language_server",
-    "jdtls",
-    "jsonls",
-    "kotlin_language_server",
-    "lemminx", -- xml language server
-    -- "ltex",
-    "lua_ls",
-    "marksman",
-    -- "nginx-language-server",
-    "perlnavigator",
-    "powershell_es",
-    "pyright",
-    "ruby_lsp",
-    "rust_analyzer",
-    -- "salt_ls",
-    "sqlls",
-    "svelte",
-    "taplo", -- TOML language server
-    "terraformls",
-    "tsserver",
-    "vimls",
-    "vuels",
-    "yamlls",
+    unpack(lsp_servers),
 
-    -- Debug Addapters
+    -- Debug Adapters
     "bash-debug-adapter", -- "chrome-debug-adapter", -- doesn't seem to work
     "cpptools",
-    "delve", -- go debugger
+    "delve", -- Go debugger
     "firefox-debug-adapter",
     "java-debug-adapter",
     "js-debug-adapter",
@@ -107,12 +87,12 @@ function M.config()
     "ansible-lint",
     "cfn-lint",
     "cmakelint",
-    --"commitlint", I'll manually install this (with asdf and node)
+    "commitlint",
     "cpplint",
     "editorconfig-checker",
     "eslint_d",
     "flake8",
-    "hadolint", --dockerfile linter
+    "hadolint", -- Dockerfile linter
     "jsonlint",
     "ktlint",
     "luacheck",
@@ -121,6 +101,7 @@ function M.config()
     "phpstan",
     "proselint",
     "shellcheck",
+    "snyk",
     "sqlfluff",
     "stylelint",
     "tflint",

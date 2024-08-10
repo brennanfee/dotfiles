@@ -66,22 +66,59 @@ function M.config()
 
   local servers = {
     "ansiblels",
+    "ast_grep",
     "autotools_ls",
     "awk_ls",
+    "basedpyright", -- Pyright replacement
     "bashls",
     "biome",
+    "clangd",
+    "cmake",
+    "cobol_ls",
+    "csharp_ls",
     "cssls",
+    "cucumber_language_server",
+    "docker_compose_language_service",
+    "dockerls",
     "eslint",
+    "fortls",
+    "gopls",
+    "graphql",
+    "harper_ls",
     "html",
+    "htmx",
+    "jdtls", -- Java
+    "jinja_lsp",
     "jsonls",
+    "kotlin_language_server",
+    "lemminx", -- Xml language server
     "ltex",
     "lua_ls",
+    "markdown_oxide",
+    "marksman",
+    "nginx_language_server",
     "perlnavigator",
-    "pyright",
-    "ruff_lsp",
+    "phpactor",
+    "powershell_es",
+    "rubocop",
+    "ruby_lsp",
+    "ruff", -- Python
     "rust_analyzer",
-    "taplo",
+    --"salt_ls", -- Seems to be broken
+    "snyk_ls", -- Security scanning
+    "sqlls",
+    "stylelint_lsp",
+    "svelte",
+    "tailwindcss",
+    "taplo", -- TOML language server
+    "terraformls",
+    "tflint",
+    "tinymist", -- Typst
     "tsserver",
+    "typos_lsp",
+    "vacuum", -- OpenAPI/Swagger
+    "vimls",
+    "vuels",
     "yamlls",
   }
 
