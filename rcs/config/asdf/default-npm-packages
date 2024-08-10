@@ -2,6 +2,7 @@ neovim
 prettier
 @prettier/plugin-xml
 @prettier/plugin-php
+prettier-plugin-awk
 prettier-plugin-package
 prettier-plugin-toml
 stylelint
@@ -15,7 +16,6 @@ typescript
 tldr
 wsl-open
 tree-sitter-cli
-markuplint
 husky
 @commitlint/cli
 @commitlint/config-conventional
