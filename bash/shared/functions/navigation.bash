@@ -201,7 +201,7 @@ function cdvm() {
 
 # Cloud folder, intended as the cloud shared\synced folder
 function cdc() {
-  xdg-go-to-dir "CLOUD" "${PROFILEPATH}/cloud" "${1:-}"
+  xdg-go-to-dir "CLOUD" "${PROFILEPATH}/cloud/files" "${1:-}"
 }
 
 # Obsidian notes folder which is stored in the cloud folder...
