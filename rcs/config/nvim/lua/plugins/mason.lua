@@ -40,7 +40,7 @@ function M.config()
     "lua_ls",
     "markdown_oxide",
     "marksman",
-    "nginx_language_server",
+    -- "nginx_language_server",
     "perlnavigator",
     "phpactor",
     "powershell_es",
