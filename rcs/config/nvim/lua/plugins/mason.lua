@@ -49,7 +49,7 @@ function M.config()
     "ruff", -- Python
     "rust_analyzer",
     --"salt_ls", -- Seems to be broken
-    "snyk_ls", -- Security scanning
+    -- "snyk_ls", -- Security scanning
     "sqlls",
     "stylelint_lsp",
     "svelte",
@@ -101,7 +101,7 @@ function M.config()
     "phpstan",
     "proselint",
     "shellcheck",
-    "snyk",
+    -- "snyk",
     "sqlfluff",
     "stylelint",
     "tflint",
