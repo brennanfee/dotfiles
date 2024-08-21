@@ -28,7 +28,11 @@ end
 
 function M.common_capabilities()
   local capabilities = vim.lsp.protocol.make_client_capabilities()
+
   capabilities.textDocument.completion.completionItem.snippetSupport = true
+  capabilities.offsetEncoding = { "utf-16" }
+  capabilities.general.positionEncodings = { "utf-16" }
+
   return capabilities
 end
 
@@ -169,6 +173,7 @@ function M.config()
     local opts = {
       on_attach = M.on_attach,
       capabilities = M.common_capabilities(),
+      offset_encoding = "utf-16",
     }
 
     local require_ok, settings = pcall(require, "lspsettings." .. server)
