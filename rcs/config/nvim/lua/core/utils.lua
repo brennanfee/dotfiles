@@ -1,16 +1,5 @@
 local M = {}
 
-M.themePackage = "onedarkpro"
-M.theme = "onedark"
-
-function M.setColorScheme(colorscheme)
-  vim.o.background = "dark"
-  local ok, _ = pcall(vim.cmd, "colorscheme " .. colorscheme)
-  if not ok then
-    vim.notify("Colorscheme " .. colorscheme .. " not found.")
-  end
-end
-
 M.lazyPluginSpecs = {}
 
 function M.plugin(item)
@@ -54,7 +43,9 @@ end
 M.theme_colors = function()
   local theme = M.themePackage
   local themeColors
-  if theme == "onedark" then
+  if theme == "oncedark" then
+    themeColors = require("oncedark.helpers").get_colors()
+  elseif theme == "onedark" then
     themeColors = require("onedark.colors")
   elseif theme == "onedarkpro" then
     themeColors = require("onedarkpro.helpers").get_colors()

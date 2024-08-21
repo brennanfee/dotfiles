@@ -1,16 +1,3 @@
--- DarkPlus
--- local M = {
---   "LunarVim/darkplus.nvim",
---   lazy = false, -- make sure we load this during startup if it is your main colorscheme
---   priority = 1000, -- make sure to load this before all the other start plugins
--- }
-
--- function M.config()
---   vim.cmd.colorscheme "darkplus"
--- end
-
--- return M
-
 local M = {
   "olimorris/onedarkpro.nvim",
   lazy = false, -- make sure we load this during startup if it is your main colorscheme
@@ -18,8 +5,6 @@ local M = {
 }
 
 function M.config()
-  local utils = require("core.utils")
-
   require("onedarkpro").setup({
     options = {
       cursorline = true,
@@ -31,7 +16,7 @@ function M.config()
     },
   })
 
-  utils.setColorScheme(utils.theme)
+  -- vim.cmd("colorscheme onedark")
 end
 
 return M
