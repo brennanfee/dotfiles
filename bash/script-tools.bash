@@ -315,14 +315,14 @@ text_magenta="$(tput setaf 5)"
 text_cyan="$(tput setaf 6)"
 text_white="$(tput setaf 7)"
 
-text_bright_black="${text_bold}${text_black}"
-text_bright_red="${text_bold}${text_red}"
-text_bright_green="${text_bold}${text_green}"
-text_bright_yellow="${text_bold}${text_yellow}"
-text_bright_blue="${text_bold}${text_blue}"
-text_bright_magenta="${text_bold}${text_magenta}"
-text_bright_cyan="${text_bold}${text_cyan}"
-text_bright_white="${text_bold}${text_white}"
+text_bright_black="$(tput setaf 8)"
+text_bright_red="$(tput setaf 9)"
+text_bright_green="$(tput setaf 10)"
+text_bright_yellow="$(tput setaf 11)"
+text_bright_blue="$(tput setaf 12)"
+text_bright_magenta="$(tput setaf 13)"
+text_bright_cyan="$(tput setaf 14)"
+text_bright_white="$(tput setaf 15)"
 
 text_dim_black="${text_dim}${text_black}"
 text_dim_red="${text_dim}${text_red}"
@@ -335,9 +335,13 @@ text_dim_white="${text_dim}${text_white}"
 
 ## Alternate color names for some of the colors
 
-text_pink="${text_bright_magenta}" # bright magenta
-text_purple="${text_magenta}"      # regular magenta
-text_orange="${text_yellow}"       # regular yellow
+text_pink="${text_magenta}"          # regular magenta
+text_purple="${text_bright_magenta}" # bright magenta
+text_orange="${text_bright_yellow}"  # bright yellow
+text_gray="${text_bright_black}"
+text_grey="${text_bright_black}"
+text_mid_gray="\033[38;2;169;169;169;02m"
+text_mid_grey="${text_mid_gray}"
 
 ## Background colors
 
@@ -363,9 +367,13 @@ text_bg_bright_white="$(tput setab 15)"
 
 # Alternate color names for some of the background colors
 
-text_bg_pink="${text_bg_bright_magenta}" # bright magenta
-text_bg_purple="${text_bg_magenta}"      # regular magenta
-text_bg_orange="${text_bg_yellow}"       # regular yellow
+text_bg_pink="${text_bg_magenta}"          # regular magenta
+text_bg_purple="${text_bg_bright_magenta}" # bright magenta
+text_bg_orange="${text_bg_bright_yellow}"  # bright yellow
+text_bg_gray="${text_bg_bright_black}"
+text_bg_grey="${text_bg_bright_black}"
+text_bg_mid_gray="\033[48;2;169;169;169;02m"
+text_bg_mid_grey="${text_bg_mid_gray}"
 
 text_reset="$(tput sgr0)"
 text_normal="$(tput sgr0)"

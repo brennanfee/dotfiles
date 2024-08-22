@@ -1,7 +1,7 @@
 -- Pull in the wezterm API
 local wezterm = require("wezterm")
 
-local config = {}
+local config = wezterm.config_builder()
 
 -- Fonts
 config.font = wezterm.font_with_fallback({
@@ -64,76 +64,44 @@ config.font_rules = {
 }
 
 -- Color Scheme And Appearance
-config.color_scheme = "OneDarkPro"
+config.color_scheme = "OnceDark"
 config.window_background_opacity = 1.0
 config.window_decorations = "RESIZE"
 config.force_reverse_video_cursor = true
 config.window_padding = { left = 10, right = 10, top = 10, bottom = 5 }
 
 config.color_schemes = {
-  ["OneDarkPro"] = {
+  ["OnceDark"] = {
     ansi = {
       "#282c34", -- black
-      "#e06c75", -- red
-      "#98c379", -- green (lime)
-      "#e5c07b", -- yellow
-      "#61afef", -- blue
-      "#c678dd", -- purple
-      "#56b6c2", -- cyan (aqua)
-      "#abb2bf", -- white
+      "#800000", -- red
+      "#556b2f", -- green
+      "#f0e68c", -- yellow
+      "#4682b4", -- blue
+      "#da70d6", -- magenta
+      "#20b2aa", -- cyan
+      "#d3d3d3", -- white
     },
     brights = {
-      "#5c6370", -- black (grey)
-      "#e9969d", -- red (maroon)
-      "#b3d39c", -- green (olive)
-      "#edd4a6", -- yellow (orange)
-      "#8fc6f4", -- blue (navy)
-      "#d7a1e7", -- purple (magenta\fuchsia)
-      "#7bc6d0", -- cyan (teal)
-      "#c8cdd5", -- white (silver)
+      "#696969", -- black (gray)
+      "#cd5c5c", -- red
+      "#8fbc8b", -- green
+      "#f4a460", -- yellow (orange)
+      "#87ceeb", -- blue
+      "#800080", -- magenta (purple)
+      "#afeeee", -- cyan
+      "#f5f5f5", -- white
     },
-    foreground = "#abb2bf",
+    foreground = "#d3d3d3",
     background = "#282c34",
-    cursor_fg = "#dcdfe4",
-    cursor_bg = "#a3b3cc",
-    cursor_border = "#a3b3cc",
-    selection_fg = "#abb2bf",
-    selection_bg = "#c678dd",
+    cursor_fg = "#f5f5f5",
+    cursor_bg = "#696969",
+    cursor_border = "#696969",
+    selection_fg = "#696969",
+    selection_bg = "#da70d6",
     --selection_bg = "#414858",
   },
-
-  ["OneDarkProVivid"] = {
-    ansi = {
-      "#282c34", -- black
-      "#ef596f", -- red
-      "#89ca78", -- green (lime)
-      "#e5c07b", -- yellow
-      "#61afef", -- blue
-      "#d55fde", -- purple
-      "#2bbac5", -- cyan (aqua)
-      "#abb2bf", -- white
-    },
-    brights = {
-      "#5c6370", -- black (grey)
-      "#f38897", -- red (maroon)
-      "#a9d89d", -- green (olive)
-      "#edd4a6", -- yellow (orange)
-      "#8fc6f4", -- blue (navy)
-      "#e089e7", -- purple (magenta\fuchsia)
-      "#4bced8", -- cyan (teal)
-      "#c8cdd5", -- white (silver)
-    },
-    foreground = "#abb2bf",
-    background = "#282c34",
-    cursor_fg = "#dcdfe4",
-    cursor_bg = "#a3b3cc",
-    cursor_border = "#a3b3cc",
-    -- selection_fg = "#abb2bf",
-    -- selection_bg = "#3a404c",
-    selection_fg = "#abb2bf",
-    selection_bg = "#d55fde",
-  },
-  ["OneDarkProLight"] = {
+  ["OnceLight"] = {
     ansi = {
       "#6a6a6a", -- black
       "#e05661", -- red
@@ -161,35 +129,6 @@ config.color_schemes = {
     cursor_border = "#a3b3cc",
     selection_fg = "#fafafa",
     selection_bg = "#9a77cf",
-  },
-  ["OneDarkProDark"] = {
-    ansi = {
-      "#000000", -- black
-      "#ef596f", -- red
-      "#89ca78", -- green (lime)
-      "#e5c07b", -- yellow
-      "#61afef", -- blue
-      "#d55fde", -- purple
-      "#2bbac5", -- cyan (aqua)
-      "#abb2bf", -- white
-    },
-    brights = {
-      "#434852", -- black (grey)
-      "#f38897", -- red (maroon)
-      "#a9d89d", -- green (olive)
-      "#edd4a6", -- yellow (orange)
-      "#8fc6f4", -- blue (navy)
-      "#e089e7", -- purple (magenta\fuchsia)
-      "#4bced8", -- cyan (teal)
-      "#c8cdd5", -- white (silver)
-    },
-    foreground = "#abb2bf",
-    background = "#000000",
-    cursor_fg = "#dcdfe4",
-    cursor_bg = "#a3b3cc",
-    cursor_border = "#a3b3cc",
-    selection_fg = "#abb2bf",
-    selection_bg = "#d55fde",
   },
 }
 
