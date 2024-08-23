@@ -50,10 +50,10 @@ function custom_prompt() {
   local last_exit=$?
   if [[ ${last_exit} -eq 0 ]]; then
     # shellcheck disable=SC2154
-    local exit_status="${text_bright_green}${i_fa_check}"
+    local exit_status="${text_green}${i_fa_check}"
   else
     # shellcheck disable=SC2154
-    local exit_status="${text_bright_red}${i_fa_close} (\$?)"
+    local exit_status="${text_red}${i_fa_close} (\$?)"
   fi
 
   local ssh_text=""
@@ -73,7 +73,7 @@ function custom_prompt() {
     curShell+="$0)"
   fi
   if [[ "${VIRTUAL_ENV}" != "" ]]; then
-    curShell+="${text_bright_red} VENV"
+    curShell+="${text_red} VENV"
   fi
 
   if [[ ${GIT_PS1_USEGIT} -eq 1 ]]; then
@@ -82,9 +82,9 @@ function custom_prompt() {
     git_part=$(__git_ps1 "${text_orange}[%s] ")
     export PS1
     # shellcheck disable=SC2154
-    PS1="${text_normal}\n${ssh_text}${text_bright_green}\u@\h ${text_magenta}\w ${git_part}${curShell} ${exit_status} ${text_normal}\n\$ "
+    PS1="${text_normal}\n${ssh_text}${text_green}\u@\h ${text_magenta}\w ${git_part}${curShell} ${exit_status} ${text_normal}\n\$ "
   else
-    export PS1="${text_normal}\n${ssh_text}${text_bright_green}\u@\h ${text_magenta}\w ${curShell} ${exit_status} ${text_normal}\n\$ "
+    export PS1="${text_normal}\n${ssh_text}${text_green}\u@\h ${text_magenta}\w ${curShell} ${exit_status} ${text_normal}\n\$ "
   fi
 }
 
