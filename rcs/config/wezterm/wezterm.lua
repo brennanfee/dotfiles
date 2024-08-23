@@ -74,22 +74,22 @@ config.color_schemes = {
   ["OnceDark"] = {
     ansi = {
       "#282c34", -- black
-      "#800000", -- red
-      "#556b2f", -- green
+      "#cd5c5c", -- red
+      "#71936e", -- green
       "#f0e68c", -- yellow
       "#4682b4", -- blue
       "#da70d6", -- magenta
-      "#20b2aa", -- cyan
+      "#00ced1", -- cyan
       "#d3d3d3", -- white
     },
     brights = {
       "#696969", -- black (gray)
-      "#cd5c5c", -- red
-      "#8fbc8b", -- green
+      "#a52a2a", -- red
+      "#3cb371", -- green
       "#f4a460", -- yellow (orange)
-      "#87ceeb", -- blue
-      "#800080", -- magenta (purple)
-      "#afeeee", -- cyan
+      "#b0c4de", -- blue
+      "#9932cc", -- magenta (purple)
+      "#ffb6c1", -- cyan
       "#f5f5f5", -- white
     },
     foreground = "#d3d3d3",

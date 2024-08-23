@@ -42,151 +42,169 @@ TERM xterm*
 #NORMAL 00 # no color code at all
 #FILE 00 # regular file: use no color at all
 RESET 0 # reset to "normal" color
-DIR 01;34 # directory
-LINK 01;36 # symbolic link. (If you set this to 'target' instead of a
- # numerical value, the color is as for the file pointed to.)
+DIR 00;34 # directory
+LINK 04;34 # symbolic link. (If you set this to 'target' instead of a
+# numerical value, the color is as for the file pointed to.)
 MULTIHARDLINK 00 # regular file with more than one link
 FIFO 40;33 # pipe
 SOCK 01;35 # socket
 DOOR 01;35 # door
 BLK 40;33;01 # block device driver
 CHR 40;33;01 # character device driver
-ORPHAN 40;31;01 # symlink to nonexistent file, or non-stat'able file ...
+ORPHAN 04;31 # symlink to nonexistent file, or non-stat'able file ...
 MISSING 00 # ... and the files they point to
-SETUID 37;41 # file that is setuid (u+s)
-SETGID 30;43 # file that is setgid (g+s)
-CAPABILITY 30;41 # file with capability
-STICKY_OTHER_WRITABLE 30;42 # dir that is sticky and other-writable (+t,o+w)
-#OTHER_WRITABLE 34;42 # dir that is other-writable (o+w) and not sticky
+SETUID 30;42 # file that is setuid (u+s)
+SETGID 30;48;5;10 # file that is setgid (g+s)
+#CAPABILITY 30;41 # file with capability
+STICKY_OTHER_WRITABLE 30;48;5;12 # dir that is sticky and other-writable (+t,o+w)
 OTHER_WRITABLE 01;34 # dir that is other-writable (o+w) and not sticky
-STICKY 37;44 # dir with the sticky bit set (+t) and not other-writable
+STICKY 30;44 # dir with the sticky bit set (+t) and not other-writable
 # This is for files with execute permission:
-EXEC 01;32
-# List any file extensions like '.gz' or '.tar' that you would like ls
+EXEC 01;32 # green
+# List any file extensions like '*gz' or '*tar' that you would like ls
 # to colorize below. Put the extension, a space, and the color init string.
 # (and any comments you want to add after a '#')
+#
 # If you use DOS-style suffixes, you may want to uncomment the following:
-.cmd 01;32 # executables (bright green)
-.exe 01;32
-.com 01;32
-.btm 01;32
-.bat 01;32
-# Or if you want to colorize scripts even if they do not have the
-# executable bit actually set.
-#.sh 01;32
-#.csh 01;32
- # archives or compressed (bright red)
-.tar 01;31
-.tgz 01;31
-.arc 01;31
-.arj 01;31
-.taz 01;31
-.lha 01;31
-.lz4 01;31
-.lzh 01;31
-.lzma 01;31
-.tlz 01;31
-.txz 01;31
-.tzo 01;31
-.t7z 01;31
-.zip 01;31
-.z 01;31
-.Z 01;31
-.dz 01;31
-.gz 01;31
-.lrz 01;31
-.lz 01;31
-.lzo 01;31
-.xz 01;31
-.zst 01;31
-.tzst 01;31
-.bz2 01;31
-.bz 01;31
-.tbz 01;31
-.tbz2 01;31
-.tz 01;31
-.deb 01;31
-.rpm 01;31
-.jar 01;31
-.war 01;31
-.ear 01;31
-.sar 01;31
-.rar 01;31
-.alz 01;31
-.ace 01;31
-.zoo 01;31
-.cpio 01;31
-.7z 01;31
-.rz 01;31
-.cab 01;31
-# image formats
-.jpg 01;35
-.jpeg 01;35
-.mjpg 01;35
-.mjpeg 01;35
-.gif 01;35
-.bmp 01;35
-.pbm 01;35
-.pgm 01;35
-.ppm 01;35
-.tga 01;35
-.xbm 01;35
-.xpm 01;35
-.tif 01;35
-.tiff 01;35
-.png 01;35
-.svg 01;35
-.svgz 01;35
-.mng 01;35
-.pcx 01;35
-.mov 01;35
-.mpg 01;35
-.mpeg 01;35
-.m2v 01;35
-.mkv 01;35
-.webm 01;35
-.ogm 01;35
-.mp4 01;35
-.m4v 01;35
-.mp4v 01;35
-.vob 01;35
-.qt 01;35
-.nuv 01;35
-.wmv 01;35
-.asf 01;35
-.rm 01;35
-.rmvb 01;35
-.flc 01;35
-.avi 01;35
-.fli 01;35
-.flv 01;35
-.gl 01;35
-.dl 01;35
-.xcf 01;35
-.xwd 01;35
-.yuv 01;35
-.cgm 01;35
-.emf 01;35
-# http://wiki.xiph.org/index.php/MIME_Types_and_File_Extensions
-.ogv 01;35
-.ogx 01;35
-# audio formats
-.aac 00;36
-.au 00;36
-.flac 00;36
-.m4a 00;36
-.mid 00;36
-.midi 00;36
-.mka 00;36
-.mp3 00;36
-.mpc 00;36
-.ogg 00;36
-.ra 00;36
-.wav 00;36
-# http://wiki.xiph.org/index.php/MIME_Types_and_File_Extensions
-.oga 00;36
-.opus 00;36
-.spx 00;36
-.xspf 00;36
-# video files
-
+# *cmd 01;38;5;10 # executables (bright green)
+# *exe 01;38;5;10
+# *com 01;38;5;10
+# *btm 01;38;5;10
+# *bat 01;38;5;10
+# archives or compressed (bright blue)
+*7z 01;38;5;12
+*Z 01;38;5;12
+*ace 01;38;5;12
+*alz 01;38;5;12
+*arc 01;38;5;12
+*arj 01;38;5;12
+*bz 01;38;5;12
+*bz2 01;38;5;12
+*cab 01;38;5;12
+*cpio 01;38;5;12
+*deb 01;38;5;12
+*dz 01;38;5;12
+*ear 01;38;5;12
+*gz 01;38;5;12
+*jar 01;38;5;12
+*lha 01;38;5;12
+*lrz 01;38;5;12
+*lz 01;38;5;12
+*lz4 01;38;5;12
+*lzh 01;38;5;12
+*lzma 01;38;5;12
+*lzo 01;38;5;12
+*rar 01;38;5;12
+*rpm 01;38;5;12
+*rz 01;38;5;12
+*sar 01;38;5;12
+*t7z 01;38;5;12
+*tar 01;38;5;12
+*taz 01;38;5;12
+*tbz 01;38;5;12
+*tbz2 01;38;5;12
+*tgz 01;38;5;12
+*tlz 01;38;5;12
+*txz 01;38;5;12
+*tz 01;38;5;12
+*tzo 01;38;5;12
+*tzst 01;38;5;12
+*war 01;38;5;12
+*xz 01;38;5;12
+*z 01;38;5;12
+*zip 01;38;5;12
+*zoo 01;38;5;12
+*zst 01;38;5;12
+# image formats (magenta)
+*bmp 00;35
+*cgm 00;35
+*emf 00;35
+*eps 00;35
+*gif 00;35
+*jpeg 00;35
+*jpg 00;35
+*mjpeg 00;35
+*mjpg 00;35
+*mng 00;35
+*pbm 00;35
+*pcx 00;35
+*pgm 00;35
+*png 00;35
+*ppm 00;35
+*svg 00;35
+*svgz 00;35
+*tga 00;35
+*tif 00;35
+*tiff 00;35
+*xbm 00;35
+*xcf 00;35
+*xpm 00;35
+*xwd 00;35
+# audio formats (bright yellow, aka orange)
+*aac 00;38;5;11
+*au 00;38;5;11
+*flac 00;38;5;11
+*m4a 00;38;5;11
+*mid 00;38;5;11
+*midi 00;38;5;11
+*mka 00;38;5;11
+*mp3 00;38;5;11
+*mpc 00;38;5;11
+*oga 00;38;5;11
+*ogg 00;38;5;11
+*opus 00;38;5;11
+*ra 00;38;5;11
+*spx 00;38;5;11
+*wav 00;38;5;11
+*xspf 00;38;5;11
+# video files (bright magenta, aka purple)
+*asf 00;38;5;13
+*avi 00;38;5;13
+*flc 00;38;5;13
+*fli 00;38;5;13
+*flv 00;38;5;13
+*gl 00;38;5;13
+*m2v 00;38;5;13
+*m4v 00;38;5;13
+*mkv 00;38;5;13
+*mov 00;38;5;13
+*mp4 00;38;5;13
+*mp4v 00;38;5;13
+*mpeg 00;38;5;13
+*mpg 00;38;5;13
+*nuv 00;38;5;13
+*ogm 00;38;5;13
+*ogv 00;38;5;13
+*ogx 00;38;5;13
+*qt 00;38;5;13
+*rm 00;38;5;13
+*rmvb 00;38;5;13
+*vob 00;38;5;13
+*webm 00;38;5;13
+*wmv 00;38;5;13
+*yuv 00;38;5;13
+# office files/documents (yellow)
+*doc 00;33
+*xls 00;33
+*docx 00;33
+*xlsx 00;33
+*ppt 00;33
+*pdf 00;33
+*odf 00;33
+*md 00;33
+*txt 00;33
+# source ignored files (gray)
+*gitignore 00;38;5;8
+*gitattributes 00;38;5;8
+*editorconfig 00;38;5;8
+*luacheckrc 00;38;5;8
+*markdownlint.yml 00;38;5;8
+*prettierrc.yml 00;38;5;8
+*ansible-lint 00;38;5;8
+*yamllint.yml 00;38;5;8
+*hadolint.yaml 00;38;5;8
+*hadolint.yml 00;38;5;8
+*eslintignore 00;38;5;8
+*eslintrc 00;38;5;8
+*npmrc 00;38;5;8
+*stylelintrc 00;38;5;8

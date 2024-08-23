@@ -5,23 +5,23 @@
 [color]
   ui = auto
 [color "diff-highlight"]
-  oldNormal = 9 bold
-  oldHighlight = 0 9 bold
-  newNormal = 10
-  newHighlight = 0 10 bold
+  oldNormal = red bold
+  oldHighlight = 0 red bold
+  newNormal = green
+  newHighlight = 0 green bold
 [color "diff"]
   meta = 11
   frag = magenta bold
   func = 146 bold
   commit = yellow bold
   old = red bold
-  new = 10
+  new = green
   whitespace = red reverse
 [color "status"]
-  added = 10
+  added = green
   changed = yellow
   untracked = magenta
-  deleted = 9
+  deleted = red
   branch = 11
 [core]
   editor = vim
