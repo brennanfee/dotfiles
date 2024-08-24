@@ -36,6 +36,9 @@ function M.config()
       bt = {},
       ft = { "TelescopePrompt" },
     },
+    win = {
+      no_overlap = false,
+    },
     debug = false,
   })
 
