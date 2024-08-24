@@ -483,6 +483,11 @@ function pause_output() {
 }
 
 function error_msg() {
+  print_warning "This version of error_msg is deprecated: Use throw_error_msg instead."
+  throw_error_msg "$@"
+}
+
+function throw_error_msg() {
   print_error "$1"
   if [[ ${2:-} != "" ]]; then
     exit "$2"

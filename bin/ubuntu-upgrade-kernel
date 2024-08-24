@@ -1,0 +1,85 @@
+#!/usr/bin/env bash
+
+# Bash strict mode
+([[ -n ${ZSH_EVAL_CONTEXT:-} && ${ZSH_EVAL_CONTEXT:-} =~ :file$ ]] ||
+  [[ -n ${BASH_VERSION:-} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
+if ! ${SOURCED}; then
+  set -o errexit  # same as set -e
+  set -o nounset  # same as set -u
+  set -o errtrace # same as set -E
+  set -o pipefail
+  set -o posix
+  #set -o xtrace # same as set -x, turn on for debugging
+
+  shopt -s inherit_errexit
+  shopt -s extdebug
+  IFS=$(printf '\n\t')
+fi
+# END Bash strict mode
+
+# SCRIPT_NAME=$(basename "$0")
+# SCRIPT_AUTHOR="Brennan Fee"
+# SCRIPT_LICENSE="MIT License"
+# SCRIPT_VERSION="0.1"
+# SCRIPT_DATE="2024-08-23"
+
+source "$(dirname "$0")/../bash/script-tools.bash"
+
+main() {
+  check_root_with_error ""
+
+  DEBIAN_FRONTEND=noninteractive apt-get -y -q update
+
+  # The HWE kernels use the Ubuntu version numbers rather than the codename
+  local release_ver
+  release_ver=$(arch-chroot /mnt lsb_release -r -s 2> /dev/null)
+
+  local hwe_edge_exists=0
+  if apt_package_exists "linux-generic-hwe-${release_ver}-edge"; then
+    hwe_edge_exists=1
+  fi
+
+  local hwe_exists=0
+  if apt_package_exists "linux-generic-hwe-${release_ver}"; then
+    hwe_exists=1
+  fi
+
+  local kernel_to_install="none"
+  if [[ "${1:-}" == "--edge" ]]; then
+    if [[ "${hwe_edge_exists}" == "0" ]]; then
+      kernel_to_install="hwe-edge"
+    elif [[ "${hwe_exists}" == "0" ]]; then
+      print_status "The edge kernel is not available, but the standard HWE kernel is.  Selecting the HWE kernel."
+      kernel_to_install="hwe"
+    fi
+  else
+    if [[ "${hwe_exists}" == "0" ]]; then
+      kernel_to_install="hwe"
+    fi
+  fi
+
+  case "${kernel_to_install}" in
+    hwe)
+      print_status "HWE kernel found, installing..."
+
+      DEBIAN_FRONTEND=noninteractive apt-get -y -q install "linux-generic-hwe-${release_ver}" linux-firmware
+
+      print_success "HWE kernel install complete.  It is HIGHLY recommended to reboot."
+      ;;
+    hwe-edge)
+      print_status "HWE-Edge kernel found, installing..."
+
+      DEBIAN_FRONTEND=noninteractive apt-get -y -q install "linux-generic-hwe-${release_ver}-edge" linux-firmware
+
+      print_success "HWE-Edge kernel install complete.  It is HIGHLY recommended to reboot."
+      ;;
+    none)
+      print_status "No HWE kernels are available. Please try again later."
+      ;;
+    *)
+      throw_error_msg "ERROR! Unable to determine which kernel to install."
+      ;;
+  esac
+}
+
+main "$@"

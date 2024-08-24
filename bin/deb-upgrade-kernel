@@ -1,0 +1,67 @@
+#!/usr/bin/env bash
+
+# Bash strict mode
+([[ -n ${ZSH_EVAL_CONTEXT:-} && ${ZSH_EVAL_CONTEXT:-} =~ :file$ ]] ||
+  [[ -n ${BASH_VERSION:-} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
+if ! ${SOURCED}; then
+  set -o errexit  # same as set -e
+  set -o nounset  # same as set -u
+  set -o errtrace # same as set -E
+  set -o pipefail
+  set -o posix
+  #set -o xtrace # same as set -x, turn on for debugging
+
+  shopt -s inherit_errexit
+  shopt -s extdebug
+  IFS=$(printf '\n\t')
+fi
+# END Bash strict mode
+
+# SCRIPT_NAME=$(basename "$0")
+# SCRIPT_AUTHOR="Brennan Fee"
+# SCRIPT_LICENSE="MIT License"
+# SCRIPT_VERSION="0.1"
+# SCRIPT_DATE="2024-08-23"
+
+source "$(dirname "$0")/../bash/script-tools.bash"
+
+main() {
+  check_root_with_error ""
+
+  DEBIAN_FRONTEND=noninteractive apt-get -y -q update
+
+  local DPKG_ARCH
+  DPKG_ARCH=$(dpkg --print-architecture)
+
+  local edition
+  edition=$(lsb_release -c -s 2>/dev/null)
+
+  local current_testing
+  current_testing=$(wget -q -O- "deb.debian.org/debian/dists/testing/Release" |
+    grep -i 'Codename:' | cut -d' ' -f2)
+  local dont_support_backports=("testing" "sid" "unstable" "rc-buggy" "experimental")
+
+  dont_support_backports+=("${current_testing}")
+
+  # Check if edition even supports backports
+  get_exit_code contains_element "${edition}" "${dont_support_backports[@]}"
+  if [[ ! "${EXIT_CODE}" != "0" ]]; then
+    print_warning "Debian edition '${edition}' does not support backports."
+    exit 0
+  fi
+
+  # Check to see if the package exists in backports
+  if ! apt_package_exists "linux-image-${DPKG_ARCH}/${edition}-backports"; then
+    print_status "Backport is not yet available for this edition '${edition}'. Please try again later."
+    exit 0
+  fi
+
+  print_status "Backport kernel found, installing..."
+
+  DEBIAN_FRONTEND=noninteractive apt-get -y -q install -t "${edition}-backports" \
+    "linux-image-${DPKG_ARCH}" "linux-headers-${DPKG_ARCH}" firmware-linux
+
+  print_success "Backports kernel install complete.  It is HIGHLY recommended to reboot."
+}
+
+main "$@"
