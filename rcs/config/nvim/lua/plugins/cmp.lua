@@ -28,10 +28,12 @@ local M = {
     },
     {
       "L3MON4D3/LuaSnip",
+      version = "v2.*",
       event = "InsertEnter",
       dependencies = {
         "rafamadriz/friendly-snippets",
       },
+      build = "make install_jsregexp",
     },
     {
       "hrsh7th/cmp-nvim-lua",
@@ -114,36 +116,38 @@ function M.config()
       -- Accept currently selected item. If none selected, `select` first item.
       -- Set `select` to `false` to only confirm explicitly selected items.
       ["<CR>"] = cmp.mapping.confirm({ select = false }),
-      -- ["<Tab>"] = cmp.mapping(function(fallback)
-      --   if cmp.visible() then
-      --     cmp.select_next_item()
-      --   elseif luasnip.expandable() then
-      --     luasnip.expand()
-      --   elseif luasnip.expand_or_jumpable() then
-      --     luasnip.expand_or_jump()
-      --   elseif check_backspace() then
-      --     fallback()
-      --     -- require("neotab").tabout()
-      --   else
-      --     fallback()
-      --     -- require("neotab").tabout()
-      --   end
-      -- end, {
-      --   "i",
-      --   "s",
-      -- }),
-      -- ["<S-Tab>"] = cmp.mapping(function(fallback)
-      --   if cmp.visible() then
-      --     cmp.select_prev_item()
-      --   elseif luasnip.jumpable(-1) then
-      --     luasnip.jump(-1)
-      --   else
-      --     fallback()
-      --   end
-      -- end, {
-      --   "i",
-      --   "s",
-      -- }),
+      ["<Tab>"] = cmp.mapping(function(fallback)
+        if cmp.visible() then
+          cmp.select_next_item()
+        elseif luasnip.locally_jumpable(1) then
+          luasnip.jump(1)
+        elseif check_backspace() then
+          fallback()
+          -- require("neotab").tabout()
+        else
+          fallback()
+          -- require("neotab").tabout()
+        end
+      end, {
+        "i",
+        "s",
+      }),
+      ["<S-Tab>"] = cmp.mapping(function(fallback)
+        if cmp.visible() then
+          cmp.select_prev_item()
+        elseif luasnip.locally_jumpable(-1) then
+          luasnip.jump(-1)
+        elseif check_backspace() then
+          fallback()
+          -- require("neotab").tabout()
+        else
+          fallback()
+          -- require("neotab").tabout()
+        end
+      end, {
+        "i",
+        "s",
+      }),
     }),
     formatting = {
       fields = { "kind", "abbr", "menu" },
