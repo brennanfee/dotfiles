@@ -32,7 +32,7 @@ main() {
 
   # The HWE kernels use the Ubuntu version numbers rather than the codename
   local release_ver
-  release_ver=$(arch-chroot /mnt lsb_release -r -s 2> /dev/null)
+  release_ver=$(lsb_release -r -s 2>/dev/null)
 
   local hwe_edge_exists=0
   if apt_package_exists "linux-generic-hwe-${release_ver}-edge"; then
@@ -46,39 +46,63 @@ main() {
 
   local kernel_to_install="none"
   if [[ "${1:-}" == "--edge" ]]; then
-    if [[ "${hwe_edge_exists}" == "0" ]]; then
+    if [[ "${hwe_edge_exists}" == "1" ]]; then
       kernel_to_install="hwe-edge"
     elif [[ "${hwe_exists}" == "0" ]]; then
       print_status "The edge kernel is not available, but the standard HWE kernel is.  Selecting the HWE kernel."
       kernel_to_install="hwe"
     fi
   else
-    if [[ "${hwe_exists}" == "0" ]]; then
+    if [[ "${hwe_exists}" == "1" ]]; then
       kernel_to_install="hwe"
     fi
   fi
 
   case "${kernel_to_install}" in
-    hwe)
-      print_status "HWE kernel found, installing..."
+  hwe)
+    print_status "HWE kernel found, installing..."
 
-      DEBIAN_FRONTEND=noninteractive apt-get -y -q install "linux-generic-hwe-${release_ver}" linux-firmware
+    DEBIAN_FRONTEND=noninteractive apt-get -y -q install "linux-generic-hwe-${release_ver}" \
+      linux-firmware
 
-      print_success "HWE kernel install complete.  It is HIGHLY recommended to reboot."
-      ;;
-    hwe-edge)
-      print_status "HWE-Edge kernel found, installing..."
+    local tools_exists=0
+    if apt_package_exists "linux-tools-generic-hwe-${release_ver}"; then
+      tools_exists=1
+    fi
 
-      DEBIAN_FRONTEND=noninteractive apt-get -y -q install "linux-generic-hwe-${release_ver}-edge" linux-firmware
+    if [[ "${tools_exists}" == "1" ]]; then
+      DEBIAN_FRONTEND=noninteractive apt-get -y -q install "linux-tools-generic-hwe-${release_ver}"
+    fi
 
-      print_success "HWE-Edge kernel install complete.  It is HIGHLY recommended to reboot."
-      ;;
-    none)
-      print_status "No HWE kernels are available. Please try again later."
-      ;;
-    *)
-      throw_error_msg "ERROR! Unable to determine which kernel to install."
-      ;;
+    DEBIAN_FRONTEND=noninteractive apt-get -y -q autoremove
+
+    print_success "HWE kernel install complete.  It is HIGHLY recommended to reboot."
+    ;;
+  hwe-edge)
+    print_status "HWE-Edge kernel found, installing..."
+
+    DEBIAN_FRONTEND=noninteractive apt-get -y -q install "linux-generic-hwe-${release_ver}-edge" \
+      "linux-tools-generic-hwe-${release_ver}-edge" linux-firmware
+
+    local tools_exists=0
+    if apt_package_exists "linux-tools-generic-hwe-${release_ver}-edge"; then
+      tools_exists=1
+    fi
+
+    if [[ "${tools_exists}" == "1" ]]; then
+      DEBIAN_FRONTEND=noninteractive apt-get -y -q install "linux-tools-generic-hwe-${release_ver}-edge"
+    fi
+
+    DEBIAN_FRONTEND=noninteractive apt-get -y -q autoremove
+
+    print_success "HWE-Edge kernel install complete.  It is HIGHLY recommended to reboot."
+    ;;
+  none)
+    print_status "No HWE kernels are available. Please try again later."
+    ;;
+  *)
+    throw_error_msg "ERROR! Unable to determine which kernel to install."
+    ;;
   esac
 }
 
