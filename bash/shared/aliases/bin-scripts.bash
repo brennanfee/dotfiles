@@ -17,6 +17,36 @@ if ! ${SOURCED}; then
 fi
 # END Bash scrict mode
 
+# Aliases to scripts in my dotfiles bin folder
+
+if [[ -x "${DOTFILES}/bin/tmux-current-session" ]]; then
+  alias tcs='${DOTFILES}/bin/tmux-current-session'
+fi
+
+if [[ -x "${DOTFILES}/bin/tmux-window-switch" ]]; then
+  alias tws='${DOTFILES}/bin/tmux-window-switch'
+  alias twt='${DOTFILES}/bin/tmux-window-switch t'
+  alias twf='${DOTFILES}/bin/tmux-window-switch f'
+  alias twl='${DOTFILES}/bin/tmux-window-switch l'
+  alias twp='${DOTFILES}/bin/tmux-window-switch p'
+  alias twn='${DOTFILES}/bin/tmux-window-switch n'
+  alias tw1='${DOTFILES}/bin/tmux-window-switch 1'
+  alias tw2='${DOTFILES}/bin/tmux-window-switch 2'
+  alias tw3='${DOTFILES}/bin/tmux-window-switch 3'
+  alias tw4='${DOTFILES}/bin/tmux-window-switch 4'
+  alias tw5='${DOTFILES}/bin/tmux-window-switch 5'
+  alias tw6='${DOTFILES}/bin/tmux-window-switch 6'
+  alias tw7='${DOTFILES}/bin/tmux-window-switch 7'
+  alias tw8='${DOTFILES}/bin/tmux-window-switch 8'
+  alias tw9='${DOTFILES}/bin/tmux-window-switch 9'
+fi
+
 if [[ -x "${DOTFILES}/bin/do-update" ]]; then
   alias doup='${DOTFILES}/bin/do-update'
+fi
+
+if [[ -x "${DOTFILES}/bin/yt-dlp-helper" ]]; then
+  alias yt='${DOTFILES}/bin/yt-dlp-helper yt'
+  alias ytm='${DOTFILES}/bin/yt-dlp-helper ytm'
+  alias pt='${DOTFILES}/bin/yt-dlp-helper pt'
 fi

@@ -2,8 +2,8 @@
 
 # Bash strict mode
 # shellcheck disable=SC2154
-([[ -n ${ZSH_EVAL_CONTEXT} && ${ZSH_EVAL_CONTEXT} =~ :file$ ]] \
-  || [[ -n ${BASH_VERSION} ]] && (return 0 2> /dev/null)) && SOURCED=true || SOURCED=false
+([[ -n ${ZSH_EVAL_CONTEXT} && ${ZSH_EVAL_CONTEXT} =~ :file$ ]] ||
+  [[ -n ${BASH_VERSION} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
 if ! ${SOURCED}; then
   set -o errexit  # same as set -e
   set -o nounset  # same as set -u
@@ -17,7 +17,15 @@ if ! ${SOURCED}; then
 fi
 # END Bash scrict mode
 
-function yt-helper() {
+# SCRIPT_NAME=$(basename "$0")
+# SCRIPT_AUTHOR="Brennan Fee"
+# SCRIPT_LICENSE="MIT License"
+# SCRIPT_VERSION="0.1"
+# SCRIPT_DATE="2024-08-27"
+
+source "$(dirname "$0")/../bash/script-tools.bash"
+
+function yt_helper() {
   local url
   if is_wsl; then
     url=$(powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -Command Get-Clipboard)
@@ -34,7 +42,7 @@ function yt-helper() {
   fi
 
   prog="youtube-dl"
-  if command -v "yt-dlp" &> /dev/null; then
+  if command -v "yt-dlp" &>/dev/null; then
     prog="yt-dlp"
   fi
 
@@ -45,7 +53,7 @@ function yt-helper() {
 function yt() {
   local output
   output="$(xdg-user-dir VIDEOS)/%(title).125B-%(id)s-[%(channel,channel_id,creator,uploader)s].%(ext)s"
-  yt-helper "high" "firefox" "${output}" "$@"
+  yt_helper "high" "firefox" "${output}" "$@"
 }
 
 function pt() {
@@ -54,7 +62,7 @@ function pt() {
   folder="$(xdg-user-dir PICTURES)/_other"
   mkdir -p "${folder}"
   output="${folder}/%(title).125B-%(id)s-[%(channel,channel_id,creator,uploader)s].%(ext)s"
-  yt-helper "low" "chrome" "${output}" "$@"
+  yt_helper "low" "chrome" "${output}" "$@"
 }
 
 # To extract an MP3 from a video, requires ffmpeg to be installed
@@ -70,10 +78,33 @@ function ytm() {
   fi
 
   prog="youtube-dl"
-  if command -v "yt-dlp" &> /dev/null; then
+  if command -v "yt-dlp" &>/dev/null; then
     prog="yt-dlp"
   fi
 
   echo "Downloading ${url}"
   ${prog} --cookies-from-browser firefox --embed-metadata --embed-thumbnail --no-mtime --extract-audio --audio-format mp3 -i -o "${output}" "${url}" "${@:2}"
 }
+
+function main() {
+  local sub_command
+  sub_command="${1:-}"
+  shift
+
+  case "${sub_command}" in
+  yt)
+    yt "$@"
+    ;;
+  pt)
+    pt "$@"
+    ;;
+  ytm)
+    ytm "$@"
+    ;;
+  *)
+    throw_error_msg "Unknown yt-dlp-helper command: '${1:-}'"
+    ;;
+  esac
+}
+
+main "$@"
