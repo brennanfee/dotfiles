@@ -25,7 +25,21 @@ fi
 
 source "$(dirname "$0")/../bash/script-tools.bash"
 
+# Usage: yt_helper <sub-command> "$@"
+# Current supported sub-command:  yt (normal), ytp (alt location), ytm (music)
+# Each of those commands, by default, will not download a playlist unless the
+# url passed is JUST to the playlist (not a combined url - video within a playlist).
+# To force the download of a list add 'l' to the command: ytl, ytpl, ytml.
 function yt_helper() {
+  local sub_command
+  sub_command="${1:-unk}"
+  shift
+
+  if [[ "${sub_command}" == "unk" ]]; then
+    throw_error_msg "Unknown yt-dlp-helper command!"
+  fi
+
+  #TODO: Allow passing in url rather than clipboard
   local url
   if is_wsl; then
     url=$(powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -Command Get-Clipboard)
@@ -45,72 +59,59 @@ function yt_helper() {
   lowFormat+="/best[height<=?720]"
 
   local format="${highFormat}"
-
-  if [[ "$1" == "low" ]]; then
+  if [[ "${sub_command}" == "ytp" || "${sub_command}" == "ytpl" ]]; then
     format="${lowFormat}"
+  fi
+
+  ## Type
+  local type="video"
+  if [[ "${sub_command}" == "ytm" || "${sub_command}" == "ytml" ]]; then
+    type="music"
+    format="bestaudio/bestaudio*/best"
   fi
 
   # Playlist flag
   local playlist="--no-playlist"
-  if [[ "${3:-}" == "yes" ]]; then
+  if [[ "${sub_command}" == "ytl" || "${sub_command}" == "ytpl" || "${sub_command}" == "ytml" ]]; then
     playlist="--yes-playlist"
   fi
 
   # Sort Order
   local sort_order="ext:mp4:m4a,proto"
 
+  # Output directory
+  local directory
+  directory="$(xdg-user-dir VIDEOS)" ## default to video directory
+  if [[ "${sub_command}" == "ytp" || "${sub_command}" == "ytpl" ]]; then
+    directory="$(xdg-user-dir PICTURES)/_other" ## alternate location
+  fi
+  mkdir -p "${directory}"
+
   # Output file name
-  local output="${4}/%(title).125B-%(id)s-[%(channel,channel_id,creator,uploader)s].%(ext)s"
+  local output="${directory}/%(title).125B-%(id)s-[%(channel,channel_id,creator,uploader)s].%(ext)s"
 
-  echo "Downloading ${url}"
-  yt-dlp --cookies-from-browser "$2" --embed-metadata --mark-watched --embed-thumbnail \
-    "${playlist}" --no-mtime -i -S "${sort_order}" -f "${format}" -o "${output}" \
-    "${url}" "${@:5}"
-}
-
-function yt() {
-  local directory
-  directory="$(xdg-user-dir VIDEOS)"
-  mkdir -p "${directory}"
-  yt_helper "high" "firefox" "no" "${directory}" "$@"
-}
-
-function yt_playlist() {
-  local directory
-  directory="$(xdg-user-dir VIDEOS)"
-  mkdir -p "${directory}"
-  yt_helper "high" "firefox" "yes" "${directory}" "$@"
-}
-
-function pt() {
-  local directory
-  directory="$(xdg-user-dir PICTURES)/_other"
-  mkdir -p "${directory}"
-  yt_helper "low" "chrome" "no" "${directory}" "$@"
-}
-
-function pt_playlist() {
-  local directory
-  directory="$(xdg-user-dir PICTURES)/_other"
-  mkdir -p "${directory}"
-  yt_helper "low" "chrome" "yes" "${directory}" "$@"
-}
-
-# To extract an MP3 from a video, requires ffmpeg to be installed
-function ytm() {
-  local output
-  output="$(xdg-user-dir VIDEOS)/%(title).125B-%(id)s-youtube.%(ext)s"
-
-  local url
-  if is_wsl; then
-    url=$(powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -Command Get-Clipboard)
-  else
-    url=$(xsel -o --clipboard)
+  local browser_auth="--cookies-from-browser firefox"
+  if [[ "${sub_command}" == "ytp" || "${sub_command}" == "ytpl" ]]; then
+    browser_auth="--cookies-from-browser chrome"
+  fi
+  ## Youtube started throttling cookies, need to support Oauth2 instead
+  ## For this to work this plugin needs to be installed:
+  ##   https://github.com/coletdjnz/yt-dlp-youtube-oauth2
+  if [[ "${url}" =~ ^"https://www.youtube.com" ]]; then
+    browser_auth="--username oauth2 --password ''"
   fi
 
   echo "Downloading ${url}"
-  yt-dlp --cookies-from-browser firefox --embed-metadata --embed-thumbnail --no-mtime \
-    --no-playlist --extract-audio --audio-format mp3 -i -o "${output}" "${url}" "${@:2}"
+  if [[ "${type}" == "video" ]]; then
+    yt-dlp "${browser_auth}" --embed-metadata --embed-thumbnail --mark-watched --embed-chapters \
+      "${playlist}" --no-mtime -i -S "${sort_order}" -f "${format}" \
+      -o "${output}" "${url}" "$@"
+  else
+    yt-dlp "${browser_auth}" --embed-metadata --embed-thumbnail \
+      "${playlist}" -no-mtime -i -S "${sort_order}" -f "${format}" \
+      --extract-audio --audio-format mp3 \
+      -o "${output}" "${url}" "$@"
+  fi
 }
 
 function main() {
@@ -120,19 +121,22 @@ function main() {
 
   case "${sub_command}" in
   yt)
-    yt "$@"
+    yt_helper "yt" "$@"
     ;;
-  ytlist)
-    yt_playlist "$@"
+  ytl)
+    yt_helper "ytl" "$@"
     ;;
-  pt)
-    pt "$@"
+  ytp)
+    yt_helper "ytp" "$@"
     ;;
-  ptlist)
-    pt_playlist "$@"
+  ytpl)
+    yt_helper "ytpl" "$@"
     ;;
   ytm)
-    ytm "$@"
+    yt_helper "ytm" "$@"
+    ;;
+  ytml)
+    yt_helper "ytml" "$@"
     ;;
   *)
     throw_error_msg "Unknown yt-dlp-helper command: '${1:-}'"
