@@ -47,6 +47,8 @@ fi
 
 if [[ -x "${DOTFILES}/bin/yt-dlp-helper" ]]; then
   alias yt='${DOTFILES}/bin/yt-dlp-helper yt'
+  alias ytlist='${DOTFILES}/bin/yt-dlp-helper ytlist'
   alias ytm='${DOTFILES}/bin/yt-dlp-helper ytm'
   alias pt='${DOTFILES}/bin/yt-dlp-helper pt'
+  alias ptlist='${DOTFILES}/bin/yt-dlp-helper ptlist'
 fi

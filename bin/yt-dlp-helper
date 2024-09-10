@@ -33,36 +33,67 @@ function yt_helper() {
     url=$(xsel -o --clipboard)
   fi
 
-  local highFormat="bestvideo[height<=?1080]+bestaudio/best[height<=?1080]/best"
-  local lowFormat="bestvideo[height<=?720]+bestaudio/best[height<=?720]/best"
+  # Format
+  local highFormat
+  highFormat+="bestvideo[height<=?1080][vcodec~='^((he|a)vc1?|h26[45])']+bestaudio"
+  highFormat+="/best[height<=?1080][vcodec~='^((he|a)vc1?|h26[45])']"
+  highFormat+="/best[height<=?1080]"
+
+  local lowFormat
+  lowFormat+="bestvideo[height<=?720][vcodec~='^((he|a)vc1?|h26[45])']+bestaudio"
+  lowFormat+="/best[height<=?720][vcodec~='^((he|a)vc1?|h26[45])']"
+  lowFormat+="/best[height<=?720]"
+
   local format="${highFormat}"
 
   if [[ "$1" == "low" ]]; then
     format="${lowFormat}"
   fi
 
-  prog="youtube-dl"
-  if command -v "yt-dlp" &>/dev/null; then
-    prog="yt-dlp"
+  # Playlist flag
+  local playlist="--no-playlist"
+  if [[ "${3:-}" == "yes" ]]; then
+    playlist="--yes-playlist"
   fi
 
+  # Sort Order
+  local sort_order="ext:mp4:m4a,proto"
+
+  # Output file name
+  local output="${4}/%(title).125B-%(id)s-[%(channel,channel_id,creator,uploader)s].%(ext)s"
+
   echo "Downloading ${url}"
-  ${prog} --cookies-from-browser "$2" --embed-metadata --mark-watched --embed-thumbnail --no-mtime -i -S +codec:avc:m4a -f "${format}" -o "$3" "${url}" "${@:4}"
+  yt-dlp --cookies-from-browser "$2" --embed-metadata --mark-watched --embed-thumbnail \
+    "${playlist}" --no-mtime -i -S "${sort_order}" -f "${format}" -o "${output}" \
+    "${url}" "${@:5}"
 }
 
 function yt() {
-  local output
-  output="$(xdg-user-dir VIDEOS)/%(title).125B-%(id)s-[%(channel,channel_id,creator,uploader)s].%(ext)s"
-  yt_helper "high" "firefox" "${output}" "$@"
+  local directory
+  directory="$(xdg-user-dir VIDEOS)"
+  mkdir -p "${directory}"
+  yt_helper "high" "firefox" "no" "${directory}" "$@"
+}
+
+function yt_playlist() {
+  local directory
+  directory="$(xdg-user-dir VIDEOS)"
+  mkdir -p "${directory}"
+  yt_helper "high" "firefox" "yes" "${directory}" "$@"
 }
 
 function pt() {
-  local folder
-  local output
-  folder="$(xdg-user-dir PICTURES)/_other"
-  mkdir -p "${folder}"
-  output="${folder}/%(title).125B-%(id)s-[%(channel,channel_id,creator,uploader)s].%(ext)s"
-  yt_helper "low" "chrome" "${output}" "$@"
+  local directory
+  directory="$(xdg-user-dir PICTURES)/_other"
+  mkdir -p "${directory}"
+  yt_helper "low" "chrome" "no" "${directory}" "$@"
+}
+
+function pt_playlist() {
+  local directory
+  directory="$(xdg-user-dir PICTURES)/_other"
+  mkdir -p "${directory}"
+  yt_helper "low" "chrome" "yes" "${directory}" "$@"
 }
 
 # To extract an MP3 from a video, requires ffmpeg to be installed
@@ -77,13 +108,9 @@ function ytm() {
     url=$(xsel -o --clipboard)
   fi
 
-  prog="youtube-dl"
-  if command -v "yt-dlp" &>/dev/null; then
-    prog="yt-dlp"
-  fi
-
   echo "Downloading ${url}"
-  ${prog} --cookies-from-browser firefox --embed-metadata --embed-thumbnail --no-mtime --extract-audio --audio-format mp3 -i -o "${output}" "${url}" "${@:2}"
+  yt-dlp --cookies-from-browser firefox --embed-metadata --embed-thumbnail --no-mtime \
+    --no-playlist --extract-audio --audio-format mp3 -i -o "${output}" "${url}" "${@:2}"
 }
 
 function main() {
@@ -95,8 +122,14 @@ function main() {
   yt)
     yt "$@"
     ;;
+  ytlist)
+    yt_playlist "$@"
+    ;;
   pt)
     pt "$@"
+    ;;
+  ptlist)
+    pt_playlist "$@"
     ;;
   ytm)
     ytm "$@"
