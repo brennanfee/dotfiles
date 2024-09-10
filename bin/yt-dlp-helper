@@ -39,11 +39,17 @@ function yt_helper() {
     throw_error_msg "Unknown yt-dlp-helper command!"
   fi
 
-  #TODO: Allow passing in url rather than clipboard
+  # The url to download
   local url
-  if is_wsl; then
+  if [[ "${1:-}" =~ ^"http" ]]; then
+    # It was passed in on the command line, always must be first one
+    url="$1"
+    shift
+  elif is_wsl; then
+    # Get url from windows clipboard
     url=$(powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -Command Get-Clipboard)
   else
+    # Get url from linux (or mac?) clipboard
     url=$(xsel -o --clipboard)
   fi
 
