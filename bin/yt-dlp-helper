@@ -114,7 +114,7 @@ function yt_helper() {
       -o "${output}" "${url}" "$@"
   else
     yt-dlp "${browser_auth[@]}" --embed-metadata --embed-thumbnail \
-      "${playlist}" -no-mtime -i -S "${sort_order}" -f "${format}" \
+      "${playlist}" --no-mtime -i -S "${sort_order}" -f "${format}" \
       --extract-audio --audio-format mp3 \
       -o "${output}" "${url}" "$@"
   fi
