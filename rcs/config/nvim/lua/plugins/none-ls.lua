@@ -66,7 +66,7 @@ function M.config()
       diagnostics.tfsec,
       diagnostics.tidy,
       diagnostics.trail_space,
-      -- diagnostics.tsc, -- using tsserver language server instead
+      -- diagnostics.tsc, -- using ts_ls language server instead
       diagnostics.vint, -- vimscript
       diagnostics.write_good.with({
         extra_args = { "--no-passive" },

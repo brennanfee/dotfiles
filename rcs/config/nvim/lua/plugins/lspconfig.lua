@@ -118,7 +118,7 @@ function M.config()
     "terraformls",
     "tflint",
     "tinymist", -- Typst
-    "tsserver",
+    "ts_ls",
     "typos_lsp",
     "vacuum", -- OpenAPI/Swagger
     "vimls",
