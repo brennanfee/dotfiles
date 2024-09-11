@@ -15,9 +15,9 @@ if ! ${SOURCED}; then
   shopt -s extdebug
   IFS=$(printf '\n\t')
 fi
+# END Bash strict mode
 
 SCRIPT_DIR="$(cd -P "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-# END Bash strict mode
 
 # Source script-tools.bash
 if [[ -f "${SCRIPT_DIR}/script-tools.bash" ]]; then
@@ -36,9 +36,9 @@ unset SCRIPT_DIR
 # will be common).  PROFILEPATH is a custom value that gets set with my standard
 # PowerShell profile scripts and points to my main profile location.
 # Both USERPROFILE and SystemRoot are standard paths available in Windows by
-# default.  The WSLENV should be set to:
+# default.  The WSLENV environment variable should be set to:
 # USERPROFILE/up:PROFILEPATH/up:SystemRoot/up:WIN_USER
-PROFILEPATH=$(xdg-user-dir PROFILE)
+PROFILEPATH="${PROFILEPATH:-$(xdg-user-dir PROFILE)}"
 PROFILEPATH="${PROFILEPATH:-${HOME}/profile}"
 if [[ ! -d "${PROFILEPATH}" ]]; then
   PROFILEPATH="${HOME}"
@@ -59,14 +59,88 @@ fi
 export WIN_HOME
 
 # Dotfiles locations
-DOTFILES=$(xdg-user-dir DOTFILES)
+DOTFILES="${DOTFILES:-$(xdg-user-dir DOTFILES)}"
 DOTFILES="${DOTFILES:-${HOME}/.dotfiles}"
 
-DOTFILES_PRIVATE=$(xdg-user-dir DOTFILESPRIVATE)
+DOTFILES_PRIVATE="${DOTFILES_PRIVATE:-$(xdg-user-dir DOTFILESPRIVATE)}"
 DOTFILES_PRIVATE="${DOTFILES_PRIVATE:-${HOME}/.dotfiles-private}"
 
 export DOTFILES
 export DOTFILES_PRIVATE
+
+## XDG Locations
+
+export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-${HOME}/.config}"
+export XDG_DATA_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}"
+export XDG_CACHE_HOME="${XDG_CACHE_HOME:-${HOME}/.cache}"
+export XDG_STATE_HOME="${XDG_STATE_HOME:-${HOME}/.local/state}"
+export XDG_BIN_HOME="${XDG_BIN_HOME:-${HOME}/.local/bin}"
+
+if [[ -f "${XDG_CONFIG_HOME}/user-dirs.dirs" ]]; then
+  while read -r line; do
+    if [[ ! ${line} =~ ^"#" && ! "${line}" == "" ]]; then
+      eval "export ${line}"
+    fi
+  done < "${XDG_CONFIG_HOME}/user-dirs.dirs"
+  #### shellcheck source=/home/brennan/.config/user-dirs.dirs
+  #source "${XDG_CONFIG_HOME}/user-dirs.dirs"
+fi
+
+## XDG Utility function
+
+function xdg-base-dir() {
+  case $1 in
+
+    CONFIG | CONFIGHOME)
+      echo "${XDG_CONFIG_HOME:-${HOME}/.config}"
+      ;;
+
+    CONFIGDIRS)
+      echo "${XDG_CONFIG_DIRS:-"/etc/xdg"}"
+      ;;
+
+    BIN | BINHOME)
+      echo "${XDG_BIN_HOME:-${HOME}/.local/bin}"
+      ;;
+
+    DATA | DATAHOME)
+      echo "${XDG_DATA_HOME:-${HOME}/.local/share}"
+      ;;
+
+    DATADIRS)
+      echo "${XGD_DATA_DIRS:-"/usr/local/share/:/usr/share/"}"
+      ;;
+
+    CACHE | CACHEHOME)
+      echo "${XDG_CACHE_HOME:-${HOME}/.cache}"
+      ;;
+
+    STATE | STATEHOME)
+      echo "${XDG_STATE_HOME:-${HOME}/.local/state}"
+      ;;
+
+    RUNTIME | RUNTIMEDIR)
+      echo "${XDG_RUNTIME_DIR:-/run/user/${UID}}"
+      ;;
+
+    EXECS | EXECUTABLES | EXES)
+      echo "${HOME}/.local/bin"
+      ;;
+
+    HOME)
+      echo "${HOME}"
+      ;;
+
+    "")
+      echo "${HOME}"
+      ;;
+
+    *)
+      xdg-user-dir "$1"
+      ;;
+
+  esac
+}
 
 ## OS Environment Variables - Indicate what type of machine we are running on.
 

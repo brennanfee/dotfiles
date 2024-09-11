@@ -23,6 +23,7 @@ fi
 base_data_dir=$(xdg-base-dir DATA)
 base_dotfiles_dir=$(xdg-base-dir DOTFILES)
 base_dotfilesprivate_dir=$(xdg-base-dir DOTFILESPRIVATE)
+base_cloud_dir=$(xdg-base-dir CLOUD)
 
 ### PREPENDS (order critical)
 
@@ -33,7 +34,8 @@ path_prepend "${HOME}/.poetry/bin"
 # Local bin
 path_prepend "${HOME}/.local/bin"
 
-# Dotfiles
+# Dotfiles & Cloud
+path_prepend "${base_cloud_dir}/bin"
 path_prepend "${base_dotfiles_dir}/bin"
 path_prepend "${base_dotfilesprivate_dir}/bin"
 
@@ -90,3 +92,4 @@ unset ruby_path
 unset base_data_dir
 unset base_dotfiles_dir
 unset base_dotfilesprivate_dir
+unset base_cloud_dir

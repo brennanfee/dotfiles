@@ -297,7 +297,7 @@ text_secure="$(tput invis)"
 text_conceal="$(tput invis)"
 text_blink="$(tput blink)"
 
-: "$(tput sgr0)"
+#: "$(tput sgr0)"
 
 # text_subscript="$(tput ssubm)"       # Not many terminals support this
 # text_subscript_off="$(tput rsubm)"   # Not many terminals support this

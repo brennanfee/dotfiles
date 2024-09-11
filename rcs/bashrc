@@ -28,8 +28,8 @@ fi
 # the base-profile.bash script has been run.  So I am being overly cautious with
 # defaults on top of defaults here.  AFTER the base-profile is loaded the xdg
 # functions should work and ALWAYS return valid paths.
-dotfiles=$(xdg-user-dir DOTFILES)
-dotfiles="${dotfiles:-${DOTFILES:-${HOME}/.dotfiles}}"
+dotfiles="${DOTFILES:-$(xdg-user-dir DOTFILES)}"
+dotfiles="${dotfiles:-${HOME}/.dotfiles}"
 
 # shellcheck source=/dev/null
 source "${dotfiles}/bash/base-profile.bash"
