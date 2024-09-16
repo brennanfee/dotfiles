@@ -145,9 +145,14 @@ function main() {
     yt_helper "ytml" "$@"
     ;;
   *)
-    throw_error_msg "Unknown yt-dlp-helper command: '${1:-}'"
+    throw_error_msg "Unknown ${SCRIPT_NAME} command: '${1:-}'"
     ;;
   esac
 }
 
 main "$@"
+# unset SCRIPT_NAME
+# unset SCRIPT_AUTHOR
+# unset SCRIPT_LICENSE
+# unset SCRIPT_VERSION
+# unset SCRIPT_DATE

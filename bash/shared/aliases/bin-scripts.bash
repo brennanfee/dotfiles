@@ -53,3 +53,7 @@ if [[ -x "${DOTFILES}/bin/yt-dlp-helper" ]]; then
   alias ytp='${DOTFILES}/bin/yt-dlp-helper ytp'
   alias ytpl='${DOTFILES}/bin/yt-dlp-helper ytpl'
 fi
+
+if [[ -x "${DOTFILES}/bin/ssh-tools" ]]; then
+  alias ssh-list='${DOTFILES}/bin/ssh-tools list'
+fi
