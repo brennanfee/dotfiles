@@ -1,8 +1,4 @@
 #!/usr/bin/env bash
-# Author: Brennan Fee
-# License: MIT License
-# Version: 0.2
-# Date: 2023-06-27
 #
 # This script sets up a new Debian repo.  It is to replace the deprecated pattern of
 # using add-apt-key and instead downloads the key and sets the sources file to point
@@ -27,7 +23,7 @@ if ! ${SOURCED}; then
 fi
 # END Bash strict mode
 
-source "$(xdg-user-dir DOTFILES)/bash/script-tools.bash"
+source "$(dirname "$0")/../bash/script-tools.bash"
 
 SCRIPT_APP=$(basename "$0")
 SCRIPT_AUTHOR="Brennan Fee"

@@ -1,9 +1,5 @@
 #!/usr/bin/env bash
-# Author: Brennan Fee
-# License: MIT License
-# Version: 0.2
-# Date: 2023-06-23
-
+#
 # AppMan (and am) are tools for installing, updating, and managing AppImages
 # Page to look for apps to install: https://portable-linux-apps.github.io/apps.html
 
@@ -30,7 +26,7 @@ SCRIPT_LICENSE="MIT License"
 SCRIPT_VERSION="0.2"
 SCRIPT_DATE="2023-06-23"
 
-source "$(xdg-user-dir DOTFILES)/bash/script-tools.bash"
+source "$(dirname "$0")/../bash/script-tools.bash"
 
 ## Defaults
 INCLUDE_DEV_TOOLS="false"

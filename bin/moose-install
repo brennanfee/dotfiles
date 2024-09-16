@@ -1,8 +1,4 @@
 #!/usr/bin/env bash
-# Author: Brennan Fee
-# License: MIT License
-# Version: 0.3
-# Date: 2023-06-23
 
 # Bash strict mode
 ([[ -n ${ZSH_EVAL_CONTEXT:-} && ${ZSH_EVAL_CONTEXT:-} =~ :file$ ]] ||
@@ -27,7 +23,7 @@ SCRIPT_LICENSE="MIT License"
 SCRIPT_VERSION="0.3"
 SCRIPT_DATE="2023-06-23"
 
-source "$(xdg-user-dir DOTFILES)/bash/script-tools.bash"
+source "$(dirname "$0")/../bash/script-tools.bash"
 
 ## Defaults
 HELP="false"
