@@ -15,7 +15,7 @@ if ! ${SOURCED}; then
   shopt -s extdebug
   IFS=$(printf '\n\t')
 fi
-# END Bash scrict mode
+# END Bash strict mode
 
 path_prepend "/usr/local/opt/coreutils/libexec/gnubin"
 manpath_prepend "/usr/local/opt/coreutils/libexec/gnuman"

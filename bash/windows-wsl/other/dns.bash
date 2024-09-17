@@ -15,7 +15,7 @@ if ! ${SOURCED}; then
   shopt -s extdebug
   IFS=$(printf '\n\t')
 fi
-# END Bash scrict mode
+# END Bash strict mode
 
 #if [[ ! -f /etc/init.d/dns-sync.sh ]]; then
 #  sudo cp "$DOTFILES/bin/dns-sync.sh" /etc/init.d/dns-sync.sh

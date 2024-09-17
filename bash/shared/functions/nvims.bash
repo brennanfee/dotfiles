@@ -15,7 +15,7 @@ if ! ${SOURCED}; then
   shopt -s extdebug
   IFS=$(printf '\n\t')
 fi
-# END Bash scrict mode
+# END Bash strict mode
 
 # NeoVim config switcher - This utility allows me to select different Nvim configurations.  Note that this only works with NVim version 0.9.0 and above as it uses the new NVIM_APPNAME feature.
 

@@ -15,6 +15,6 @@ if ! ${SOURCED}; then
   shopt -s extdebug
   IFS=$(printf '\n\t')
 fi
-# END Bash scrict mode
+# END Bash strict mode
 
 export RUSTUP_INIT_SKIP_PATH_CHECK="yes"

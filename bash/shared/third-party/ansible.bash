@@ -15,6 +15,6 @@ if ! ${SOURCED}; then
   shopt -s extdebug
   IFS=$(printf '\n\t')
 fi
-# END Bash scrict mode
+# END Bash strict mode
 
 export ANSIBLE_INVENTORY_DNS_DOMAIN="_ansible.bfee.org"

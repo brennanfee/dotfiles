@@ -15,7 +15,7 @@ if ! ${SOURCED}; then
   shopt -s extdebug
   IFS=$(printf '\n\t')
 fi
-# END Bash scrict mode
+# END Bash strict mode
 
 dircolors_file="$(xdg-base-dir CONFIG)/dircolors"
 test -f "${dircolors_file}" && eval "$(dircolors "${dircolors_file}" || true)"

@@ -16,7 +16,7 @@ if ! ${SOURCED}; then
   shopt -s extdebug
   IFS=$(printf '\n\t')
 fi
-# END Bash scrict mode
+# END Bash strict mode
 
 source_if "/usr/share/bash-completion/completions/fzf"
 source_if "/usr/share/doc/fzf/examples/key-bindings.bash"

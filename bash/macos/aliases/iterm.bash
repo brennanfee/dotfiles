@@ -15,7 +15,7 @@ if ! ${SOURCED}; then
   shopt -s extdebug
   IFS=$(printf '\n\t')
 fi
-# END Bash scrict mode
+# END Bash strict mode
 
 alias imgcat='$(xdg-base-dir DOTFILES)/iterm2/imgcat'
 alias it2dl='$(xdg-base-dir DOTFILES)/iterm2/it2dl'
