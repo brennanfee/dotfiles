@@ -1,12 +1,9 @@
 #!/usr/bin/env bash
-# Author: Brennan Fee
-# License: MIT License
-# Version: 0.1
-# Date: 2023-10-18
 
-# Bash strict mode
-([[ -n ${ZSH_EVAL_CONTEXT:-} && ${ZSH_EVAL_CONTEXT:-} =~ :file$ ]] ||
-  [[ -n ${BASH_VERSION:-} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
+### START Bash strict mode
+# shellcheck disable=SC2154
+([[ -n ${ZSH_EVAL_CONTEXT} && ${ZSH_EVAL_CONTEXT} =~ :file$ ]] ||
+  [[ -n ${BASH_VERSION} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
 if ! ${SOURCED}; then
   set -o errexit  # same as set -e
   set -o nounset  # same as set -u
@@ -15,11 +12,53 @@ if ! ${SOURCED}; then
   set -o posix
   #set -o xtrace # same as set -x, turn on for debugging
 
-  shopt -s inherit_errexit
   shopt -s extdebug
   IFS=$(printf '\n\t')
 fi
-# END Bash strict mode
+### END Bash strict mode
+
+### START Script template bootstrap
+
+script_name=$(basename "${BASH_SOURCE[0]}")
+script_dir="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"
+script_author="Brennan Fee"
+script_license="MIT License"
+script_version="0.2"
+script_date="2024-09-16"
+
+function cleanup_vars() {
+  unset script_name
+  unset script_dir
+  unset script_author
+  unset script_license
+  unset script_version
+  unset script_date
+
+  cleanup_script_vars
+}
+
+# Source script-tools.bash
+if [[ -f "${script_dir}/../bash/script-tools.bash" ]]; then
+  # shellcheck source=/home/brennan/.dotfiles/bash/script-tools.bash
+  source "${script_dir}/../bash/script-tools.bash"
+fi
+
+function show_version() {
+  print_status "${script_name}"
+  print_status "Author: ${script_author} --- License: ${script_license}"
+  print_status "Version: ${script_version} --- Date: ${script_date}"
+  print_blank_line
+
+  if [[ "${1:-}" == "exit" || "${1:-}" == "yes" ]]; then
+    exit 0
+  fi
+}
+
+### END Script template bootstrap
+
+function cleanup_script_vars() {
+  noop
+}
 
 function createScratchDirectories() {
   mkdir -p "${HOME}/.vim/vimscratch/backup"
@@ -37,11 +76,14 @@ function ensurePlugInstalled() {
 
 function updateBundles() {
   if [[ -f "${HOME}/.vim/vimrc.bundles" ]]; then
-    vim -N -u "${HOME}/.vim/vimrc.bundles" +PlugUpdate +PlugClean! +qa
+    /usr/bin/vim -N -u "${HOME}/.vim/vimrc.bundles" +PlugUpdate +PlugClean! +qa
   fi
 }
 
 function main() {
+  mkdir -p "${XDG_CACHE_HOME:-$HOME/.cache}/vim"
+  mkdir -p "${XDG_CACHE_HOME:-$HOME/.cache}/zsh"
+
   createScratchDirectories
 
   ensurePlugInstalled
@@ -49,4 +91,13 @@ function main() {
   updateBundles
 }
 
-main "$@"
+### START Script main handler
+
+function main_handler() {
+  main "$@"
+  cleanup_vars
+}
+
+main_handler "$@"
+
+### END Script main handler

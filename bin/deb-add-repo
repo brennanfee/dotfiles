@@ -6,9 +6,10 @@
 # URL to the key, and the url for the deb repository.  However, many other options are
 # provided to override certain defaults.
 
-# Bash strict mode
-([[ -n ${ZSH_EVAL_CONTEXT:-} && ${ZSH_EVAL_CONTEXT:-} =~ :file$ ]] ||
-  [[ -n ${BASH_VERSION:-} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
+### START Bash strict mode
+# shellcheck disable=SC2154
+([[ -n ${ZSH_EVAL_CONTEXT} && ${ZSH_EVAL_CONTEXT} =~ :file$ ]] ||
+  [[ -n ${BASH_VERSION} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
 if ! ${SOURCED}; then
   set -o errexit  # same as set -e
   set -o nounset  # same as set -u
@@ -17,19 +18,49 @@ if ! ${SOURCED}; then
   set -o posix
   #set -o xtrace # same as set -x, turn on for debugging
 
-  shopt -s inherit_errexit
   shopt -s extdebug
   IFS=$(printf '\n\t')
 fi
-# END Bash strict mode
+### END Bash strict mode
 
-source "$(dirname "$0")/../bash/script-tools.bash"
+### START Script template bootstrap
 
-SCRIPT_APP=$(basename "$0")
-SCRIPT_AUTHOR="Brennan Fee"
-SCRIPT_LICENSE="MIT License"
-SCRIPT_VERSION="0.2"
-SCRIPT_DATE="2023-06-27"
+script_name=$(basename "${BASH_SOURCE[0]}")
+script_dir="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"
+script_author="Brennan Fee"
+script_license="MIT License"
+script_version="0.3"
+script_date="2024-09-16"
+
+function cleanup_vars() {
+  unset script_name
+  unset script_dir
+  unset script_author
+  unset script_license
+  unset script_version
+  unset script_date
+
+  cleanup_script_vars
+}
+
+# Source script-tools.bash
+if [[ -f "${script_dir}/../bash/script-tools.bash" ]]; then
+  # shellcheck source=/home/brennan/.dotfiles/bash/script-tools.bash
+  source "${script_dir}/../bash/script-tools.bash"
+fi
+
+function show_version() {
+  print_status "${script_name}"
+  print_status "Author: ${script_author} --- License: ${script_license}"
+  print_status "Version: ${script_version} --- Date: ${script_date}"
+  print_blank_line
+
+  if [[ "${1:-}" == "exit" || "${1:-}" == "yes" ]]; then
+    exit 0
+  fi
+}
+
+### END Script template bootstrap
 
 KEY_FILE=""
 REPO_URL=""
@@ -63,174 +94,188 @@ SOURCES_FILE_FULLPATH=""
 
 FILES_PRESENT=0
 
-#### START: Process arguments
+function cleanup_script_vars() {
+  unset KEY_FILE
+  unset REPO_URL
+  unset KEY_PATH
+  unset APP_NAME
+  unset OUTPUT_KEY_FILE
+  unset SOURCES_FILENAME
+  unset SOURCES_INCLUDE_SRC
+  unset SOURCES_DISTRIBUTION
+  unset SOURCES_COMPONENTS
+  unset GPG_BIN
+  unset STATE
+  unset HELP_REQUESTED
+  unset SUPPORTED_STATES
+  unset DEFAULT_GPG_BIN
+  unset GPG_BIN_EXE
+  unset KEY_FILE_FULLPATH
+  unset SOURCES_FILE_FULLPATH
+  unset FILES_PRESENT
+}
 
-ARGS=$(getopt -n "${SCRIPT_APP}" --options "vhis:" --longoptions "version,help,include-sources,state:,app-name:,key-path:,gpg-bin-path:,output-key-name:,sources-name:,sources-distribution:,sources-components:" -- "$@")
+function process_arguments() {
+  local args
+  args=$(getopt -n "${script_name}" --options "vhis:" --longoptions "version,help,include-sources,state:,app-name:,key-path:,gpg-bin-path:,output-key-name:,sources-name:,sources-distribution:,sources-components:" -- "$@")
 
-# Show help if no parameters were passed
-# shellcheck disable=SC2181
-if [[ $? -ne 0 ]]; then
-  show_help
-fi
-
-eval set -- "${ARGS}"
-unset ARGS
-
-while true; do
-  case "$1" in
-  '-h' | '--help')
-    HELP_REQUESTED=1
+  # Show help if no parameters were passed
+  #
+  # shellcheck disable=SC2181
+  if [[ $? -ne 0 ]]; then
     show_help
-    ;;
-  '-v' | '--version')
-    show_version
-    ;;
-  '-i' | '--include-sources')
-    SOURCES_INCLUDE_SRC=1
-    shift
-    continue
-    ;;
-  '-s' | '--state')
-    STATE=$(echo "$2" | tr "[:upper:]" "[:lower:]")
-    shift 2
-    continue
-    ;;
-  '--app-name')
-    APP_NAME="$2"
-    shift 2
-    continue
-    ;;
-  '--key-path')
-    KEY_PATH="$2"
-    shift 2
-    continue
-    ;;
-  '--gpg-bin-path')
-    GPG_BIN="$2"
-    shift 2
-    continue
-    ;;
-  '--output-key-name')
-    OUTPUT_KEY_FILE="$2"
-    shift 2
-    continue
-    ;;
-  '--sources-name')
-    SOURCES_FILENAME="$2"
-    shift 2
-    continue
-    ;;
-  '--sources-distribution')
-    SOURCES_DISTRIBUTION="$2"
-    shift 2
-    continue
-    ;;
-  '--sources-components')
-    SOURCES_COMPONENTS="$2"
-    shift 2
-    continue
-    ;;
-  '--')
-    shift
-    break
-    ;;
-  *)
-    error_msg "Unknown option: $1"
-    ;;
-  esac
-done
+  fi
 
-ARG_COUNT=1
-for arg; do
-  case "${ARG_COUNT}" in
-  1)
-    KEY_FILE=${arg}
-    ;;
-  2)
-    REPO_URL=$(echo "${arg}" | tr "[:upper:]" "[:lower:]")
-    ;;
-  3)
-    break
-    ;;
-  *)
-    error_msg "Internal Argument Error"
-    ;;
-  esac
-  ARG_COUNT=$((ARG_COUNT + 1))
-done
+  eval set -- "${args}"
 
-#### END: Process arguments
+  # Process flags and options
+  #
+  while true; do
+    case "$1" in
+    '-h' | '--help')
+      HELP_REQUESTED=1
+      show_help
+      ;;
+    '-v' | '--version')
+      show_version "exit"
+      ;;
+    '-i' | '--include-sources')
+      SOURCES_INCLUDE_SRC=1
+      shift
+      continue
+      ;;
+    '-s' | '--state')
+      STATE=$(echo "$2" | tr "[:upper:]" "[:lower:]")
+      shift 2
+      continue
+      ;;
+    '--app-name')
+      APP_NAME="$2"
+      shift 2
+      continue
+      ;;
+    '--key-path')
+      KEY_PATH="$2"
+      shift 2
+      continue
+      ;;
+    '--gpg-bin-path')
+      GPG_BIN="$2"
+      shift 2
+      continue
+      ;;
+    '--output-key-name')
+      OUTPUT_KEY_FILE="$2"
+      shift 2
+      continue
+      ;;
+    '--sources-name')
+      SOURCES_FILENAME="$2"
+      shift 2
+      continue
+      ;;
+    '--sources-distribution')
+      SOURCES_DISTRIBUTION="$2"
+      shift 2
+      continue
+      ;;
+    '--sources-components')
+      SOURCES_COMPONENTS="$2"
+      shift 2
+      continue
+      ;;
+    '--')
+      shift
+      break
+      ;;
+    *)
+      throw_error_msg "Unknown option: $1"
+      ;;
+    esac
+  done
+
+  # Process positional arguments
+  #
+  local arg_count=1
+  for arg; do
+    case "${arg_count}" in
+    1)
+      KEY_FILE=${arg}
+      ;;
+    2)
+      REPO_URL=$(echo "${arg}" | tr "[:upper:]" "[:lower:]")
+      ;;
+    3)
+      break
+      ;;
+    *)
+      throw_error_msg "Internal Argument Error"
+      ;;
+    esac
+    arg_count=$((arg_count + 1))
+  done
+}
 
 #### START: Help
-
-function show_version() {
-  print_status "${SCRIPT_APP}"
-  print_status "Author: ${SCRIPT_AUTHOR}    License: ${SCRIPT_LICENSE}"
-  print_stauts "Version: ${SCRIPT_VERSION}    Date: ${SCRIPT_DATE}"
-  exit 0
-}
 
 function show_help() {
   if [[ "${HELP_REQUESTED}" == "0" ]]; then
     print_warning "Incorrect parameters or options provided."
-    blank_line
+    print_blank_line
   fi
 
-  print_status "${SCRIPT_APP}"
-  print_status "Author: ${SCRIPT_AUTHOR}    License: ${SCRIPT_LICENSE}"
-  print_stauts "Version: ${SCRIPT_VERSION}    Date: ${SCRIPT_DATE}"
-  blank_line
+  show_version ""
 
-  print_status "  ${SCRIPT_APP} [options] <key file or url> <repo url>"
-  blank_line
+  print_status "  ${script_name} [options] <key file or url> <repo url>"
+  print_blank_line
   print_status "This program sets up a Debian (or derivative) repository using the new method of"
   print_status "downloading a GPG key and setting up the sources.list.d file to use the 'signed-by'"
   print_status "setting to indicate the repo is signed by that key.  This replaces the older"
   print_status "method of using 'apt-key' to add the keys globally.  This method is more secure."
-  blank_line
+  print_blank_line
   print_status "Prerequisites:  lsb_release, gnupg, and wget must all be installed or accessible."
-  blank_line
+  print_blank_line
   print_status "Options:"
-  blank_line
+  print_blank_line
   print_status "  -h or --help"
   print_status "      Show this help screen."
-  blank_line
+  print_blank_line
   print_status "  -v or --version"
-  print_stauts "     Show the version number."
-  blank_line
+  print_status "     Show the version number."
+  print_blank_line
   print_status "  --gpg-bin-path <path>"
   print_status "      Location where the gpg executable can be found.  By default, it looks using"
   print_status "      the system path and if not found in the path then attempts to use "
   print_status "      /usr/bin/gpg.  If your GPG setup is somehow different and not in your path,"
   print_status "      you will need to provide a valid path here."
-  blank_line
+  print_blank_line
   print_status "  --app-name <string>"
   print_status "      The application name the repo is intended for.  Will default to the filename"
-  print_stauts "      of the key file without extension."
-  blank_line
+  print_status "      of the key file without extension."
+  print_blank_line
   print_status "  --key-path <path>"
   print_status "      Location where the key file will be placed. Default is "
   print_status "      /usr/local/share/keyrings."
-  blank_line
+  print_blank_line
   print_status "  --output-key-name <filename>"
   print_status "      Key filename to use, otherwise will default to the downloaded file name."
   print_status "      This should end in '.gpg', if it doesn't .gpg will be added automatically."
-  blank_line
+  print_blank_line
   print_status "  --sources-name <filename>"
   print_status "      Name of the APT sources list file, otherwise will default to the downloaded"
   print_status "      file name of the key."
-  blank_line
+  print_blank_line
   print_status "  -i or --include-sources"
   print_status "      Toggle to include deb-src in the sources file. Default is to not include it."
-  blank_line
+  print_blank_line
   print_status "  --sources-distribution <string>"
   print_status "      Override for the distribution name to use, will default to the current"
   print_status "      systems distribution version codename."
-  blank_line
+  print_blank_line
   print_status "  --sources-components <string>"
   print_status "      The components of packages to include, defaults to just 'main'.  This is a"
   print_status "      space separated list so you will likely need to wrap this in quotes."
-  blank_line
+  print_blank_line
   print_status "  --state <present/absent/latest>"
   print_status "      To support idempotent execution.  The default is 'present' and will do nothing"
   print_status "      if the key and sources file already exist.  'Absent' will remove them or do"
@@ -249,7 +294,7 @@ function show_help() {
 function verify_state() {
   get_exit_code contains_element "${STATE}" "${SUPPORTED_STATES[@]}"
   if [[ ! "${EXIT_CODE}" == "0" ]]; then
-    error_msg "Invalid 'State' argument value. Use one of 'present', 'absent', or 'latest'."
+    throw_error_msg "Invalid 'State' argument value. Use one of 'present', 'absent', or 'latest'."
   fi
 }
 
@@ -262,7 +307,7 @@ function set_gpg_exe() {
     else
       local msg="Unable to locate GPG executable.  Make sure GnuGPG is installed and either"
       msg="${msg} on your path or you pass in the location with --gpg-bin."
-      error_msg "${msg}"
+      throw_error_msg "${msg}"
     fi
   else
     GPG_BIN_EXE="${GPG_BIN}"
@@ -280,11 +325,11 @@ verify_parameters() {
   ensure_key_path
 
   if [[ "${KEY_FILE:-}" == "" ]]; then
-    error_msg "A key file must be provided."
+    throw_error_msg "A key file must be provided."
   fi
 
   if [[ "${REPO_URL:-}" == "" ]]; then
-    error_msg "A repo URL must be provided."
+    throw_error_msg "A repo URL must be provided."
   fi
 }
 
@@ -374,7 +419,7 @@ setup_key() {
   elif [[ "${file_type}" == "PGP/GPG key public ring (v4)" ]]; then
     cp "${tmp_file}" "${KEY_FILE_FULLPATH}"
   else
-    error_msg "Invalid key file type."
+    throw_error_msg "Invalid key file type."
   fi
 
   if [[ -f "${tmp_file}" ]]; then
@@ -413,7 +458,7 @@ download_and_setup() {
   setup_sources_file
 }
 
-main() {
+function main() {
   check_root_with_error ""
   verify_parameters
 
@@ -434,11 +479,21 @@ main() {
     download_and_setup
     ;;
   *)
-    error_msg "Invalid Argument Error: Invalid State"
+    throw_error_msg "Invalid Argument Error: Invalid State"
     ;;
   esac
-
-  exit 0
 }
 
-main "$@"
+### START Script main handler
+
+function main_handler() {
+  local args=("$@")
+  process_arguments "$@"
+
+  main "${args[@]}"
+  cleanup_vars
+}
+
+main_handler "$@"
+
+### END Script main handler

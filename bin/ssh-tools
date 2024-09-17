@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Bash strict mode
+### START Bash strict mode
 # shellcheck disable=SC2154
 ([[ -n ${ZSH_EVAL_CONTEXT} && ${ZSH_EVAL_CONTEXT} =~ :file$ ]] ||
   [[ -n ${BASH_VERSION} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
@@ -15,15 +15,50 @@ if ! ${SOURCED}; then
   shopt -s extdebug
   IFS=$(printf '\n\t')
 fi
-# END Bash scrict mode
+### END Bash strict mode
 
-# SCRIPT_NAME=$(basename "$0")
-# SCRIPT_AUTHOR="Brennan Fee"
-# SCRIPT_LICENSE="MIT License"
-# SCRIPT_VERSION="0.1"
-# SCRIPT_DATE="2024-09-16"
+### START Script template bootstrap
 
-source "$(dirname "$0")/../bash/script-tools.bash"
+script_name=$(basename "${BASH_SOURCE[0]}")
+script_dir="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"
+script_author="Brennan Fee"
+script_license="MIT License"
+script_version="0.2"
+script_date="2024-09-16"
+
+function cleanup_vars() {
+  unset script_name
+  unset script_dir
+  unset script_author
+  unset script_license
+  unset script_version
+  unset script_date
+
+  cleanup_script_vars
+}
+
+# Source script-tools.bash
+if [[ -f "${script_dir}/../bash/script-tools.bash" ]]; then
+  # shellcheck source=/home/brennan/.dotfiles/bash/script-tools.bash
+  source "${script_dir}/../bash/script-tools.bash"
+fi
+
+function show_version() {
+  print_status "${script_name}"
+  print_status "Author: ${script_author} --- License: ${script_license}"
+  print_status "Version: ${script_version} --- Date: ${script_date}"
+  print_blank_line
+
+  if [[ "${1:-}" == "exit" || "${1:-}" == "yes" ]]; then
+    exit 0
+  fi
+}
+
+### END Script template bootstrap
+
+function cleanup_script_vars() {
+  noop
+}
 
 function ssh-list() {
   awk '$1 ~ /Host$/ { print $2 }' ~/.ssh/config
@@ -35,18 +70,22 @@ function main() {
   shift
 
   case "${sub_command}" in
-    list)
-      ssh-list
-      ;;
-    *)
-      throw_error_msg "Unknown ${SCRIPT_NAME} command: '${1:-}'"
-      ;;
+  list)
+    ssh-list
+    ;;
+  *)
+    throw_error_msg "Unknown ${script_name} command: '${sub_command}'"
+    ;;
   esac
 }
 
-main "$@"
-# unset SCRIPT_NAME
-# unset SCRIPT_AUTHOR
-# unset SCRIPT_LICENSE
-# unset SCRIPT_VERSION
-# unset SCRIPT_DATE
+### START Script main handler
+
+function main_handler() {
+  main "$@"
+  cleanup_vars
+}
+
+main_handler "$@"
+
+### END Script main handler

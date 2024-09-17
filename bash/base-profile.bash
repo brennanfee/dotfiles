@@ -74,7 +74,6 @@ export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-${HOME}/.config}"
 export XDG_DATA_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}"
 export XDG_CACHE_HOME="${XDG_CACHE_HOME:-${HOME}/.cache}"
 export XDG_STATE_HOME="${XDG_STATE_HOME:-${HOME}/.local/state}"
-export XDG_BIN_HOME="${XDG_BIN_HOME:-${HOME}/.local/bin}"
 
 if [[ -f "${XDG_CONFIG_HOME}/user-dirs.dirs" ]]; then
   while read -r line; do
@@ -99,8 +98,8 @@ function xdg-base-dir() {
       echo "${XDG_CONFIG_DIRS:-"/etc/xdg"}"
       ;;
 
-    BIN | BINHOME)
-      echo "${XDG_BIN_HOME:-${HOME}/.local/bin}"
+    BIN | BINDIR)
+      echo "${XDG_BIN_DIR:-${HOME}/.local/bin}"
       ;;
 
     DATA | DATAHOME)

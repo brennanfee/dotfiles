@@ -1,25 +1,98 @@
 #!/usr/bin/env bash
 
-echo -e "\033[0mNormal\033[0m  \033[0;33mNormal Yellow\033[0m"
-echo -e "\033[1mBold\033[0m    \033[1;33mBold Yellow\033[0m"
-echo -e "\033[2mDark\033[0m    \033[2;33mDark Yellow\033[0m"
-echo -e "\033[0;97mHigh Intensity\033[0m    \033[0;93mHigh Intensity Yellow\033[0m"
-echo -e "\033[1;97mHigh Intensity Bold\033[0m   \033[1;93mHigh Intensity Bold Yellow\033[0m"
-echo -e "\033[2;97mHigh Intensity Dark\033[0m    \033[2;93mHigh Intensity Dark Yellow\033[0m"
-echo -e "\033[3mItalic\033[0m"
-echo -e "\033[3;1mBold Italic\033[0m    \033[1;3mBold Italic Alt\033[0m"
-echo -e "\033[3;2mDark Italic\033[0m"
-echo -e "\033[3;97mHigh Intensity Italic\033[0m    \033[3;93mHigh Intensity Yellow Italic\033[0m"
-echo -e "\033[9mStrikethrough\033[0m"
-echo -e "\033[8mConceal\033[0m"
-echo -e "\033[7mReverse\033[0m"
-echo ""
-echo -e "\033[53mOverline\033[0m   \033[4mUnderline\033[0m"
-echo -e "\033[4:2mDouble Underline\033[0m"
-echo -e "\033[4:4mDotted Underline\033[0m   \033[4:5mDashed Underline\033[0m"
-echo -e "\033[4:3mUndercurl\033[0m"
-echo -e "\033[4:3m\033[58;5;6mUndercurl Cyan\033[0m"
-echo ""
-echo "Ligatures: == === !== >= <= =>"
-echo "Font icons:  契            勒  鈴  "
-echo "Color emojis:  😄  💜  🎵  💾  💩  ⛔"
+### START Bash strict mode
+# shellcheck disable=SC2154
+([[ -n ${ZSH_EVAL_CONTEXT} && ${ZSH_EVAL_CONTEXT} =~ :file$ ]] ||
+  [[ -n ${BASH_VERSION} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
+if ! ${SOURCED}; then
+  set -o errexit  # same as set -e
+  set -o nounset  # same as set -u
+  set -o errtrace # same as set -E
+  set -o pipefail
+  set -o posix
+  #set -o xtrace # same as set -x, turn on for debugging
+
+  shopt -s extdebug
+  IFS=$(printf '\n\t')
+fi
+### END Bash strict mode
+
+### START Script template bootstrap
+
+script_name=$(basename "${BASH_SOURCE[0]}")
+script_dir="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"
+script_author="Brennan Fee"
+script_license="MIT License"
+script_version="0.2"
+script_date="2024-09-16"
+
+function cleanup_vars() {
+  unset script_name
+  unset script_dir
+  unset script_author
+  unset script_license
+  unset script_version
+  unset script_date
+
+  cleanup_script_vars
+}
+
+# Source script-tools.bash
+if [[ -f "${script_dir}/../bash/script-tools.bash" ]]; then
+  # shellcheck source=/home/brennan/.dotfiles/bash/script-tools.bash
+  source "${script_dir}/../bash/script-tools.bash"
+fi
+
+function show_version() {
+  print_status "${script_name}"
+  print_status "Author: ${script_author} --- License: ${script_license}"
+  print_status "Version: ${script_version} --- Date: ${script_date}"
+  print_blank_line
+
+  if [[ "${1:-}" == "exit" || "${1:-}" == "yes" ]]; then
+    exit 0
+  fi
+}
+
+### END Script template bootstrap
+
+function cleanup_script_vars() {
+  noop
+}
+
+function main() {
+  echo -e "\033[0mNormal\033[0m  \033[0;33mNormal Yellow\033[0m"
+  echo -e "\033[1mBold\033[0m    \033[1;33mBold Yellow\033[0m"
+  echo -e "\033[2mDark\033[0m    \033[2;33mDark Yellow\033[0m"
+  echo -e "\033[0;97mHigh Intensity\033[0m    \033[0;93mHigh Intensity Yellow\033[0m"
+  echo -e "\033[1;97mHigh Intensity Bold\033[0m   \033[1;93mHigh Intensity Bold Yellow\033[0m"
+  echo -e "\033[2;97mHigh Intensity Dark\033[0m    \033[2;93mHigh Intensity Dark Yellow\033[0m"
+  echo -e "\033[3mItalic\033[0m"
+  echo -e "\033[3;1mBold Italic\033[0m    \033[1;3mBold Italic Alt\033[0m"
+  echo -e "\033[3;2mDark Italic\033[0m"
+  echo -e "\033[3;97mHigh Intensity Italic\033[0m    \033[3;93mHigh Intensity Yellow Italic\033[0m"
+  echo -e "\033[9mStrikethrough\033[0m"
+  echo -e "\033[8mConceal\033[0m"
+  echo -e "\033[7mReverse\033[0m"
+  echo ""
+  echo -e "\033[53mOverline\033[0m   \033[4mUnderline\033[0m"
+  echo -e "\033[4:2mDouble Underline\033[0m"
+  echo -e "\033[4:4mDotted Underline\033[0m   \033[4:5mDashed Underline\033[0m"
+  echo -e "\033[4:3mUndercurl\033[0m"
+  echo -e "\033[4:3m\033[58;5;6mUndercurl Cyan\033[0m"
+  echo ""
+  echo "Ligatures: == === !== >= <= =>"
+  echo "Font icons:  契            勒  鈴  "
+  echo "Color emojis:  😄  💜  🎵  💾  💩  ⛔"
+}
+
+### START Script main handler
+
+function main_handler() {
+  main "$@"
+  cleanup_vars
+}
+
+main_handler "$@"
+
+### END Script main handler

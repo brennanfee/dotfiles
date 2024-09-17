@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Bash strict mode
+### START Bash strict mode
 # shellcheck disable=SC2154
 ([[ -n ${ZSH_EVAL_CONTEXT} && ${ZSH_EVAL_CONTEXT} =~ :file$ ]] ||
   [[ -n ${BASH_VERSION} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
@@ -15,53 +15,70 @@ if ! ${SOURCED}; then
   shopt -s extdebug
   IFS=$(printf '\n\t')
 fi
-# END Bash strict mode
+### END Bash strict mode
 
-function _write_msg() {
-  local bold
-  local reset
-  local green
-  local t_cols
-  t_cols=$(tput cols)
-  t_cols=$((t_cols - 1))
-  reset="$(tput sgr0)"
-  bold="$(tput bold)"
-  green="$(tput setaf 2)"
-  echo -e "${bold}${green}$1${reset}" | fold -sw "${t_cols}"
+### START Script template bootstrap
+
+script_name=$(basename "${BASH_SOURCE[0]}")
+script_dir="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"
+script_author="Brennan Fee"
+script_license="MIT License"
+script_version="0.2"
+script_date="2024-09-16"
+
+function cleanup_vars() {
+  unset script_name
+  unset script_dir
+  unset script_author
+  unset script_license
+  unset script_version
+  unset script_date
+
+  cleanup_script_vars
 }
 
-function _write_error() {
-  local bold
-  local reset
-  local red
-  local t_cols
-  t_cols=$(tput cols)
-  t_cols=$((t_cols - 1))
-  reset="$(tput sgr0)"
-  bold="$(tput bold)"
-  red="$(tput setaf 1)"
-  echo -e "${bold}${red}$1${reset}" | fold -sw "${t_cols}"
+# Source script-tools.bash
+if [[ -f "${script_dir}/../bash/script-tools.bash" ]]; then
+  # shellcheck source=/home/brennan/.dotfiles/bash/script-tools.bash
+  source "${script_dir}/../bash/script-tools.bash"
+fi
+
+function show_version() {
+  print_status "${script_name}"
+  print_status "Author: ${script_author} --- License: ${script_license}"
+  print_status "Version: ${script_version} --- Date: ${script_date}"
+  print_blank_line
+
+  if [[ "${1:-}" == "exit" || "${1:-}" == "yes" ]]; then
+    exit 0
+  fi
 }
 
-function command_exists() {
-  command -v "$1" &>/dev/null && return 0 || return 1
+### END Script template bootstrap
+
+function cleanup_script_vars() {
+  noop
 }
 
 function showHelp() {
-  _write_msg "Do Updates (doup) Help"
-  _write_msg ""
-  _write_msg "By default, doup updates all the things."
-  _write_msg ""
-  _write_msg "Optionally you can request a single or a space separated list"
-  _write_msg "of items to update.  The options are:"
-  _write_msg ""
-  _write_msg "apt, flatpak, snaps, pipx, asdf, appman, tmux, vim, nvim"
-  _write_msg ""
+  show_version ""
+
+  print_status "Do Updates (doup) Help"
+  print_blank_line
+  print_status "By default, doup updates all the things."
+  print_blank_line
+  print_status "Optionally you can request a single or a space separated list"
+  print_status "of items to update.  The options are:"
+  print_blank_line
+  print_status "apt, flatpak, snaps, pipx, asdf, appman, tmux, vim, nvim"
+  print_blank_line
+
+  exit 0
 }
 
 function updateApt() {
   if command_exists apt-get; then
-    _write_msg "Getting updates with apt"
+    print_info "Getting updates with apt"
     DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q update
     DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q full-upgrade
     DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q autoremove
@@ -70,7 +87,7 @@ function updateApt() {
 
 function updateFlatpak() {
   if command_exists flatpak; then
-    _write_msg "Getting updates with flatpak"
+    print_info "Getting updates with flatpak"
     flatpak upgrade -y --noninteractive --system
     flatpak upgrade -y --noninteractive --user
   fi
@@ -78,25 +95,25 @@ function updateFlatpak() {
 
 function updateSnaps() {
   if command_exists snap; then
-    _write_msg "Getting updates with snap"
+    print_info "Getting updates with snap"
     sudo snap refresh
   fi
 }
 
 function updatePipx() {
   if command_exists pipx; then
-    _write_msg "Getting updates with pipx"
+    print_info "Getting updates with pipx"
     pipx upgrade-all --include-injected
   fi
 }
 
 function updateAsdf() {
   if command_exists asdf; then
-    _write_msg "Updating asdf"
+    print_info "Updating asdf"
     asdf update
-    _write_msg "Updating plugins for asdf"
+    print_info "Updating plugins for asdf"
     asdf plugin update --all
-    _write_msg "Updating asdf tools"
+    print_info "Updating asdf tools"
     asdf install
   fi
 }
@@ -121,23 +138,23 @@ function updateAm() {
 
 function updateTmux() {
   if command_exists tmux; then
-    _write_msg "Updating tmux plugins"
-    TMUX_PLUGIN_MANAGER_PATH="${XDG_CONFIG_HOME:-$HOME/.config}/tmux/plugins"
+    print_info "Updating tmux plugins"
+    local tmux_plugin_manager_path="${XDG_CONFIG_HOME:-$HOME/.config}/tmux/plugins"
 
     # Download the tmux plugin manager if it isn't already there
-    if [[ ! -d "${TMUX_PLUGIN_MANAGER_PATH}/tpm" ]]; then
-      git clone https://github.com/tmux-plugins/tpm "${TMUX_PLUGIN_MANAGER_PATH}/tpm"
+    if [[ ! -d "${tmux_plugin_manager_path}/tpm" ]]; then
+      git clone https://github.com/tmux-plugins/tpm "${tmux_plugin_manager_path}/tpm"
     fi
 
-    if [[ -f "${TMUX_PLUGIN_MANAGER_PATH}/tpm/bin/install_plugins" ]]; then
-      "${TMUX_PLUGIN_MANAGER_PATH}/tpm/bin/install_plugins"
+    if [[ -f "${tmux_plugin_manager_path}/tpm/bin/install_plugins" ]]; then
+      "${tmux_plugin_manager_path}/tpm/bin/install_plugins"
     fi
   fi
 }
 
 function updateVim() {
   if command_exists vim; then
-    _write_msg "Updating vim plugins"
+    print_info "Updating vim plugins"
     mkdir -p "${XDG_CACHE_HOME:-$HOME/.cache}/vim"
     mkdir -p "${XDG_CACHE_HOME:-$HOME/.cache}/zsh"
 
@@ -160,11 +177,11 @@ function updateVim() {
 
 function updateNvim() {
   if command_exists nvim; then
-    _write_msg "Updating nvim plugins"
+    print_info "Updating nvim plugins"
     nvim --headless "+Lazy! sync" +qa
   fi
   if command_exists nvim-nightly; then
-    _write_msg "Updating nvim plugins"
+    print_info "Updating nvim plugins"
     nvim-nightly --headless "+Lazy! sync" +qa
   fi
 }
@@ -198,7 +215,9 @@ function main() {
     case "$1" in
     'help' | '-h' | '--help')
       showHelp
-      break
+      ;;
+    'version' | '-v' | '-V' | '--version')
+      show_version "exit"
       ;;
     'all')
       updateAll
@@ -242,8 +261,7 @@ function main() {
       break
       ;;
     *)
-      _write_error "Unknown option: $1"
-      break
+      throw_error_msg "Unknown option: $1"
       ;;
     esac
     shift
@@ -256,4 +274,13 @@ function main() {
   )
 }
 
-main "$@"
+### START Script main handler
+
+function main_handler() {
+  main "$@"
+  cleanup_vars
+}
+
+main_handler "$@"
+
+### END Script main handler

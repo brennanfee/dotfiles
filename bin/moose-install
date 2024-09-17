@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 
-# Bash strict mode
-([[ -n ${ZSH_EVAL_CONTEXT:-} && ${ZSH_EVAL_CONTEXT:-} =~ :file$ ]] ||
-  [[ -n ${BASH_VERSION:-} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
+### START Bash strict mode
+# shellcheck disable=SC2154
+([[ -n ${ZSH_EVAL_CONTEXT} && ${ZSH_EVAL_CONTEXT} =~ :file$ ]] ||
+  [[ -n ${BASH_VERSION} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
 if ! ${SOURCED}; then
   set -o errexit  # same as set -e
   set -o nounset  # same as set -u
@@ -11,19 +12,49 @@ if ! ${SOURCED}; then
   set -o posix
   #set -o xtrace # same as set -x, turn on for debugging
 
-  shopt -s inherit_errexit
   shopt -s extdebug
   IFS=$(printf '\n\t')
 fi
-# END Bash strict mode
+### END Bash strict mode
 
-SCRIPT_APP=$(basename "$0")
-SCRIPT_AUTHOR="Brennan Fee"
-SCRIPT_LICENSE="MIT License"
-SCRIPT_VERSION="0.3"
-SCRIPT_DATE="2023-06-23"
+### START Script template bootstrap
 
-source "$(dirname "$0")/../bash/script-tools.bash"
+script_name=$(basename "${BASH_SOURCE[0]}")
+script_dir="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"
+script_author="Brennan Fee"
+script_license="MIT License"
+script_version="0.4"
+script_date="2024-09-16"
+
+function cleanup_vars() {
+  unset script_name
+  unset script_dir
+  unset script_author
+  unset script_license
+  unset script_version
+  unset script_date
+
+  cleanup_script_vars
+}
+
+# Source script-tools.bash
+if [[ -f "${script_dir}/../bash/script-tools.bash" ]]; then
+  # shellcheck source=/home/brennan/.dotfiles/bash/script-tools.bash
+  source "${script_dir}/../bash/script-tools.bash"
+fi
+
+function show_version() {
+  print_status "${script_name}"
+  print_status "Author: ${script_author} --- License: ${script_license}"
+  print_status "Version: ${script_version} --- Date: ${script_date}"
+  print_blank_line
+
+  if [[ "${1:-}" == "exit" || "${1:-}" == "yes" ]]; then
+    exit 0
+  fi
+}
+
+### END Script template bootstrap
 
 ## Defaults
 HELP="false"
@@ -31,98 +62,91 @@ ROLE_NAME=""
 
 SUPPORTED_ROLES=('client' 'master' 'metalogger' 'chunkserver')
 
-#### START: Process arguments
+function cleanup_script_vars() {
+  unset HELP
+  unset ROLE_NAME
+  unset SUPPORTED_ROLES
+}
 
-ARGS=$(getopt --name "${SCRIPT_APP}" --options hv --longoptions "help,version" -- "$@")
+function process_arguments() {
+  local args
+  args=$(getopt --name "${script_name}" --options hv --longoptions "help,version" -- "$@")
 
-# shellcheck disable=SC2181
-if [[ $? -ne 0 ]]; then
-  show_help
-fi
-
-eval set -- "${ARGS}"
-unset ARGS
-
-while true; do
-  case "$1" in
-  '-h' | '--help')
-    HELP="true"
+  # Show help if no parameters were passed
+  #
+  # shellcheck disable=SC2181
+  if [[ $? -ne 0 ]]; then
     show_help
-    ;;
-  '-v' | '--version')
-    show_version
-    ;;
-  '--')
-    shift
-    break
-    ;;
-  *)
-    error_msg "Unknown option: $1"
-    ;;
-  esac
-done
+  fi
 
-## Now process positional arguments
+  eval set -- "${args}"
 
-ARG_COUNT=1
-for arg; do
-  case "${ARG_COUNT}" in
-  1)
-    # Example, normalize to lower case
-    ROLE_NAME=$(echo "${arg}" | tr "[:upper:]" "[:lower:]")
-    ;;
-  2)
-    break
-    ;;
-  *)
-    error_msg "Internal Argument Error"
-    ;;
-  esac
-  ARG_COUNT=$((ARG_COUNT + 1))
-done
-unset ARG_COUNT
+  # Process flags and options
+  #
+  while true; do
+    case "$1" in
+    '-h' | '--help')
+      HELP="true"
+      show_help
+      ;;
+    '-v' | '--version')
+      show_version "exit"
+      ;;
+    '--')
+      shift
+      break
+      ;;
+    *)
+      throw_error_msg "Unknown option: $1"
+      ;;
+    esac
+  done
 
-#### END: Process arguments
-
-#### START: Help
-
-function show_version() {
-  print_status "${SCRIPT_APP} - MooseFS Installer"
-  print_status "Author: ${SCRIPT_AUTHOR}    License: ${SCRIPT_LICENSE}"
-  print_stauts "Version: ${SCRIPT_VERSION}    Date: ${SCRIPT_DATE}"
-  blank_line
-
-  exit 0
+  # Process positional arguments
+  #
+  local arg_count=1
+  for arg; do
+    case "${arg_count}" in
+    1)
+      # Normalize to lower case
+      ROLE_NAME=$(echo "${arg}" | tr "[:upper:]" "[:lower:]")
+      ;;
+    2)
+      break
+      ;;
+    *)
+      throw_error_msg "Internal Argument Error"
+      ;;
+    esac
+    arg_count=$((arg_count + 1))
+  done
 }
 
 function show_help() {
   if [[ "${HELP}" == "false" ]]; then
     print_warning "Incorrect parameters or options provided."
-    blank_line
+    print_blank_line
   fi
 
-  print_status "${SCRIPT_APP} - MooseFS Installer"
-  print_status "Author: ${SCRIPT_AUTHOR}    License: ${SCRIPT_LICENSE}"
-  print_stauts "Version: ${SCRIPT_VERSION}    Date: ${SCRIPT_DATE}"
-  blank_line
+  show_version ""
 
   print_info "This will install the binaries needed for MooseFS to perform one of three roles:"
   print_info "A client, the master server, or a metalogger server.  Both the master and metalogger"
   print_fino "roles also install the client binaries."
-  blank_line
-  print_status "  ${SCRIPT_APP} [options] <role name>"
-  blank_line
+  print_blank_line
+  print_status "  ${SCRIPT_NAME} [options] <role name>"
+  print_blank_line
   print_status "Options:"
-  blank_line
+  print_blank_line
   print_status "  -h or --help"
   print_status "      Show this help screen."
-  blank_line
+  print_blank_line
   print_status "  -v or --version"
-  print_stauts "     Show the version number."
-  blank_line
+  print_status "     Show the version number."
+  print_blank_line
   print_status "  <role name>"
   print_status "     The role to install, options are: client, master, metalogger, chunkserver."
-  blank_line
+  print_blank_line
 
   if [[ "${HELP}" == "false" ]]; then
     exit 1
@@ -136,7 +160,7 @@ function show_help() {
 function verify_role() {
   get_exit_code contains_element "${ROLE_NAME}" "${SUPPORTED_ROLES[@]}"
   if [[ ! ${EXIT_CODE} == "0" ]]; then
-    error_msg "Invalid role selected '${ROLE_NAME}', please input a valid role: Client, Master, Mettalogger, or Chunkserver."
+    throw_error_msg "Invalid role selected '${ROLE_NAME}', please input a valid role: Client, Master, Mettalogger, or Chunkserver."
   fi
 }
 
@@ -210,9 +234,21 @@ function main() {
       moosefs-chunkserver moosefs-client
     ;;
   *)
-    error_msg "Invalid role detected '${ROLE_NAME}', something must have gone wrong."
+    throw_error_msg "Invalid role detected '${ROLE_NAME}', something must have gone wrong."
     ;;
   esac
 }
 
-main "$@"
+### START Script main handler
+
+function main_handler() {
+  local args=("$@")
+  process_arguments "$@"
+
+  main "${args[@]}"
+  cleanup_vars
+}
+
+main_handler "$@"
+
+### END Script main handler

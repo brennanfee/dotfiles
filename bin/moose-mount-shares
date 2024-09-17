@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 
-# Bash strict mode
-([[ -n ${ZSH_EVAL_CONTEXT:-} && ${ZSH_EVAL_CONTEXT:-} =~ :file$ ]] ||
-  [[ -n ${BASH_VERSION:-} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
+### START Bash strict mode
+# shellcheck disable=SC2154
+([[ -n ${ZSH_EVAL_CONTEXT} && ${ZSH_EVAL_CONTEXT} =~ :file$ ]] ||
+  [[ -n ${BASH_VERSION} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
 if ! ${SOURCED}; then
   set -o errexit  # same as set -e
   set -o nounset  # same as set -u
@@ -11,87 +12,135 @@ if ! ${SOURCED}; then
   set -o posix
   #set -o xtrace # same as set -x, turn on for debugging
 
-  shopt -s inherit_errexit
   shopt -s extdebug
   IFS=$(printf '\n\t')
 fi
-# END Bash strict mode
+### END Bash strict mode
 
-SCRIPT_APP=$(basename "$0")
-SCRIPT_AUTHOR="Brennan Fee"
-SCRIPT_LICENSE="MIT License"
-SCRIPT_VERSION="0.2"
-SCRIPT_DATE="2023-06-23"
+### START Script template bootstrap
 
-source "$(dirname "$0")/../bash/script-tools.bash"
+script_name=$(basename "${BASH_SOURCE[0]}")
+script_dir="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"
+script_author="Brennan Fee"
+script_license="MIT License"
+script_version="0.3"
+script_date="2024-09-16"
+
+function cleanup_vars() {
+  unset script_name
+  unset script_dir
+  unset script_author
+  unset script_license
+  unset script_version
+  unset script_date
+
+  cleanup_script_vars
+}
+
+# Source script-tools.bash
+if [[ -f "${script_dir}/../bash/script-tools.bash" ]]; then
+  # shellcheck source=/home/brennan/.dotfiles/bash/script-tools.bash
+  source "${script_dir}/../bash/script-tools.bash"
+fi
+
+function show_version() {
+  print_status "${script_name}"
+  print_status "Author: ${script_author} --- License: ${script_license}"
+  print_status "Version: ${script_version} --- Date: ${script_date}"
+  print_blank_line
+
+  if [[ "${1:-}" == "exit" || "${1:-}" == "yes" ]]; then
+    exit 0
+  fi
+}
+
+### END Script template bootstrap
 
 ## Defaults
 FORCE="false"
 
-#### START: Process arguments
+function cleanup_script_vars() {
+  unset FORCE
+}
 
-ARGS=$(getopt --name "${SCRIPT_APP}" --options fhv --longoptions "force,help,version" -- "$@")
+function process_arguments() {
+  local args
+  args=$(getopt --name "${script_name}" --options fhv --longoptions "force,help,version" -- "$@")
 
-eval set -- "${ARGS}"
-unset ARGS
+  # Show help if no parameters were passed
+  #
+  # shellcheck disable=SC2181
+  # if [[ $? -ne 0 ]]; then
+  #   show_help
+  # fi
 
-while true; do
-  case "$1" in
-  '-h' | '--help')
-    show_help
-    ;;
-  '-v' | '--version')
-    show_version
-    ;;
-  '-f' | '--force')
-    FORCE="true"
-    shift
-    continue
-    ;;
-  '--')
-    shift
-    break
-    ;;
-  *)
-    error_msg "Unknown option: $1"
-    ;;
-  esac
-done
+  eval set -- "${args}"
 
-#### END: Process arguments
+  # Process flags and options
+  #
+  while true; do
+    case "$1" in
+    '-h' | '--help')
+      show_help
+      ;;
+    '-v' | '--version')
+      show_version "exit"
+      ;;
+    '-f' | '--force')
+      FORCE="true"
+      shift
+      continue
+      ;;
+    '--')
+      shift
+      break
+      ;;
+    *)
+      throw_error_msg "Unknown option: $1"
+      ;;
+    esac
+  done
 
-#### START: Help
-
-function show_version() {
-  print_status "${SCRIPT_APP}"
-  print_status "Author: ${SCRIPT_AUTHOR}    License: ${SCRIPT_LICENSE}"
-  print_stauts "Version: ${SCRIPT_VERSION}    Date: ${SCRIPT_DATE}"
-  blank_line
-
-  exit 0
+  # Process positional arguments
+  #
+  # local arg_count=1
+  # for arg; do
+  #   case "${arg_count}" in
+  #   1)
+  #     # VAR=${arg}
+  #     ;;
+  #   2)
+  #     # OTHER=$(echo "${arg}" | tr "[:upper:]" "[:lower:]")
+  #     ;;
+  #   3)
+  #     break
+  #     ;;
+  #   *)
+  #     throw_error_msg "Internal Argument Error"
+  #     ;;
+  #   esac
+  #   arg_count=$((arg_count + 1))
+  # done
 }
 
 function show_help() {
-  print_status "${SCRIPT_APP}"
-  print_status "Author: ${SCRIPT_AUTHOR}    License: ${SCRIPT_LICENSE}"
-  print_stauts "Version: ${SCRIPT_VERSION}    Date: ${SCRIPT_DATE}"
-  blank_line
+  show_version
 
-  print_status "  ${SCRIPT_APP} [options]"
-  blank_line
+  print_status "  ${script_name} [options]"
+  print_blank_line
   print_status "This script mounts my MooseFS shares into the profile directory tree."
-  blank_line
+  print_blank_line
   print_status "Options:"
-  blank_line
+  print_blank_line
   print_status "  -h or --help"
   print_status "      Show this help screen."
-  blank_line
+  print_blank_line
   print_status "  -v or --version"
-  print_stauts "     Show the version number."
-  blank_line
+  print_status "     Show the version number."
+  print_blank_line
   print_status "  -f or --force"
   print_status "     Force mount."
-  blank_line
+  print_blank_line
 
   exit 0
 }
@@ -126,4 +175,16 @@ function main() {
   fi
 }
 
-main "$@"
+### START Script main handler
+
+function main_handler() {
+  local args=("$@")
+  process_arguments "$@"
+
+  main "${args[@]}"
+  cleanup_vars
+}
+
+main_handler "$@"
+
+### END Script main handler

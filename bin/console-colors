@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
+#
+# console-colors - Script to show the configured shell colors by name
 
-# Bash strict mode
+### START Bash strict mode
 # shellcheck disable=SC2154
 ([[ -n ${ZSH_EVAL_CONTEXT} && ${ZSH_EVAL_CONTEXT} =~ :file$ ]] ||
   [[ -n ${BASH_VERSION} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
@@ -15,47 +17,99 @@ if ! ${SOURCED}; then
   shopt -s extdebug
   IFS=$(printf '\n\t')
 fi
-# END Bash strict mode
+### END Bash strict mode
 
-# console-colors - Script to show the configured colors by base-colors.sh
+### START Script template bootstrap
 
-# Load the colors if needed
-if [[ ${text_black:-} == "" ]]; then
-  # shellcheck source=/home/brennan/.dotfiles/bash/base-profile.bash
-  source "${DOTFILES}/bash/base-profile.bash"
+script_name=$(basename "${BASH_SOURCE[0]}")
+script_dir="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"
+script_author="Brennan Fee"
+script_license="MIT License"
+script_version="0.2"
+script_date="2024-09-16"
+
+function cleanup_vars() {
+  unset script_name
+  unset script_dir
+  unset script_author
+  unset script_license
+  unset script_version
+  unset script_date
+
+  cleanup_script_vars
+}
+
+# Source script-tools.bash
+if [[ -f "${script_dir}/../bash/script-tools.bash" ]]; then
+  # shellcheck source=/home/brennan/.dotfiles/bash/script-tools.bash
+  source "${script_dir}/../bash/script-tools.bash"
 fi
 
-echo ""
-echo "Console color map"
-echo ""
-echo -e "${text_black}████ ${text_normal} black"
-echo -e "${text_red}████ ${text_normal} red"
-echo -e "${text_green}████ ${text_normal} green"
-echo -e "${text_yellow}████ ${text_normal} yellow"
-echo -e "${text_blue}████ ${text_normal} blue"
-echo -e "${text_magenta}████ ${text_normal} magenta"
-echo -e "${text_cyan}████ ${text_normal} cyan"
-echo -e "${text_white}████ ${text_normal} white"
-echo ""
-echo -e "${text_bright_black}████ ${text_normal} bright_black"
-echo -e "${text_bright_red}████ ${text_normal} bright_red"
-echo -e "${text_bright_green}████ ${text_normal} bright_green"
-echo -e "${text_bright_yellow}████ ${text_normal} bright_yellow"
-echo -e "${text_bright_blue}████ ${text_normal} bright_blue"
-echo -e "${text_bright_magenta}████ ${text_normal} bright_magenta"
-echo -e "${text_bright_cyan}████ ${text_normal} bright_cyan"
-echo -e "${text_bright_white}████ ${text_normal} bright_white"
-echo ""
-echo -e "${text_dim_black}████ ${text_normal} dim_black"
-echo -e "${text_dim_red}████ ${text_normal} dim_red"
-echo -e "${text_dim_green}████ ${text_normal} dim_green"
-echo -e "${text_dim_yellow}████ ${text_normal} dim_yellow"
-echo -e "${text_dim_blue}████ ${text_normal} dim_blue"
-echo -e "${text_dim_magenta}████ ${text_normal} dim_magenta"
-echo -e "${text_dim_cyan}████ ${text_normal} dim_cyan"
-echo -e "${text_dim_white}████ ${text_normal} dim_white"
-echo ""
-echo -e "${text_pink}████ ${text_normal} pink = bold magenta"
-echo -e "${text_purple}████ ${text_normal} purple = magenta"
-echo -e "${text_orange}████ ${text_normal} orange = yellow"
-echo ""
+function show_version() {
+  print_status "${script_name}"
+  print_status "Author: ${script_author} --- License: ${script_license}"
+  print_status "Version: ${script_version} --- Date: ${script_date}"
+  print_blank_line
+
+  if [[ "${1:-}" == "exit" || "${1:-}" == "yes" ]]; then
+    exit 0
+  fi
+}
+
+### END Script template bootstrap
+
+function cleanup_script_vars() {
+  noop
+}
+
+function main() {
+  echo ""
+  echo "Console color map"
+  echo ""
+  echo -e "${text_black}████ ${text_normal} black"
+  echo -e "${text_red}████ ${text_normal} red"
+  echo -e "${text_green}████ ${text_normal} green"
+  echo -e "${text_yellow}████ ${text_normal} yellow"
+  echo -e "${text_blue}████ ${text_normal} blue"
+  echo -e "${text_magenta}████ ${text_normal} magenta"
+  echo -e "${text_cyan}████ ${text_normal} cyan"
+  echo -e "${text_white}████ ${text_normal} white"
+  echo ""
+  echo -e "${text_bright_black}████ ${text_normal} bright_black"
+  echo -e "${text_bright_red}████ ${text_normal} bright_red"
+  echo -e "${text_bright_green}████ ${text_normal} bright_green"
+  echo -e "${text_bright_yellow}████ ${text_normal} bright_yellow"
+  echo -e "${text_bright_blue}████ ${text_normal} bright_blue"
+  echo -e "${text_bright_magenta}████ ${text_normal} bright_magenta"
+  echo -e "${text_bright_cyan}████ ${text_normal} bright_cyan"
+  echo -e "${text_bright_white}████ ${text_normal} bright_white"
+  echo ""
+  echo -e "${text_dim_black}████ ${text_normal} dim_black"
+  echo -e "${text_dim_red}████ ${text_normal} dim_red"
+  echo -e "${text_dim_green}████ ${text_normal} dim_green"
+  echo -e "${text_dim_yellow}████ ${text_normal} dim_yellow"
+  echo -e "${text_dim_blue}████ ${text_normal} dim_blue"
+  echo -e "${text_dim_magenta}████ ${text_normal} dim_magenta"
+  echo -e "${text_dim_cyan}████ ${text_normal} dim_cyan"
+  echo -e "${text_dim_white}████ ${text_normal} dim_white"
+  echo ""
+  echo -e "${text_pink}████ ${text_normal} pink = magenta"
+  echo -e "${text_purple}████ ${text_normal} purple = bright magenta"
+  echo -e "${text_orange}████ ${text_normal} orange = bright yellow"
+  echo -e "${text_gray}████ ${text_normal} gray = bright black"
+  echo -e "${text_grey}████ ${text_normal} grey = bright black"
+  echo -e "${text_mid_gray}████ ${text_normal} mid_gray, custom added color"
+  echo -e "${text_mid_grey}████ ${text_normal} mid_grey = mid_gray"
+  echo ""
+}
+
+### START Script main handler
+
+function main_handler() {
+  main "$@"
+  cleanup_vars
+}
+
+main_handler "$@"
+
+### END Script main handler

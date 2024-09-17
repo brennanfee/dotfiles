@@ -1,14 +1,13 @@
 #!/usr/bin/env bash
-# Author: Brennan Fee
-# License: MIT License
 #
 # This script will copy the names of files from a source folder to the files in a destination
-# folder.  I use this a lot for overwritting new versions of files like tv show episodes.
+# folder.  I use this a lot for overwriting new versions of files like TV show episodes.
 #
 
-# Bash strict mode
-([[ -n ${ZSH_EVAL_CONTEXT:-} && ${ZSH_EVAL_CONTEXT:-} =~ :file$ ]] ||
-  [[ -n ${BASH_VERSION:-} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
+### START Bash strict mode
+# shellcheck disable=SC2154
+([[ -n ${ZSH_EVAL_CONTEXT} && ${ZSH_EVAL_CONTEXT} =~ :file$ ]] ||
+  [[ -n ${BASH_VERSION} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
 if ! ${SOURCED}; then
   set -o errexit  # same as set -e
   set -o nounset  # same as set -u
@@ -17,30 +16,86 @@ if ! ${SOURCED}; then
   set -o posix
   #set -o xtrace # same as set -x, turn on for debugging
 
-  shopt -s inherit_errexit
   shopt -s extdebug
   IFS=$(printf '\n\t')
 fi
-# END Bash strict mode
+### END Bash strict mode
 
-lhs_files=("${1}"/*.mp4)
-rhs_files=("${2}"/*.mp4)
+### START Script template bootstrap
 
-# Sort them just in case
-readarray -t lhs_files < <(for a in "${lhs_files[@]}"; do echo "$a"; done | sort)
-readarray -t rhs_files < <(for a in "${rhs_files[@]}"; do echo "$a"; done | sort)
+script_name=$(basename "${BASH_SOURCE[0]}")
+script_dir="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"
+script_author="Brennan Fee"
+script_license="MIT License"
+script_version="0.2"
+script_date="2024-09-16"
 
-if [[ ${#lhs_files[@]} -ne ${#rhs_files[@]} ]]; then
-  echo "Sides do not have the same number of files, exiting."
-  exit 1
+function cleanup_vars() {
+  unset script_name
+  unset script_dir
+  unset script_author
+  unset script_license
+  unset script_version
+  unset script_date
+
+  cleanup_script_vars
+}
+
+# Source script-tools.bash
+if [[ -f "${script_dir}/../bash/script-tools.bash" ]]; then
+  # shellcheck source=/home/brennan/.dotfiles/bash/script-tools.bash
+  source "${script_dir}/../bash/script-tools.bash"
 fi
 
-echo "Renaming..."
+function show_version() {
+  print_status "${script_name}"
+  print_status "Author: ${script_author} --- License: ${script_license}"
+  print_status "Version: ${script_version} --- Date: ${script_date}"
+  print_blank_line
 
-for ((i = 0; i < ${#lhs_files[@]}; i++)); do
-  new_name=$(basename "${lhs_files[$i]}")
-  path_name=$(dirname "${rhs_files[$i]}")
-  mv "${rhs_files[$i]}" "${path_name}/${new_name}"
-done
+  if [[ "${1:-}" == "exit" || "${1:-}" == "yes" ]]; then
+    exit 0
+  fi
+}
 
-echo "Done"
+### END Script template bootstrap
+
+function cleanup_script_vars() {
+  noop
+}
+
+function main() {
+  lhs_files=("${1}"/*.mp4)
+  rhs_files=("${2}"/*.mp4)
+
+  # Sort them just in case
+  readarray -t lhs_files < <(for a in "${lhs_files[@]}"; do echo "$a"; done | sort)
+  readarray -t rhs_files < <(for a in "${rhs_files[@]}"; do echo "$a"; done | sort)
+
+  if [[ ${#lhs_files[@]} -ne ${#rhs_files[@]} ]]; then
+    print_warning "Sides do not have the same number of files, exiting."
+    cleanup_vars
+    exit 1
+  fi
+
+  print_status "Renaming..."
+
+  for ((i = 0; i < ${#lhs_files[@]}; i++)); do
+    new_name=$(basename "${lhs_files[$i]}")
+    path_name=$(dirname "${rhs_files[$i]}")
+    mv "${rhs_files[$i]}" "${path_name}/${new_name}"
+  done
+
+  print_success "Done"
+}
+
+### START Script main handler
+
+function main_handler() {
+  main "$@"
+  cleanup_vars
+}
+
+main_handler "$@"
+
+### END Script main handler

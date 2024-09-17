@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 
-# Bash strict mode
-([[ -n ${ZSH_EVAL_CONTEXT:-} && ${ZSH_EVAL_CONTEXT:-} =~ :file$ ]] ||
-  [[ -n ${BASH_VERSION:-} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
+### START Bash strict mode
+# shellcheck disable=SC2154
+([[ -n ${ZSH_EVAL_CONTEXT} && ${ZSH_EVAL_CONTEXT} =~ :file$ ]] ||
+  [[ -n ${BASH_VERSION} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
 if ! ${SOURCED}; then
   set -o errexit  # same as set -e
   set -o nounset  # same as set -u
@@ -11,19 +12,49 @@ if ! ${SOURCED}; then
   set -o posix
   #set -o xtrace # same as set -x, turn on for debugging
 
-  shopt -s inherit_errexit
   shopt -s extdebug
   IFS=$(printf '\n\t')
 fi
-# END Bash strict mode
+### END Bash strict mode
 
-SCRIPT_APP=$(basename "$0")
-SCRIPT_AUTHOR="Brennan Fee"
-SCRIPT_LICENSE="MIT License"
-SCRIPT_VERSION="0.6"
-SCRIPT_DATE="2023-06-23"
+### START Script template bootstrap
 
-source "$(dirname "$0")/../bash/script-tools.bash"
+script_name=$(basename "${BASH_SOURCE[0]}")
+script_dir="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"
+script_author="Brennan Fee"
+script_license="MIT License"
+script_version="0.7"
+script_date="2024-09-16"
+
+function cleanup_vars() {
+  unset script_name
+  unset script_dir
+  unset script_author
+  unset script_license
+  unset script_version
+  unset script_date
+
+  cleanup_script_vars
+}
+
+# Source script-tools.bash
+if [[ -f "${script_dir}/../bash/script-tools.bash" ]]; then
+  # shellcheck source=/home/brennan/.dotfiles/bash/script-tools.bash
+  source "${script_dir}/../bash/script-tools.bash"
+fi
+
+function show_version() {
+  print_status "${script_name}"
+  print_status "Author: ${script_author} --- License: ${script_license}"
+  print_status "Version: ${script_version} --- Date: ${script_date}"
+  print_blank_line
+
+  if [[ "${1:-}" == "exit" || "${1:-}" == "yes" ]]; then
+    exit 0
+  fi
+}
+
+### END Script template bootstrap
 
 ## Defaults
 FORCE="false"
@@ -34,112 +65,110 @@ SHARE_TO_MOUNT=""
 # The last two are considered "hidden" options as they are not listed in the help
 SUPPORTED_SHARES=("files" "backups" "volumes" "metadata" "files-ro" "other" "root")
 
-#### START: Process arguments
+function cleanup_script_vars() {
+  unset FORCE
+  unset SERVER
+  unset LOCATION
+  unset SHARE_TO_MOUNT
+  unset SUPPORT_SHARES
+}
 
-ARGS=$(getopt --name "${SCRIPT_APP}" --options fs:l::hv --longoptions "force,server:,location:,help,version" -- "$@")
+function process_arguments() {
+  local args
+  args=$(getopt --name "${script_name}" --options fs:l::hv --longoptions "force,server:,location:,help,version" -- "$@")
 
-# shellcheck disable=SC2181
-if [[ $? -ne 0 ]]; then
-  show_help
-fi
-
-eval set -- "${ARGS}"
-unset ARGS
-
-while true; do
-  case "$1" in
-  '-h' | '--help')
+  # Show help if no parameters were passed
+  #
+  # shellcheck disable=SC2181
+  if [[ $? -ne 0 ]]; then
     show_help
-    ;;
-  '-v' | '--version')
-    show_version
-    ;;
-  '-f' | '--force')
-    FORCE="true"
-    shift
-    continue
-    ;;
-  '-s' | '--server')
-    SERVER=$(echo "${2}" | tr "[:upper:]" "[:lower:]")
-    shift 2
-    continue
-    ;;
-  '-l' | '--location')
-    LOCATION=$2
-    shift 2
-    continue
-    ;;
-  '--')
-    shift
-    break
-    ;;
-  *)
-    error_msg "Unknown option: $1"
-    ;;
-  esac
-done
+  fi
 
-## Now process positional arguments
+  eval set -- "${args}"
 
-ARG_COUNT=1
-for arg; do
-  case "${ARG_COUNT}" in
-  1)
-    # Example, normalize to lower case
-    SHARE_TO_MOUNT=$(echo "${arg}" | tr "[:upper:]" "[:lower:]")
-    ;;
-  2)
-    break
-    ;;
-  *)
-    error_msg "Internal Argument Error"
-    ;;
-  esac
-  ARG_COUNT=$((ARG_COUNT + 1))
-done
-unset ARG_COUNT
+  # Process flags and options
+  #
+  while true; do
+    case "$1" in
+    '-h' | '--help')
+      show_help
+      ;;
+    '-v' | '--version')
+      show_version "exit"
+      ;;
+    '-f' | '--force')
+      FORCE="true"
+      shift
+      continue
+      ;;
+    '-s' | '--server')
+      SERVER=$(echo "${2}" | tr "[:upper:]" "[:lower:]")
+      shift 2
+      continue
+      ;;
+    '-l' | '--location')
+      LOCATION=$2
+      shift 2
+      continue
+      ;;
+    '--')
+      shift
+      break
+      ;;
+    *)
+      throw_error_msg "Unknown option: $1"
+      ;;
+    esac
+  done
 
-#### END: Process arguments
+  # Process positional arguments
+  #
+  local arg_count=1
+  for arg; do
+    case "${arg_count}" in
+    1)
+      # Normalize to lower case
+      SHARE_TO_MOUNT=$(echo "${arg}" | tr "[:upper:]" "[:lower:]")
+      ;;
+    2)
+      break
+      ;;
+    *)
+      throw_error_msg "Internal Argument Error"
+      ;;
+    esac
+    arg_count=$((arg_count + 1))
+  done
+}
 
 #### START: Help
 
-function show_version() {
-  print_status "${SCRIPT_APP} - Moose Mounter"
-  print_status "Author: ${SCRIPT_AUTHOR}    License: ${SCRIPT_LICENSE}"
-  print_stauts "Version: ${SCRIPT_VERSION}    Date: ${SCRIPT_DATE}"
-  blank_line
-
-  exit 0
-}
-
 function show_help() {
-  print_status "${SCRIPT_APP} - Moose Mounter"
-  print_status "Author: ${SCRIPT_AUTHOR}    License: ${SCRIPT_LICENSE}"
-  print_stauts "Version: ${SCRIPT_VERSION}    Date: ${SCRIPT_DATE}"
-  blank_line
+  show_version
+
   print_status "Little utility to mount my MooseFS volumes just the way I like."
-  blank_line
-  print_status "  ${SCRIPT_APP} [options] <share name>"
-  blank_line
+  print_blank_line
+  print_status "  ${script_name} [options] <share name>"
+  print_blank_line
   print_status "Options:"
-  blank_line
+  print_blank_line
   print_status "  -h or --help"
   print_status "    Show this help screen."
-  blank_line
+  print_blank_line
   print_status "  -f or --force"
   print_status "    Force mount (rarely needed)."
-  blank_line
+  print_blank_line
   print_status "  -s or --server"
   print_status "    Override for the moosefs server location (fqdn)."
-  blank_line
+  print_blank_line
   print_status "  -l or --location"
   print_status "    Override for the mount location, each share has it's own"
   print_status "    default location if no override is provided."
-  blank_line
+  print_blank_line
   print_status "  <share name>"
-  print_stauts "     Which share to mount, optoins are: files, backups, volumes,"
-  print_stauts "     metadata, and files-ro."
-  blank_line
+  print_status "     Which share to mount, options are: files, backups, volumes,"
+  print_status "     metadata, and files-ro."
+  print_blank_line
 
   exit 0
 }
@@ -149,7 +178,7 @@ function show_help() {
 function verify_share_to_mount() {
   get_exit_code contains_element "${SHARE_TO_MOUNT}" "${SUPPORTED_SHARES[@]}"
   if [[ ! ${EXIT_CODE} == "0" ]]; then
-    error_msg "Invalid share option, please use a valid share.  Check the help for a list of valid options."
+    throw_error_msg "Invalid share option, please use a valid share.  Check the help for a list of valid options."
   fi
 }
 
@@ -182,7 +211,7 @@ function mount_the_share() {
 
   pword=$(kwalletcli -f moosefs -e "${SHARE_TO_MOUNT}" 2>/dev/null)
   if [[ -z "${pword}" ]]; then
-    error_msg "ERROR! The moosefs wallet entry has not been set up correctly. No password provided."
+    throw_error_msg "ERROR! The moosefs wallet entry has not been set up correctly. No password provided."
   fi
 
   mkdir -p "${location}"
@@ -232,7 +261,7 @@ function mount_root() {
 
   pword=$(kwalletcli -f moosefs -e "${SHARE_TO_MOUNT}" 2>/dev/null)
   if [[ -z "${pword}" ]]; then
-    error_msg "ERROR! The moosefs wallet entry has not been set up correctly. No password provided."
+    throw_error_msg "ERROR! The moosefs wallet entry has not been set up correctly. No password provided."
   fi
 
   mkdir -p "${location}"
@@ -255,7 +284,7 @@ function main() {
 
   verify_share_to_mount
 
-  mkdir -p "$HOME/mounts"
+  mkdir -p "${HOME}/mounts"
 
   case "${SHARE_TO_MOUNT}" in
   files)
@@ -280,9 +309,21 @@ function main() {
     mount_root "${HOME}/mounts/moose-root"
     ;;
   *)
-    error_msg "Invalid share option detected '${SHARE_TO_MOUNT}', please use a valid share option."
+    throw_error_msg "Invalid share option detected '${SHARE_TO_MOUNT}', please use a valid share option."
     ;;
   esac
 }
 
-main "$@"
+### START Script main handler
+
+function main_handler() {
+  local args=("$@")
+  process_arguments "$@"
+
+  main "${args[@]}"
+  cleanup_vars
+}
+
+main_handler "$@"
+
+### END Script main handler

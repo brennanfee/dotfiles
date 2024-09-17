@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Bash strict mode
+### START Bash strict mode
 # shellcheck disable=SC2154
 ([[ -n ${ZSH_EVAL_CONTEXT} && ${ZSH_EVAL_CONTEXT} =~ :file$ ]] ||
   [[ -n ${BASH_VERSION} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
@@ -15,19 +15,77 @@ if ! ${SOURCED}; then
   shopt -s extdebug
   IFS=$(printf '\n\t')
 fi
-# END Bash strict mode
+### END Bash strict mode
 
-# First, clear out any previous keys
-ssh-add -q -D
+### START Script template bootstrap
 
-# Finds all private key files (that are protected, based on mode bits)
-# and adds each to ssh agent
-for filename in "${HOME}"/.ssh/*; do
-  perms=$(stat "${filename}" | sed -n '/^Access: (/{s/Access: (\([0-9]\+\).*$/\1/;p}')
+script_name=$(basename "${BASH_SOURCE[0]}")
+script_dir="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"
+script_author="Brennan Fee"
+script_license="MIT License"
+script_version="0.2"
+script_date="2024-09-16"
 
-  filetype=$(file "${filename}")
+function cleanup_vars() {
+  unset script_name
+  unset script_dir
+  unset script_author
+  unset script_license
+  unset script_version
+  unset script_date
 
-  if [[ "${perms}" == "0600" && "${filetype}" == *"private key" ]]; then
-    ssh-add -q "${filename}"
+  cleanup_script_vars
+}
+
+# Source script-tools.bash
+if [[ -f "${script_dir}/../bash/script-tools.bash" ]]; then
+  # shellcheck source=/home/brennan/.dotfiles/bash/script-tools.bash
+  source "${script_dir}/../bash/script-tools.bash"
+fi
+
+function show_version() {
+  print_status "${script_name}"
+  print_status "Author: ${script_author} --- License: ${script_license}"
+  print_status "Version: ${script_version} --- Date: ${script_date}"
+  print_blank_line
+
+  if [[ "${1:-}" == "exit" || "${1:-}" == "yes" ]]; then
+    exit 0
   fi
-done
+}
+
+### END Script template bootstrap
+
+function cleanup_script_vars() {
+  noop
+}
+
+function main() {
+  # First, clear out any previous keys
+  ssh-add -q -D
+
+  # Finds all private key files (that are protected, based on mode bits)
+  # and adds each to ssh agent
+  for filename in "${HOME}"/.ssh/*; do
+    local perms
+    local filetype
+    perms=$(stat "${filename}" | sed -n '/^Access: (/{s/Access: (\([0-9]\+\).*$/\1/;p}')
+
+    filetype=$(file "${filename}")
+
+    if [[ "${perms}" == "0600" && "${filetype}" == *"private key" ]]; then
+      ssh-add -q "${filename}"
+    fi
+  done
+}
+
+### START Script main handler
+
+function main_handler() {
+  main "$@"
+  cleanup_vars
+}
+
+main_handler "$@"
+
+### END Script main handler

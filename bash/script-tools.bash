@@ -36,6 +36,11 @@ function source_if() {
   fi
 }
 
+# A noop (aka 'no op', or 'no operation') function
+function noop() {
+  true
+}
+
 #### END: Basic Utilities
 
 #### START: Array Utilities
@@ -383,98 +388,46 @@ text_clear="$(tput sgr0)"
 
 #### START: Terminal Print Functions
 
-function print_blank_line() {
-  echo ""
+function _print_folded() {
+  local cols
+  cols=$(tput cols)
+  if ((cols <= 0)); then
+    cols="${COLUMNS:-100}"
+  fi
+
+  echo -e "$1" | fold -s --width "${cols}"
 }
 
+## Rules & Lines
+
 function print_separator() {
-  print_line "$@"
+  print_line "${@:--}"
+}
+
+function print_hr() {
+  print_line "${@:--}"
 }
 
 function print_line() {
-  local T_COLS
-  T_COLS=$(tput cols)
-  printf "%${T_COLS}s\n" | tr ' ' '-'
+  local cols
+  cols=$(tput cols)
+  if ((cols <= 0)); then
+    cols="${COLUMNS:-100}"
+  fi
+
+  local word="$1"
+  if [[ -n "${word}" ]]; then
+    local line=''
+    while ((${#line} < cols)); do
+      line="${line}${word}"
+    done
+
+    echo -e "${line:0:$cols}"
+  fi
 }
 
-function print_white() {
-  print_status "$@"
-}
-
-function print_status() {
-  local T_COLS
-  T_COLS=$(tput cols)
-  T_COLS=$((T_COLS - 1))
-  echo -e "${text_reset}$1${text_reset}" | fold -sw "${T_COLS}"
-}
-
-function print_bold() {
-  print_info "$@"
-}
-
-function print_info() {
-  local T_COLS
-  T_COLS=$(tput cols)
-  T_COLS=$((T_COLS - 1))
-  echo -e "${text_bold}$1${text_reset}" | fold -sw "${T_COLS}"
-}
-
-function print_yellow() {
-  print_warning "$@"
-}
-
-function print_warning() {
-  local T_COLS
-  T_COLS=$(tput cols)
-  T_COLS=$((T_COLS - 1))
-  echo -e "${text_yellow}$1${text_reset}" | fold -sw "${T_COLS}"
-}
-
-function print_green() {
-  print_success "$@"
-}
-
-function print_success() {
-  local T_COLS
-  T_COLS=$(tput cols)
-  T_COLS=$((T_COLS - 1))
-  echo -e "${text_green}$1${text_reset}" | fold -sw "${T_COLS}"
-}
-
-function print_red() {
-  print_error "$@"
-}
-
-function print_error() {
-  local T_COLS
-  T_COLS=$(tput cols)
-  T_COLS=$((T_COLS - 1))
-  echo -e "${text_red}$1${text_reset}" | fold -sw "${T_COLS}"
-}
-
-function print_blue() {
-  local T_COLS
-  T_COLS=$(tput cols)
-  T_COLS=$((T_COLS - 1))
-  echo -e "${text_blue}$1${text_reset}" | fold -sw "${T_COLS}"
-}
-
-function print_magenta {
-  print_heading "$@"
-}
-
-function print_heading {
-  local T_COLS
-  T_COLS=$(tput cols)
-  T_COLS=$((T_COLS - 1))
-  echo -e "${text_magenta}$1${text_reset}" | fold -sw "${T_COLS}"
-}
-
-function print_cyan {
-  local T_COLS
-  T_COLS=$(tput cols)
-  T_COLS=$((T_COLS - 1))
-  echo -e "${text_cyan}$1${text_reset}" | fold -sw "${T_COLS}"
+function print_blank_line() {
+  echo -e ""
 }
 
 function pause_output() {
@@ -482,9 +435,232 @@ function pause_output() {
   read -re -sn 1 -p "Press enter to continue..."
 }
 
-function error_msg() {
-  print_warning "This version of error_msg is deprecated: Use throw_error_msg instead."
-  throw_error_msg "$@"
+## Basic print methods
+
+function print_normal() {
+  _print_folded "${text_reset}$1${text_reset}"
+}
+
+function print_normal_bold() {
+  _print_folded "${text_bold}$1${text_reset}"
+}
+
+function print_bold() {
+  print_normal_bold "$@"
+}
+
+## Color based print methods
+
+function print_black() {
+  _print_folded "${text_black}$1${text_reset}"
+}
+
+function print_black_bold() {
+  _print_folded "${text_black}${text_bold}$1${text_reset}"
+}
+
+function print_red() {
+  _print_folded "${text_red}$1${text_reset}"
+}
+
+function print_red_bold() {
+  _print_folded "${text_red}${text_bold}$1${text_reset}"
+}
+
+function print_green() {
+  _print_folded "${text_green}$1${text_reset}"
+}
+
+function print_green_bold() {
+  _print_folded "${text_green}${text_bold}$1${text_reset}"
+}
+
+function print_yellow() {
+  _print_folded "${text_yellow}$1${text_reset}"
+}
+
+function print_yellow_bold() {
+  _print_folded "${text_yellow}${text_bold}$1${text_reset}"
+}
+
+function print_blue() {
+  _print_folded "${text_blue}$1${text_reset}"
+}
+
+function print_blue_bold() {
+  _print_folded "${text_blue}${text_bold}$1${text_reset}"
+}
+
+function print_magenta {
+  _print_folded "${text_magenta}$1${text_reset}"
+}
+
+function print_magenta_bold {
+  _print_folded "${text_magenta}${text_bold}$1${text_reset}"
+}
+
+function print_cyan {
+  _print_folded "${text_cyan}$1${text_reset}"
+}
+
+function print_cyan_bold {
+  _print_folded "${text_cyan}${text_bold}$1${text_reset}"
+}
+
+function print_white() {
+  _print_folded "${text_white}$1${text_reset}"
+}
+
+function print_white_bold() {
+  _print_folded "${text_white}${text_bold}$1${text_reset}"
+}
+
+function print_bright_black() {
+  _print_folded "${text_bright_black}$1${text_reset}"
+}
+
+function print_bright_black_bold() {
+  _print_folded "${text_bright_black}${text_bold}$1${text_reset}"
+}
+
+function print_bright_red() {
+  _print_folded "${text_bright_red}$1${text_reset}"
+}
+
+function print_bright_red_bold() {
+  _print_folded "${text_bright_red}${text_bold}$1${text_reset}"
+}
+
+function print_bright_green() {
+  _print_folded "${text_bright_green}$1${text_reset}"
+}
+
+function print_bright_green_bold() {
+  _print_folded "${text_bright_green}${text_bold}$1${text_reset}"
+}
+
+function print_bright_yellow() {
+  _print_folded "${text_bright_yellow}$1${text_reset}"
+}
+
+function print_bright_yellow_bold() {
+  _print_folded "${text_bright_yellow}${text_bold}$1${text_reset}"
+}
+
+function print_bright_blue() {
+  _print_folded "${text_bright_blue}$1${text_reset}"
+}
+
+function print_bright_blue_bold() {
+  _print_folded "${text_bright_blue}${text_bold}$1${text_reset}"
+}
+
+function print_bright_magenta {
+  _print_folded "${text_bright_magenta}$1${text_reset}"
+}
+
+function print_bright_magenta_bold {
+  _print_folded "${text_bright_magenta}${text_bold}$1${text_reset}"
+}
+
+function print_bright_cyan {
+  _print_folded "${text_bright_cyan}$1${text_reset}"
+}
+
+function print_bright_cyan_bold {
+  _print_folded "${text_bright_cyan}${text_bold}$1${text_reset}"
+}
+
+function print_bright_white() {
+  _print_folded "${text_bright_white}$1${text_reset}"
+}
+
+function print_bright_white_bold() {
+  _print_folded "${text_bright_white}${text_bold}$1${text_reset}"
+}
+
+## Aliased colors print methods
+
+function print_pink() {
+  _print_folded "${text_pink}$1${text_reset}"
+}
+
+function print_pink_bold() {
+  _print_folded "${text_pink}${text_bold}$1${text_reset}"
+}
+
+function print_purple() {
+  _print_folded "${text_purple}$1${text_reset}"
+}
+
+function print_purple_bold() {
+  _print_folded "${text_purple}${text_bold}$1${text_reset}"
+}
+
+function print_orange() {
+  _print_folded "${text_orange}$1${text_reset}"
+}
+
+function print_orange_bold() {
+  _print_folded "${text_orange}${text_bold}$1${text_reset}"
+}
+
+function print_gray() {
+  _print_folded "${text_gray}$1${text_reset}"
+}
+
+function print_gray_bold() {
+  _print_folded "${text_gray}${text_bold}$1${text_reset}"
+}
+
+function print_grey() {
+  _print_folded "${text_grey}$1${text_reset}"
+}
+
+function print_grey_bold() {
+  _print_folded "${text_grey}${text_bold}$1${text_reset}"
+}
+
+function print_mid_gray() {
+  _print_folded "${text_mid_gray}$1${text_reset}"
+}
+
+function print_mid_gray_bold() {
+  _print_folded "${text_mid_gray}${text_bold}$1${text_reset}"
+}
+
+function print_mid_grey() {
+  _print_folded "${text_mid_grey}$1${text_reset}"
+}
+
+function print_mid_grey_bold() {
+  _print_folded "${text_mid_grey}${text_bold}$1${text_reset}"
+}
+
+## Context based print methods
+
+function print_status() {
+  print_normal "$@"
+}
+
+function print_info() {
+  print_normal_bold "$@"
+}
+
+function print_success() {
+  print_green "$@"
+}
+
+function print_warning() {
+  print_yellow "$@"
+}
+
+function print_heading {
+  print_magenta "$@"
+}
+
+function print_error() {
+  print_red "$@"
 }
 
 function throw_error_msg() {

@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
-# Author: Brennan Fee
-# License: MIT License
 #
-# This script collects information from the current machine using inxi.  By default it places the file in the working directory, but you can pass -S to "stamp" the machine placing the file in the home directory instead
+# This script collects information from the current machine using inxi.  By default it places
+# the file in the working directory, but you can pass -S to "stamp" the machine placing the
+# file in the home directory instead.
 
-# Bash strict mode
-([[ -n ${ZSH_EVAL_CONTEXT:-} && ${ZSH_EVAL_CONTEXT:-} =~ :file$ ]] ||
-  [[ -n ${BASH_VERSION:-} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
+### START Bash strict mode
+# shellcheck disable=SC2154
+([[ -n ${ZSH_EVAL_CONTEXT} && ${ZSH_EVAL_CONTEXT} =~ :file$ ]] ||
+  [[ -n ${BASH_VERSION} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
 if ! ${SOURCED}; then
   set -o errexit  # same as set -e
   set -o nounset  # same as set -u
@@ -15,39 +16,82 @@ if ! ${SOURCED}; then
   set -o posix
   #set -o xtrace # same as set -x, turn on for debugging
 
-  shopt -s inherit_errexit
   shopt -s extdebug
   IFS=$(printf '\n\t')
 fi
-# END Bash strict mode
+### END Bash strict mode
 
-VERSION="0.2 2023-01-28"
+### START Script template bootstrap
 
-check_root() {
-  local RESET
-  RESET=$(tput sgr0)
-  local RED
-  RED=$(tput setaf 1)
+script_name=$(basename "${BASH_SOURCE[0]}")
+script_dir="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"
+script_author="Brennan Fee"
+script_license="MIT License"
+script_version="0.3"
+script_date="2024-09-16"
 
-  # Must be root
-  local USER_ID
-  USER_ID=$(id -u)
-  if [[ "${USER_ID}" -ne 0 ]]; then
-    echo -e "${RED}This script must be run as root.${RESET}"
-    exit 1
+function cleanup_vars() {
+  unset script_name
+  unset script_dir
+  unset script_author
+  unset script_license
+  unset script_version
+  unset script_date
+
+  cleanup_script_vars
+}
+
+# Source script-tools.bash
+if [[ -f "${script_dir}/../bash/script-tools.bash" ]]; then
+  # shellcheck source=/home/brennan/.dotfiles/bash/script-tools.bash
+  source "${script_dir}/../bash/script-tools.bash"
+fi
+
+function show_version() {
+  print_status "${script_name}"
+  print_status "Author: ${script_author} --- License: ${script_license}"
+  print_status "Version: ${script_version} --- Date: ${script_date}"
+  print_blank_line
+
+  if [[ "${1:-}" == "exit" || "${1:-}" == "yes" ]]; then
+    exit 0
   fi
 }
 
+### END Script template bootstrap
+
+# Defaults
 to_system_file="false"
 
-read_options() {
+function cleanup_script_vars() {
+  unset to_system_file
+}
+
+function process_arguments() {
   local args
-  args=$(getopt --options s --long "system" -- "$@")
+  args=$(getopt --name "${script_name}" --options shv --longoptions "system,help,version" -- "$@")
 
-  eval set --"${args}"
+  # Show help if no parameters were passed
+  #
+  # shellcheck disable=SC2181
+  # if [[ $? -ne 0 ]]; then
+  #   show_help
+  # fi
 
+  eval set -- "${args}"
+
+  # Process flags and options
+  #
   while true; do
     case "$1" in
+    '-h' | '--help')
+      #show_help
+      print_red "No help for this tool."
+      break
+      ;;
+    '-v' | '--version')
+      show_version "exit"
+      ;;
     -s | --system)
       to_system_file="true"
       shift
@@ -56,16 +100,35 @@ read_options() {
       break
       ;;
     *)
-      printf "Unknown option %s\n" "$1"
-      exit 2
+      throw_error_msg "Unknown option: $1" 2
       ;;
     esac
   done
+
+  # Process positional arguments
+  #
+  # local arg_count=1
+  # for arg; do
+  #   case "${arg_count}" in
+  #   1)
+  #     # VAR=${arg}
+  #     ;;
+  #   2)
+  #     # OTHER=$(echo "${arg}" | tr "[:upper:]" "[:lower:]")
+  #     ;;
+  #   3)
+  #     break
+  #     ;;
+  #   *)
+  #     throw_error_msg "Internal Argument Error"
+  #     ;;
+  #   esac
+  #   arg_count=$((arg_count + 1))
+  # done
 }
 
-main() {
-  check_root
-  read_options "$@"
+function main() {
+  check_root_with_error ""
 
   local the_user_home
   local the_hostname
@@ -92,4 +155,16 @@ main() {
   sudo inxi -Fdflmopux -c 0 | tee "${output_file}" 1>/dev/null
 }
 
-main "$@"
+### START Script main handler
+
+function main_handler() {
+  local args=("$@")
+  process_arguments "$@"
+
+  main "${args[@]}"
+  cleanup_vars
+}
+
+main_handler "$@"
+
+### END Script main handler
