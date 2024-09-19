@@ -24,9 +24,25 @@ alias dir='ls -CA'
 alias vdir='ls -lA'
 alias tree="tree -C"
 
-alias grep="grep --color"
-alias pgrep="grep --color"
-alias egrep="grep --color"
+alias grep="grep --color=auto"
+alias pgrep="grep --color=auto"
+alias egrep="grep --color=auto"
+
+alias lsgrep="ls -A | grep -i --color=never"
+alias llgrep="ls -hlA --time-style=long-iso | grep -i --color=never"
+
+alias lsrg="ls -A | rg -S --color=never"
+alias llrg="ls -hlA --time-style=long-iso | rg -S --color=never"
+
+function psgrep() {
+  # shellcheck disable=SC2009,SC2001
+  ps aux | grep -i --color=never "$(echo "$@" | sed "s/^\(.\)/[\1]/g")"
+}
+
+function psrg() {
+  # shellcheck disable=SC2001
+  ps aux | rg -S --color=never "$(echo "$@" | sed "s/^\(.\)/[\1]/g")"
+}
 
 # Make sudo preserve home
 alias sudo="sudo -H"

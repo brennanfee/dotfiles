@@ -22,36 +22,6 @@ function reload_profile() {
   source "${HOME}/.bash_profile"
 }
 
-function lsgrep() {
-  # shellcheck disable=SC2010
-  ls -A | grep -i "$@"
-}
-
-function llgrep() {
-  # shellcheck disable=SC2010
-  ls -hlA --time-style=long-iso | grep -i "$@"
-}
-
-function lsrg() {
-  # shellcheck disable=SC2012
-  ls -A | rg -S "$@"
-}
-
-function llrg() {
-  # shellcheck disable=SC2012
-  ls -hlA --time-style=long-iso | rg -S "$@"
-}
-
-function psgrep() {
-  # shellcheck disable=SC2009,SC2001
-  ps aux | grep -i "$(echo "$@" | sed "s/^\(.\)/[\1]/g")"
-}
-
-function psrg() {
-  # shellcheck disable=SC2001
-  ps aux | rg -S "$(echo "$@" | sed "s/^\(.\)/[\1]/g")"
-}
-
 function myip() {
   curl ifconfig.co/ip
 }
