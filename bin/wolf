@@ -1,0 +1,115 @@
+#!/usr/bin/env bash
+#!/usr/bin/env bash
+
+### START Bash strict mode
+# shellcheck disable=SC2154
+([[ -n ${ZSH_EVAL_CONTEXT} && ${ZSH_EVAL_CONTEXT} =~ :file$ ]] ||
+  [[ -n ${BASH_VERSION} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
+if ! ${SOURCED}; then
+  set -o errexit  # same as set -e
+  set -o nounset  # same as set -u
+  set -o errtrace # same as set -E
+  set -o pipefail
+  set -o posix
+  #set -o xtrace # same as set -x, turn on for debugging
+
+  shopt -s extdebug
+  IFS=$(printf '\n\t')
+fi
+### END Bash strict mode
+
+### START Script template bootstrap
+
+script_name=$(basename "${BASH_SOURCE[0]}")
+script_dir="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"
+script_author="Brennan Fee"
+script_license="MIT License"
+script_version="0.1"
+script_date="2024-09-16"
+
+function cleanup_vars() {
+  unset script_name
+  unset script_dir
+  unset script_author
+  unset script_license
+  unset script_version
+  unset script_date
+
+  cleanup_script_vars
+}
+
+# Source script-tools.bash
+if [[ -f "${script_dir}/../bash/script-tools.bash" ]]; then
+  # shellcheck source=/home/brennan/.dotfiles/bash/script-tools.bash
+  source "${script_dir}/../bash/script-tools.bash"
+fi
+
+function show_version() {
+  print_status "${script_name}"
+  print_status "Author: ${script_author} --- License: ${script_license}"
+  print_status "Version: ${script_version} --- Date: ${script_date}"
+  print_blank_line
+
+  if [[ "${1:-}" == "exit" || "${1:-}" == "yes" ]]; then
+    exit 0
+  fi
+}
+
+### END Script template bootstrap
+
+function cleanup_script_vars() {
+  noop
+}
+
+function metric() {
+  local appId="${WOLFRAM_ALPHA_APPID:-}"
+  local options="units=metric"
+  if [[ "${appId}" != "" ]]; then
+    options="${options}&appid=${appId}"
+  fi
+
+  curl --get -dL \
+    --data-urlencode "i=$*" \
+    "https://api.wolframalpha.com/v1/result?${options}"
+}
+
+function imperial() {
+  local appId="${WOLFRAM_ALPHA_APPID:-}"
+  local options="units=imperial"
+  if [[ "${appId}" != "" ]]; then
+    options="${options}&appid=${appId}"
+  fi
+
+  curl --get -dL \
+    --data-urlencode "i=$*" \
+    "https://api.wolframalpha.com/v1/result?${options}"
+}
+
+function main() {
+  local sub_command
+  sub_command="${1:-}"
+  shift
+
+  case "${sub_command}" in
+  metric)
+    metric "$@"
+    ;;
+  imperial)
+    imperial "$@"
+    ;;
+  *)
+    throw_error_msg "Unknown ${script_name} command: '${sub_command}'"
+    ;;
+  esac
+}
+
+### START Script main handler
+
+function main_handler() {
+  main "$@"
+  cleanup_vars
+}
+
+main_handler "$@"
+
+### END Script main handler

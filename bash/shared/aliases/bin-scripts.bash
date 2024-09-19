@@ -57,3 +57,9 @@ fi
 if [[ -x "${DOTFILES}/bin/ssh-tools" ]]; then
   alias ssh-list='${DOTFILES}/bin/ssh-tools list'
 fi
+
+if [[ -x "${DOTFILES}/bin/wolf" ]]; then
+  alias wolf='${DOTFILES}/bin/wolf imperial'
+  alias wolfi='${DOTFILES}/bin/wolf imperial'
+  alias wolfm='${DOTFILES}/bin/wolf metric'
+fi
