@@ -63,3 +63,9 @@ if [[ -x "${DOTFILES}/bin/wolf" ]]; then
   alias wolfi='${DOTFILES}/bin/wolf imperial'
   alias wolfm='${DOTFILES}/bin/wolf metric'
 fi
+
+if [[ -x "${DOTFILES}/bin/cheat" ]]; then
+  alias cheat='${DOTFILES}/bin/cheat cheat'
+  alias tldr='${DOTFILES}/bin/cheat tldr'
+  alias chsh='${DOTFILES}/bin/cheat chsh'
+fi
