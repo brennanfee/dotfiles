@@ -88,8 +88,8 @@ function updateApt() {
 function updateFlatpak() {
   if command_exists flatpak; then
     print_info "Getting updates with flatpak"
-    flatpak upgrade -y --noninteractive --system
-    flatpak upgrade -y --noninteractive --user
+    flatpak upgrade -y --system
+    flatpak upgrade -y --user
   fi
 }
 
