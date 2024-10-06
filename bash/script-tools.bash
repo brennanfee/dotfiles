@@ -639,7 +639,12 @@ function print_mid_grey_bold() {
 
 ## Context based print methods
 
+function print_out() {
+  print_normal "$@"
+}
+
 function print_status() {
+  print_warning "The print_status method is deprecated. Switch to print_out"
   print_normal "$@"
 }
 
@@ -660,7 +665,7 @@ function print_heading {
 }
 
 function print_error() {
-  print_red "$@"
+  >&2 print_red "$@"
 }
 
 function throw_error_msg() {
@@ -670,6 +675,10 @@ function throw_error_msg() {
   else
     exit 1
   fi
+}
+
+function to_be_developed() {
+  print_warning "To Be Developed: ${FUNCNAME[1]}"
 }
 
 #### END: Terminal Print Functions
