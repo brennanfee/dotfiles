@@ -17,4 +17,4 @@ if ! ${SOURCED}; then
 fi
 # END Bash strict mode
 
-export ANSIBLE_INVENTORY_DNS_DOMAIN="_ansible.bfee.org"
+export ANSIBLE_INVENTORY_DNS_DOMAIN="_ansible.bfee.casa"

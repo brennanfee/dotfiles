@@ -65,7 +65,7 @@ if command_exists fzf; then
     fi
   }
 
-  vmc() {
+  vmu() {
     local lang=${1}
 
     if [[ -z ${lang} ]]; then

@@ -17,10 +17,21 @@ if ! ${SOURCED}; then
 fi
 # END Bash strict mode
 
-if command_exists pipx; then
-  if command_exists register-python-argcomplete3; then
-    eval "$(register-python-argcomplete3 pipx || true)"
-  elif command_exists register-python-argcomplete; then
-    eval "$(register-python-argcomplete pipx || true)"
-  fi
+export UV_TOOL_BIN_DIR="${HOME}/.local/uv/bin"
+path_append "${UV_TOOL_BIN_DIR}"
+
+if command -v uv &> /dev/null; then
+  eval "$(uv generate-shell-completion bash)"
+
+  path_append "$(uv tool dir)"
+
+  export UV_NATIVE_TLS="true"
+  export UV_PYTHON_PREFERENCE="managed"
+
+  alias uvr="uv run"
 fi
+
+if command -v uvx &> /dev/null; then
+  eval "$(uvx --generate-shell-completion bash)"
+fi
+

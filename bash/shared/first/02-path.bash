@@ -27,10 +27,6 @@ base_cloud_dir=$(xdg-base-dir CLOUD)
 
 ### PREPENDS (order critical)
 
-# Python
-path_prepend "${HOME}/.local/pipx/bin"
-path_prepend "${HOME}/.poetry/bin"
-
 # Local bin
 path_prepend "${HOME}/.local/bin"
 

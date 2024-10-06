@@ -20,7 +20,3 @@ fi
 ## Python startup
 PYTHONSTARTUP="$(xdg-base-dir CONFIG)/python/pythonrc"
 export PYTHONSTARTUP
-
-## For PIPX
-export PIPX_DEFAULT_PYTHON=/usr/bin/python3
-export PIPX_BIN_DIR=${HOME}/.local/pipx/bin
