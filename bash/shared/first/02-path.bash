@@ -66,14 +66,6 @@ fi
 # I want this to be "first" among the dev language tooling so it takes precedence
 path_append "${base_data_dir}/nvim/mason/bin"
 
-# Rust
-if [[ -d "${CARGO_INSTALL_ROOT}/bin" ]]; then
-  path_append "${CARGO_INSTALL_ROOT}/bin"
-fi
-if [[ -d "${CARGO_HOME}/bin" ]]; then
-  path_append "${CARGO_HOME}/bin"
-fi
-
 # Node
 if command_exists yarn; then
   yarn_path=$(yarn global bin)

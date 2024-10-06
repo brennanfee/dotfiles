@@ -57,3 +57,5 @@ CARGO_INSTALL_ROOT="$(xdg-base-dir DATA)/cargo"
 export CARGO_INSTALL_ROOT
 CARGO_HOME="$(xdg-base-dir CONFIG)/cargo"
 export CARGO_HOME
+path_append "${CARGO_INSTALL_ROOT}/bin"
+path_append "${CARGO_HOME}/bin"
