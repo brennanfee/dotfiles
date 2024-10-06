@@ -70,6 +70,9 @@ path_append "${base_data_dir}/nvim/mason/bin"
 if [[ -d "${CARGO_INSTALL_ROOT}/bin" ]]; then
   path_append "${CARGO_INSTALL_ROOT}/bin"
 fi
+if [[ -d "${CARGO_HOME}/bin" ]]; then
+  path_append "${CARGO_HOME}/bin"
+fi
 
 # Node
 if command_exists yarn; then
