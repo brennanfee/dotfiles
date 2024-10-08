@@ -28,12 +28,18 @@
   eol = lf
   autocrlf = input
   gvfs = true
-  pager = diff-so-fancy | less --tabs=2 -RFX
+  pager = delta
 [interactive]
-  diffFilter = diff-so-fancy --patch
-[diff-so-fancy]
-  markEmptyLines = false
-  rulerWidth = 100
+  diffFilter = delta --color-only
+[delta]
+  dark = true
+  width = -12
+  navigate = true
+  side-by-side = true
+  hyperlinks = true
+  hunk-header-style = file line-number syntax
+  file-decoration-style = yellow ul ol
+  file-style = yellow
 [fetch]
   prune = true
   pruneTags = true
@@ -43,8 +49,10 @@
   postBuffer = 524288000
 [diff]
   renamelimit = 0
+  colorMoved = default
 [merge]
   renamelimit = 0
+  conflictstyle = diff3
 [alias]
   co = checkout
   c = commit
