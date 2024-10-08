@@ -237,7 +237,7 @@ function install_common_tools() {
 }
 
 function install_dev_tools() {
-  if [[ ! "${include_dev_tools}" == "true" ]]; then
+  if [[ ! "${g_include_dev_tools}" == "true" ]]; then
     return
   fi
 

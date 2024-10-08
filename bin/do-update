@@ -207,10 +207,17 @@ function print_help() {
   print_blank_line
   print_out "all, apt, flatpak, snaps, pipx, asdf, appman, tmux, vim, nvim"
   print_blank_line
-  print_out "Note that the order of the parameters does not change the order in"
+  print_out "Note that the order of the parameters can change the order in"
   print_out "in which the steps are run.  Passing in 'all' halts processing of"
   print_out "the rest of the arguments and updates all the things."
   print_blank_line
+}
+
+function record_last_updated() {
+  (
+    IFS=$' '
+    date +"%Y-%m-%d %r : $*" >>"${XDG_CACHE_HOME:-$HOME/.cache}/updates.log"
+  )
 }
 
 function updateApt() {
@@ -244,6 +251,20 @@ function updatePipx() {
   fi
 }
 
+function updateUv() {
+  if command_exists uv; then
+    print_info "Getting updates for uv tools"
+    # Update uv itself
+    INSTALLER_NO_MODIFY_PATH=1 uv self update
+
+    # Update the tools
+    uv tool upgrade --all
+
+    # Prune the cache
+    uv cache prune
+  fi
+}
+
 function updateAsdf() {
   if command_exists asdf; then
     print_info "Updating asdf"
@@ -261,6 +282,10 @@ function updateAppman() {
     appman -s
     # update
     appman -u
+
+    # special... nightly builds don't get updated so we will manually manage nvim
+    appman -R nvim-nightly
+    appman -i nvim-nightly
   fi
 }
 
@@ -328,53 +353,36 @@ function updateAll() {
   updateFlatpak
   updateSnaps
   updatePipx
+  updateUv
   updateAsdf
   updateAppman
   updateAm
   updateTmux
   updateVim
   updateNvim
+
+  record_last_updated "All"
 }
 
-## Your main implementation goes here.  All of the positional arguments have
-## been passed as an array to this function.
-function main() {
-  if [[ -z "${1:-}" ]]; then
-    updateAll
-
-    # Record last update
-    date +"%Y-%m-%d %r : All (default)" >>"${XDG_CACHE_HOME:-$HOME/.cache}/updates.log"
-
-    return
-  fi
-
-  options=("$@")
+function updateSelected() {
+  local selected=("$@")
 
   while [[ -n "${1:-}" ]]; do
     case "$1" in
-    'help')
-      showHelp
-      exit 0
-      ;;
-    'version')
-      show_version "exit"
-      exit 0
-      ;;
-    'all')
-      updateAll
-      exit 0
-      ;;
     'apt')
       updateApt
       ;;
     'flatpak')
       updateFlatpak
       ;;
-    'snap' | 'snaps')
+    'snap')
       updateSnaps
       ;;
     'pipx')
       updatePipx
+      ;;
+    'uv')
+      updateUv
       ;;
     'asdf')
       updateAsdf
@@ -395,8 +403,79 @@ function main() {
     'vim')
       updateVim
       ;;
-    'nvim' | 'neovim')
+    'nvim')
       updateNvim
+      ;;
+    *)
+      throw_error_msg "Unknown option: $1"
+      ;;
+    esac
+    shift
+  done
+
+  record_last_updated "${selected[@]}"
+}
+
+## Your main implementation goes here.  All of the positional arguments have
+## been passed as an array to this function.
+function main() {
+  if [[ -z "${1:-}" ]]; then
+    updateAll
+    exit 0
+  fi
+
+  local options=("$@")
+  local selected=()
+
+  while [[ -n "${1:-}" ]]; do
+    case "$1" in
+    'help')
+      showHelp
+      exit 0
+      ;;
+    'version')
+      show_version "exit"
+      exit 0
+      ;;
+    'all')
+      updateAll
+      exit 0
+      ;;
+    'apt')
+      selected+=("apt")
+      ;;
+    'flatpak')
+      selected+=("flatpak")
+      ;;
+    'snap' | 'snaps')
+      selected+=("snap")
+      ;;
+    'pipx')
+      selected+=("pipx")
+      ;;
+    'uv')
+      selected+=("uv")
+      ;;
+    'asdf')
+      selected+=("asdf")
+      ;;
+    'appimages' | 'appimage')
+      selected+=("appimages")
+      ;;
+    'appman')
+      selected+=("appman")
+      ;;
+    'am')
+      selected+=("am")
+      ;;
+    'tmux')
+      selected+=("tmux")
+      ;;
+    'vim')
+      selected+=("vim")
+      ;;
+    'nvim' | 'neovim')
+      selected+=("nvim")
       ;;
     '--')
       break
@@ -408,11 +487,7 @@ function main() {
     shift
   done
 
-  # Record last update
-  (
-    IFS=$' '
-    date +"%Y-%m-%d %r : ${options[*]}" >>"${XDG_CACHE_HOME:-$HOME/.cache}/updates.log"
-  )
+  updateSelected "${selected[@]}"
 }
 
 ## This must be the last line
