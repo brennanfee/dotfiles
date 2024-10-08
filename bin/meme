@@ -221,7 +221,7 @@ function process_flags() {
 
 ## USAGE: Construct your help screen text here.
 function print_help() {
-  print_out "  ${script_name} [options] <sub-command>"
+  print_out "  ${g_script_name} [options] <sub-command>"
   print_blank_line
   print_out "Script to use a free online service (memegen.link) to generate"
   print_out "meme images from templates."

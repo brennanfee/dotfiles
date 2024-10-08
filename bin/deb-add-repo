@@ -276,7 +276,7 @@ function process_flags() {
 
 ## USAGE: Construct your help screen text here.
 function print_help() {
-  print_out "  ${script_name} [options] <key file or url> <repo url>"
+  print_out "  ${g_script_name} [options] <key file or url> <repo url>"
   print_blank_line
   print_out "This program sets up a Debian (or derivative) repository using the new method of"
   print_out "downloading a GPG key and setting up the sources.list.d file to use the 'signed-by'"

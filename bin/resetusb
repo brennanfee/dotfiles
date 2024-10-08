@@ -2,8 +2,8 @@
 
 ### START Bash strict mode
 # shellcheck disable=SC2154
-([[ -n ${ZSH_EVAL_CONTEXT} && ${ZSH_EVAL_CONTEXT} =~ :file$ ]] ||
-  [[ -n ${BASH_VERSION} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
+([[ -n ${ZSH_EVAL_CONTEXT} && ${ZSH_EVAL_CONTEXT} =~ :file$ ]] \
+  || [[ -n ${BASH_VERSION} ]] && (return 0 2> /dev/null)) && SOURCED=true || SOURCED=false
 if ! ${SOURCED}; then
   set -o errexit  # same as set -e
   set -o nounset  # same as set -u
@@ -122,15 +122,21 @@ function process_arguments() {
     fi
   done
 
-  # We require at least one positional argument for the sub_command
-  if [[ "${#positional_arguments[@]}" -eq 0 ]]; then
-    print_error "Invalid number of arguments - missing command."
+  process_flags "${flags[@]}"
+  g_positional_arguments=("${positional_arguments[@]}")
+}
+
+## USAGE: First parameter should be the number of expected (required) positional arguments.
+## Optionally, you can pass in a second argument to customize the error message.
+function validate_number_of_positional_arguments() {
+  local expected_arguments=$1
+  local error_msg="${2:-Invalid number of arguments, expected at least ${expected_arguments}.}"
+
+  if [[ "${#g_positional_arguments[@]}" -lt ${expected_arguments} ]]; then
+    print_error "${error_msg}"
     show_help
     exit 1
   fi
-
-  process_flags "${flags[@]}"
-  g_positional_arguments=("${positional_arguments[@]}")
 }
 
 function main_handler() {
@@ -192,7 +198,7 @@ function process_flags() {
 
 ## USAGE: Construct your help screen text here.
 function print_help() {
-  print_out "  ${script_name} [options]"
+  print_out "  ${g_script_name} [options]"
   print_blank_line
   print_out "Utility to reset the USB devices to attempt to solve issues."
   print_blank_line

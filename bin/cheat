@@ -244,7 +244,7 @@ function main() {
     tldr "$@"
     ;;
   *)
-    throw_error_msg "Unknown ${script_name} command: '${sub_command}'"
+    throw_error_msg "Unknown ${g_script_name} command: '${sub_command}'"
     ;;
   esac
 }

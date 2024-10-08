@@ -190,7 +190,7 @@ function process_flags() {
 
 ## USAGE: Construct your help screen text here.
 function print_help() {
-  print_out "  ${script_name} [options]"
+  print_out "  ${g_script_name} [options]"
   print_blank_line
   print_out "Utility to install\upgrade the Ubuntu kernel to an HWE version."
   print_blank_line
@@ -235,7 +235,7 @@ function main() {
     if [[ "${hwe_edge_exists}" == "1" ]]; then
       kernel_to_install="hwe-edge"
     elif [[ "${hwe_exists}" == "1" ]]; then
-      print_status "The edge kernel is not available, but the standard HWE kernel is.  Selecting the HWE kernel."
+      print_out "The edge kernel is not available, but the standard HWE kernel is.  Selecting the HWE kernel."
       kernel_to_install="hwe"
     fi
   else
@@ -246,7 +246,7 @@ function main() {
 
   case "${kernel_to_install}" in
   hwe)
-    print_status "HWE kernel found, installing..."
+    print_out "HWE kernel found, installing..."
 
     DEBIAN_FRONTEND=noninteractive apt-get -y -q install "linux-generic-hwe-${release_ver}" \
       linux-firmware
@@ -265,7 +265,7 @@ function main() {
     print_success "HWE kernel install complete.  It is HIGHLY recommended to reboot."
     ;;
   hwe-edge)
-    print_status "HWE-Edge kernel found, installing..."
+    print_out "HWE-Edge kernel found, installing..."
 
     DEBIAN_FRONTEND=noninteractive apt-get -y -q install "linux-generic-hwe-${release_ver}-edge" \
       linux-firmware
@@ -284,7 +284,7 @@ function main() {
     print_success "HWE-Edge kernel install complete.  It is HIGHLY recommended to reboot."
     ;;
   none)
-    print_status "No HWE kernels are available. No changes were made.  Please try again later."
+    print_out "No HWE kernels are available. No changes were made.  Please try again later."
     ;;
   *)
     throw_error_msg "ERROR! Unable to determine which kernel to install."

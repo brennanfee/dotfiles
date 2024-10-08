@@ -190,7 +190,7 @@ function process_flags() {
 
 ## USAGE: Construct your help screen text here.
 function print_help() {
-  print_out "  ${script_name} [options] <query to wolfram>"
+  print_out "  ${g_script_name} [options] <query to wolfram>"
   print_blank_line
   print_out "CLI utility to make calls to Wolfram Alpha from the terminal."
   print_blank_line

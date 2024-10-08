@@ -202,7 +202,7 @@ function process_flags() {
 
 ## USAGE: Construct your help screen text here.
 function print_help() {
-  print_out "  ${script_name} [options]"
+  print_out "  ${g_script_name} [options]"
   print_blank_line
   print_out "Utility to mirror filenames from one directory onto another."
   print_blank_line

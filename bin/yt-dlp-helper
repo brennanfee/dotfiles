@@ -201,7 +201,7 @@ function process_flags() {
 
 ## USAGE: Construct your help screen text here.
 function print_help() {
-  print_out "  ${script_name} [options] <sub-command> [pass-through arguments]"
+  print_out "  ${g_script_name} [options] <sub-command> [pass-through arguments]"
   print_blank_line
   print_out "This program is a wrapper around yt-dlp for downloading videos"
   print_out "and music from the web."
@@ -347,7 +347,7 @@ function main() {
     yt_helper "ytml" "$@"
     ;;
   *)
-    throw_error_msg "Unknown ${script_name} command: '${sub_command}'"
+    throw_error_msg "Unknown ${g_script_name} command: '${sub_command}'"
     ;;
   esac
 }

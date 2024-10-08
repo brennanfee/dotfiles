@@ -647,11 +647,6 @@ function print_output() {
   print_out "$@"
 }
 
-function print_status() {
-  print_warning "The print_status method is deprecated. Switch to print_out"
-  print_normal "$@"
-}
-
 function print_info() {
   print_normal_bold "$@"
 }

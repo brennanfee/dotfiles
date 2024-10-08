@@ -201,7 +201,7 @@ function process_flags() {
 
 ## USAGE: Construct your help screen text here.
 function print_help() {
-  print_out "  ${script_name} [options] <sub-command>"
+  print_out "  ${g_script_name} [options] <sub-command>"
   print_blank_line
   print_out "This is a collection of SSH utilities, each sub-command a different"
   print_out "tool."

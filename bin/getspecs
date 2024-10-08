@@ -196,7 +196,7 @@ function process_flags() {
 
 ## USAGE: Construct your help screen text here.
 function print_help() {
-  print_out "  ${script_name} [options]"
+  print_out "  ${g_script_name} [options]"
   print_blank_line
   print_out "Utility to produce a file with standard system information for"
   print_out "the current machine.  This tool uses inxi to produce the data."

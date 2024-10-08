@@ -208,7 +208,7 @@ function process_flags() {
 
 ## USAGE: Construct your help screen text here.
 function print_help() {
-  print_out "  ${script_name} [options] <share name>"
+  print_out "  ${g_script_name} [options] <share name>"
   print_blank_line
   print_out "Little utility to mount my MooseFS volumes just the way I like."
   print_blank_line

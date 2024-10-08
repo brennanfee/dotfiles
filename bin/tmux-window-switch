@@ -198,7 +198,7 @@ function process_flags() {
 
 ## USAGE: Construct your help screen text here.
 function print_help() {
-  print_out "  ${script_name} [options] <direction>"
+  print_out "  ${g_script_name} [options] <direction>"
   print_blank_line
   print_out "This program moves between tmux windows using the CLI rather than"
   print_out "a key-combination."
