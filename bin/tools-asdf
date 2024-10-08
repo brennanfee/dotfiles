@@ -233,7 +233,7 @@ function add_if_needed() {
 # time being I have them all in common tools
 #
 # The split that I would like is to have only the following in "common":
-#   golang, nodejs, python, packer, terraform
+#   golang, nodejs, packer, rust, terraform
 # With all the rest being for "dev" environments only
 
 function install_common_tools() {
