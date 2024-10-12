@@ -21,13 +21,13 @@ export PAGER="less"
 
 if command_exists bat; then
   export BAT_BIN="bat"
-  alias cat="bat --terminal-width=-5"
+  alias cat="bat"
   alias bat="bat --terminal-width=-5"
-  alias batcat="bat --terminal-width=-5"
+  alias batcat="bat"
 elif command_exists batcat; then
   export BAT_BIN="batcat"
-  alias cat="batcat --terminal-width=-5"
-  alias bat="batcat --terminal-width=-5"
+  alias cat="batcat"
+  alias bat="batcat"
   alias batcat="batcat --terminal-width=-5"
 else
   export BAT_BIN="cat"
