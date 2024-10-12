@@ -149,7 +149,7 @@ function cdtp() {
 }
 
 # Dotfiles bin
-function cdb() {
+function cdtb() {
   xdg-cd-sub "DOTFILES" "${HOME}/.dotfiles" "bin" "bin" "${1:-}"
 }
 
@@ -157,6 +157,7 @@ function cdb() {
 function cdlb() {
   xdg-go-to-dir "BIN" "${HOME}/.local/bin" "${1:-}"
 }
+alias cdb=cdlb
 
 # Music folder
 function cdm() {
