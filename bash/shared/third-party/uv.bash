@@ -26,7 +26,7 @@ if command -v uv &> /dev/null; then
   path_append "$(uv tool dir)"
 
   export UV_NATIVE_TLS="true"
-  export UV_PYTHON_PREFERENCE="managed"
+  export UV_PYTHON_PREFERENCE="only-managed"
 
   alias uvr="uv run"
 fi
@@ -34,4 +34,3 @@ fi
 if command -v uvx &> /dev/null; then
   eval "$(uvx --generate-shell-completion bash)"
 fi
-

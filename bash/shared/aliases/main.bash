@@ -73,10 +73,15 @@ alias :q="exit"
 alias :wq="exit"
 alias :x="exit"
 
+# RipGrep should always use "smart-case"
+if command_exists rg; then
+  alias rg='rg -S -p'
+fi
+
 # History
 alias histg='history | grep'
 if command_exists rg; then
-  alias hist='history | rg'
+  alias hist='history | rg -S -p'
 else
   alias hist='history | grep'
 fi
@@ -90,28 +95,13 @@ alias cd.='cd ..'
 alias cd..='cd ..'
 alias cdu='cd ..'
 
-# RipGrep should always use "smart-case"
-if command_exists rg; then
-  alias rg='rg -S'
-fi
-
 # wget
 # shellcheck disable=SC2139
-alias wget=wget --hsts-file="$(xdg-base-dir DATA || true)/wget-hsts"
+alias wget='wget --hsts-file="$(xdg-base-dir DATA || true)/wget-hsts"'
 
 # Set up alias for fd
 if command_exists fdfind; then
   alias fd="fdfind"
-fi
-
-# If bat is installed, make it cat
-if command_exists bat; then
-  alias cat="bat"
-elif command_exists batcat; then
-  alias bat="batcat"
-  alias cat="batcat"
-else
-  alias bat="cat"
 fi
 
 if command_exists thefuck; then

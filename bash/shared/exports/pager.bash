@@ -18,25 +18,50 @@ fi
 # END Bash strict mode
 
 export PAGER="less"
-export MANPAGER="less --no-lessopen --line-numbers"
 
-export LESS="--LINE-NUMBERS --quit-if-one-screen --ignore-case --RAW-CONTROL-CHARS --tabs=2 --use-color --QUIET --LONG-PROMPT --mouse"
+if command_exists bat; then
+  export BAT_BIN="bat"
+  alias cat="bat --terminal-width=-5"
+  alias bat="bat --terminal-width=-5"
+  alias batcat="bat --terminal-width=-5"
+elif command_exists batcat; then
+  export BAT_BIN="batcat"
+  alias cat="batcat --terminal-width=-5"
+  alias bat="batcat --terminal-width=-5"
+  alias batcat="batcat --terminal-width=-5"
+else
+  export BAT_BIN="cat"
+  alias bat="cat"
+  alias batcat="cat"
+fi
+
+if [[ "${BAT_BIN}" == "bat" || "${BAT_BIN}" == "batcat" ]]; then
+  export MANROFFOPT="-c"
+
+  if [[ -x "${DOTFILES}/bin/batpipe" ]]; then
+    eval "$("${DOTFILES}/bin/batpipe")"
+    export BATPIPE_TERM_WIDTH=-5
+    export MANPAGER="less -R --use-color -Dd+r -Du+b"
+  else
+    export MANPAGER="sh -c 'col -bx | batcat -l man'"
+  fi
+
+  if command_exists rg; then
+    function batrg() {
+      rg -S -p "$@" | less -R
+    }
+    function batgrep() {
+      rg -S -p "$@" | less -R
+    }
+  else
+    function batgrep() {
+      grep "$@" | less
+    }
+  fi
+else
+  export LESS="--LINE-NUMBERS --quit-if-one-screen --ignore-case --RAW-CONTROL-CHARS --tabs=2 --use-color --QUIET --LONG-PROMPT --mouse"
+  export MANPAGER="less --no-lessopen --line-numbers"
+fi
+
 LESSHISTFILE="$(xdg-base-dir CACHE)/lesshst"
 export LESSHISTFILE
-
-# if type source-highlight >/dev/null 2>&1; then
-#   LESSOPEN="| $(xdg-base-dir DOTFILES)/bin/src-hilite-lesspipe.sh %s"
-# elif type lesspipe >/dev/null 2>&1; then
-#   LESSOPEN="| lesspipe %s"
-# fi
-# export LESSOPEN
-
-function man() {
-  LESS_TERMCAP_md=$'\E[1;31m' \
-    LESS_TERMCAP_me=$'\E[0m' \
-    LESS_TERMCAP_so=$'\E[01;44;33m' \
-    LESS_TERMCAP_se=$'\E[0m' \
-    LESS_TERMCAP_us=$'\E[1;32m' \
-    LESS_TERMCAP_ue=$'\E[0m' \
-    command man "$@"
-}
