@@ -52,17 +52,17 @@ function M.config()
     updateevents = { "TextChangedI" },
   })
 
-  -- vscode format
+  -- Vscode format
   require("luasnip.loaders.from_vscode").lazy_load({
     paths = vim.g.vscode_snippets_path or "",
   })
 
-  -- snipmate format
+  -- Snipmate format
   require("luasnip.loaders.from_snipmate").lazy_load({
     paths = vim.g.snipmate_snippets_path or "",
   })
 
-  -- lua format
+  -- Lua format
   require("luasnip.loaders.from_lua").lazy_load({ paths = vim.g.lua_snippets_path or "" })
 
   local LuaSnipCursorHoldGrp = vim.api.nvim_create_augroup("LuaSnipCursorHoldGrp", { clear = true })
@@ -74,7 +74,7 @@ function M.config()
         return
       end
       if luasnip2.expand_or_jumpable() then
-        -- ask maintainer for option to make this silent
+        -- Ask maintainer for option to make this silent
         -- luasnip.unlink_current()
         vim.cmd([[silent! lua require("luasnip").unlink_current()]])
       end
@@ -117,9 +117,10 @@ function M.config()
       -- Set `select` to `false` to only confirm explicitly selected items.
       ["<CR>"] = cmp.mapping.confirm({ select = false }),
       ["<Tab>"] = cmp.mapping(function(fallback)
-        if cmp.visible() then
-          cmp.select_next_item()
-        elseif luasnip.locally_jumpable(1) then
+        -- if cmp.visible() then
+        --   cmp.select_next_item()
+        -- elseif luasnip.locally_jumpable(1) then
+        if luasnip.locally_jumpable(1) then
           luasnip.jump(1)
         elseif check_backspace() then
           fallback()
@@ -133,9 +134,10 @@ function M.config()
         "s",
       }),
       ["<S-Tab>"] = cmp.mapping(function(fallback)
-        if cmp.visible() then
-          cmp.select_prev_item()
-        elseif luasnip.locally_jumpable(-1) then
+        -- if cmp.visible() then
+        --   cmp.select_prev_item()
+        -- elseif luasnip.locally_jumpable(-1) then
+        if luasnip.locally_jumpable(-1) then
           luasnip.jump(-1)
         elseif check_backspace() then
           fallback()
