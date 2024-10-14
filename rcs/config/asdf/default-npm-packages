@@ -21,3 +21,4 @@ husky
 @commitlint/config-conventional
 commitlint-format-json
 license-report
+npm-check-updates
