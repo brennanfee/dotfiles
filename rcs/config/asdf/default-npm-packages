@@ -10,10 +10,8 @@ stylelint-prettier
 eslint
 eslint-config-prettier
 eslint-plugin-prettier
-htmlhint
 aws-cdk
 typescript
-tldr
 wsl-open
 tree-sitter-cli
 husky

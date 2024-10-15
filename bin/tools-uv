@@ -231,6 +231,8 @@ function housekeeping() {
 function install_common_tools() {
   uv tool install wheel
 
+  uv tool install ansible --with cryptography --with paramiko --with dnspython
+
   uv tool install invoke
   uv tool install yt-dlp
   #uv tool install streamdeck-ui
@@ -241,16 +243,11 @@ function install_dev_tools() {
     return
   fi
 
-  uv tool install ansible --with cryptography --with paramiko --with dnspython
-
   uv tool install molecule --with molecule-plugins \
     --with "molecule-plugins[vagrant]" --with python-vagrant --with dnspython
 
-  # TODO: Evaluate whether these should instead be from nvim\mason or inside the project folders
   uv tool install checkov
-  uv tool install semgrep
   uv tool install bandit
-  uv tool install black
 }
 
 ## Your main implementation goes here.  All of the positional arguments have
