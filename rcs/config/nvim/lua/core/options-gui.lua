@@ -10,5 +10,5 @@ if vim.g.neovide then
 
   vim.g.neovide_input_use_logo = true
 
-  vim.g.neovide_cursor_animation_length = 0 -- turn off cursor animations
+  vim.g.neovide_cursor_animation_length = 0 -- Turn off cursor animations
 end

@@ -6,7 +6,7 @@ function M.plugin(item)
   table.insert(M.lazyPluginSpecs, { import = item })
 end
 
--- check if a variable is not empty nor nil
+-- Check if a variable is not empty nor nil
 M.isNotEmpty = function(s)
   return s ~= nil and s ~= ""
 end
@@ -33,7 +33,7 @@ M.bufdelete = function(bufnum)
 end
 
 M.keymap = function(mode, lhs, rhs, opts)
-  local options = {} -- noremap already default to true for vim.keymap.set
+  local options = {}
   if opts then
     options = vim.tbl_extend("force", options, opts)
   end
@@ -50,7 +50,7 @@ M.theme_colors = function()
   elseif theme == "onedarkpro" then
     themeColors = require("onedarkpro.helpers").get_colors()
   else
-    -- these should match the default Neovim theme
+    -- These should match the default Neovim theme
     themeColors = {
       black = "#0e1013",
       bg0 = "#1f2329",
