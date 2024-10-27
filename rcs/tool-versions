@@ -1,10 +1,12 @@
-dotnet 8.0.401
-golang 1.23.1
-java adoptopenjdk-23.0.0+37
-kotlin 2.0.20
-nodejs 20.17.0
-packer 1.11.2
-ruby 3.3.5
-rust 1.81.0
-semver 3.4.0
-terraform 1.9.6
+dotnet 8.0.403 latest
+golang 1.23.2 latest
+java adoptopenjdk-23.0.1+11 latest:adoptopenjdk-23
+julia 1.11.1 latest
+kotlin 2.0.21 latest
+nodejs lts latest
+packer 1.11.2 latest
+php 8.3.13 latest
+ruby 3.3.5 latest
+rust 1.82.0 latest
+semver 3.4.0 latest
+terraform 1.9.8 latest

@@ -240,9 +240,11 @@ function install_common_tools() {
   add_if_needed dotnet
   add_if_needed golang
   add_if_needed java
+  add_if_needed julia
   add_if_needed kotlin
   add_if_needed nodejs
   add_if_needed packer
+  add_if_needed php
   # add_if_needed python  # now being handled by uv
   add_if_needed ruby
   add_if_needed rust
