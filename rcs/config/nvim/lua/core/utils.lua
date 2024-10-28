@@ -32,6 +32,28 @@ M.bufdelete = function(bufnum)
   end
 end
 
+M.tableMerge = function(t1, t2)
+  for k, v in pairs(t2) do
+    if type(v) == "table" then
+      if type(t1[k] or false) == "table" then
+        M.tableMerge(t1[k] or {}, t2[k] or {})
+      else
+        t1[k] = v
+      end
+    else
+      t1[k] = v
+    end
+  end
+  return t1
+end
+
+M.tableAppend = function(t1, t2)
+  for _, v in pairs(t2) do
+    table.insert(t1, v)
+  end
+  return t1
+end
+
 M.keymap = function(mode, lhs, rhs, opts)
   local options = {}
   if opts then

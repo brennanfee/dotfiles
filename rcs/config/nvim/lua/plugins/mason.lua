@@ -36,20 +36,29 @@ function M.config()
   require("mason-tool-installer").setup({
     ensure_installed = tool_lists.all_tools,
     run_on_start = true,
+    auto_update = true,
+    integrations = {
+      ["mason-lspconfig"] = true,
+      ["mason-null-ls"] = false,
+      ["mason-nvim-dap"] = true,
+    },
   })
 
   vim.api.nvim_create_user_command("AutoUpdate", function()
     require("lazy").sync({ wait = true, show = false })
     vim.cmd("MasonUpdate")
-    vim.cmd("MasonToolsUpdate")
+    vim.cmd("MasonToolsUpdateSync")
+    vim.cmd("MasonToolsClean")
   end, {})
 
-  -- vim.api.nvim_create_user_command("DoUpdate", function()
-  --   require("lazy").sync({ wait = true, show = false })
-  --   vim.cmd("MasonToolsUpdate")
-  -- end, {})
+  vim.api.nvim_create_user_command("DoUpdate", function()
+    require("lazy").sync({ wait = true, show = false })
+    vim.cmd("MasonUpdate")
+    vim.cmd("MasonToolsUpdateSync")
+    vim.cmd("MasonToolsClean")
+  end, {})
 
-  vim.g.mason_binaries_list = servers
+  -- vim.g.mason_binaries_list = tool_lists.all_tools
 end
 
 return M

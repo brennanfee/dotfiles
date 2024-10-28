@@ -4,6 +4,8 @@ M.lsp_servers = {
   "ansiblels",
   "autotools_ls",
   "awk_ls",
+  -- "bacon-ls", -- For Rust, not in lspconfig yet
+  -- "bacon_ls", -- For Rust, not in lspconfig yet
   "basedpyright", -- Pyright replacement
   "bashls",
   "biome",
@@ -11,11 +13,13 @@ M.lsp_servers = {
   "cmake",
   "cobol_ls",
   "csharp_ls",
+  "css_variables",
   "cssls",
+  "cssmodules_ls",
   "cucumber_language_server",
   "docker_compose_language_service",
   "dockerls",
-  "eslint",
+  -- "eslint", -- Use Biome instead
   "fortls",
   "gopls",
   "graphql",
@@ -32,14 +36,15 @@ M.lsp_servers = {
   "markdown_oxide",
   "marksman",
   -- "nginx_language_server",
+  -- "nil_ls", -- Fails to install
   "perlnavigator",
   "phpactor",
   "powershell_es",
   "rubocop",
   "ruby_lsp",
   "ruff", -- Python
-  "rust_analyzer",
-  --"salt_ls", -- Seems to be broken
+  "rust_analyzer", -- Switch to bacon_ls
+  -- "salt_ls", -- Seems to be broken
   -- "snyk_ls", -- Security scanning
   "sqlls",
   "stylelint_lsp",
@@ -58,75 +63,127 @@ M.lsp_servers = {
 }
 
 M.debug_adapters = {
-  "bash-debug-adapter", -- "chrome-debug-adapter", -- doesn't seem to work
+  "bash-debug-adapter",
+  -- "chrome-debug-adapter", -- doesn't seem to work
   "cpptools",
+  "debugpy",
   "delve", -- Go debugger
   "firefox-debug-adapter",
   "java-debug-adapter",
   "js-debug-adapter",
   "kotlin-debug-adapter",
   "node-debug2-adapter",
+  "perl-debug-adapter",
   "php-debug-adapter",
-  "debugpy",
 }
 
 M.linters = {
   "actionlint",
+  "alex",
   "ansible-lint",
+  "ast-grep",
+  "bacon", -- For Rust
+  "bacon-ls", -- For Rust
+  "biome",
+  "buf",
   "cfn-lint",
   "checkmake",
+  "checkstyle",
+  "cmakelang",
   "cmakelint",
   "commitlint",
   "cpplint",
+  "curlylint",
   "editorconfig-checker",
   "eslint_d",
   "flake8",
+  "gitleaks",
+  "gitlint",
   "hadolint", -- Dockerfile linter
+  "htmlhint",
   "jsonlint",
   "ktlint",
   "luacheck",
   "markdownlint",
   "misspell",
+  "oxlint",
   "phpstan",
   "proselint",
+  "pydocstyle",
+  "pylint",
+  "rubocop",
+  "ruff",
+  "salt-lint",
+  "selene", -- For Lua
   "semgrep",
   "shellcheck",
   -- "snyk",
   "sqlfluff",
   "stylelint",
+  "systemdlint",
+  "textlint",
   "tflint",
   "tfsec",
+  "typos",
+  "vacuum",
   "vint",
+  "vulture",
+  "woke",
   "write-good",
   "yamllint",
 }
 
 M.formatters = {
+  "ast-grep",
+  "autoflake",
+  "biome",
   "black",
   "blackd-client",
   "buf",
   "cbfmt",
   "clang-format",
   "cmakelang",
-  "commitlint",
   "csharpier",
+  "docformatter",
+  "doctoc",
   "fixjson",
+  "fprettify",
+  "gci",
   "gofumpt",
+  "goimports",
   "google-java-format",
-  "htmlhint",
+  "hclfmt",
+  "isort",
+  "ktfmt",
+  "ktlint",
   "luaformatter",
   "markdown-toc",
+  "markdownlint",
+  "mdformat",
+  "mdsf",
+  "nixpkgs-fmt",
   "php-cs-fixer",
+  "pint",
+  "prettier",
   "prettierd",
+  "pretty-php",
+  "pyment",
+  "reformat-gherkin",
   "rubocop",
+  "rubyfmt",
+  "ruff",
+  "rufo",
+  "rustywind", -- For Tailwind
   "shfmt",
   "sqlfmt",
   "stylua",
+  "typstfmt",
+  "xmlformatter",
+  "yamlfix",
   "yamlfmt",
 }
 
 M.misc_tools = {
-  "ast-grep",
   "gh",
   "gitui",
   "glow",
@@ -134,16 +191,16 @@ M.misc_tools = {
   "yq",
 }
 
-M.all_except_lsps = {
-  unpack(M.debug_adapters),
-  unpack(M.linters),
-  unpack(M.formatters),
-  unpack(M.misc_tools),
-}
+M.all_except_lsps = {}
+M.all_tools = {}
 
-M.all_tools = {
-  unpack(M.all_except_lsps),
-  unpack(M.lsp_servers),
-}
+local utils = require("core/utils")
+utils.tableAppend(M.all_except_lsps, M.debug_adapters)
+utils.tableAppend(M.all_except_lsps, M.linters)
+utils.tableAppend(M.all_except_lsps, M.formatters)
+utils.tableAppend(M.all_except_lsps, M.misc_tools)
+
+utils.tableAppend(M.all_tools, M.lsp_servers)
+utils.tableAppend(M.all_tools, M.all_except_lsps)
 
 return M
