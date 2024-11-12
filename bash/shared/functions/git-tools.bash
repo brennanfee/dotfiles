@@ -19,17 +19,6 @@ fi
 
 shopt -s inherit_errexit
 
-function git-exe() {
-  git_cmd="git"
-  if command_exists hub; then
-    git_cmd="hub"
-  fi
-  if command_exists lab; then
-    git_cmd="lab"
-  fi
-  echo "${git_cmd}"
-}
-
 function git-branch-name() {
   local res=in-a-git-repo
   if [[ res -eq 0 ]]; then
