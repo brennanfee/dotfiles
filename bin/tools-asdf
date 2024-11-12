@@ -237,7 +237,9 @@ function add_if_needed() {
 # With all the rest being for "dev" environments only
 
 function install_common_tools() {
+  add_if_needed bun
   add_if_needed dotnet
+  add_if_needed glab
   add_if_needed golang
   add_if_needed java
   add_if_needed julia
@@ -250,6 +252,7 @@ function install_common_tools() {
   add_if_needed rust
   add_if_needed semver
   add_if_needed terraform
+  add_if_needed typst
 }
 
 function install_dev_tools() {
