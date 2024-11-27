@@ -199,6 +199,10 @@ function check_prerequisites() {
   if [[ ! -x "${g_mise_bin}" ]]; then
     curl https://mise.run | bash
 
+    # Trust the config file
+    "${g_mise_bin}" -y trust "$(xdg_base_dir DOTFILES)/rcs/config/mise/config.toml"
+
+    ## Run the installs
     "${g_mise_bin}" -y install
 
     msg="The 'mise' utility was installed.  You will need to close and re-open the terminal."
@@ -211,12 +215,15 @@ function check_prerequisites() {
 function main() {
   check_prerequisites
 
+  # Trust the config file
+  "${g_mise_bin}" -y trust "$(xdg_base_dir DOTFILES)/rcs/config/mise/config.toml"
+
   # Update mise itself
   "${g_mise_bin}" -y self-update
 
   # Install and upgrade tools
   "${g_mise_bin}" -y install
-  "${g_mise_bin}" -y upgrade
+  "${g_mise_bin}" -y upgrade --bump
   "${g_mise_bin}" -y reshim
   "${g_mise_bin}" -y prune
 }
