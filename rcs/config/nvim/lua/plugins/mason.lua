@@ -36,7 +36,8 @@ function M.config()
   require("mason-tool-installer").setup({
     ensure_installed = tool_lists.all_tools,
     run_on_start = true,
-    auto_update = true,
+    -- auto_update = true,
+    auto_update = false,
     integrations = {
       ["mason-lspconfig"] = true,
       ["mason-null-ls"] = false,
