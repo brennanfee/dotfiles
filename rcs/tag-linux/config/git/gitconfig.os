@@ -1,8 +1,8 @@
 [diff]
-  tool = bc3
+  tool = bc
 [difftool]
   bc3 = trustExitCode
 [merge]
-  tool = bc3
+  tool = bc
 [mergetool]
   bc3 = trustExitCode
