@@ -149,8 +149,8 @@ function main_handler() {
 
 g_script_author="Brennan Fee"
 g_script_license="MIT License"
-g_script_version="0.4"
-g_script_date="2024-10-07"
+g_script_version="0.5"
+g_script_date="2024-11-27"
 
 ### END Script template bootstrap
 #################################

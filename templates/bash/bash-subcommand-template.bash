@@ -21,10 +21,6 @@ fi
 
 g_script_name=$(basename "${BASH_SOURCE[0]}")
 g_script_dir="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"
-g_script_author="Brennan Fee"
-g_script_license="MIT License"
-g_script_version="0.1"
-g_script_date="2024-09-16"
 
 g_short_options=""
 g_long_options=""
@@ -144,14 +140,25 @@ function validate_number_of_positional_arguments() {
 
 function main_handler() {
   load_script_tools
+  setup_script_vars
   setup_options
   process_arguments "$@"
   main "${g_positional_arguments[@]}"
   cleanup_vars
 }
 
+g_script_author="Brennan Fee"
+g_script_license="MIT License"
+g_script_version="0.1"
+g_script_date="2024-09-16"
+
 ### END Script template bootstrap
 #################################
+
+## USAGE: If you want any global variables, set them up here
+function setup_script_vars() {
+  noop
+}
 
 ## USAGE: If you add any global variables, clean them up in this method
 function cleanup_script_vars() {
