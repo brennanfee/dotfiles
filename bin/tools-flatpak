@@ -24,10 +24,6 @@ fi
 
 g_script_name=$(basename "${BASH_SOURCE[0]}")
 g_script_dir="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"
-g_script_author="Brennan Fee"
-g_script_license="MIT License"
-g_script_version="0.4"
-g_script_date="2024-10-07"
 
 g_short_options=""
 g_long_options=""
@@ -144,17 +140,26 @@ function validate_number_of_positional_arguments() {
 
 function main_handler() {
   load_script_tools
+  setup_script_vars
   setup_options
   process_arguments "$@"
   main "${g_positional_arguments[@]}"
   cleanup_vars
 }
 
+g_script_author="Brennan Fee"
+g_script_license="MIT License"
+g_script_version="0.4"
+g_script_date="2024-10-07"
+
 ### END Script template bootstrap
 #################################
 
-g_include_dev_tools="false"
-g_desktop_environment="kde"
+## USAGE: If you want any global variables, set them up here
+function setup_script_vars() {
+  g_include_dev_tools="false"
+  g_desktop_environment="kde"
+}
 
 ## USAGE: If you add any global variables, clean them up in this method
 function cleanup_script_vars() {
@@ -244,12 +249,12 @@ function check_prerequisites() {
   fi
 
   # Setup flathub repo
-  sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+  flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 }
 
 function install_if_needed() {
   if [[ $(flatpak list --columns=application | grep -i -c "${1}") -eq 0 ]]; then
-    sudo flatpak install -y --noninteractive flathub "${1}"
+    flatpak install -y --noninteractive flathub "${1}"
   fi
 }
 

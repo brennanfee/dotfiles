@@ -223,7 +223,8 @@ function main() {
 
   # Install and upgrade tools
   "${g_mise_bin}" -y install
-  "${g_mise_bin}" -y upgrade --bump
+  # "${g_mise_bin}" -y upgrade --bump --verbose
+  "${g_mise_bin}" -y upgrade
   "${g_mise_bin}" -y reshim
   "${g_mise_bin}" -y prune
 }

@@ -223,55 +223,63 @@ function prepare() {
   fi
 }
 
+function install_if_needed() {
+  local product="${1}"
+  local listFile="${2}"
+  local keyFile="${3}"
+  local keyUrl="${4}"
+  local repoStatement="${5}"
+  local dearmorKey="${6:-false}"
+
+  if [[ ! -f "${listFile}" ]]; then
+    print_out "  Installing ${product} repo"
+    # key file
+    if [[ "${dearmorKey}" == "true" ]]; then
+      curl -fsSL "${keyUrl}" | sudo gpg --dearmor -o "${keyFile}"
+    else
+      sudo curl -fsSLo "${keyFile}" "${keyUrl}"
+    fi
+    # list file
+    echo "deb [signed-by=${keyFile} arch=$(dpkg --print-architecture)] ${repoStatement}" |
+      sudo tee "${listFile}" >/dev/null
+  fi
+}
+
 function install_mullvad_repo() {
   local listFile="/etc/apt/sources.list.d/mullvad.list"
   local keyFile="/etc/apt/keyrings/mullvad-keyring.asc"
   local keyUrl="https://repository.mullvad.net/deb/mullvad-keyring.asc"
-  local repoUrl="https://repository.mullvad.net/deb/stable"
+  local repoStatement
+  repoStatement="https://repository.mullvad.net/deb/stable $(lsb_release -cs) main"
 
-  if [[ ! -f "${listFile}" ]]; then
-    print_out "  Installing Mullvad repo"
-    # key file
-    sudo curl -fsSLo "${keyFile}" "${keyUrl}"
-    # list file
-    echo "deb [signed-by=${keyFile} arch=$(dpkg --print-architecture)] ${repoUrl} $(lsb_release -cs) main" | sudo tee "${listFile}" >/dev/null
-  fi
+  install_if_needed "Mullvad" "${listFile}" "${keyFile}" "${keyUrl}" "${repoStatement}"
 }
 
 function install_netbird_repo() {
   local listFile="/etc/apt/sources.list.d/netbird.list"
   local keyFile="/etc/apt/keyrings/netbird-archive-keyring.gpg"
   local keyUrl="https://pkgs.netbird.io/debian/public.key"
-  local repoUrl="https://pkgs.netbird.io/debian"
+  local repoStatement="https://pkgs.netbird.io/debian stable main"
 
-  if [[ ! -f "${listFile}" ]]; then
-    print_out "  Installing Netbird repo"
-    # key file
-    curl -fsSL "${keyUrl}" | sudo gpg --dearmor -o "${keyFile}"
-    # list file
-    echo "deb [signed-by=${keyFile} arch=$(dpkg --print-architecture)] ${repoUrl} stable main" | sudo tee "${listFile}" >/dev/null
-  fi
+  install_if_needed "Netbird" "${listFile}" "${keyFile}" "${keyUrl}" "${repoStatement}" true
 }
 
 function install_beyondCompare_repo() {
   local listFile="/etc/apt/sources.list.d/scootersoftware.list"
   local keyFile="/etc/apt/keyrings/scootersoftware.asc"
   local keyUrl="https://www.scootersoftware.com/DEB-GPG-KEY-scootersoftware.asc"
-  local repoUrl="https://repository.mullvad.net/deb/stable"
+  local repoStatement="https://www.scootersoftware.com/debian bcompare5 non-free"
 
   if [[ ! -f "${listFile}" ]]; then
-    print_out "  Installing Beyond Compare repo"
     # Prevent installs from trying to install this repo again
     sudo touch /etc/default/bcompare
-    # key file
-    sudo curl -fsSLo "${keyFile}" "${keyUrl}"
-    # list file
-    echo "deb [signed-by=${keyFile} arch=$(dpkg --print-architecture)] ${repoUrl} bcompare5 non-free" | sudo tee "${listFile}" >/dev/null
   fi
+
+  install_if_needed "Beyond Compare" "${listFile}" "${keyFile}" "${keyUrl}" "${repoStatement}"
 }
 
 function install_insync_repo() {
-  local listFile="/etc/apt/sources.list.d/scootersoftware.list"
+  local listFile="/etc/apt/sources.list.d/insync.list"
   local keyFile="/etc/apt/keyrings/insync.gpg"
 
   if [[ ! -f "${listFile}" ]]; then
@@ -289,32 +297,23 @@ function install_vsCode_repo() {
   local listFile="/etc/apt/sources.list.d/vscode.list"
   local keyFile="/etc/apt/keyrings/microsoft.asc"
   local keyUrl="https://packages.microsoft.com/keys/microsoft.asc"
-  local repoUrl="https://packages.microsoft.com/repos/code"
+  local repoStatement="https://packages.microsoft.com/repos/code stable main"
 
   if [[ ! -f "${listFile}" ]]; then
-    print_out "  Installing VS Code repo"
     # Prevent installs from trying to install this repo again
     echo "code code/add-microsoft-repo boolean false" | sudo debconf-set-selections
-    # key file
-    sudo curl -fsSLo "${keyFile}" "${keyUrl}"
-    # list file
-    echo "deb [signed-by=${keyFile} arch=$(dpkg --print-architecture)] ${repoUrl} stable main" | sudo tee "${listFile}" >/dev/null
   fi
+
+  install_if_needed "VS Code" "${listFile}" "${keyFile}" "${keyUrl}" "${repoStatement}"
 }
 
 function install_chrome_repo() {
   local listFile="/etc/apt/sources.list.d/google-chrome.list"
   local keyFile="/etc/apt/keyrings/google.asc"
   local keyUrl="https://dl.google.com/linux/linux_signing_key.pub"
-  local repoUrl="https://dl.google.com/linux/chrome/deb"
+  local repoStatement="https://dl.google.com/linux/chrome/deb stable main"
 
-  if [[ ! -f "${listFile}" ]]; then
-    print_out "  Installing Google Chrome repo"
-    # key file
-    sudo curl -fsSLo "${keyFile}" "${keyUrl}"
-    # list file
-    echo "deb [signed-by=${keyFile} arch=$(dpkg --print-architecture)] ${repoUrl} stable main" | sudo tee "${listFile}" >/dev/null
-  fi
+  install_if_needed "Google Chrome" "${listFile}" "${keyFile}" "${keyUrl}" "${repoStatement}"
 }
 
 function install_common_repos() {
