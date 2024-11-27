@@ -623,6 +623,10 @@ function print_info() {
   print_normal_bold "$@"
 }
 
+function print_status() {
+  print_normal_bold "$@"
+}
+
 function print_success() {
   print_green "$@"
 }

@@ -214,20 +214,8 @@ function print_help() {
   print_blank_line
 }
 
-function check_prerequisites() {
-  if ! command -v uv &>/dev/null; then
-    curl -LsSf https://astral.sh/uv/install.sh | INSTALLER_NO_MODIFY_PATH=1 sh -s
-
-    path_append "${CARGO_INSTALL_ROOT}/bin"
-    path_append "${CARGO_HOME}/bin"
-
-    eval "$(uv generate-shell-completion bash)"
-    eval "$(uvx --generate-shell-completion bash)"
-  fi
-}
-
 function housekeeping() {
-  INSTALLER_NO_MODIFY_PATH=1 uv self update
+  # INSTALLER_NO_MODIFY_PATH=1 uv self update
 
   uv cache prune
 }
@@ -258,7 +246,9 @@ function install_dev_tools() {
 ## Your main implementation goes here.  All of the positional arguments have
 ## been passed as an array to this function.
 function main() {
-  check_prerequisites
+  if ! command_exists uv; then
+    return 0
+  fi
 
   housekeeping
 

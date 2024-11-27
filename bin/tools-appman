@@ -242,7 +242,7 @@ function install_if_needed() {
 
 function install_common_tools() {
   install_if_needed nvim-nightly
-  install_if_needed espanso
+  # install_if_needed espanso # Temporarily on hold
   install_if_needed orcaslicer
 }
 

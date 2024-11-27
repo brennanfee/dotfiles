@@ -227,18 +227,27 @@ function main() {
   fi
 
   # Call the other tool install scripts, order does matter here.
+  print_status "Running 'tools-repos'"
   "${dotfilesBin}/tools-repos" "${options}"
+  print_status "Running 'apts'"
   "${dotfilesBin}/tools-apts" "${options}"
+  print_status "Running 'tools-mise'"
   "${dotfilesBin}/tools-mise"
 
+  print_status "Activating Mise"
   eval "$("${miseExe}" activate bash)"
   eval "$("${miseExe}" hook-env -s bash)"
 
+  print_status "Running 'tools-tmux'"
   "${dotfilesBin}/tools-tmux"
+  print_status "Running 'tools-vim'"
   "${dotfilesBin}/tools-vim"
 
-  "${dotfilesBin}/tools-am" "${options}"
+  print_status "Running 'tools-appman'"
+  "${dotfilesBin}/tools-appman" "${options}"
+  print_status "Running 'tools-flatpak'"
   "${dotfilesBin}/tools-flatpak" "${options}"
+  print_status "Running 'tools-uv'"
   "${dotfilesBin}/tools-uv" "${options}"
 }
 

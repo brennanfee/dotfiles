@@ -293,8 +293,8 @@ function main() {
   install_dev_tools
 
   # Upgrade all installed
-  flatpak upgrade -y --noninteractive --system
-  flatpak upgrade -y --noninteractive --user
+  flatpak upgrade -y --system
+  flatpak upgrade -y --user
 }
 
 ## This must be the last line
