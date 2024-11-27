@@ -23,7 +23,7 @@ if [[ $- != *i* ]]; then
   return
 fi
 
-# Most other places need to ONLY use the xdg-user-dir or my custom xdg-base-dir
+# Most other places need to ONLY use the xdg-user-dir or my custom xdg_base_dir
 # functions, but this directory is so critical and may not be loaded until after
 # the base-profile.bash script has been run.  So I am being overly cautious with
 # defaults on top of defaults here.  AFTER the base-profile is loaded the xdg
@@ -35,8 +35,8 @@ dotfiles="${dotfiles:-${HOME}/.dotfiles}"
 source "${dotfiles}/bash/base-profile.bash"
 
 # Reload them, now with the benefit of base-profile
-dotfiles=$(xdg-user-dir DOTFILES)
-dotfiles_private=$(xdg-user-dir DOTFILESPRIVATE)
+dotfiles=$(xdg_base_dir DOTFILES)
+dotfiles_private=$(xdg_base_dir DOTFILESPRIVATE)
 
 # Again, defaults here just to be overly cautious
 os_primary="${OS_PRIMARY:-linux}"      # Assume linux

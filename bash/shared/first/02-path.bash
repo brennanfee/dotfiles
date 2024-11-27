@@ -20,10 +20,10 @@ fi
 # Set PATH so it includes user's home bin folders (if they exist)
 # NOTE: The order of these is important, the last one will be searched first
 
-base_data_dir=$(xdg-base-dir DATA)
-base_dotfiles_dir=$(xdg-base-dir DOTFILES)
-base_dotfilesprivate_dir=$(xdg-base-dir DOTFILESPRIVATE)
-base_cloud_dir=$(xdg-base-dir CLOUD)
+base_data_dir=$(xdg_base_dir DATA)
+base_dotfiles_dir=$(xdg_base_dir DOTFILES)
+base_dotfilesprivate_dir=$(xdg_base_dir DOTFILESPRIVATE)
+base_cloud_dir=$(xdg_base_dir CLOUD)
 
 ### PREPENDS (order critical)
 

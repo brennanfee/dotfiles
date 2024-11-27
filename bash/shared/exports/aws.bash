@@ -19,7 +19,7 @@ fi
 
 export AWS_DEFAULT_REGION="us-east-1"
 
-aws_home="$(xdg-user-dir CONFIG)/aws"
+aws_home="$(xdg_base_dir CONFIG)/aws"
 
 export AWS_SHARED_CREDENTIALS_FILE="${aws_home}/credentials"
 export AWS_CONFIG_FILE="${aws_home}/config"

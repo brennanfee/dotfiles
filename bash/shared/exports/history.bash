@@ -23,5 +23,5 @@ export HISTIGNORE=$'[ \t]*:&:[fb]g:exit:ls:ls -la:sl:ll:la:lls:lla:pwd:cd:cdp:cd
 export HISTTIMEFORMAT="%Y-%m-%d %H:%M:%S  "
 export HISTFILESIZE=5000
 export HISTSIZE=5000
-HISTFILE="$(xdg-base-dir STATE)/bash_history"
+HISTFILE="$(xdg_base_dir STATE)/bash_history"
 export HISTFILE

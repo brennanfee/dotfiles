@@ -20,9 +20,9 @@ fi
 if command_exists npm; then
   alias npr='npm run'
 
-  NODE_PATH="$(xdg-base-dir DATA)/npm/lib/node_modules"
+  NODE_PATH="$(xdg_base_dir DATA)/npm/lib/node_modules"
   export NODE_PATH
 fi
 
-NPM_CONFIG_USERCONFIG="$(xdg-base-dir CONFIG)/npm/npmrc"
+NPM_CONFIG_USERCONFIG="$(xdg_base_dir CONFIG)/npm/npmrc"
 export NPM_CONFIG_USERCONFIG

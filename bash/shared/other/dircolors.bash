@@ -17,5 +17,5 @@ if ! ${SOURCED}; then
 fi
 # END Bash strict mode
 
-dircolors_file="$(xdg-base-dir CONFIG)/dircolors"
+dircolors_file="$(xdg_base_dir CONFIG)/dircolors"
 test -f "${dircolors_file}" && eval "$(dircolors "${dircolors_file}" || true)"

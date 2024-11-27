@@ -34,7 +34,7 @@ if command_exists fzf; then
   function femo() {
     local selected_emoji
     local the_file
-    the_file="$(xdg-base-dir DOTFILES || true)/bin/emojis.txt"
+    the_file="$(xdg_base_dir DOTFILES || true)/bin/emojis.txt"
     if [[ -f ${the_file} ]]; then
       # shellcheck disable=2002
       selected_emoji=$(cat "${the_file}" | fzf)

@@ -17,5 +17,5 @@ if ! ${SOURCED}; then
 fi
 # END Bash strict mode
 
-GOPATH="$(xdg-base-dir DATA)/go"
+GOPATH="$(xdg_base_dir DATA)/go"
 export GOPATH

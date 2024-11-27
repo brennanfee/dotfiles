@@ -286,9 +286,9 @@ function yt_helper() {
 
   # Output directory
   local directory
-  directory="$(xdg-user-dir VIDEOS)" ## default to video directory
+  directory="$(xdg_base_dir VIDEOS)" ## default to video directory
   if [[ "${sub_command}" == "ytp" || "${sub_command}" == "ytpl" ]]; then
-    directory="$(xdg-user-dir PICTURES)/_other" ## alternate location
+    directory="$(xdg_base_dir PICTURES)/_other" ## alternate location
   fi
   mkdir -p "${directory}"
 

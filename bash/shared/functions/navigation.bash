@@ -18,8 +18,8 @@ fi
 # END Bash strict mode
 
 # Some quick navigations within my profile path, largely managed by
-# the xdg-user-dir system.  See the ~/.config/user-dirs.dirs file for
-# their locations.
+# my custom xdg_base_dir system (which is based off of xdg-user-dir).
+# See the ~/.config/user-dirs.dirs file for their locations.
 
 # Helper functions the others will use
 function xdg-cd-sub() {
@@ -33,7 +33,7 @@ function xdg-cd-sub() {
   local sub1
   local sub2
 
-  the_path=$(xdg-user-dir "$1")
+  the_path=$(xdg_base_dir "$1")
   the_path="${the_path:-$2}"
 
   if [[ -d "${the_path}" ]]; then
@@ -62,7 +62,7 @@ function xdg-go-to-dir() {
   # $2 = backup path if xdg name not found, required
   # $3 = sub-path to go to if it exists, optional
   local the_path
-  the_path=$(xdg-base-dir "$1")
+  the_path=$(xdg_base_dir "$1")
   the_path="${the_path:-$2}"
 
   if [[ -d "${the_path}" ]]; then
@@ -81,7 +81,7 @@ function cdp() {
   # $1 = sub-path to go to if it exists, optional
 
   local the_path
-  the_path=$(xdg-base-dir "PROFILE")
+  the_path=$(xdg_base_dir "PROFILE")
   the_path="${the_path:-${HOME}/profile}"
 
   if [[ -d "${the_path}" ]]; then

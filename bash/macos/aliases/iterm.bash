@@ -17,5 +17,5 @@ if ! ${SOURCED}; then
 fi
 # END Bash strict mode
 
-alias imgcat='$(xdg-base-dir DOTFILES)/iterm2/imgcat'
-alias it2dl='$(xdg-base-dir DOTFILES)/iterm2/it2dl'
+alias imgcat='$(xdg_base_dir DOTFILES)/iterm2/imgcat'
+alias it2dl='$(xdg_base_dir DOTFILES)/iterm2/it2dl'

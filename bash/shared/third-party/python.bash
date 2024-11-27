@@ -18,5 +18,5 @@ fi
 # END Bash strict mode
 
 ## Python startup
-PYTHONSTARTUP="$(xdg-base-dir CONFIG)/python/pythonrc"
+PYTHONSTARTUP="$(xdg_base_dir CONFIG)/python/pythonrc"
 export PYTHONSTARTUP

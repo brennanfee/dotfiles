@@ -45,9 +45,9 @@ export SUDO_PROMPT="${i_fa_lock} password for %u@%h: "
 export FIGNORE=".git:.DS_Store"
 
 # Input
-INPUTRC="$(xdg-base-dir CONFIG)/readline/inputrc"
+INPUTRC="$(xdg_base_dir CONFIG)/readline/inputrc"
 export INPUTRC
 
 # gnupg
-GNUPGHOME="$(xdg-base-dir DATA)/gnupg"
+GNUPGHOME="$(xdg_base_dir DATA)/gnupg"
 export GNUPGHOME

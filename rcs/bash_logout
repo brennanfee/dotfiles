@@ -7,9 +7,9 @@ if [ "$SHLVL" = 1 ]; then
   [ -x /usr/bin/clear_console ] && /usr/bin/clear_console -q
 fi
 
-# dotfiles="${DOTFILES:-$(xdg-user-dir DOTFILES)}"
+# dotfiles="${DOTFILES:-$(xdg_base_dir DOTFILES)}"
 # dotfiles="${dotfiles:-${HOME}/.dotfiles}"
-# profile_path="${PROFILEPATH:-$(xdg-user-dir PROFILE)}"
+# profile_path="${PROFILEPATH:-$(xdg_base_dir PROFILE)}"
 # profile_path="${profile_path:-${HOME}/profile}"
 
 # Unmount the shares

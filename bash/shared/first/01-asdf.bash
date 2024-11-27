@@ -18,7 +18,7 @@ fi
 # END Bash strict mode
 
 # The location where asdf should be installed to and all the data lives
-ASDF_DATA_DIR="$(xdg-base-dir DATA)/asdf"
+ASDF_DATA_DIR="$(xdg_base_dir DATA)/asdf"
 if [[ ! -d "${ASDF_DATA_DIR}" ]]; then
   ASDF_DATA_DIR="${XDG_DATA_HOME}/asdf"
   if [[ ! -d "${ASDF_DATA_DIR}" ]]; then
@@ -32,7 +32,7 @@ fi
 export ASDF_DATA_DIR
 
 # Where all the files will live
-ASDF_CONFIG_HOME="$(xdg-base-dir CONFIG)/asdf"
+ASDF_CONFIG_HOME="$(xdg_base_dir CONFIG)/asdf"
 export ASDF_CONFIG_HOME
 
 # The main config file

@@ -97,7 +97,7 @@ alias cdu='cd ..'
 
 # wget
 # shellcheck disable=SC2139
-alias wget='wget --hsts-file="$(xdg-base-dir DATA || true)/wget-hsts"'
+alias wget='wget --hsts-file="$(xdg_base_dir DATA || true)/wget-hsts"'
 
 # Set up alias for fd
 if command_exists fdfind; then

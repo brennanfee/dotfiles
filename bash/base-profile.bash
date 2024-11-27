@@ -87,7 +87,7 @@ fi
 
 ## XDG Utility function
 
-function xdg-base-dir() {
+function xdg_base_dir() {
   case $1 in
 
     CONFIG | CONFIGHOME)

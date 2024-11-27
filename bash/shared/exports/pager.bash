@@ -63,5 +63,5 @@ else
   export MANPAGER="less --no-lessopen --line-numbers"
 fi
 
-LESSHISTFILE="$(xdg-base-dir CACHE)/lesshst"
+LESSHISTFILE="$(xdg_base_dir CACHE)/lesshst"
 export LESSHISTFILE

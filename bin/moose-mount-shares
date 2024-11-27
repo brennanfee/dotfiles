@@ -228,7 +228,7 @@ function main() {
     return 0
   fi
 
-  xdg_dotfiles="$(xdg-user-dir DOTFILES)"
+  xdg_dotfiles="$(xdg_base_dir DOTFILES)"
   script="${xdg_dotfiles:-${DOTFILES}}/bin/moose-mount"
   if [[ -x "${script}" ]]; then
     bash "${script}" "files" "${option}"

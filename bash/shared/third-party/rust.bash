@@ -17,10 +17,10 @@ if ! ${SOURCED}; then
 fi
 # END Bash strict mode
 
-CARGO_INSTALL_ROOT="$(xdg-base-dir DATA)/cargo"
+CARGO_INSTALL_ROOT="$(xdg_base_dir DATA)/cargo"
 export CARGO_INSTALL_ROOT
 
-CARGO_HOME="$(xdg-base-dir CONFIG)/cargo"
+CARGO_HOME="$(xdg_base_dir CONFIG)/cargo"
 export CARGO_HOME
 
 path_append "${CARGO_INSTALL_ROOT}/bin"
