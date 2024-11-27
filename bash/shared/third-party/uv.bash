@@ -17,6 +17,8 @@ if ! ${SOURCED}; then
 fi
 # END Bash strict mode
 
+export INSTALLER_NO_MODIFY_PATH=1
+
 export UV_TOOL_BIN_DIR="${HOME}/.local/uv/bin"
 path_append "${UV_TOOL_BIN_DIR}"
 

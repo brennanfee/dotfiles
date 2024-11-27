@@ -20,7 +20,11 @@ fi
 # Set PATH so it includes user's home bin folders (if they exist)
 # NOTE: The order of these is important, the last one will be searched first
 
+log "path before: ${PATH}"
+
 base_data_dir=$(xdg_base_dir DATA)
+base_bin_dir=$(xdg_base_dir BIN)
+base_homebin_dir=$(xdg_base_dir HOMEBIN)
 base_dotfiles_dir=$(xdg_base_dir DOTFILES)
 base_dotfilesprivate_dir=$(xdg_base_dir DOTFILESPRIVATE)
 base_cloud_dir=$(xdg_base_dir CLOUD)
@@ -28,7 +32,7 @@ base_cloud_dir=$(xdg_base_dir CLOUD)
 ### PREPENDS (order critical)
 
 # Local bin
-path_prepend "${HOME}/.local/bin"
+path_prepend "${base_bin_dir}"
 
 # Dotfiles & Cloud
 path_prepend "${base_cloud_dir}/bin"
@@ -36,8 +40,7 @@ path_prepend "${base_dotfiles_dir}/bin"
 path_prepend "${base_dotfilesprivate_dir}/bin"
 
 # Home (local override), should always be the "first" to override everything else
-path_prepend "${HOME}/bin"
-path_prepend "${HOME}/.bin"
+path_prepend "${base_homebin_dir}"
 
 # WSL (Windows)
 [[ -d "${WIN_HOME:-${HOME}}/winfiles/bin" ]] && path_prepend "${WIN_HOME:-${HOME}}/winfiles/bin"
@@ -62,25 +65,17 @@ fi
 # I want this to be "first" among the dev language tooling so it takes precedence
 path_append "${base_data_dir}/nvim/mason/bin"
 
-# Node
-if command_exists yarn; then
-  yarn_path=$(yarn global bin)
-  path_append "${yarn_path}"
-fi
-if command_exists npm; then
-  path_append "${base_data_dir}/npm/bin"
-fi
+# # Nix Support
+# if [[ -f /nix/var/nix/profiles/default/etc/profile.d/nix.sh ]]; then
+#   source /nix/var/nix/profiles/default/etc/profile.d/nix.sh
+#   export NIX_REMOTE=daemon
+# fi
 
-# Ruby & Gems
-if command_exists ruby && command_exists gem; then
-  ruby_path=$(ruby -r rubygems -e 'puts Gem.user_dir')
-  path_append "${ruby_path}/bin"
-fi
-
-unset yarn_path
-unset npm_path
-unset ruby_path
 unset base_data_dir
+unset base_bin_dir
+unset base_homebin_dir
 unset base_dotfiles_dir
 unset base_dotfilesprivate_dir
 unset base_cloud_dir
+
+log "path after: ${PATH}"

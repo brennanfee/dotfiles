@@ -21,7 +21,26 @@ if ! ${SOURCED}; then
 fi
 # END Bash strict mode
 
+g_script_dir="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"
+# Source base-profile.bash
+if [[ -f "${g_script_dir}/base-profile.bash" ]]; then
+  # shellcheck source=/home/brennan/.dotfiles/bash/base-profile.bash
+  source "${g_script_dir}/base-profile.bash"
+fi
+unset g_script_dir
+
 #### START: Basic Utilities
+
+function log() {
+  if [[ ${BASHRC_LOGS} == "1" ]]; then
+    local logPath="${HOME}"
+    if [[ -d "${HOME}/profile" ]]; then
+      logPath="${HOME}/profile"
+    fi
+
+    echo -e "$(date --rfc-3339=ns):\n  $1" >> "${logPath}/bashrc.log"
+  fi
+}
 
 # function to make checking executable existence easier
 function command_exists() {
@@ -188,53 +207,6 @@ function manpath_prepend() {
 }
 
 #### END: Path Utilities
-
-#### START: Virtualization Detection Functions - if we are virtual, what type
-
-function is_vm() {
-  if [[ $(systemd-detect-virt --vm || true) == "none" ]]; then
-    return 1
-  else
-    return 0
-  fi
-}
-
-function is_container() {
-  if [[ $(systemd-detect-virt --container || true) == "none" ]]; then
-    return 1
-  else
-    return 0
-  fi
-}
-
-function is_virtual() {
-  if [[ "$(systemd-detect-virt || true)" == "none" ]]; then
-    return 1
-  else
-    return 0
-  fi
-}
-
-function is_vagrant() {
-  if is_vm && [[ "$(grep -i '^vagrant' < /etc/passwd || true)" == "" ]]; then
-    return 1
-  else
-    return 0
-  fi
-}
-
-function is_wsl() {
-  # Are we running on Windows in WSL
-  local kernel
-  kernel=$(uname -r | tr '[:upper:]' '[:lower:]')
-  if [[ "${kernel}" == *"microsoft"* ]]; then
-    return 0
-  else
-    return 1
-  fi
-}
-
-#### END: Virtualization Detection Functions
 
 #### START: Check Root Functions
 

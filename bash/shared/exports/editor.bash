@@ -2,8 +2,8 @@
 
 # Bash strict mode
 # shellcheck disable=SC2154
-([[ -n ${ZSH_EVAL_CONTEXT} && ${ZSH_EVAL_CONTEXT} =~ :file$ ]] ||
-  [[ -n ${BASH_VERSION} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
+([[ -n ${ZSH_EVAL_CONTEXT} && ${ZSH_EVAL_CONTEXT} =~ :file$ ]] \
+  || [[ -n ${BASH_VERSION} ]] && (return 0 2> /dev/null)) && SOURCED=true || SOURCED=false
 if ! ${SOURCED}; then
   set -o errexit  # same as set -e
   set -o nounset  # same as set -u
@@ -16,9 +16,6 @@ if ! ${SOURCED}; then
   IFS=$(printf '\n\t')
 fi
 # END Bash strict mode
-
-VIM_VER="$($(command -v vim) --version | grep "Vi IMproved" | awk '{print $5}' | sed -e 's/\.//g' || true)"
-export VIM_VER
 
 NEOVIM_BIN=""
 HAVE_NVIM=0
@@ -46,14 +43,12 @@ fi
 #   HAVE_NVIM=1
 # fi
 
-export NEOVIM_BIN
-export HAVE_NVIM
-
 if [[ ${HAVE_NVIM} == "1" ]]; then
   # Setup for nvim
   alias vi='"${NEOVIM_BIN}"'
   alias vim='"${NEOVIM_BIN}"'
   alias ogvim="/usr/bin/vim"
+  alias realvim="/usr/bin/vim"
   alias v='"${NEOVIM_BIN}" -R'
   alias view='"${NEOVIM_BIN}" -R'
 
@@ -67,6 +62,7 @@ else
   # Setup for vim
   alias vi="vim"
   alias ogvim="/usr/bin/vim"
+  alias realvim="/usr/bin/vim"
   alias v="vim -R"
   alias view="vim -R"
 
@@ -99,3 +95,6 @@ alias edit='"$EDITOR"'
 alias eg='"$VISUAL"'
 alias ev='"$VISUAL"'
 alias vis='"$VISUAL"'
+
+unset NEOVIM_BIN
+unset HAVE_NVIM

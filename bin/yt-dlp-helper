@@ -21,10 +21,6 @@ fi
 
 g_script_name=$(basename "${BASH_SOURCE[0]}")
 g_script_dir="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"
-g_script_author="Brennan Fee"
-g_script_license="MIT License"
-g_script_version="0.3"
-g_script_date="2024-10-07"
 
 g_short_options=""
 g_long_options=""
@@ -144,14 +140,25 @@ function validate_number_of_positional_arguments() {
 
 function main_handler() {
   load_script_tools
+  setup_script_vars
   setup_options
   process_arguments "$@"
   main "${g_positional_arguments[@]}"
   cleanup_vars
 }
 
+g_script_author="Brennan Fee"
+g_script_license="MIT License"
+g_script_version="0.4"
+g_script_date="2024-11-27"
+
 ### END Script template bootstrap
 #################################
+
+## USAGE: If you want any global variables, set them up here
+function setup_script_vars() {
+  noop
+}
 
 ## USAGE: If you add any global variables, clean them up in this method
 function cleanup_script_vars() {
@@ -287,9 +294,11 @@ function yt_helper() {
   # Output directory
   local directory
   directory="$(xdg_base_dir VIDEOS)" ## default to video directory
+
   if [[ "${sub_command}" == "ytp" || "${sub_command}" == "ytpl" ]]; then
     directory="$(xdg_base_dir PICTURES)/_other" ## alternate location
   fi
+
   mkdir -p "${directory}"
 
   # Output file name

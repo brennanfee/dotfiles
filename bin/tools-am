@@ -25,10 +25,6 @@ fi
 
 g_script_name=$(basename "${BASH_SOURCE[0]}")
 g_script_dir="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"
-g_script_author="Brennan Fee"
-g_script_license="MIT License"
-g_script_version="0.4"
-g_script_date="2024-10-07"
 
 g_short_options=""
 g_long_options=""
@@ -145,20 +141,31 @@ function validate_number_of_positional_arguments() {
 
 function main_handler() {
   load_script_tools
+  setup_script_vars
   setup_options
   process_arguments "$@"
   main "${g_positional_arguments[@]}"
   cleanup_vars
 }
 
+g_script_author="Brennan Fee"
+g_script_license="MIT License"
+g_script_version="0.5"
+g_script_date="2024-11-26"
+
 ### END Script template bootstrap
 #################################
 
-g_include_dev_tools="false"
+## USAGE: If you want any global variables, set them up here
+function setup_script_vars() {
+  g_include_dev_tools="false"
+  g_bin_dir="$(xdg_base_dir BIN)"
+}
 
 ## USAGE: If you add any global variables, clean them up in this method
 function cleanup_script_vars() {
   unset g_include_dev_tools
+  unset g_bin_dir
 }
 
 ## USAGE: If you need to add any command-line flags or options, do it here.
@@ -221,14 +228,14 @@ function check_prerequisites() {
 
   # Check for appman itself, if needed install it
   if ! command -v appman &>/dev/null; then
-    mkdir -p ~/.local/bin/
-    wget -q -O ~/.local/bin/appman https://raw.githubusercontent.com/ivan-hc/AppMan/main/appman
-    chmod +x ~/.local/bin/appman
+    mkdir -p "${g_bin_dir}"
+    wget -q -O "${g_bin_dir}/appman" https://raw.githubusercontent.com/ivan-hc/AppMan/main/appman
+    chmod +x "${g_bin_dir}/appman"
   fi
 }
 
 function install_if_needed() {
-  if [[ ! -x "${XDG_BIN_DIR:-$HOME/.local/bin}/${1}" ]]; then
+  if [[ ! -x "${g_bin_dir}/${1}" ]]; then
     appman -i "${1}"
   fi
 }
@@ -236,6 +243,7 @@ function install_if_needed() {
 function install_common_tools() {
   install_if_needed nvim-nightly
   install_if_needed espanso
+  install_if_needed orcaslicer
 }
 
 function install_dev_tools() {

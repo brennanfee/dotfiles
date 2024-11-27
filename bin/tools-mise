@@ -146,20 +146,20 @@ function main_handler() {
 
 g_script_author="Brennan Fee"
 g_script_license="MIT License"
-g_script_version="0.3"
-g_script_date="2024-11-27"
+g_script_version="0.1"
+g_script_date="2024-11-26"
 
 ### END Script template bootstrap
 #################################
 
 ## USAGE: If you want any global variables, set them up here
 function setup_script_vars() {
-  g_include_dev_tools="false"
+  g_mise_bin="$(xdg_base_dir BIN)/mise"
 }
 
 ## USAGE: If you add any global variables, clean them up in this method
 function cleanup_script_vars() {
-  unset g_include_dev_tools
+  unset g_mise_bin
 }
 
 ## USAGE: If you need to add any command-line flags or options, do it here.
@@ -167,8 +167,7 @@ function cleanup_script_vars() {
 ## set_long_options.  They accept a string with syntax that is the same for
 ## the getopt program.  See it's help for more information.
 function setup_options() {
-  set_short_options "d"
-  set_long_options "include-dev"
+  noop
 }
 
 ## Usage: If you added command-line flags or options using setup_options,
@@ -176,30 +175,15 @@ function setup_options() {
 ## directly into this method so you can process them however you wish,
 ## including using 'shift' as you loop.
 function process_flags() {
-
-  while [[ $# -gt 0 ]]; do
-    case "$1" in
-    '-d')
-      g_include_dev_tools="true"
-      shift
-      ;;
-    '--')
-      shift
-      break
-      ;;
-    *)
-      throw_error_msg "Unknown option: $1"
-      ;;
-    esac
-  done
+  noop
 }
 
 ## USAGE: Construct your help screen text here.
 function print_help() {
   print_out "  ${g_script_name} [options]"
   print_blank_line
-  print_out "This program installs my commonly needed APT packages.  Most are "
-  print_out "needed for asdf plugins or terminal usage."
+  print_out "This program sets up Mise version manager (https://mise.jdx.dev/)"
+  print_out "and installs my desired applications/tools."
   print_blank_line
   print_out "Options:"
   print_blank_line
@@ -209,50 +193,32 @@ function print_help() {
   print_out "  -v or --version"
   print_out "     Show the version number."
   print_blank_line
-  print_out "  -d or --include-dev"
-  print_out "     Also install the tools for a development environment."
-  print_blank_line
 }
 
-function install_common_tools() {
-  # Preferred command-line tools
-  DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q install ripgrep fd-find \
-    fzf dtrx inxi bat cmake direnv tmux git atool rcm wget curl \
-    gnutls-bin ffmpeg mediainfo rename locate build-essential dkms clang
+function check_prerequisites() {
+  if [[ ! -x "${g_mise_bin}" ]]; then
+    curl https://mise.run | bash
 
-  # For rbenv builds (for asdf)
-  DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q install autoconf patch \
-    make rustc libssl-dev libyaml-dev libreadline-dev zlib1g-dev libgmp-dev \
-    libncurses5-dev libffi-dev libgdbm6 libgdbm-dev libdb-dev uuid-dev
+    "${g_mise_bin}" -y install
 
-  # For python builds (for asdf & uv)
-  DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q install build-essential \
-    libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev curl git \
-    libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev \
-    liblzma-dev llvm libmpfr-dev dns-root-data libhidapi-libusb0 \
-    libxcb-xinerama0
-
-  # For PHP builds (for asdf)
-  DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q install autoconf bison \
-    gettext libgd-dev libcurl4-openssl-dev libedit-dev libicu-dev libjpeg-dev \
-    libmariadb-dev libonig-dev libpng-dev libpq-dev libreadline-dev \
-    libsqlite3-dev libssl-dev libxml2-dev libzip-dev openssl pkg-config re2c \
-    zlib1g-dev
-}
-
-function install_dev_tools() {
-  noop
+    msg="The 'mise' utility was installed.  You will need to close and re-open the terminal."
+    print_warning "${msg}"
+  fi
 }
 
 ## Your main implementation goes here.  All of the positional arguments have
 ## been passed as an array to this function.
 function main() {
-  DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q update
+  check_prerequisites
 
-  install_common_tools
-  install_dev_tools
+  # Update mise itself
+  "${g_mise_bin}" -y self-update
 
-  DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q autoremove
+  # Install and upgrade tools
+  "${g_mise_bin}" -y install
+  "${g_mise_bin}" -y upgrade
+  "${g_mise_bin}" -y reshim
+  "${g_mise_bin}" -y prune
 }
 
 ## This must be the last line

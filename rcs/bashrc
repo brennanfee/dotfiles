@@ -23,16 +23,7 @@ if [[ $- != *i* ]]; then
   return
 fi
 
-# Most other places need to ONLY use the xdg-user-dir or my custom xdg_base_dir
-# functions, but this directory is so critical and may not be loaded until after
-# the base-profile.bash script has been run.  So I am being overly cautious with
-# defaults on top of defaults here.  AFTER the base-profile is loaded the xdg
-# functions should work and ALWAYS return valid paths.
-dotfiles="${DOTFILES:-$(xdg-user-dir DOTFILES)}"
-dotfiles="${dotfiles:-${HOME}/.dotfiles}"
-
-# shellcheck source=/dev/null
-source "${dotfiles}/bash/base-profile.bash"
+log "In bashrc"
 
 # Reload them, now with the benefit of base-profile
 dotfiles=$(xdg_base_dir DOTFILES)
@@ -49,6 +40,7 @@ for folder in "first" "options" "exports" "aliases" "third-party" "functions" "o
     for root in "${dotfiles}/bash" "${dotfiles_private}/bash"; do
       if [[ -d "${root}/${base}/${folder}" ]]; then
         for file in "${root}/${base}/${folder}"/*.bash; do
+          log "sourcing: ${file}"
           # shellcheck source=/dev/null
           source "${file}"
         done
@@ -63,6 +55,7 @@ if is_wsl; then
     for root in "${dotfiles}/bash" "${dotfiles_private}/bash"; do
       if [[ -d "${root}/windows-wsl/${folder}" ]]; then
         for file in "${root}"/windows-wsl/"${folder}"/*.bash; do
+          log "sourcing: ${file}"
           # shellcheck source=/dev/null
           source "${file}"
         done
@@ -73,17 +66,24 @@ fi
 
 # Load bash completions
 for file in "${dotfiles}"/bash/completions/*.bash; do
+  log "sourcing: ${file}"
   # shellcheck source=/dev/null
   source "${file}"
 done
 
 if ! mountpoint -q "${HOME}/mounts/files"; then
-  [[ -x "${dotfiles}/bin/moose-mount-shares" ]] && "${dotfiles}/bin/moose-mount-shares"
+  if [[ -x "${dotfiles}/bin/moose-mount-shares" ]]; then
+    log "mounting shares"
+    "${dotfiles}/bin/moose-mount-shares"
+  fi
 fi
 
 # Local config, this should be last and never checked into source control (or if it is it should be host specific)
 # shellcheck source=/dev/null
-[[ -f "${HOME}/.bashrc.local" ]] && source "${HOME}/.bashrc.local"
+if [[ -f "${HOME}/.bashrc.local" ]]; then
+  log "sourcing: ${HOME}/.bashrc.local"
+  source "${HOME}/.bashrc.local"
+fi
 
 unset root
 unset base
@@ -94,4 +94,3 @@ unset dotfiles
 unset dotfiles_private
 unset os_primary
 unset os_secondary
-unset profile_path

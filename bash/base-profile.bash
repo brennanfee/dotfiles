@@ -17,16 +17,6 @@ if ! ${SOURCED}; then
 fi
 # END Bash strict mode
 
-SCRIPT_DIR="$(cd -P "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-
-# Source script-tools.bash
-if [[ -f "${SCRIPT_DIR}/script-tools.bash" ]]; then
-  # shellcheck source=/home/brennan/.dotfiles/bash/script-tools.bash
-  source "${SCRIPT_DIR}/script-tools.bash"
-fi
-
-unset SCRIPT_DIR
-
 #### Profile Environment Variables - Critical locations
 
 # For Windows WSL I use the WSLENV environment variable to pass in the values
@@ -59,6 +49,10 @@ fi
 export WIN_HOME
 
 # Dotfiles locations
+# All "home" locations should be set in only this one location, after this
+# script is loaded (either in a script or in the entire environment), all
+# locations should be set and xdg_base_dir can be used to resolve their locations.
+
 DOTFILES="${DOTFILES:-$(xdg-user-dir DOTFILES)}"
 DOTFILES="${DOTFILES:-${HOME}/.dotfiles}"
 
@@ -68,27 +62,29 @@ DOTFILES_PRIVATE="${DOTFILES_PRIVATE:-${HOME}/.dotfiles-private}"
 export DOTFILES
 export DOTFILES_PRIVATE
 
-## XDG Locations
+# XDG Locations
 
 export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-${HOME}/.config}"
 export XDG_DATA_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}"
 export XDG_CACHE_HOME="${XDG_CACHE_HOME:-${HOME}/.cache}"
 export XDG_STATE_HOME="${XDG_STATE_HOME:-${HOME}/.local/state}"
 
+# I have to manually read the lines from user-dirs.dirs in order to prepend
+# each line with an explicit call to "export"
 if [[ -f "${XDG_CONFIG_HOME}/user-dirs.dirs" ]]; then
   while read -r line; do
     if [[ ! ${line} =~ ^"#" && ! "${line}" == "" ]]; then
       eval "export ${line}"
     fi
   done < "${XDG_CONFIG_HOME}/user-dirs.dirs"
-  #### shellcheck source=/home/brennan/.config/user-dirs.dirs
-  #source "${XDG_CONFIG_HOME}/user-dirs.dirs"
 fi
 
 ## XDG Utility function
 
 function xdg_base_dir() {
-  case $1 in
+  local query
+  query=$(echo "${1}" | tr '[:lower:]' '[:upper:]')
+  case "${query}" in
 
     CONFIG | CONFIGHOME)
       echo "${XDG_CONFIG_HOME:-${HOME}/.config}"
@@ -130,6 +126,10 @@ function xdg_base_dir() {
       echo "${HOME}"
       ;;
 
+    HOMEBIN)
+      echo "${HOME}/.bin"
+      ;;
+
     "")
       echo "${HOME}"
       ;;
@@ -140,6 +140,53 @@ function xdg_base_dir() {
 
   esac
 }
+
+#### START: Virtualization Detection Functions - if we are virtual, what type
+
+function is_vm() {
+  if [[ $(systemd-detect-virt --vm || true) == "none" ]]; then
+    return 1
+  else
+    return 0
+  fi
+}
+
+function is_container() {
+  if [[ $(systemd-detect-virt --container || true) == "none" ]]; then
+    return 1
+  else
+    return 0
+  fi
+}
+
+function is_virtual() {
+  if [[ "$(systemd-detect-virt || true)" == "none" ]]; then
+    return 1
+  else
+    return 0
+  fi
+}
+
+function is_vagrant() {
+  if is_vm && [[ "$(grep -i '^vagrant' < /etc/passwd || true)" == "" ]]; then
+    return 1
+  else
+    return 0
+  fi
+}
+
+function is_wsl() {
+  # Are we running on Windows in WSL
+  local kernel
+  kernel=$(uname -r | tr '[:upper:]' '[:lower:]')
+  if [[ "${kernel}" == *"microsoft"* ]]; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+#### END: Virtualization Detection Functions
 
 ## OS Environment Variables - Indicate what type of machine we are running on.
 

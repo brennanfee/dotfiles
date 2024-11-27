@@ -16,4 +16,4 @@ def write_history():
     except OSError:
         pass
 
-atexit.register(write_history)
+_ = atexit.register(write_history)

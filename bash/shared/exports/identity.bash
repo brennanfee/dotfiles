@@ -18,11 +18,11 @@ fi
 # END Bash strict mode
 
 export NAME_FIRST="Brennan"
-export NAME_LAST="Brennan"
+export NAME_LAST="Fee"
 export NAME="Brennan Fee"
 export NAME_FULL="${NAME}"
 
-export HOME_EMAIL="brennan@logoscorner.com"
+export HOME_EMAIL="brennan+shell@mailbots.org"
 export WORK_EMAIL="febrenna@amazon.com"
 
 export EMAIL="${HOME_EMAIL}"

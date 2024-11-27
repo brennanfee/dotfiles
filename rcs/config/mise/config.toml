@@ -1,0 +1,35 @@
+[settings]
+go_default_packages_file = "~/.config/mise/default-golang-packages"
+ruby.default_packages_file = "~/.config/mise/default-ruby-packages"
+python.default_packages_file = "~/.config/mise/default-python-packages"
+
+python.venv_stdlib = true
+node.compile = false
+
+cargo.binstall = true
+npm.bun = true
+pipx.uvx = true
+
+[alias.node.versions]
+lts = "22"
+lts-jod = "22"
+lts-iron = "20"
+lts-hydrogen = "18"
+
+[tools]
+bun = "latest"
+cargo-binstall = "latest"
+"cargo:bottom" = "latest"
+"cargo:git-delta" = "latest"
+dotnet = "latest"
+go = "latest"
+java = "corretto"
+julia = "latest"
+kotlin = "latest"
+node = "lts"
+php = "latest"
+python = "latest"
+ruby = "latest"
+rust = "latest"
+usage = "latest"
+uv = "latest"

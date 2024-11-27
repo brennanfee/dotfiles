@@ -21,10 +21,6 @@ fi
 
 g_script_name=$(basename "${BASH_SOURCE[0]}")
 g_script_dir="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"
-g_script_author="Brennan Fee"
-g_script_license="MIT License"
-g_script_version="0.2"
-g_script_date="2024-10-07"
 
 g_short_options=""
 g_long_options=""
@@ -141,17 +137,25 @@ function validate_number_of_positional_arguments() {
 
 function main_handler() {
   load_script_tools
+  setup_script_vars
   setup_options
   process_arguments "$@"
   main "${g_positional_arguments[@]}"
   cleanup_vars
 }
 
+g_script_author="Brennan Fee"
+g_script_license="MIT License"
+g_script_version="0.3"
+g_script_date="2024-11-27"
+
 ### END Script template bootstrap
 #################################
 
-## Defaults
-g_include_dev_tools="false"
+## USAGE: If you want any global variables, set them up here
+function setup_script_vars() {
+  g_include_dev_tools="false"
+}
 
 ## USAGE: If you add any global variables, clean them up in this method
 function cleanup_script_vars() {
@@ -212,7 +216,7 @@ function print_help() {
 
 function check_prerequisites() {
   if ! command -v uv &>/dev/null; then
-    curl -LsSf https://astral.sh/uv/install.sh | sh -s -- --no-modify-path
+    curl -LsSf https://astral.sh/uv/install.sh | INSTALLER_NO_MODIFY_PATH=1 sh -s
 
     path_append "${CARGO_INSTALL_ROOT}/bin"
     path_append "${CARGO_HOME}/bin"
@@ -230,6 +234,7 @@ function housekeeping() {
 
 function install_common_tools() {
   uv tool install wheel
+  uv tool install neovim
 
   uv tool install ansible --with cryptography --with paramiko --with dnspython
 

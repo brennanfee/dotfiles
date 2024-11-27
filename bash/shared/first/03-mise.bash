@@ -17,5 +17,19 @@ if ! ${SOURCED}; then
 fi
 # END Bash strict mode
 
-GOPATH="$(xdg_base_dir DATA)/go"
-export GOPATH
+log "mise path: ${PATH}"
+
+if command_exists mise; then
+  log "mise found, calling activate"
+  eval "$(mise activate bash)"
+else
+  log "mise not found"
+fi
+
+log "mise path after: ${PATH}"
+
+# export ASDF_CRATE_DEFAULT_PACKAGES_FILE="${XDG_CONFIG_HOME}/mise/default-rust-packages"
+export RUSTUP_INIT_SKIP_PATH_CHECK="yes"
+
+export MISE_NODE_DEFAULT_PACKAGES_FILE="${XDG_CONFIG_HOME}/mise/default-node-packages"
+export MISE_NODE_COREPACK="true"

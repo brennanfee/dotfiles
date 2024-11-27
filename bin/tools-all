@@ -146,8 +146,8 @@ function main_handler() {
 
 g_script_author="Brennan Fee"
 g_script_license="MIT License"
-g_script_version="0.3"
-g_script_date="2024-11-27"
+g_script_version="0.1"
+g_script_date="2024-11-26"
 
 ### END Script template bootstrap
 #################################
@@ -176,10 +176,9 @@ function setup_options() {
 ## directly into this method so you can process them however you wish,
 ## including using 'shift' as you loop.
 function process_flags() {
-
   while [[ $# -gt 0 ]]; do
     case "$1" in
-    '-d')
+    '-d' | '--include-dev')
       g_include_dev_tools="true"
       shift
       ;;
@@ -198,8 +197,8 @@ function process_flags() {
 function print_help() {
   print_out "  ${g_script_name} [options]"
   print_blank_line
-  print_out "This program installs my commonly needed APT packages.  Most are "
-  print_out "needed for asdf plugins or terminal usage."
+  print_out "This script runs all the tools scripts in their proper order. This is"
+  print_out "mostly useful when setting up a new machine."
   print_blank_line
   print_out "Options:"
   print_blank_line
@@ -214,45 +213,33 @@ function print_help() {
   print_blank_line
 }
 
-function install_common_tools() {
-  # Preferred command-line tools
-  DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q install ripgrep fd-find \
-    fzf dtrx inxi bat cmake direnv tmux git atool rcm wget curl \
-    gnutls-bin ffmpeg mediainfo rename locate build-essential dkms clang
-
-  # For rbenv builds (for asdf)
-  DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q install autoconf patch \
-    make rustc libssl-dev libyaml-dev libreadline-dev zlib1g-dev libgmp-dev \
-    libncurses5-dev libffi-dev libgdbm6 libgdbm-dev libdb-dev uuid-dev
-
-  # For python builds (for asdf & uv)
-  DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q install build-essential \
-    libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev curl git \
-    libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev \
-    liblzma-dev llvm libmpfr-dev dns-root-data libhidapi-libusb0 \
-    libxcb-xinerama0
-
-  # For PHP builds (for asdf)
-  DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q install autoconf bison \
-    gettext libgd-dev libcurl4-openssl-dev libedit-dev libicu-dev libjpeg-dev \
-    libmariadb-dev libonig-dev libpng-dev libpq-dev libreadline-dev \
-    libsqlite3-dev libssl-dev libxml2-dev libzip-dev openssl pkg-config re2c \
-    zlib1g-dev
-}
-
-function install_dev_tools() {
-  noop
-}
-
 ## Your main implementation goes here.  All of the positional arguments have
 ## been passed as an array to this function.
 function main() {
-  DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q update
+  local dotfilesBin
+  local miseExe
+  dotfilesBin=$(xdg_base_dir DOTFILESBIN)
+  miseExe="$(xdg_base_dir BIN)/mise"
 
-  install_common_tools
-  install_dev_tools
+  local options=""
+  if [[ "${g_include_dev_tools}" == "true" ]]; then
+    options="--include-dev"
+  fi
 
-  DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q autoremove
+  # Call the other tool install scripts, order does matter here.
+  "${dotfilesBin}/tools-repos" "${options}"
+  "${dotfilesBin}/tools-apts" "${options}"
+  "${dotfilesBin}/tools-mise"
+
+  eval "$("${miseExe}" activate bash)"
+  eval "$("${miseExe}" hook-env -s bash)"
+
+  "${dotfilesBin}/tools-tmux"
+  "${dotfilesBin}/tools-vim"
+
+  "${dotfilesBin}/tools-am" "${options}"
+  "${dotfilesBin}/tools-flatpak" "${options}"
+  "${dotfilesBin}/tools-uv" "${options}"
 }
 
 ## This must be the last line

@@ -73,7 +73,7 @@ function custom_prompt() {
     curShell+="$0)"
   fi
   if [[ "${VIRTUAL_ENV}" != "" ]]; then
-    curShell+="${text_red} VENV"
+    curShell+="${text_red} VENV($(basename "${VIRTUAL_ENV}"))"
   fi
 
   if [[ ${GIT_PS1_USEGIT} -eq 1 ]]; then
@@ -89,3 +89,11 @@ function custom_prompt() {
 }
 
 PROMPT_COMMAND=custom_prompt
+
+if command_exists mise; then
+  if [[ ";${PROMPT_COMMAND:-};" != *";_mise_hook;"* ]]; then
+    PROMPT_COMMAND="_mise_hook${PROMPT_COMMAND:+;$PROMPT_COMMAND}"
+  fi
+fi
+
+#unset GIT_PS1_USEGIT

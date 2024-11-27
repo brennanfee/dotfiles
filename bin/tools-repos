@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+#
 
 ### START Bash strict mode
 # shellcheck disable=SC2154
@@ -146,8 +147,8 @@ function main_handler() {
 
 g_script_author="Brennan Fee"
 g_script_license="MIT License"
-g_script_version="0.3"
-g_script_date="2024-11-27"
+g_script_version="0.1"
+g_script_date="2024-11-26"
 
 ### END Script template bootstrap
 #################################
@@ -176,10 +177,9 @@ function setup_options() {
 ## directly into this method so you can process them however you wish,
 ## including using 'shift' as you loop.
 function process_flags() {
-
   while [[ $# -gt 0 ]]; do
     case "$1" in
-    '-d')
+    '-d' | '--include-dev')
       g_include_dev_tools="true"
       shift
       ;;
@@ -198,8 +198,8 @@ function process_flags() {
 function print_help() {
   print_out "  ${g_script_name} [options]"
   print_blank_line
-  print_out "This program installs my commonly needed APT packages.  Most are "
-  print_out "needed for asdf plugins or terminal usage."
+  print_out "This script sets up a few key Debian third-party repositories the"
+  print_out "'proper' way (using a signing key)."
   print_blank_line
   print_out "Options:"
   print_blank_line
@@ -214,45 +214,170 @@ function print_help() {
   print_blank_line
 }
 
+function prepare() {
+  sudo mkdir -p /etc/apt/keyrings
+
+  if ! command_exists curl || ! command_exists gpg; then
+    DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q install \
+      ca-certificates curl gnupg
+  fi
+}
+
+function install_mullvad_repo() {
+  local listFile="/etc/apt/sources.list.d/mullvad.list"
+  local keyFile="/etc/apt/keyrings/mullvad-keyring.asc"
+  local keyUrl="https://repository.mullvad.net/deb/mullvad-keyring.asc"
+  local repoUrl="https://repository.mullvad.net/deb/stable"
+
+  if [[ ! -f "${listFile}" ]]; then
+    print_out "  Installing Mullvad repo"
+    # key file
+    sudo curl -fsSLo "${keyFile}" "${keyUrl}"
+    # list file
+    echo "deb [signed-by=${keyFile} arch=$(dpkg --print-architecture)] ${repoUrl} $(lsb_release -cs) main" | sudo tee "${listFile}" >/dev/null
+  fi
+}
+
+function install_netbird_repo() {
+  local listFile="/etc/apt/sources.list.d/netbird.list"
+  local keyFile="/etc/apt/keyrings/netbird-archive-keyring.gpg"
+  local keyUrl="https://pkgs.netbird.io/debian/public.key"
+  local repoUrl="https://pkgs.netbird.io/debian"
+
+  if [[ ! -f "${listFile}" ]]; then
+    print_out "  Installing Netbird repo"
+    # key file
+    curl -fsSL "${keyUrl}" | sudo gpg --dearmor -o "${keyFile}"
+    # list file
+    echo "deb [signed-by=${keyFile} arch=$(dpkg --print-architecture)] ${repoUrl} stable main" | sudo tee "${listFile}" >/dev/null
+  fi
+}
+
+function install_beyondCompare_repo() {
+  local listFile="/etc/apt/sources.list.d/scootersoftware.list"
+  local keyFile="/etc/apt/keyrings/scootersoftware.asc"
+  local keyUrl="https://www.scootersoftware.com/DEB-GPG-KEY-scootersoftware.asc"
+  local repoUrl="https://repository.mullvad.net/deb/stable"
+
+  if [[ ! -f "${listFile}" ]]; then
+    print_out "  Installing Beyond Compare repo"
+    # Prevent installs from trying to install this repo again
+    sudo touch /etc/default/bcompare
+    # key file
+    sudo curl -fsSLo "${keyFile}" "${keyUrl}"
+    # list file
+    echo "deb [signed-by=${keyFile} arch=$(dpkg --print-architecture)] ${repoUrl} bcompare5 non-free" | sudo tee "${listFile}" >/dev/null
+  fi
+}
+
+function install_insync_repo() {
+  local listFile="/etc/apt/sources.list.d/scootersoftware.list"
+  local keyFile="/etc/apt/keyrings/insync.gpg"
+
+  if [[ ! -f "${listFile}" ]]; then
+    print_out "  Installing Insync repo"
+    # key file
+    sudo gpg --keyserver hkps://keyserver.ubuntu.com --recv-keys ACCAF35C
+    sudo gpg --export ACCAF35C | sudo tee "${keyFile}" >/dev/null
+    sudo gpg --batch --yes --delete-keys ACCAF35C
+    # list file
+    echo "deb [signed-by=${keyFile} arch=$(dpkg --print-architecture)] http://apt.insync.io/$(lsb_release -is | tr "[:upper:]" "[:lower:]") $(lsb_release -cs) non-free contrib" | sudo tee "${listFile}"
+  fi
+}
+
+function install_vsCode_repo() {
+  local listFile="/etc/apt/sources.list.d/vscode.list"
+  local keyFile="/etc/apt/keyrings/microsoft.asc"
+  local keyUrl="https://packages.microsoft.com/keys/microsoft.asc"
+  local repoUrl="https://packages.microsoft.com/repos/code"
+
+  if [[ ! -f "${listFile}" ]]; then
+    print_out "  Installing VS Code repo"
+    # Prevent installs from trying to install this repo again
+    echo "code code/add-microsoft-repo boolean false" | sudo debconf-set-selections
+    # key file
+    sudo curl -fsSLo "${keyFile}" "${keyUrl}"
+    # list file
+    echo "deb [signed-by=${keyFile} arch=$(dpkg --print-architecture)] ${repoUrl} stable main" | sudo tee "${listFile}" >/dev/null
+  fi
+}
+
+function install_chrome_repo() {
+  local listFile="/etc/apt/sources.list.d/google-chrome.list"
+  local keyFile="/etc/apt/keyrings/google.asc"
+  local keyUrl="https://dl.google.com/linux/linux_signing_key.pub"
+  local repoUrl="https://dl.google.com/linux/chrome/deb"
+
+  if [[ ! -f "${listFile}" ]]; then
+    print_out "  Installing Google Chrome repo"
+    # key file
+    sudo curl -fsSLo "${keyFile}" "${keyUrl}"
+    # list file
+    echo "deb [signed-by=${keyFile} arch=$(dpkg --print-architecture)] ${repoUrl} stable main" | sudo tee "${listFile}" >/dev/null
+  fi
+}
+
+function install_common_repos() {
+  install_mullvad_repo
+  install_netbird_repo
+  install_beyondCompare_repo
+  install_insync_repo
+  # install_vsCode_repo # deprecated, use Flatpak instead
+  # install_chrome_repo # deprecated, use Flatpak instead
+}
+
+function install_dev_repos() {
+  if [[ ! "${g_include_dev_tools}" == "true" ]]; then
+    return
+  fi
+}
+
 function install_common_tools() {
-  # Preferred command-line tools
-  DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q install ripgrep fd-find \
-    fzf dtrx inxi bat cmake direnv tmux git atool rcm wget curl \
-    gnutls-bin ffmpeg mediainfo rename locate build-essential dkms clang
+  DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q install \
+    mullvad-vpn netbird bcompare insync
+  ##mullvad-vpn bcompare insync code google-chrome-stable
 
-  # For rbenv builds (for asdf)
-  DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q install autoconf patch \
-    make rustc libssl-dev libyaml-dev libreadline-dev zlib1g-dev libgmp-dev \
-    libncurses5-dev libffi-dev libgdbm6 libgdbm-dev libdb-dev uuid-dev
+  # Are we running on a desktop (with a GUI installed)?
+  if [[ -n "$XDG_CURRENT_DESKTOP" ]]; then
+    DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q install netbird-ui
 
-  # For python builds (for asdf & uv)
-  DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q install build-essential \
-    libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev curl git \
-    libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev \
-    liblzma-dev llvm libmpfr-dev dns-root-data libhidapi-libusb0 \
-    libxcb-xinerama0
+    ## Insync file manager integrations
+    if command_exists dolphin; then
+      DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q install insync-dolphin
+    fi
 
-  # For PHP builds (for asdf)
-  DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q install autoconf bison \
-    gettext libgd-dev libcurl4-openssl-dev libedit-dev libicu-dev libjpeg-dev \
-    libmariadb-dev libonig-dev libpng-dev libpq-dev libreadline-dev \
-    libsqlite3-dev libssl-dev libxml2-dev libzip-dev openssl pkg-config re2c \
-    zlib1g-dev
+    if command_exists caja; then
+      DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q install insync-caja
+    fi
+
+    if command_exists nautilus; then
+      DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q install insync-nautilus
+    fi
+
+    if command_exists thunar; then
+      DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q install insync-nautilus
+    fi
+  fi
 }
 
 function install_dev_tools() {
-  noop
+  if [[ ! "${g_include_dev_tools}" == "true" ]]; then
+    return
+  fi
 }
 
 ## Your main implementation goes here.  All of the positional arguments have
 ## been passed as an array to this function.
 function main() {
+  prepare
+
+  install_common_repos
+  install_dev_repos
+
   DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q update
 
   install_common_tools
   install_dev_tools
-
-  DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q autoremove
 }
 
 ## This must be the last line
