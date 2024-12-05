@@ -23,6 +23,8 @@ dotfiles="$(cd -P "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # shellcheck source=/home/brennan/.dotfiles/bash/base-profile.bash
 source "${dotfiles}/bash/base-profile.bash"
+# shellcheck source=/home/brennan/.dotfiles/bash/script-tools.bash
+source "${dotfiles}/bash/script-tools.bash"
 
 # At this point, the machine may not be fully set up and as a result we can't rely on
 # the bash environment being setup either.  So we can't use xdg-user-dir or expect the

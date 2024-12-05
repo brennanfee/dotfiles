@@ -5,6 +5,7 @@ python.default_packages_file = "~/.config/mise/default-python-packages"
 
 python.venv_stdlib = true
 node.compile = false
+node.gpg_verify = false
 
 cargo.binstall = true
 npm.bun = true

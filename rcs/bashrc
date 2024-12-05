@@ -23,6 +23,11 @@ if [[ $- != *i* ]]; then
   return
 fi
 
+dotfiles="${DOTFILES:-$(xdg-user-dir DOTFILES)}"
+dotfiles="${dotfiles:-${HOME}/.dotfiles}"
+
+source "${dotfiles}/bash/script-tools.bash"
+
 log "In bashrc"
 
 # Reload them, now with the benefit of base-profile

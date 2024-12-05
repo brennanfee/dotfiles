@@ -35,7 +35,7 @@ source "${dotfiles}/bash/script-tools.bash"
 
 # source bashrc if it exists
 if [[ -f "${HOME}/.bashrc" ]]; then
-  log "sourcing bashrc"
+  log_profile "sourcing bashrc"
   # shellcheck source=/home/brennan/.dotfiles/rcs/bashrc
   source "${HOME}/.bashrc"
 fi

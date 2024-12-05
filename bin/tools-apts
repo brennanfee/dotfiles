@@ -218,7 +218,8 @@ function install_common_tools() {
   # Preferred command-line tools
   DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q install ripgrep fd-find \
     fzf dtrx inxi bat cmake direnv tmux git atool rcm wget curl \
-    gnutls-bin ffmpeg mediainfo rename locate build-essential dkms clang
+    gnutls-bin ffmpeg mediainfo rename locate build-essential dkms clang \
+    zsync luarocks gawk ffmpeg handbrake-cli mediainfo rename
 
   # For rbenv builds (for asdf)
   DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q install autoconf patch \

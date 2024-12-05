@@ -276,6 +276,12 @@ function install_common_tools() {
   install_if_needed com.rafaelmardojai.Blanket
   install_if_needed com.github.tenderowl.frog
   install_if_needed org.localsend.localsend_app
+  install_if_needed com.bambulab.BambuStudio
+  install_if_needed com.brave.Browser
+  install_if_needed com.google.Chrome
+  install_if_needed fr.handbrake.ghb
+  install_if_needed com.sweethome3d.Sweethome3d
+  install_if_needed io.github.Qalculate.qalculate-qt
 }
 
 function install_dev_tools() {
