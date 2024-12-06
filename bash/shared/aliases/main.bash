@@ -107,3 +107,7 @@ fi
 if command_exists thefuck; then
   eval "$(thefuck --alias || true)"
 fi
+
+if command_exists ansible-community; then
+  alias ansible="ansible-community"
+fi
