@@ -17,8 +17,8 @@ if ! ${SOURCED}; then
 fi
 # END Bash strict mode
 
-# Set PATH so it includes user's home bin folders (if they exist)
-# NOTE: The order of these is important, the last one will be searched first
+# Set PATH so it includes user's home bin folders (if they exist) and some
+# infrastructural paths (flatpak, mason).
 
 log "path before: ${PATH}"
 
@@ -29,47 +29,54 @@ base_dotfiles_dir=$(xdg_base_dir DOTFILES)
 base_dotfilesprivate_dir=$(xdg_base_dir DOTFILESPRIVATE)
 base_cloud_dir=$(xdg_base_dir CLOUD)
 
-### PREPENDS (order critical)
+### NOTE: Order is important
 
-# Local bin
-path_prepend "${base_bin_dir}"
-
-# Dotfiles & Cloud
-path_prepend "${base_cloud_dir}/bin"
-path_prepend "${base_dotfiles_dir}/bin"
-path_prepend "${base_dotfilesprivate_dir}/bin"
+# Build up the path from SCRATCH, ignore any system provided path
+export PATH=""
 
 # Home (local override), should always be the "first" to override everything else
-path_prepend "${base_homebin_dir}"
+path_append "${base_homebin_dir}"
+
+# Cloud bin should be next
+path_append "${base_cloud_dir}/bin"
+
+# Then dotfiles
+path_append "${base_dotfilesprivate_dir}/bin"
+path_append "${base_dotfiles_dir}/bin"
+
+# Local bin
+path_append "${base_bin_dir}"
 
 # WSL (Windows)
-[[ -d "${WIN_HOME:-${HOME}}/winfiles/bin" ]] && path_prepend "${WIN_HOME:-${HOME}}/winfiles/bin"
-
-### APPENDS (order less important)
-
-# Games
-path_append "/usr/local/games"
+path_append "${WIN_HOME:-${HOME}}/winfiles/bin"
 
 # Flatpak
 #    Global packages
-if [[ -d "/var/lib/flatpak/exports/bin" ]]; then
-  path_append "/var/lib/flatpak/exports/bin"
-fi
+path_append "/var/lib/flatpak/exports/bin"
 
 #    User packages
-if [[ -d "${base_data_dir}/flatpak/exports/bin" ]]; then
-  path_append "${base_data_dir}/flatpak/exports/bin"
-fi
+path_append "${base_data_dir}/flatpak/exports/bin"
 
 # Neovim Mason bin path (for all the linters and other dev tools)
 # I want this to be "first" among the dev language tooling so it takes precedence
 path_append "${base_data_dir}/nvim/mason/bin"
+
+# Rust installed packages
+path_append "${base_data_dir}/cargo/bin"
 
 # # Nix Support
 # if [[ -f /nix/var/nix/profiles/default/etc/profile.d/nix.sh ]]; then
 #   source /nix/var/nix/profiles/default/etc/profile.d/nix.sh
 #   export NIX_REMOTE=daemon
 # fi
+
+# Main system paths
+path_append "/usr/local/bin"
+path_append "/usr/bin"
+path_append "/bin"
+path_append "/usr/local/games"
+path_append "/usr/games"
+path_append "/snap/bin"
 
 unset base_data_dir
 unset base_bin_dir

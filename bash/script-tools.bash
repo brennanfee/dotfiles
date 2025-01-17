@@ -38,7 +38,7 @@ function log() {
       logPath="${HOME}/profile"
     fi
 
-    echo -e "$(date --rfc-3339=ns):\n  $1" >> "${logPath}/bashrc.log"
+    echo -e "$(/usr/bin/date --rfc-3339=ns):\n  $1" >> "${logPath}/bashrc.log"
   fi
 }
 
