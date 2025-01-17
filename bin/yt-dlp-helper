@@ -237,9 +237,11 @@ function print_help() {
 # url passed is JUST to the playlist (not a combined url - video within a playlist).
 # To force the download of a list add 'l' to the command: ytl, ytpl, ytml.
 function yt_helper() {
+  # echo "params: $*"
   local sub_command
   sub_command="${1:-unk}"
   shift
+  # echo "after: $*"
 
   if [[ "${sub_command}" == "unk" ]]; then
     throw_error_msg "Unknown yt-dlp-helper command!"
@@ -312,7 +314,8 @@ function yt_helper() {
   ## For this to work this plugin needs to be installed:
   ##   https://github.com/coletdjnz/yt-dlp-youtube-oauth2
   if [[ "${url}" =~ ^"https://www.youtube.com" ]]; then
-    browser_auth=("--username" "oauth2" "--password" "''")
+    browser_auth=("--cookies-from-browser" "firefox" "--sleep-requests" "1" "--min-sleep-interval" "15" "--max-sleep-interval" "45")
+    # browser_auth=("--username" "oauth2" "--password" "''")
   fi
 
   echo "Downloading ${url}"
