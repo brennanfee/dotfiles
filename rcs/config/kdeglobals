@@ -136,8 +136,8 @@ ForegroundPositive=39,174,96
 ForegroundVisited=155,89,182
 
 [DirSelect Dialog]
-DirSelectDialog Size=831,608
-History Items[$e]=file:$HOME/profile/source/packer-linux
+DirSelectDialog Size=1390,847
+History Items[$e]=file:$HOME/profile/cloud/files/notes/brain,file:$HOME/profile/cloud/notes/brain,file:$HOME/profile/source/packer-linux
 
 [General]
 BrowserApplication=org.mozilla.firefox.desktop
@@ -145,12 +145,13 @@ ColorSchemeHash=01662607e36cd33eacc7d7d7189f69c26b9a2cc8
 Name=Breeze Dark
 TerminalApplication=/usr/bin/flatpak run --branch=stable --arch=x86_64 --command=wezterm org.wezfurlong.wezterm start --cwd .
 TerminalService=org.wezfurlong.wezterm.desktop
-fixed=JetBrainsMono Nerd Font Mono,12,-1,5,50,0,0,0,0,0
-font=Noto Sans,12,-1,5,50,0,0,0,0,0
-menuFont=Noto Sans,12,-1,5,50,0,0,0,0,0
+XftSubPixel=none
+fixed=JetBrainsMono Nerd Font Mono,14,-1,5,50,0,0,0,0,0
+font=Noto Sans,14,-1,5,50,0,0,0,0,0
+menuFont=Noto Sans,14,-1,5,50,0,0,0,0,0
 shadeSortColumn=true
-smallestReadableFont=Noto Sans,10,-1,5,50,0,0,0,0,0
-toolBarFont=Noto Sans,12,-1,5,50,0,0,0,0,0
+smallestReadableFont=Noto Sans,12,-1,5,50,0,0,0,0,0
+toolBarFont=Noto Sans,14,-1,5,50,0,0,0,0,0
 widgetStyle=Breeze
 
 [Icons]
@@ -180,7 +181,7 @@ Show hidden files=true
 Sort by=Name
 Sort directories first=true
 Sort hidden files last=false
-Sort reversed=true
+Sort reversed=false
 Speedbar Width=125
 View Style=DetailTree
 
@@ -194,7 +195,7 @@ MaximumSize=3145728
 [WM]
 activeBackground=49,54,59
 activeBlend=252,252,252
-activeFont=Noto Sans,12,-1,5,50,0,0,0,0,0
+activeFont=Noto Sans,14,-1,5,50,0,0,0,0,0
 activeForeground=252,252,252
 inactiveBackground=42,46,50
 inactiveBlend=161,169,177

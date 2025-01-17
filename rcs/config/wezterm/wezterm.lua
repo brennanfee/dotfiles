@@ -13,7 +13,7 @@ config.font = wezterm.font_with_fallback({
   { family = "Symbols Nerd Font" },
   { family = "Noto Color Emoji" },
 })
-config.font_size = 16.0
+config.font_size = 18.0
 config.warn_about_missing_glyphs = false
 config.adjust_window_size_when_changing_font_size = false
 config.freetype_interpreter_version = 40
@@ -143,7 +143,7 @@ config.visual_bell = {
 config.colors = { visual_bell = "#202020" }
 
 -- Initial state
-config.initial_rows = 32 -- Leaves a few lines of screen space above/below the window
+config.initial_rows = 36 -- Leaves a few lines of screen space above/below the window
 config.initial_cols = 140 -- Wide enough for 100 Neovim columns plus 30 for tree view
 config.default_prog = {
   "tmux",
