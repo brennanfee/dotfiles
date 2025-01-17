@@ -253,9 +253,8 @@ function updatePipx() {
 
 function updateUv() {
   if command_exists uv; then
+    # NOTE: No need to update UV itself as that is being managed by Mise
     print_info "Getting updates for uv tools"
-    # Update uv itself
-    INSTALLER_NO_MODIFY_PATH=1 uv self update
 
     # Update the tools
     uv tool upgrade --all
