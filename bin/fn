@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+
+### START Bash strict mode
+# shellcheck disable=SC2154
+([[ -n ${ZSH_EVAL_CONTEXT} && ${ZSH_EVAL_CONTEXT} =~ :file$ ]] ||
+  [[ -n ${BASH_VERSION} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
+if ! ${SOURCED}; then
+  set -o errexit  # same as set -e
+  set -o nounset  # same as set -u
+  set -o errtrace # same as set -E
+  set -o pipefail
+  set -o posix
+  #set -o xtrace # same as set -x, turn on for debugging
+
+  shopt -s extdebug
+  IFS=$(printf '\n\t')
+fi
+### END Bash strict mode
+
+function main() {
+  local outputPath
+  outputPath="$(xdg-user-dir PICTURES)/_other"
+  local tmpFile
+  tmpFile=$(mktemp -p "${outputPath}")
+
+  local url
+  if [[ "${1:-}" =~ ^"http" ]]; then
+    # It was passed in on the command line, always must be first one
+    url="$1"
+    shift
+  else
+    # Get url from linux (or mac?) clipboard
+    url=$(xsel -o --clipboard)
+  fi
+
+  echo "Source URL: ${url}"
+
+  curl -o "${tmpFile}" "${url}"
+
+  local vidUrl
+  vidUrl=$(sed -nE 's|.*<meta itemprop="contentURL" content="([^"]*)".*|\1|p' "${tmpFile}")
+
+  if [[ "${vidUrl}" == "" ]]; then
+    echo "Error reading webpage."
+    exit 1
+  fi
+
+  rm -f "${tmpFile}"
+  echo "Vid URL: ${vidUrl}"
+
+  yt-dlp-helper ytp "${vidUrl}"
+}
+
+main "$@"
