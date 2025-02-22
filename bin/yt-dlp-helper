@@ -149,8 +149,8 @@ function main_handler() {
 
 g_script_author="Brennan Fee"
 g_script_license="MIT License"
-g_script_version="0.4"
-g_script_date="2024-11-27"
+g_script_version="0.5"
+g_script_date="2025-02-22"
 
 ### END Script template bootstrap
 #################################
@@ -231,26 +231,25 @@ function print_help() {
   print_out "'ytl' to download everything in a playlist."
 }
 
-# Usage: yt_helper <sub-command> "$@"
-# Current supported sub-command:  yt (normal), ytp (alt location), ytm (music)
-# Each of those commands, by default, will not download a playlist unless the
-# url passed is JUST to the playlist (not a combined url - video within a playlist).
-# To force the download of a list add 'l' to the command: ytl, ytpl, ytml.
+# Usage: yt_helper "$@"
+# Sub-command MUST start with yt.  Augments can be passed with m being for music,
+# l to download an entire playlist (as opposed to just the single item given,
+# which is the default behavior for a combined url), and p to use the alternate
+# output location.  Note that passing JUST a playlist url (no reference to a
+# playlist item will still download the entire playlist even without the l modifier).
 function yt_helper() {
-  # echo "params: $*"
   local sub_command
   sub_command="${1:-unk}"
   shift
-  # echo "after: $*"
 
-  if [[ "${sub_command}" == "unk" ]]; then
-    throw_error_msg "Unknown yt-dlp-helper command!"
+  if [[ ! "${sub_command}" == yt* ]]; then
+    throw_error_msg "Unknown ${g_script_name} command!  Value: ${sub_command}"
   fi
 
   # The url to download
   local url
   if [[ "${1:-}" =~ ^"http" ]]; then
-    # It was passed in on the command line, always must be first one
+    # It was passed in on the command line, always must be first parameter
     url="$1"
     shift
   elif is_wsl; then
@@ -261,107 +260,133 @@ function yt_helper() {
     url=$(xsel -o --clipboard)
   fi
 
-  # Format
-  local highFormat
-  highFormat+="bestvideo[height<=?1080][vcodec~='^((he|a)vc1?|h26[45])']+bestaudio"
-  highFormat+="/best[height<=?1080][vcodec~='^((he|a)vc1?|h26[45])']"
-  highFormat+="/best[height<=?1080]"
+  # Process command flags
 
-  local lowFormat
-  lowFormat+="bestvideo[height<=?720][vcodec~='^((he|a)vc1?|h26[45])']+bestaudio"
-  lowFormat+="/best[height<=?720][vcodec~='^((he|a)vc1?|h26[45])']"
-  lowFormat+="/best[height<=?720]"
-
-  local format="${highFormat}"
-  if [[ "${sub_command}" == "ytp" || "${sub_command}" == "ytpl" ]]; then
-    format="${lowFormat}"
-  fi
-
-  ## Type
+  ## Determine what type of download we want (video file or audio file)
   local type="video"
-  if [[ "${sub_command}" == "ytm" || "${sub_command}" == "ytml" ]]; then
-    type="music"
-    format="bestaudio/bestaudio*/best"
+  if [[ "${sub_command}" == *"m"* ]]; then
+    type="audio"
   fi
 
-  # Playlist flag
-  local playlist="--no-playlist"
-  if [[ "${sub_command}" == "ytl" || "${sub_command}" == "ytpl" || "${sub_command}" == "ytml" ]]; then
-    playlist="--yes-playlist"
+  ## Determine if we want to force playlist download
+  local playlist_flag="false"
+  if [[ "${sub_command}" == *"l"* ]]; then
+    playlist_flag="true"
   fi
 
-  # Sort Order
-  local sort_order="ext:mp4:m4a,proto"
+  ## Determine if we want to use the alternate save location
+  local alternate_location="false"
+  if [[ "${sub_command}" == *"p"* ]]; then
+    alternate_location="true"
+  fi
 
-  # Output directory
+  ## FOR DEBUGGING
+  # echo "Type: ${type}"
+  # echo "Playlist Flag: ${playlist_flag}"
+  # echo "Alternate Location: ${alternate_location}"
+
+  ## END Process command flags
+
+  local yt_dlp_params=()
+
+  # Build up the parameters to pass in an array, start with a few values used always
+  yt_dlp_params+=("--embed-metadata" "--embed-thumbnail" "--embed-chapters" "--no-mtime")
+
+  if [[ "${playlist_flag}" == "true" ]]; then
+    # The ignore-errors is needed otherwise the playlist download would stop on a single
+    # link failure, this way it will continue download the rest of the playlist items
+    yt_dlp_params+=("--yes-playlist" "--ignore-errors")
+  else
+    yt_dlp_params+=("--no-playlist")
+  fi
+
+  # Format Selection
+  if [[ "${type}" == "video" ]]; then
+    yt_dlp_params+=("--mark-watched")
+    # Prioritize http over other protocols (m3u8, for instance).  Prever h264 & h265 over anything
+    # else.
+    local format
+    format+="bestvideo[height<=?1080][vcodec~='^((he|a)vc1?|h26[45])'][protocol^=http]+bestaudio"
+    format+="/best[height<=?1080][vcodec~='^((he|a)vc1?|h26[45])'][protocol^=http]"
+    format+="/best[height<=?1080][protocol^=http]"
+    format+="/bestvideo[height<=?1080][vcodec~='^((he|a)vc1?|h26[45])']+bestaudio"
+    format+="/best[height<=?1080][vcodec~='^((he|a)vc1?|h26[45])']"
+    format+="/best[height<=?1080]"
+
+    yt_dlp_params+=("--format" "${format}")
+  else
+    # We want an audio file
+    yt_dlp_params+=("--extract-audio" "--audio-format" "mp3")
+
+    # A music download, format selection looks for just audio first and prioritizes http protocol
+    local format="bestaudio[protocol^=http]/bestaudio*[protocol^=http]/best[protocol^=http]/bestaudio/bestaudio*/best"
+
+    yt_dlp_params+=("--format" "${format}")
+  fi
+
+  # Format sort order
+  yt_dlp_params+=("--format-sort" "+codec:avc:m4a")
+
+  # Output directory and filename
   local directory
   directory="$(xdg_base_dir VIDEOS)" ## default to video directory
-
-  if [[ "${sub_command}" == "ytp" || "${sub_command}" == "ytpl" ]]; then
+  if [[ "${alternate_location}" == "true" ]]; then
     directory="$(xdg_base_dir PICTURES)/_other" ## alternate location
   fi
 
+  ## Ensure the directory exists
   mkdir -p "${directory}"
 
-  # Output file name
-  local output="${directory}/%(title).125B-%(id)s-[%(channel,channel_id,creator,uploader)s].%(ext)s"
+  ## Output file name template
+  local name_template="${directory}/%(title).125B-%(id)s-[%(channel,channel_id,creator,uploader)s].%(ext)s"
 
-  local browser_auth=("--cookies-from-browser" "firefox")
-  if [[ "${sub_command}" == "ytp" || "${sub_command}" == "ytpl" ]]; then
-    browser_auth=("--cookies-from-browser" "chrome")
+  yt_dlp_params+=("--output" "${name_template}")
+
+  # Cookies, default to firefox, but for the alternate location, chrome
+  if [[ "${alternate_location}" == "false" ]]; then
+    yt_dlp_params+=("--cookies-from-browser" "firefox")
+  else
+    yt_dlp_params+=("--cookies-from-browser" "chrome")
   fi
-  ## Youtube started throttling cookies, need to support Oauth2 instead
-  ## For this to work this plugin needs to be installed:
-  ##   https://github.com/coletdjnz/yt-dlp-youtube-oauth2
-  if [[ "${url}" =~ ^"https://www.youtube.com" ]]; then
-    browser_auth=("--cookies-from-browser" "firefox" "--sleep-requests" "1" "--min-sleep-interval" "15" "--max-sleep-interval" "45")
-    # browser_auth=("--username" "oauth2" "--password" "''")
+
+  #### Site specific customizations
+  local domain
+  domain=$(echo "${url}" | sed -e 's/[^/]*\/\/\([^@]*@\)\?\([^:/]*\).*/\2/' | tr '[:upper:]' '[:lower:]')
+  echo "Domain: ${domain}"
+
+  # Youtube has started throttling, so we need to add some delays.  I am using
+  # different delays for a single file versus a playlist.
+  if [[ "${domain}" == *"youtube.com" ]]; then
+    yt_dlp_params+=("--sleep-requests" "0.5")
+    if [[ "${playlist_flag}" == "true" ]]; then
+      yt_dlp_params+=("--min-sleep-interval" "3" "--max-sleep-interval" "20")
+    else
+      yt_dlp_params+=("--min-sleep-interval" "1" "--max-sleep-interval" "5")
+    fi
   fi
+
+  if [[ "${domain}" == *"xhamster.com" ]]; then
+    yt_dlp_params+=("--compat-options" "allow-unsafe-ext")
+  fi
+
+  #### END Site specific customizations
+
+  # Lastly, add the url
+  yt_dlp_params+=("${url}")
 
   echo "Downloading ${url}"
-  if [[ "${type}" == "video" ]]; then
-    yt-dlp "${browser_auth[@]}" --embed-metadata --embed-thumbnail --mark-watched --embed-chapters \
-      "${playlist}" --no-mtime -i -S "${sort_order}" -f "${format}" \
-      -o "${output}" "${url}" "$@"
-  else
-    yt-dlp "${browser_auth[@]}" --embed-metadata --embed-thumbnail \
-      "${playlist}" --no-mtime -i -S "${sort_order}" -f "${format}" \
-      --extract-audio --audio-format mp3 \
-      -o "${output}" "${url}" "$@"
-  fi
+
+  ## FOR DEBUGGING
+  # echo "Params: ${yt_dlp_params[*]}"
+
+  yt-dlp "${yt_dlp_params[@]}" "$@"
 }
 
 ## Your main implementation goes here.  All of the positional arguments have
 ## been passed as an array to this function.  The first parameter should be
-## the command (sub-command) name.
+## the sub-command.
 function main() {
-  local sub_command
-  sub_command="${1:-}"
-  shift
-
-  case "${sub_command}" in
-  yt)
-    yt_helper "yt" "$@"
-    ;;
-  ytl)
-    yt_helper "ytl" "$@"
-    ;;
-  ytp)
-    yt_helper "ytp" "$@"
-    ;;
-  ytpl)
-    yt_helper "ytpl" "$@"
-    ;;
-  ytm)
-    yt_helper "ytm" "$@"
-    ;;
-  ytml)
-    yt_helper "ytml" "$@"
-    ;;
-  *)
-    throw_error_msg "Unknown ${g_script_name} command: '${sub_command}'"
-    ;;
-  esac
+  yt_helper "$@"
 }
 
 ## This must be the last line

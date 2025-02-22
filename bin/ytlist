@@ -235,7 +235,7 @@ function main() {
   fi
 
   while read -r url; do
-    "${DOTFILES}/bin/yt-dlp-helper" "ytp" "${url}"
+    "${DOTFILES}/bin/yt-dlp-helper" "ytp" "${url}" -- --cookies-from-browser firefox --extractor-args "generic:impersonate"
   done <"${the_file}"
 }
 
