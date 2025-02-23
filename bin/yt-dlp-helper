@@ -350,13 +350,18 @@ function yt_helper() {
   fi
 
   #### Site specific customizations
+  local full_domain
   local domain
-  domain=$(echo "${url}" | sed -e 's/[^/]*\/\/\([^@]*@\)\?\([^:/]*\).*/\2/' | tr '[:upper:]' '[:lower:]')
+  # First, cut the path parts out, then use sed to extract just the domain name, then lower case
+  full_domain=$(echo "${url}" | cut -d'/' -f1,2,3 | sed -e 's/[^/]*\/\/\([^@]*@\)\?\([^:/]*\).*/\2/' | tr '[:upper:]' '[:lower:]')
+  # Now strip off sub-domains
+  domain=$(echo "${full_domain}" | awk -F. '{print $(NF-1) "." $NF}')
+  echo "Full Domain: ${full_domain}"
   echo "Domain: ${domain}"
 
   # Youtube has started throttling, so we need to add some delays.  I am using
   # different delays for a single file versus a playlist.
-  if [[ "${domain}" == *"youtube.com" ]]; then
+  if [[ "${domain}" == "youtube.com" ]]; then
     yt_dlp_params+=("--sleep-requests" "0.5")
     if [[ "${playlist_flag}" == "true" ]]; then
       yt_dlp_params+=("--min-sleep-interval" "3" "--max-sleep-interval" "20")
@@ -365,7 +370,7 @@ function yt_helper() {
     fi
   fi
 
-  if [[ "${domain}" == *"xhamster.com" ]]; then
+  if [[ "${domain}" == "xhamster.com" ]]; then
     yt_dlp_params+=("--compat-options" "allow-unsafe-ext")
   fi
 
