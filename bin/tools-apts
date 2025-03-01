@@ -219,21 +219,22 @@ function install_common_tools() {
   DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q install ripgrep fd-find \
     fzf dtrx inxi bat cmake direnv tmux git atool rcm wget curl \
     gnutls-bin ffmpeg mediainfo rename locate build-essential dkms clang \
-    zsync luarocks gawk ffmpeg handbrake-cli mediainfo rename iperf3
+    zsync luarocks gawk ffmpeg handbrake-cli mediainfo rename iperf3 \
+    shellcheck
 
-  # For rbenv builds (for asdf)
+  # For rbenv builds (for mise)
   DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q install autoconf patch \
     make rustc libssl-dev libyaml-dev libreadline-dev zlib1g-dev libgmp-dev \
     libncurses5-dev libffi-dev libgdbm6 libgdbm-dev libdb-dev uuid-dev
 
-  # For python builds (for asdf & uv)
+  # For python builds (for mise & uv)
   DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q install build-essential \
     libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev curl git \
     libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev \
     liblzma-dev llvm libmpfr-dev dns-root-data libhidapi-libusb0 \
     libxcb-xinerama0
 
-  # For PHP builds (for asdf)
+  # For PHP builds (for mise)
   DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q install autoconf bison \
     gettext libgd-dev libcurl4-openssl-dev libedit-dev libicu-dev libjpeg-dev \
     libmariadb-dev libonig-dev libpng-dev libpq-dev libreadline-dev \
@@ -242,7 +243,9 @@ function install_common_tools() {
 }
 
 function install_dev_tools() {
-  noop
+  if [[ "${g_include_dev_tools}" == "true" ]]; then
+    noop
+  fi
 }
 
 ## Your main implementation goes here.  All of the positional arguments have

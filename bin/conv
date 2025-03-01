@@ -1,0 +1,556 @@
+#!/usr/bin/env bash
+
+### START Bash strict mode
+# shellcheck disable=SC2154
+([[ -n ${ZSH_EVAL_CONTEXT} && ${ZSH_EVAL_CONTEXT} =~ :file$ ]] ||
+  [[ -n ${BASH_VERSION} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
+if ! ${SOURCED}; then
+  set -o errexit  # same as set -e
+  set -o nounset  # same as set -u
+  set -o errtrace # same as set -E
+  set -o pipefail
+  set -o posix
+  #set -o xtrace # same as set -x, turn on for debugging
+
+  shopt -s extdebug
+  IFS=$(printf '\n\t')
+fi
+### END Bash strict mode
+
+### START Script template bootstrap
+
+g_script_name=$(basename "${BASH_SOURCE[0]}")
+g_script_dir="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"
+
+g_short_options=""
+g_long_options=""
+g_positional_arguments=""
+
+function cleanup_vars() {
+  unset g_script_name
+  unset g_script_dir
+  unset g_script_author
+  unset g_script_license
+  unset g_script_version
+  unset g_script_date
+
+  unset g_short_options
+  unset g_long_options
+  unset g_positional_arguments
+
+  cleanup_script_vars
+}
+
+function load_script_tools() {
+  # Source script-tools.bash
+  if [[ -f "${g_script_dir}/../bash/script-tools.bash" ]]; then
+    # shellcheck source=/home/brennan/.dotfiles/bash/script-tools.bash
+    source "${g_script_dir}/../bash/script-tools.bash"
+  fi
+}
+
+function show_version() {
+  print_out "Application: ${g_script_name}"
+  print_out "Author: ${g_script_author} --- License: ${g_script_license}"
+  print_out "Version: ${g_script_version} --- Date: ${g_script_date}"
+  print_blank_line
+}
+
+function show_help() {
+  show_version
+  print_help
+}
+
+function set_short_options() {
+  g_short_options="$1"
+}
+
+function set_long_options() {
+  g_long_options="$1"
+}
+
+function process_arguments() {
+  local args
+  set +o errexit # temporarily turn off error on exit
+  args=$(getopt --name "${g_script_name}" --options "${g_short_options}hv" --longoptions "${g_long_options},help,version" -- "$@")
+  # Handle if getopt returned an error
+  # shellcheck disable=SC2181
+  if [[ $? -gt 0 ]]; then
+    show_help
+    exit 1
+  fi
+  set -o errexit # turn error on exit back on
+
+  eval set -- "${args}"
+
+  ## Handle the required options, help & version, bypass everything else
+  local flags=("$@")
+  local i=0
+  while [[ "$i" -lt "${#flags[@]}" ]]; do
+    local flag=${flags[i]}
+    if [[ "${flag}" == "-h" || "${flag}" == "--help" ]]; then
+      show_help
+      exit 0
+    elif [[ "${flag}" == "-v" || "${flag}" == "--version" ]]; then
+      show_version
+      exit 0
+    elif [[ "${flag}" == "--" ]]; then
+      break
+    fi
+    i=$((i + 1))
+  done
+
+  # Split up the flags and positionals
+  local flags=() positional_arguments=()
+  local reached_positionals=0
+  while [[ $# -gt 0 ]]; do
+    if [[ "$1" == "--" ]]; then
+      reached_positionals=1
+      shift
+    else
+      if [[ "${reached_positionals}" -eq 1 ]]; then
+        positional_arguments+=("$1")
+        shift
+      else
+        flags+=("$1")
+        shift
+      fi
+    fi
+  done
+
+  process_flags "${flags[@]}"
+  g_positional_arguments=("${positional_arguments[@]}")
+}
+
+## USAGE: First parameter should be the number of expected (required) positional arguments.
+## Optionally, you can pass in a second argument to customize the error message.
+function validate_number_of_positional_arguments() {
+  local expected_arguments=$1
+  local error_msg="${2:-Invalid number of arguments, expected at least ${expected_arguments}.}"
+
+  if [[ "${#g_positional_arguments[@]}" -lt ${expected_arguments} ]]; then
+    print_error "${error_msg}"
+    show_help
+    exit 1
+  fi
+}
+
+function main_handler() {
+  load_script_tools
+  setup_script_vars
+  setup_options
+  process_arguments "$@"
+  main "${g_positional_arguments[@]}"
+  cleanup_vars
+}
+
+g_script_author="Brennan Fee"
+g_script_license="MIT License"
+g_script_version="0.1"
+g_script_date="2024-11-26"
+
+### END Script template bootstrap
+#################################
+
+## USAGE: If you want any global variables, set them up here
+function setup_script_vars() {
+  g_force="false"
+  g_recursive="false"
+  g_pipe="false"
+  g_sub_commands=("conv-mkv" "strip-meta" "extract-subs" "list-noaudio"
+    "rename-fixperiods")
+}
+
+## USAGE: If you add any global variables, clean them up in this method
+function cleanup_script_vars() {
+  unset g_force
+  unset g_recursive
+  unset g_pipe
+  unset g_sub_commands
+}
+
+## USAGE: If you need to add any command-line flags or options, do it here.
+## You should call one or both of the helper methods set_short_options or
+## set_long_options.  They accept a string with syntax that is the same for
+## the getopt program.  See it's help for more information.
+function setup_options() {
+  set_short_options "frp"
+  set_long_options "force,recursive,pipe"
+}
+
+## Usage: If you added command-line flags or options using setup_options,
+## process them here.  The flags and their values will be passed as an array
+## directly into this method so you can process them however you wish,
+## including using 'shift' as you loop.
+function process_flags() {
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+    '-f' | '--force')
+      g_force="true"
+      shift
+      ;;
+    '-r' | '--recursive')
+      g_recursive="true"
+      shift
+      ;;
+    '-p' | '--pipe')
+      g_pipe="true"
+      shift
+      ;;
+    '--')
+      shift
+      break
+      ;;
+    *)
+      throw_error_msg "Unknown option: $1"
+      ;;
+    esac
+  done
+}
+
+## USAGE: Construct your help screen text here.
+function print_help() {
+  print_out "  ${g_script_name} [options]"
+  print_blank_line
+  print_out "This script performs various conversion tasks.  Each sub-command does a different "
+  print_out "conversion."
+  print_blank_line
+  print_out "Options:"
+  print_blank_line
+  print_out "  -h or --help"
+  print_out "      Show this help screen."
+  print_blank_line
+  print_out "  -v or --version"
+  print_out "     Show the version number."
+  print_blank_line
+  print_out "  -f or --force"
+  print_out "     Some sub-commands support 'forcing' their particular operation.  Usually"
+  print_out "     removing any checks before taking an action."
+  print_blank_line
+  print_out "  -r or --recursive"
+  print_out "     Some sub-commands support performing the operation recursively through"
+  print_out "     a directory tree.  Pass this flag to make the command recursive."
+  print_blank_line
+  print_out "  -p or --pipe"
+  print_out "     Some sub-commands produce a list of files, this option formats the"
+  print_out "     list of files suitable for piping through to other output or to a file."
+  print_blank_line
+  print_out "The supported sub-commands are:"
+  print_out "  conv-mkv, strip-meta, extract-subs, list-no-audio, rename-fix-periods"
+}
+
+function verify_command() {
+  get_exit_code contains_element "${1}" "${g_sub_commands[@]}"
+  if [[ ! ${EXIT_CODE} -eq 0 ]]; then
+    throw_error_msg "Unknown ${g_script_name} command: '${sub_command}'"
+  fi
+}
+
+function _print() {
+  local color="$1"
+  local msg="$2"
+
+  if [[ ! "${g_pipe}" == "true" ]]; then
+    case "${color}" in
+    "green")
+      print_green "${msg}"
+      ;;
+    "normal")
+      print_normal "${msg}"
+      ;;
+    "yellow")
+      print_yellow "${msg}"
+      ;;
+    "blue")
+      print_blue "${msg}"
+      ;;
+    "red")
+      print_red "${msg}"
+      ;;
+    *)
+      throw_error_msg "Internal error. Unknown color: '${color}'"
+      ;;
+    esac
+  fi
+}
+
+function _convertMkvFileToMp4() {
+  print_blue "Converting file: $1"
+
+  local new_file="${1%.*}.mp4"
+
+  get_exit_code ffmpeg -i "$1" -map_metadata -1 -codec copy -movflags +faststart \
+    "${new_file}"
+
+  if [[ ${EXIT_CODE} -eq 0 ]]; then
+    rm "${1}"
+    print_green "File converted: ${new_file}"
+  else
+    print_red "Failed to convert file: $1"
+  fi
+}
+
+function convertMkvToMp4() {
+  local fileOrPath file files
+  fileOrPath=$(pwd)
+  if [[ -n "${1:-}" ]]; then
+    fileOrPath="$1"
+  fi
+
+  if [[ -d "${fileOrPath}" ]]; then
+    if [[ "${g_recursive}" == "true" ]]; then
+      files=("${fileOrPath}"/*.mkv "${fileOrPath}"/**/*.mkv)
+    else
+      files=("${fileOrPath}"/*.mkv)
+    fi
+
+    for file in "${files[@]}"; do
+      if [[ ! "${file}" == *"*"* ]]; then
+        _convertMkvFileToMp4 "${file}"
+      fi
+    done
+
+    print_blue "Finished converting mkv's to mp4's."
+  else
+    if [[ -f "${fileOrPath}" ]]; then
+      _convertMkvFileToMp4 "${fileOrPath}"
+    else
+      throw_error_msg "Value given is not a file or a directory: '${fileOrPath}'"
+    fi
+  fi
+}
+
+function _stripMetadataFromFile() {
+  print_blue "Stripping metadata from file: $1"
+
+  local tempFile="fixed-${1##*/}"
+  get_exit_code ffmpeg -i "$1" -map_metadata -1 -codec copy -movflags +faststart \
+    "${tempFile}"
+
+  if [[ ${EXIT_CODE} -eq 0 ]]; then
+    rm "${1}"
+    mv "${tempFile}" "${1}"
+    print_green "Metadata removed from file: ${1}"
+  else
+    rm "${tempFile}"
+    print_red "Failed to strip metadata from file: $1"
+  fi
+}
+
+function _stripMetadata() {
+  if [[ "${g_force}" == "true" ]]; then
+    _stripMetadataFromFile "$1"
+  else
+    print_blue "Checking file: $1"
+    if mediainfo "$1" | grep -q -i "movie name\|title"; then
+      _stripMetadataFromFile "$1"
+    else
+      print_yellow "Skipping '$1', no metadata."
+    fi
+  fi
+}
+
+function stripMetadata() {
+  local fileOrPath file files
+  fileOrPath=$(pwd)
+  if [[ -n "${1:-}" ]]; then
+    fileOrPath="$1"
+  fi
+
+  if [[ -d "${fileOrPath}" ]]; then
+    if [[ "${g_recursive}" == "true" ]]; then
+      files=("${fileOrPath}"/*.mp4 "${fileOrPath}"/**/*.mp4)
+    else
+      files=("${fileOrPath}"/*.mp4)
+    fi
+
+    for file in "${files[@]}"; do
+      if [[ ! "${file}" == *"*"* ]]; then
+        _stripMetadata "${file}"
+      fi
+    done
+
+    print_blue "Finished stripping metadata from files."
+  else
+    if [[ -f "${fileOrPath}" ]]; then
+      _stripMetadata "${fileOrPath}"
+    else
+      throw_error_msg "Value given is not a file or a directory: '${fileOrPath}'"
+    fi
+  fi
+}
+
+function _extractSubtitles() {
+  local file="$1"
+  local subtitleNumber="$2"
+  local srtFile
+
+  print_blue "Extracting subtitle #${subtitleNumber} from file: ${file}"
+
+  srtFile="${file%.*}.en.forced.srt"
+
+  get_exit_code ffmpeg -i "${file}" -map "0:s:${subtitleNumber}" "${srtFile}"
+
+  if [[ ${EXIT_CODE} -eq 0 ]]; then
+    print_green "Subtitles extracted to file: ${srtFile}"
+  else
+    rm "${srtFile}"
+    print_red "Failed to extract subtitles from file: $1"
+  fi
+}
+
+function extractSubtitles() {
+  local fileOrPath file files
+  local subtitleNumber=0
+  if [[ -n "${1:-}" ]]; then
+    subtitleNumber="$1"
+  fi
+
+  fileOrPath=$(pwd)
+  if [[ -n "${2:-}" ]]; then
+    fileOrPath="$2"
+  fi
+
+  if [[ -d "${fileOrPath}" ]]; then
+    if [[ "${g_recursive}" == "true" ]]; then
+      files=("${fileOrPath}"/*.mkv "${fileOrPath}"/**/*.mkv)
+    else
+      files=("${fileOrPath}"/*.mkv)
+    fi
+
+    for file in "${files[@]}"; do
+      if [[ ! "${file}" == *"*"* ]]; then
+        _extractSubtitles "${file}" "${subtitleNumber}"
+      fi
+    done
+
+    print_blue "Finished extracting subtitles from files."
+  else
+    if [[ -f "${fileOrPath}" ]]; then
+      _extractSubtitles "${fileOrPath}" "${subtitleNumber}"
+    else
+      throw_error_msg "Value given is not a file or a directory: '${fileOrPath}'"
+    fi
+  fi
+}
+
+function _checkFileForAudio() {
+  local printForPositive="${2:-"false"}"
+
+  if mediainfo "$1" | grep -q -i "^audio"; then
+    if [[ "${printForPositive}" == "true" ]]; then
+      print_green "File '$1' has audio."
+    fi
+  else
+    if [[ "${g_pipe}" == "true" ]]; then
+      print_normal "$1"
+    else
+      print_yellow "File '$1' has no audio!"
+    fi
+  fi
+}
+
+function listVideosWithNoAudio() {
+  local fileOrPath file files
+  fileOrPath=$(pwd)
+  if [[ -n "${1:-}" ]]; then
+    fileOrPath="$1"
+  fi
+
+  if [[ -d "${fileOrPath}" ]]; then
+    _print "blue" "Searching for videos with no audio."
+
+    if [[ "${g_recursive}" == "true" ]]; then
+      files=("${fileOrPath}"/*.mp4 "${fileOrPath}"/**/*.mp4)
+    else
+      files=("${fileOrPath}"/*.mp4)
+    fi
+
+    for file in "${files[@]}"; do
+      if [[ ! "${file}" == *"*"* ]]; then
+        _checkFileForAudio "${file}"
+      fi
+    done
+
+    _print "blue" "Finished searching for videos with no audio."
+  else
+    if [[ -f "${fileOrPath}" ]]; then
+      _checkFileForAudio "${file}" "true"
+    else
+      throw_error_msg "Value given is not a file or a directory: '${fileOrPath}'"
+    fi
+  fi
+}
+
+function _renameFileFixPeriods() {
+  rename --nopath -f 's/\.(?![^.]+$)/ /g' "$1"
+}
+
+function renameFixPeriods() {
+  local fileOrMask path file files
+  fileOrMask="*"
+  if [[ -n "${1:-}" ]]; then
+    fileOrMask="$1"
+  fi
+
+  path="$(pwd)"
+  if [[ -n "${2:-}" ]]; then
+    path="$2"
+  fi
+
+  if [[ -f "${fileOrMask}" ]]; then
+    _renameFileFixPeriods "${fileOrMask}"
+  else
+    print_blue "Renaming files..."
+
+    if [[ "${g_recursive}" == "true" ]]; then
+      mapfile -t files < <(find "${path}" -type f -iname "${fileOrMask}")
+    else
+      mapfile -t files < <(find "${path}" -maxdepth 1 -type f -iname "${fileOrMask}")
+    fi
+
+    for file in "${files[@]}"; do
+      if [[ ! "${file}" == *"*"* ]]; then
+        _renameFileFixPeriods "${file}"
+      fi
+    done
+
+    print_blue "Finished renaming files."
+  fi
+}
+
+## Your main implementation goes here.  All of the positional arguments have
+## been passed as an array to this function.
+function main() {
+  local sub_command
+  sub_command="${1:-unk}"
+  shift
+
+  sub_command=$(echo "${sub_command}" | tr "[:upper:]" "[:lower:]")
+
+  verify_command "${sub_command}"
+
+  case "${sub_command}" in
+  "conv-mkv")
+    convertMkvToMp4 "$@"
+    ;;
+  "strip-meta")
+    stripMetadata "$@"
+    ;;
+  "extract-subs")
+    extractSubtitles "$@"
+    ;;
+  "list-noaudio")
+    listVideosWithNoAudio "$@"
+    ;;
+  "rename-fixperiods")
+    renameFixPeriods "$@"
+    ;;
+  *)
+    throw_error_msg "Unknown ${g_script_name} command: '${sub_command}'"
+    ;;
+  esac
+}
+
+## This must be the last line
+main_handler "$@"
