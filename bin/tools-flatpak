@@ -149,8 +149,8 @@ function main_handler() {
 
 g_script_author="Brennan Fee"
 g_script_license="MIT License"
-g_script_version="0.5"
-g_script_date="2024-11-27"
+g_script_version="0.6"
+g_script_date="2025-03-13"
 
 ### END Script template bootstrap
 #################################
@@ -259,34 +259,38 @@ function install_if_needed() {
 }
 
 function install_common_tools() {
-  install_if_needed com.github.tchx84.Flatseal
+  install_if_needed com.bambulab.BambuStudio
   install_if_needed com.bitwarden.desktop
+  install_if_needed com.brave.Browser
+  install_if_needed com.github.tchx84.Flatseal
+  install_if_needed com.github.tenderowl.frog
+  install_if_needed com.google.Chrome
   install_if_needed com.jgraph.drawio.desktop
   install_if_needed com.plexamp.Plexamp
+  install_if_needed com.rafaelmardojai.Blanket
+  install_if_needed com.sweethome3d.Sweethome3d
+  install_if_needed fr.handbrake.ghb
+  install_if_needed io.github.Qalculate.qalculate-qt
+  install_if_needed md.obsidian.Obsidian
+  install_if_needed org.bleachbit.BleachBit
+  install_if_needed org.gnome.boabab
+  install_if_needed org.kde.okular
   install_if_needed org.libreoffice.LibreOffice
+  install_if_needed org.localsend.localsend_app
   install_if_needed org.mozilla.firefox
+  install_if_needed org.musicbrainz.Picard
+  install_if_needed org.nomacs.ImageLounge
   install_if_needed org.signal.Signal
   install_if_needed org.speedcrunch.SpeedCrunch
   install_if_needed org.videolan.VLC
   install_if_needed org.wezfurlong.wezterm
   install_if_needed tv.plex.PlexDesktop
   install_if_needed tv.plex.PlexHTPC
-  install_if_needed org.kde.okular
-  install_if_needed org.bleachbit.BleachBit
-  install_if_needed com.rafaelmardojai.Blanket
-  install_if_needed com.github.tenderowl.frog
-  install_if_needed org.localsend.localsend_app
-  install_if_needed com.bambulab.BambuStudio
-  install_if_needed com.brave.Browser
-  install_if_needed com.google.Chrome
-  install_if_needed fr.handbrake.ghb
-  install_if_needed com.sweethome3d.Sweethome3d
-  install_if_needed io.github.Qalculate.qalculate-qt
 }
 
 function install_dev_tools() {
   if [[ ! "${g_include_dev_tools}" == "true" ]]; then
-    return
+    install_if_needed org.raspberrypi.rpi-imager
   fi
 }
 
