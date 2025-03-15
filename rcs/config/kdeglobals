@@ -184,11 +184,12 @@ Sort by=Name
 Sort directories first=true
 Sort hidden files last=false
 Sort reversed=false
-Speedbar Width=125
+Speedbar Width=301
 View Style=DetailTree
 
 [KScreen]
-ScreenScaleFactors=HDMI-A-0=1;DisplayPort-0=1;DisplayPort-1=1;DisplayPort-2=1;
+ScaleFactor=1.25
+ScreenScaleFactors=HDMI-A-0=1.25;DisplayPort-0=1.25;DisplayPort-1=1.25;DisplayPort-2=1.25;
 
 [KShortcutsDialog Settings]
 Dialog Size=600,480
