@@ -146,7 +146,7 @@ Name=Breeze Dark
 TerminalApplication=/usr/bin/flatpak run --branch=stable --arch=x86_64 --command=wezterm org.wezfurlong.wezterm start --cwd .
 TerminalService=org.wezfurlong.wezterm.desktop
 XftAntialias=true
-XftHintStyle=hintfull
+XftHintStyle=hintslight
 XftSubPixel=rgb
 fixed=JetBrainsMono Nerd Font Mono,14,-1,5,50,0,0,0,0,0
 font=Noto Sans,14,-1,5,50,0,0,0,0,0

@@ -1,6 +1,10 @@
 [$Version]
 update_info=kscreenlocker.upd:0.1-autolock
 
+[Daemon]
+LockGrace=30
+Timeout=15
+
 [Greeter][Wallpaper][org.kde.image][General]
 Image=/home/brennan/.dotfiles/wallpapers/1920x1080/darkest-hour.jpg
 PreviewImage=/home/brennan/.dotfiles/wallpapers/1920x1080/darkest-hour.jpg
