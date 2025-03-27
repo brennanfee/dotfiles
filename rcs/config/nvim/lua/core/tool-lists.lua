@@ -179,7 +179,6 @@ M.formatters = {
   "stylua",
   "typstfmt",
   "xmlformatter",
-  "yamlfix",
   "yamlfmt",
 }
 

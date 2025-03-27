@@ -201,6 +201,7 @@ EXEC 01;32 # green
 *markdownlint.yml 00;38;5;8
 *prettierrc.yml 00;38;5;8
 *ansible-lint 00;38;5;8
+*yamlfmt.yml 00;38;5;8
 *yamllint.yml 00;38;5;8
 *hadolint.yaml 00;38;5;8
 *hadolint.yml 00;38;5;8

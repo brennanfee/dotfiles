@@ -11,7 +11,6 @@ repos:
       - id: mixed-line-ending
         args: [--fix=lf]
       - id: check-yaml
-      - id: check-json
       - id: check-toml
       - id: check-xml
       - id: check-case-conflict
@@ -22,6 +21,10 @@ repos:
       - id: check-symlinks
       - id: destroyed-symlinks
       - id: fix-byte-order-marker
+  - repo: https://gitlab.com/bmares/check-json5
+    rev: v1.0.0
+    hooks:
+      - id: check-json5
   - repo: https://github.com/alessandrojcm/commitlint-pre-commit-hook
     rev: v9.22.0
     hooks:
@@ -32,6 +35,10 @@ repos:
   #   rev: v0.10.0.1
   #   hooks:
   #     - id: shellcheck
+  - repo: https://github.com/google/yamlfmt
+    rev: v0.14.0
+    hooks:
+      - id: yamlfmt
   - repo: https://github.com/adrienverge/yamllint.git
     rev: v1.29.0
     hooks:
