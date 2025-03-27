@@ -15,7 +15,6 @@ function M.config()
       -- next = "<C-Space>",
     },
   })
-
 end
 
 return M

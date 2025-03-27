@@ -18,30 +18,10 @@ keymap("n", "<C-i>", "<C-i>", opts)
 ------ Multiple Mode Mappings ------
 
 -- Remap for dealing with line wrap
-keymap(
-  { "n", "x" },
-  "j",
-  'v:count || mode(1)[0:1] == "no" ? "j" : "gj"',
-  { expr = true, silent = true }
-) -- Move down
-keymap(
-  { "n", "x" },
-  "k",
-  'v:count || mode(1)[0:1] == "no" ? "k" : "gk"',
-  { expr = true, silent = true }
-) -- Move up
-keymap(
-  { "n", "v" },
-  "<Down>",
-  'v:count || mode(1)[0:1] == "no" ? "j" : "gj"',
-  { expr = true, silent = true }
-) -- Move down
-keymap(
-  { "n", "v" },
-  "<Up>",
-  'v:count || mode(1)[0:1] == "no" ? "k" : "gk"',
-  { expr = true, silent = true }
-) -- Move up
+keymap({ "n", "x" }, "j", 'v:count || mode(1)[0:1] == "no" ? "j" : "gj"', { expr = true, silent = true }) -- Move down
+keymap({ "n", "x" }, "k", 'v:count || mode(1)[0:1] == "no" ? "k" : "gk"', { expr = true, silent = true }) -- Move up
+keymap({ "n", "v" }, "<Down>", 'v:count || mode(1)[0:1] == "no" ? "j" : "gj"', { expr = true, silent = true }) -- Move down
+keymap({ "n", "v" }, "<Up>", 'v:count || mode(1)[0:1] == "no" ? "k" : "gk"', { expr = true, silent = true }) -- Move up
 
 -- Better movements to start and end of line
 keymap({ "n", "o", "x" }, "<s-u>", "0", opts)

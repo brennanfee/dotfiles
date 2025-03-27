@@ -40,3 +40,11 @@ repos:
     rev: v0.17.2
     hooks:
       - id: markdownlint-cli2
+  - repo: https://github.com/JohnnyMorganz/StyLua
+    rev: v2.0.2
+    hooks:
+      - id: stylua-github
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.24.2
+    hooks:
+      - id: gitleaks

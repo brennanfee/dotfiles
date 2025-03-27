@@ -90,8 +90,7 @@ end
 vim.opt.list = true
 --o.listchars = "eol:¬,tab:>·,trail:~,extends:>,precedes:<,space:␣"
 --o.listchars = "tab:>·,trail:~,extends:>,precedes:<"
-vim.opt.listchars =
-  { tab = " ", trail = "~", extends = ">", precedes = "<", nbsp = "␣", lead = "⋅" }
+vim.opt.listchars = { tab = " ", trail = "~", extends = ">", precedes = "<", nbsp = "␣", lead = "⋅" }
 
 vim.opt.wrap = true
 vim.opt.linebreak = true

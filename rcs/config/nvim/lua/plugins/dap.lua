@@ -62,8 +62,11 @@ function M.config()
     { "<leader>dt", "<cmd>require('dap').step_out<CR>", desc = "Step Out" },
     { "<leader>dc", "<cmd>require('dap').continue<CR>", desc = "Continue" },
     { "<leader>db", "<cmd>require('dap').toggle_breakpoint<CR>", desc = "Toggle Breakpoint" },
-    { "<leader>dB", "<cmd>require('dap').set_breakpoint(vim.fn.input('Breakpoint condition: '))<CR>",
-      desc = "Breakpoint (with condition)" },
+    {
+      "<leader>dB",
+      "<cmd>require('dap').set_breakpoint(vim.fn.input('Breakpoint condition: '))<CR>",
+      desc = "Breakpoint (with condition)",
+    },
   })
 
   -- Dap UI setup

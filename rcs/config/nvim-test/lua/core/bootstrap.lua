@@ -10,9 +10,7 @@ M.echo = function(str)
 end
 
 M.lazy = function(install_path)
-  M.echo(
-    "This is the initial run of NeoVim, please wait will plugins are installed.\nPress any key to continue..."
-  )
+  M.echo("This is the initial run of NeoVim, please wait will plugins are installed.\nPress any key to continue...")
   vim.fn.getchar()
 
   M.echo("  Installing lazy.nvim & plugins ...")

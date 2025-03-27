@@ -33,11 +33,7 @@ function M.config()
     ),
     button("r", icons.ui.History .. " Recent files", ":Telescope oldfiles <CR>"),
     button("t", icons.ui.Text .. " Find text", ":Telescope live_grep <CR>"),
-    button(
-      "c",
-      icons.ui.Gear .. " Config",
-      ":lua vim.cmd('e ' .. vim.fn.stdpath('config') .. '/init.lua') <CR>"
-    ),
+    button("c", icons.ui.Gear .. " Config", ":lua vim.cmd('e ' .. vim.fn.stdpath('config') .. '/init.lua') <CR>"),
     button("q", icons.ui.SignOut .. " Quit", ":qa<CR>"),
   }
 

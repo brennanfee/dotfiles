@@ -84,8 +84,7 @@ end
 vim.opt.list = true
 --o.listchars = "eol:¬,tab:>·,trail:~,extends:>,precedes:<,space:␣"
 --o.listchars = "tab:>·,trail:~,extends:>,precedes:<"
-vim.opt.listchars =
-  { tab = " ", trail = "~", extends = ">", precedes = "<", nbsp = "␣", lead = "⋅" }
+vim.opt.listchars = { tab = " ", trail = "~", extends = ">", precedes = "<", nbsp = "␣", lead = "⋅" }
 
 vim.opt.wrap = true
 vim.opt.linebreak = true
@@ -141,14 +140,8 @@ vim.g.loaded_netrwPlugin = 1
 -- mason should override Mise
 local is_windows = vim.loop.os_uname().sysname == "Windows_NT"
 if not string.find(vim.env.PATH, "/mise/shims", 1, true) then
-  vim.env.PATH = vim.env.XDG_DATA_HOME
-    .. "/mise/shims"
-    .. (is_windows and ";" or ":")
-    .. vim.env.PATH
+  vim.env.PATH = vim.env.XDG_DATA_HOME .. "/mise/shims" .. (is_windows and ";" or ":") .. vim.env.PATH
 end
 if not string.find(vim.env.PATH, "/mason/bin", 1, true) then
-  vim.env.PATH = vim.fn.stdpath("data")
-    .. "/mason/bin"
-    .. (is_windows and ";" or ":")
-    .. vim.env.PATH
+  vim.env.PATH = vim.fn.stdpath("data") .. "/mason/bin" .. (is_windows and ";" or ":") .. vim.env.PATH
 end
