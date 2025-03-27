@@ -9,4 +9,3 @@
 [mergetool "bc"]
   cmd = \"/mnt/c/Program Files/Beyond Compare 4/BCompare.exe\" -expandall \"$(wslpath -w $LOCAL)\" \"$(wslpath -w $REMOTE)\" \"$(wslpath -w $BASE)\" \"$(wslpath -w $MERGED)\"
   trustExitCode = true
-

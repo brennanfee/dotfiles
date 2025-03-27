@@ -9,8 +9,9 @@ charset = utf-8
 end_of_line = lf
 indent_style = space
 indent_size = 2
-insert_final_newline = false
+insert_final_newline = true
 trim_trailing_whitespace = true
+max_line_length = 120
 
 # Python PEP8, PHP (PSR-2), Perl, Rust
 [*.{py,py3,php,pl,pm,t,PL,rs}]
@@ -33,8 +34,21 @@ indent_size = 4
 [*.{ps1,psd1,psm1,pssc}]
 indent_size = 4
 
+# Command & Batch
+[*.{cmd,bat}]
+end_of_line = crlf
+indent_size = 4
+
 # Makefiles
 [{Makefile,*.mk,Makefile.*}]
 indent_size = tab
 indent_style = tab
 
+# For shfmt
+[*.{sh,bash}]
+shell_variant = bash
+binary_next_line = true
+switch_case_indent = true
+space_redirects = true
+keep_padding = false
+function_next_line = false

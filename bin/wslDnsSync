@@ -33,4 +33,4 @@ if [ ${#UNIQUE_SEARCH_DOMAIN[@]} -ne 0 ]; then
   echo "search ${UNIQUE_SEARCH_DOMAIN[@]}" >>/etc/resolv.conf
 fi
 
-sed -i -e 's///g' /etc/resolv.conf
+tr -d $'\r' </etc/resolv.conf

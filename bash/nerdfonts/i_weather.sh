@@ -232,4 +232,3 @@ i='' i_weather_moon_alt_waning_crescent_4=$i
 i='' i_weather_moon_alt_waning_crescent_5=$i
 i='' i_weather_moon_alt_waning_crescent_6=$i
 i='' i_weather_moon_alt_new=$i
-
