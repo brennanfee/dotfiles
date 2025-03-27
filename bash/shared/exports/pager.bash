@@ -36,6 +36,9 @@ else
 fi
 
 if [[ "${BAT_BIN}" == "bat" || "${BAT_BIN}" == "batcat" ]]; then
+  # Completions
+  eval "$("${BAT_BIN}" --completion bash)"
+
   export MANROFFOPT="-c"
 
   if [[ -x "${DOTFILES}/bin/batpipe" ]]; then

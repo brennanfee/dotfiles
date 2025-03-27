@@ -17,6 +17,10 @@ function log_profile() {
 
 log_profile "In bash_profile"
 
+if command -v "mise" &>/dev/null; then
+  eval "$(mise activate bash --shims)"
+fi
+
 # Most other places need to ONLY use the xdg-user-dir or my custom xdg_base_dir
 # functions, but this directory is so critical and may not be loaded until after
 # the base-profile.bash script has been run.  So I am being overly cautious with

@@ -205,7 +205,7 @@ function print_help() {
   print_out "Optionally you can request a single or a space separated list"
   print_out "of items to update.  The individual options are:"
   print_blank_line
-  print_out "all, apt, flatpak, snaps, pipx, asdf, appman, tmux, vim, nvim"
+  print_out "all, apt, flatpak, snaps, mise, pipx, asdf, appman, tmux, vim, nvim"
   print_blank_line
   print_out "Note that the order of the parameters can change the order in"
   print_out "in which the steps are run.  Passing in 'all' halts processing of"
@@ -261,6 +261,32 @@ function updateUv() {
 
     # Prune the cache
     uv cache prune
+  fi
+}
+
+function updateMise() {
+  if command_exists mise; then
+    print_info "Updating mise"
+
+    # Trust the config file
+    mise -y trust "$(xdg_base_dir DOTFILES)/rcs/config/mise/config.toml"
+
+    # Update mise itself
+    mise -y self-update
+
+    # Update the bash completions file
+    if [[ -f "$(xdg_base_dir DOTFILES)/bash/completions/mise-completion.bash" ]]; then
+      mise -y completion bash --include-bash-completion-lib > \
+        "$(xdg_base_dir DOTFILES)/bash/completions/mise-completion.bash"
+    fi
+
+    # Install and upgrade tools
+    mise -y install
+    # mise -y upgrade --bump --verbose
+    mise -y upgrade
+    mise -y reshim # may not be necessary
+    mise -y prune
+    mise -y cache prune
   fi
 }
 
@@ -348,14 +374,22 @@ function updateNvim() {
 }
 
 function updateAll() {
+  # System installs
   updateApt
   updateFlatpak
   updateSnaps
-  updatePipx
-  updateUv
-  updateAsdf
   updateAppman
   updateAm
+
+  # Shell installs
+  updateMise
+  updateUv
+
+  # Deprecated
+  updateAsdf
+  updatePipx
+
+  # Specific applications
   updateTmux
   updateVim
   updateNvim
@@ -385,6 +419,9 @@ function updateSelected() {
       ;;
     'asdf')
       updateAsdf
+      ;;
+    'mise')
+      updateMise
       ;;
     'appimages')
       updateAppman
@@ -457,6 +494,9 @@ function main() {
       ;;
     'asdf')
       selected+=("asdf")
+      ;;
+    'mise')
+      selected+=("mise")
       ;;
     'appimages' | 'appimage')
       selected+=("appimages")

@@ -29,9 +29,12 @@ fi
 # default.  The WSLENV environment variable should be set to:
 # USERPROFILE/up:PROFILEPATH/up:SystemRoot/up:WIN_USER
 PROFILEPATH="${PROFILEPATH:-$(xdg-user-dir PROFILE)}"
-PROFILEPATH="${PROFILEPATH:-${HOME}/profile}"
+PROFILEPATH="${PROFILEPATH:-$HOME/profile}"
 if [[ ! -d "${PROFILEPATH}" ]]; then
-  PROFILEPATH="${HOME}"
+  PROFILEPATH="${HOME}/profile"
+  if [[ ! -d "${PROFILEPATH}" ]]; then
+    mkdir -p "${PROFILEPATH}"
+  fi
 fi
 
 export PROFILEPATH

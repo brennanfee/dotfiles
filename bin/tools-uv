@@ -221,12 +221,12 @@ function housekeeping() {
 }
 
 function install_common_tools() {
-  uv tool install wheel
-  uv tool install neovim || true # uv complains if the package doesn't expose an executable
-
   uv tool install ansible --with cryptography --with paramiko --with dnspython
 
-  uv tool install invoke
+  uv tool install invoke # may remove in favor of Mise tasks
+  uv tool install pre-commit
+  uv tool install identify
+
   uv tool install yt-dlp
   #uv tool install streamdeck-ui
 }

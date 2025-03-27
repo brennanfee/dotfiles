@@ -18,18 +18,22 @@ if ! ${SOURCED}; then
 fi
 # END Bash strict mode
 
-source_if "/usr/share/bash-completion/completions/fzf"
-source_if "/usr/share/doc/fzf/examples/key-bindings.bash"
-
-export FZF_DEFAULT_OPTS="--height 40% --layout=reverse --border --bind='ctrl-space:toggle'"
-
-export FZF_CTRL_T_OPTS="--select-1 --exit-0"
-
-export FZF_ALT_C_OPTS="--select-1 --exit-0"
-
 ### Fuzzy search terminal utilities
 
 if command_exists fzf; then
+  export FZF_DEFAULT_OPTS="--height 40% --layout=reverse --border --bind='ctrl-space:toggle' --ansi"
+
+  export FZF_CTRL_T_OPTS="--select-1 --exit-0"
+
+  export FZF_ALT_C_OPTS="--select-1 --exit-0"
+
+  if command_exists fd; then
+    export FZF_DEFAULT_COMMAND='fd --type f --strip-cwd-prefix --hidden --follow --exclude .git --color=always'
+    export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+  fi
+
+  eval "$(fzf --bash)"
+
   # Emojis
   function femo() {
     local selected_emoji

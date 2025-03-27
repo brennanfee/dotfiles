@@ -32,6 +32,10 @@ base_data_dir=$(xdg_base_dir DATA)
 base_state_dir=$(xdg_base_dir STATE)
 base_config_dir=$(xdg_base_dir CONFIG)
 
+# Some mise aliases
+alias mx="mise x --"
+alias mr="mise r --"
+
 # export ASDF_CRATE_DEFAULT_PACKAGES_FILE="${XDG_CONFIG_HOME}/mise/default-rust-packages"
 export RUSTUP_INIT_SKIP_PATH_CHECK="yes"
 export RUSTUP_HOME="${base_state_dir}/rustup"

@@ -215,36 +215,41 @@ function print_help() {
 }
 
 function install_common_tools() {
-  # Preferred command-line tools
-  DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q install ripgrep fd-find \
-    fzf dtrx inxi bat cmake direnv tmux git atool rcm wget curl \
-    gnutls-bin ffmpeg mediainfo rename locate build-essential dkms clang \
-    zsync luarocks gawk ffmpeg handbrake-cli mediainfo rename iperf3 \
-    shellcheck
-
-  # For rbenv builds (for mise)
-  DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q install autoconf patch \
-    make rustc libssl-dev libyaml-dev libreadline-dev zlib1g-dev libgmp-dev \
-    libncurses5-dev libffi-dev libgdbm6 libgdbm-dev libdb-dev uuid-dev
+  # Somne of my preferred command-line tools
+  DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q install dtrx inxi \
+    tmux git atool rcm wget curl gnutls-bin ffmpeg mediainfo rename locate \
+    build-essential dkms clang zsync luarocks gawk handbrake-cli iperf3
 
   # For python builds (for mise & uv)
+  # Reference: https://github.com/pyenv/pyenv/wiki#suggested-build-environment
   DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q install build-essential \
     libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev curl git \
     libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev \
-    liblzma-dev llvm libmpfr-dev dns-root-data libhidapi-libusb0 \
-    libxcb-xinerama0
+    liblzma-dev
+
+  # For ruby builds (for mise)
+  # Reference: https://github.com/rbenv/ruby-build/wiki#suggested-build-environment
+  DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q install autoconf patch \
+    build-essential rustc libssl-dev libyaml-dev libreadline-dev zlib1g-dev libgmp-dev \
+    libncurses5-dev libffi-dev libgdbm6 libgdbm-dev libdb-dev uuid-dev
 
   # For PHP builds (for mise)
+  # Reference: https://github.com/version-fox/vfox-php/blob/main/.github/workflows/test-linux.yaml
   DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q install autoconf bison \
     gettext libgd-dev libcurl4-openssl-dev libedit-dev libicu-dev libjpeg-dev \
-    libmariadb-dev libonig-dev libpng-dev libpq-dev libreadline-dev \
-    libsqlite3-dev libssl-dev libxml2-dev libzip-dev openssl pkg-config re2c \
-    zlib1g-dev
+    libmariadb-dev libmariadb-dev-compat libmariadb-dev libonig-dev libpng-dev \
+    libpq-dev libreadline-dev libsqlite3-dev libssl-dev libxml2-dev libxslt-dev \
+    libzip-dev openssl pkg-config re2c zlib1g-dev
+
+  # Other (explore trimming these)
+  DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q install llvm libmpfr-dev \
+    dns-root-data libhidapi-libusb0 libxcb-xinerama0 make
+
 }
 
 function install_dev_tools() {
-  if [[ "${g_include_dev_tools}" == "true" ]]; then
-    noop
+  if [[ ! "${g_include_dev_tools}" == "true" ]]; then
+    return
   fi
 }
 

@@ -221,7 +221,9 @@ function install_common_tools() {
 }
 
 function install_dev_tools() {
-  noop
+  if [[ ! "${g_include_dev_tools}" == "true" ]]; then
+    return
+  fi
 }
 
 ## Your main implementation goes here.  All of the positional arguments have

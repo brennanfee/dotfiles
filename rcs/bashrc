@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 # shellcheck shell=bash
 
+# If not running interactively, don't do anything
+if [[ $- != *i* ]]; then
+  return
+fi
+
 # Bash strict mode
 ([[ -n ${ZSH_EVAL_CONTEXT:-} && ${ZSH_EVAL_CONTEXT:-} =~ :file$ ]] ||
   [[ -n ${BASH_VERSION:-} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
@@ -17,11 +22,6 @@ if ! ${SOURCED}; then
   IFS=$(printf '\n\t')
 fi
 # END Bash strict mode
-
-# If not running interactively, don't do anything
-if [[ $- != *i* ]]; then
-  return
-fi
 
 dotfiles="${DOTFILES:-$(xdg-user-dir DOTFILES)}"
 dotfiles="${dotfiles:-${HOME}/.dotfiles}"

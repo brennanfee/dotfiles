@@ -197,7 +197,7 @@ function print_help() {
 
 function check_prerequisites() {
   if [[ ! -x "${g_mise_bin}" ]]; then
-    curl https://mise.run | bash
+    curl https://mise.run | "MISE_INSTALL_PATH=${g_mise_bin}" bash
 
     # Trust the config file
     "${g_mise_bin}" -y trust "$(xdg_base_dir DOTFILES)/rcs/config/mise/config.toml"
@@ -220,6 +220,12 @@ function main() {
 
   # Update mise itself
   "${g_mise_bin}" -y self-update
+
+  # Update the bash completions file
+  if [[ -f "$(xdg_base_dir DOTFILES)/bash/completions/mise-completion.bash" ]]; then
+    "${g_mise_bin}" -y completion bash --include-bash-completion-lib > \
+      "$(xdg_base_dir DOTFILES)/bash/completions/mise-completion.bash"
+  fi
 
   # Install and upgrade tools
   "${g_mise_bin}" -y install

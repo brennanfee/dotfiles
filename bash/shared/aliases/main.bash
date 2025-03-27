@@ -23,6 +23,7 @@ alias lss='ls -1'
 alias dir='ls -CA'
 alias vdir='ls -lA'
 alias tree="tree -C"
+alias as-tree="tree -C --fromfile"
 
 alias grep="grep --color=auto"
 alias pgrep="grep --color=auto"

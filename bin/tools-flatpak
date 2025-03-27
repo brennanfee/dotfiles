@@ -290,8 +290,10 @@ function install_common_tools() {
 
 function install_dev_tools() {
   if [[ ! "${g_include_dev_tools}" == "true" ]]; then
-    install_if_needed org.raspberrypi.rpi-imager
+    return
   fi
+
+  install_if_needed org.raspberrypi.rpi-imager
 }
 
 ## Your main implementation goes here.  All of the positional arguments have

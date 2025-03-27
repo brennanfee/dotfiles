@@ -95,7 +95,7 @@ vim.opt.iskeyword:remove("_")
 
 vim.opt.shortmess:append("c") -- Prevent "pattern not found" messages
 
-vim.opt.colorcolumn = "80,100"
+vim.opt.colorcolumn = "100,120"
 vim.opt.breakindent = true -- Enable break indent
 
 -- Allows Neovim to send the Terminal details of the current window, instead of just getting 'v'
@@ -137,6 +137,18 @@ vim.g.netrw_mouse = 2
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
--- Add binaries installed by mason.nvim to path
+-- Prepend Mise Shim directory and mason bin directories, if needed (note, order is important,
+-- mason should override Mise
 local is_windows = vim.loop.os_uname().sysname == "Windows_NT"
-vim.env.PATH = vim.env.PATH .. (is_windows and ";" or ":") .. vim.fn.stdpath("data") .. "/mason/bin"
+if not string.find(vim.env.PATH, "/mise/shims", 1, true) then
+  vim.env.PATH = vim.env.XDG_DATA_HOME
+    .. "/mise/shims"
+    .. (is_windows and ";" or ":")
+    .. vim.env.PATH
+end
+if not string.find(vim.env.PATH, "/mason/bin", 1, true) then
+  vim.env.PATH = vim.fn.stdpath("data")
+    .. "/mason/bin"
+    .. (is_windows and ";" or ":")
+    .. vim.env.PATH
+end
