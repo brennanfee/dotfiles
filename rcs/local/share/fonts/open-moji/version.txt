@@ -1,0 +1,5 @@
+15.1
+
+https://openmoji.org/
+
+https://github.com/hfg-gmuend/openmoji

@@ -1,0 +1,4 @@
+3.3.0
+
+https://www.nerdfonts.com/
+https://github.com/ryanoasis/nerd-fonts
