@@ -215,9 +215,17 @@ function print_help() {
 }
 
 function install_common_tools() {
+  # Fonts
+  DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q install fonts-recommended \
+    fonts-dejavu fonts-liberation2 fonts-croscore fonts-firacode fonts-hack \
+    fonts-jetbrains-mono vfit ttf-mscorefonts-installer fonts-gnutypewriter \
+    fonts-mathjax fonts-mathjax-extras fonts-national-park fonts-noto fonts-opensymbol \
+    fonts-roboto fonts-stix fonts-terminus fonts-terminus-otb fonts-ubuntu \
+    fonts-ubuntu-console fonts-ubuntu-title
+
   DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q install kwalletcli \
     papirus-icon-theme gitk git-gui meld vim-gtk3 gnome-icon-theme \
-    fonts-dejavu conky-all xclip xsel mediainfo-gui
+    conky-all xclip xsel mediainfo-gui
 }
 
 function install_dev_tools() {
