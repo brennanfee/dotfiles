@@ -1,11 +1,6 @@
 #!/usr/bin/env bash
 # shellcheck shell=bash
 
-# If not running interactively, don't do anything
-if [[ $- != *i* ]]; then
-  return
-fi
-
 # Bash strict mode
 ([[ -n ${ZSH_EVAL_CONTEXT:-} && ${ZSH_EVAL_CONTEXT:-} =~ :file$ ]] ||
   [[ -n ${BASH_VERSION:-} ]] && (return 0 2>/dev/null)) && SOURCED=true || SOURCED=false
@@ -23,12 +18,45 @@ if ! ${SOURCED}; then
 fi
 # END Bash strict mode
 
+# If not running interactively, don't do anything
+if [[ $- != *i* ]]; then
+  return
+fi
+
+export BASHRC_LOGS=1
+# rm -f "${HOME}/profile/bashrc.log"
+
+function log_early() {
+  if [[ ${BASHRC_LOGS} == "1" ]]; then
+    local logPath="${HOME}"
+    if [[ -d "${HOME}/profile" ]]; then
+      logPath="${HOME}/profile"
+    fi
+
+    echo -e "$(/usr/bin/date --rfc-3339=ns):\n  $1" >>"${logPath}/bashrc.log"
+  fi
+}
+
+log_early "-------------------------------------------------------------"
+log_early "In bashrc"
+
+# Most other places need to ONLY use the xdg-user-dir or my custom xdg_base_dir
+# functions, but this directory is so critical and may not be loaded until after
+# the base-profile.bash script has been run.  So I am being overly cautious with
+# defaults on top of defaults here.  AFTER the base-profile is loaded the xdg
+# functions should work and ALWAYS return valid paths.
 dotfiles="${DOTFILES:-$(xdg-user-dir DOTFILES)}"
 dotfiles="${dotfiles:-${HOME}/.dotfiles}"
 
+log_early "sourcing: ${dotfiles}/bash/base-profile.bash"
+# shellcheck source=/home/brennan/.dotfiles/bash/base-profile.bash
+source "${dotfiles}/bash/base-profile.bash"
+
+log_early "sourcing: ${dotfiles}/bash/script-tools.bash"
+# shellcheck source=/home/brennan/.dotfiles/bash/script-tools.bash
 source "${dotfiles}/bash/script-tools.bash"
 
-log "In bashrc"
+log "After script sourcing"
 
 # Reload them, now with the benefit of base-profile
 dotfiles=$(xdg_base_dir DOTFILES)
@@ -99,3 +127,4 @@ unset dotfiles
 unset dotfiles_private
 unset os_primary
 unset os_secondary
+unset BASHRC_LOGS
