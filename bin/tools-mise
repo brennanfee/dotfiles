@@ -223,7 +223,7 @@ function main() {
 
   # Update the bash completions file
   if [[ -f "$(xdg_base_dir DOTFILES)/bash/completions/mise-completion.bash" ]]; then
-    "${g_mise_bin}" -y completion bash --include-bash-completion-lib > \
+    "${g_mise_bin}" -y completion --include-bash-completion-lib bash > \
       "$(xdg_base_dir DOTFILES)/bash/completions/mise-completion.bash"
   fi
 

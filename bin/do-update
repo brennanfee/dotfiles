@@ -276,7 +276,7 @@ function updateMise() {
 
     # Update the bash completions file
     if [[ -f "$(xdg_base_dir DOTFILES)/bash/completions/mise-completion.bash" ]]; then
-      mise -y completion bash --include-bash-completion-lib > \
+      mise -y completion --include-bash-completion-lib bash > \
         "$(xdg_base_dir DOTFILES)/bash/completions/mise-completion.bash"
     fi
 
