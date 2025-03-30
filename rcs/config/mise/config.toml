@@ -15,11 +15,11 @@ lts = "22"
 lts-jod = "22"
 lts-iron = "20"
 lts-hydrogen = "18"
+rolling = "23"
 
 [alias.java.versions]
 lts = "corretto-21"
 rolling = "corretto-24"
-latest = "corretto-24"
 
 [tools]
 # Pre-reqs
