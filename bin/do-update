@@ -307,10 +307,6 @@ function updateAppman() {
     appman -s
     # update
     appman -u
-
-    # special... nightly builds don't get updated so we will manually manage nvim
-    appman -R nvim-nightly
-    appman -i nvim-nightly
   fi
 }
 
