@@ -29,6 +29,7 @@
   autocrlf = input
   gvfs = true
   pager = delta
+  longpaths = true
 [interactive]
   diffFilter = delta --color-only
 [delta]
