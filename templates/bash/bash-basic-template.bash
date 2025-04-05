@@ -17,6 +17,7 @@ if ! ${SOURCED}; then
 fi
 ### END Bash strict mode
 
+###################################################################################################
 ### START Script template bootstrap
 
 g_script_name=$(basename "${BASH_SOURCE[0]}")
@@ -72,7 +73,8 @@ function set_long_options() {
 function process_arguments() {
   local args
   set +o errexit # temporarily turn off error on exit
-  args=$(getopt --name "${g_script_name}" --options "${g_short_options}hv" --longoptions "${g_long_options},help,version" -- "$@")
+  args=$(getopt --name "${g_script_name}" --options "${g_short_options}hv" \
+    --longoptions "${g_long_options},help,version" -- "$@")
   # Handle if getopt returned an error
   # shellcheck disable=SC2181
   if [[ $? -gt 0 ]]; then
@@ -144,13 +146,13 @@ function main_handler() {
   cleanup_vars
 }
 
+### END Script template bootstrap
+###################################################################################################
+
 g_script_author="Brennan Fee"
 g_script_license="MIT License"
-g_script_version="0.1"
-g_script_date="2024-09-16"
-
-### END Script template bootstrap
-#################################
+g_script_version="0.0"
+g_script_date="2025-04-03"
 
 ## USAGE: If you want any global variables, set them up here
 function setup_script_vars() {
@@ -208,8 +210,8 @@ function print_help() {
   to_be_developed
 }
 
-## Your main implementation goes here.  All of the positional arguments have
-## been passed as an array to this function.
+## Your main implementation goes here.  All of the positional arguments have been passed as an array
+## to this function.
 function main() {
   to_be_developed
 }
