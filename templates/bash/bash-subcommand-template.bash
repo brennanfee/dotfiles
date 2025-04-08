@@ -43,10 +43,12 @@ function cleanup_vars() {
 }
 
 function load_script_tools() {
+  local dotfiles
+  dotfiles="${DOTFILES:-$(xdg-user-dir DOTFILES)}"
   # Source script-tools.bash
-  if [[ -f "${g_script_dir}/../bash/script-tools.bash" ]]; then
+  if [[ -f "${dotfiles}/bash/script-tools.bash" ]]; then
     # shellcheck source=/home/brennan/.dotfiles/bash/script-tools.bash
-    source "${g_script_dir}/../bash/script-tools.bash"
+    source "${dotfiles}/bash/script-tools.bash"
   fi
 }
 
