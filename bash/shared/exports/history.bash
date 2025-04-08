@@ -38,8 +38,8 @@ function historyclean {
   if [[ -e "${HISTFILE}" ]]; then
     local history_lock
     exec {history_lock}< "${HISTFILE}" && flock -s ${history_lock}
-    tac "${HISTFILE}" | awk '!x[$0]++' | tac > "${HISTFILE}.tmp$$"
     history -a
+    tac "${HISTFILE}" | awk '!x[$0]++' | tac > "${HISTFILE}.tmp$$"
     mv -f "${HISTFILE}.tmp$$" "${HISTFILE}"
     history -c
     history -r
