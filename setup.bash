@@ -34,26 +34,26 @@ dotfiles=${dotfiles:-${HOME}/.dotfiles}
 dotfiles_private=${dotfiles_private:-${HOME}/.dotfiles-private}
 
 echo ""
-echo -e "${text_green}Starting setup...${text_normal}"
+echo -e "${text_green}Starting setup...${text_reset}"
 echo ""
 
 if ! command -v "rcup" &> /dev/null; then
-  echo -e "${text_red}RCM is not installed.  Please install it and try again.${text_normal}"
+  echo -e "${text_red}RCM is not installed.  Please install it and try again.${text_reset}"
   exit 1
 fi
 
 if ! command -v "curl" &> /dev/null; then
-  echo -e "${text_red}Curl is not installed.  Please install it and try again.${text_normal}"
+  echo -e "${text_red}Curl is not installed.  Please install it and try again.${text_reset}"
   exit 1
 fi
 
 rcup -f -K -d "${dotfiles}/rcs" -d "${dotfiles_private}/rcs" rcrc
 
 if [[ -f "${HOME}/.rcrc" ]]; then
-  echo -e "${text_yellow}Home .rcrc is in place.${text_normal}"
+  echo -e "${text_yellow}Home .rcrc is in place.${text_reset}"
   echo ""
 else
-  echo -e "${text_white}Creating new ~/.rcrc file.${text_normal}"
+  echo -e "${text_white}Creating new ~/.rcrc file.${text_reset}"
   echo ""
   cp "${dotfiles}/base-rcrc" "${HOME}/.rcrc"
 
@@ -63,10 +63,10 @@ else
     echo "TAGS=\"${OS_PRIMARY} home\"" >> "${HOME}/.rcrc"
   fi
 
-  echo -e "${text_yellow}~/.rcrc file created.  You will need to add it with mkrc -o ~/.rcrc${text_normal}"
+  echo -e "${text_yellow}~/.rcrc file created.  You will need to add it with mkrc -o ~/.rcrc${text_reset}"
 fi
 
-echo -e "${text_green}Done!  Edit the ~/.rcrc as needed then run 'rcup'${text_normal}"
+echo -e "${text_green}Done!  Edit the ~/.rcrc as needed then run 'rcup'${text_reset}"
 echo ""
 
 unset dotfiles

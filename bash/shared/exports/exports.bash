@@ -33,6 +33,7 @@ export TZ="America/Chicago"
 
 # Set terminal
 export TERM=tmux-256color
+tput init
 
 # Turn on colors
 export CLICOLOR=1
@@ -51,3 +52,10 @@ export INPUTRC
 # gnupg
 GNUPGHOME="$(xdg_base_dir DATA)/gnupg"
 export GNUPGHOME
+
+# Colorscript
+DIR_COLORSCRIPTS="$(xdg-user-dir DOTFILES)/files/colorscripts"
+export DIR_COLORSCRIPTS
+
+alias termtest='$(xdg-user-dir DOTFILES)/files/colorscripts/tests/termtest'
+alias themetest='$(xdg-user-dir DOTFILES)/files/colorscripts/tests/themetest'

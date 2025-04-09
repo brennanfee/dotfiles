@@ -1,14 +1,4 @@
 #!/usr/bin/env bash
-#
-# This file was originally taken from iterm2 https://github.com/gnachman/iTerm2/blob/master/tests/24-bit-color.sh
-#
-#   This file echoes a bunch of 24-bit color codes
-#   to the terminal to demonstrate its functionality.
-#   The foreground escape sequence is ^[38;2;<r>;<g>;<b>m
-#   The background escape sequence is ^[48;2;<r>;<g>;<b>m
-#   <r> <g> <b> range from 0 to 255 inclusive.
-#   The escape sequence ^[0m returns output to default
-#
 
 ### START Bash strict mode
 # shellcheck disable=SC2154
@@ -27,14 +17,11 @@ if ! ${SOURCED}; then
 fi
 ### END Bash strict mode
 
+###################################################################################################
 ### START Script template bootstrap
 
 g_script_name=$(basename "${BASH_SOURCE[0]}")
 g_script_dir="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"
-g_script_author="Brennan Fee"
-g_script_license="MIT License"
-g_script_version="0.3"
-g_script_date="2024-10-07"
 
 g_short_options=""
 g_long_options=""
@@ -56,10 +43,12 @@ function cleanup_vars() {
 }
 
 function load_script_tools() {
+  local dotfiles
+  dotfiles="${DOTFILES:-$(xdg-user-dir DOTFILES)}"
   # Source script-tools.bash
-  if [[ -f "${g_script_dir}/../bash/script-tools.bash" ]]; then
+  if [[ -f "${dotfiles}/bash/script-tools.bash" ]]; then
     # shellcheck source=/home/brennan/.dotfiles/bash/script-tools.bash
-    source "${g_script_dir}/../bash/script-tools.bash"
+    source "${dotfiles}/bash/script-tools.bash"
   fi
 }
 
@@ -86,7 +75,8 @@ function set_long_options() {
 function process_arguments() {
   local args
   set +o errexit # temporarily turn off error on exit
-  args=$(getopt --name "${g_script_name}" --options "${g_short_options}hv" --longoptions "${g_long_options},help,version" -- "$@")
+  args=$(getopt --name "${g_script_name}" --options "${g_short_options}hv" \
+    --longoptions "${g_long_options},help,version" -- "$@")
   # Handle if getopt returned an error
   # shellcheck disable=SC2181
   if [[ $? -gt 0 ]]; then
@@ -151,6 +141,7 @@ function validate_number_of_positional_arguments() {
 
 function main_handler() {
   load_script_tools
+  setup_script_vars
   setup_options
   process_arguments "$@"
   main "${g_positional_arguments[@]}"
@@ -158,7 +149,17 @@ function main_handler() {
 }
 
 ### END Script template bootstrap
-#################################
+###################################################################################################
+
+g_script_author="Brennan Fee"
+g_script_license="MIT License"
+g_script_version="0.4"
+g_script_date="2025-04-08"
+
+## USAGE: If you want any global variables, set them up here
+function setup_script_vars() {
+  noop
+}
 
 ## USAGE: If you add any global variables, clean them up in this method
 function cleanup_script_vars() {
@@ -208,101 +209,47 @@ function process_flags() {
 
 ## USAGE: Construct your help screen text here.
 function print_help() {
-  to_be_developed
+  print_out "  ${g_script_name} [options]"
+  print_blank_line
+  print_out "Utility to evaluate color scheme use in the terminal."
+  print_blank_line
+  print_out "Options:"
+  print_blank_line
+  print_out "  -h or --help"
+  print_out "      Show this help screen."
+  print_blank_line
+  print_out "  -v or --version"
+  print_out "     Show the version number."
+  print_blank_line
 }
 
-function setBackgroundColor() {
-  #printf '\x1bPtmux;\x1b\x1b[48;2;%s;%s;%sm' $1 $2 $3
-  printf '\x1b[48;2;%s;%s;%sm' "$1" "${2:-}" "${3:-}"
-}
-
-function resetOutput() {
-  echo -en "\x1b[0m\n"
-}
-
-# Gives a color $1/255 % along HSV
-# Who knows what happens when $1 is outside 0-255
-# Echoes "$red $green $blue" where
-# $red $green and $blue are integers
-# ranging between 0 and 255 inclusive
-function rainbowColor() {
-  local h
-  local f
-  local t
-  local q
-
-  ((h = $1 / 43))
-  ((f = $1 - 43 * h))
-  ((t = f * 255 / 43))
-  ((q = 255 - t))
-
-  if [[ ${h} -eq 0 ]]; then
-    echo "255 ${t} 0"
-  elif [[ ${h} -eq 1 ]]; then
-    echo "${q} 255 0"
-  elif [[ ${h} -eq 2 ]]; then
-    echo "0 255 ${t}"
-  elif [[ ${h} -eq 3 ]]; then
-    echo "0 ${q} 255"
-  elif [[ ${h} -eq 4 ]]; then
-    echo "${t} 0 255"
-  elif [[ ${h} -eq 5 ]]; then
-    echo "255 0 ${q}"
-  else
-    # execution should never reach here
-    echo "0 0 0"
-  fi
-}
-
-## Your main implementation goes here.  All of the positional arguments have
-## been passed as an array to this function.
+## Your main implementation goes here.  All of the positional arguments have been passed as an array
+## to this function.
 function main() {
-  for i in $(seq 0 127); do
-    setBackgroundColor "${i}" 0 0
-    echo -en " "
-  done
-  resetOutput
-  for i in $(seq 255 -1 128); do
-    setBackgroundColor "${i}" 0 0
-    echo -en " "
-  done
-  resetOutput
-
-  for i in $(seq 0 127); do
-    setBackgroundColor 0 "${i}" 0
-    echo -n " "
-  done
-  resetOutput
-  for i in $(seq 255 -1 128); do
-    setBackgroundColor 0 "${i}" 0
-    echo -n " "
-  done
-  resetOutput
-
-  for i in $(seq 0 127); do
-    setBackgroundColor 0 0 "${i}"
-    echo -n " "
-  done
-  resetOutput
-  for i in $(seq 255 -1 128); do
-    setBackgroundColor 0 0 "${i}"
-    echo -n " "
-  done
-  resetOutput
-
-  local the_color
-  for i in $(seq 0 127); do
-    the_color=$(rainbowColor "${i}")
-    setBackgroundColor "${the_color}"
-    echo -n " "
-  done
-  resetOutput
-  for i in $(seq 255 -1 128); do
-    the_color=$(rainbowColor "${i}")
-    setBackgroundColor "${the_color}"
-    echo -n " "
-  done
-  resetOutput
+  echo ""
+  echo "Console Color Map"
+  echo ""
+  echo "Normal"
+  echo ""
+  echo -e "${text_black}████ ${text_normal} black          ${text_bright_black}████ ${text_normal} bright_black          ${text_dim}${text_black}████ ${text_normal} dim_black"
+  echo -e "${text_red}████ ${text_normal} red            ${text_bright_red}████ ${text_normal} bright_red            ${text_dim}${text_red}████ ${text_normal} dim_red"
+  echo -e "${text_green}████ ${text_normal} green          ${text_bright_green}████ ${text_normal} bright_green          ${text_dim}${text_green}████ ${text_normal} dim_green"
+  echo -e "${text_yellow}████ ${text_normal} yellow         ${text_bright_yellow}████ ${text_normal} bright_yellow         ${text_dim}${text_yellow}████ ${text_normal} dim_yellow"
+  echo -e "${text_blue}████ ${text_normal} blue           ${text_bright_blue}████ ${text_normal} bright_blue           ${text_dim}${text_blue}████ ${text_normal} dim_blue"
+  echo -e "${text_magenta}████ ${text_normal} magenta        ${text_bright_magenta}████ ${text_normal} bright_magenta        ${text_dim}${text_magenta}████ ${text_normal} dim_magenta"
+  echo -e "${text_cyan}████ ${text_normal} cyan           ${text_bright_cyan}████ ${text_normal} bright_cyan           ${text_dim}${text_cyan}████ ${text_normal} dim_cyan"
+  echo -e "${text_white}████ ${text_normal} white          ${text_bright_white}████ ${text_normal} bright_white          ${text_dim}${text_white}████ ${text_normal} dim_white"
+  echo "${text_reset}"
+  echo "Color Aliases"
+  echo ""
+  echo -e "${text_pink}████ ${text_normal} pink = magenta"
+  echo -e "${text_purple}████ ${text_normal} purple = bright magenta"
+  echo -e "${text_orange}████ ${text_normal} orange = bright yellow"
+  echo -e "${text_gray}████ ${text_normal} gray = bright black"
+  echo -e "${text_grey}████ ${text_normal} grey = bright black"
+  echo -e "${text_mid_gray}████ ${text_normal} mid_gray, custom added color"
+  echo -e "${text_mid_grey}████ ${text_normal} mid_grey = mid_gray"
+  echo ""
 }
 
 ## This must be the last line

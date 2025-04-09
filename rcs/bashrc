@@ -118,6 +118,10 @@ if [[ -f "${HOME}/.bashrc.local" ]]; then
   source "${HOME}/.bashrc.local"
 fi
 
+if command_exists colorscript; then
+  colorscript banners random
+fi
+
 unset root
 unset base
 unset folder

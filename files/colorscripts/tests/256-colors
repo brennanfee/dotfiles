@@ -17,14 +17,11 @@ if ! ${SOURCED}; then
 fi
 ### END Bash strict mode
 
+###################################################################################################
 ### START Script template bootstrap
 
 g_script_name=$(basename "${BASH_SOURCE[0]}")
 g_script_dir="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"
-g_script_author="Brennan Fee"
-g_script_license="MIT License"
-g_script_version="0.3"
-g_script_date="2024-10-07"
 
 g_short_options=""
 g_long_options=""
@@ -46,10 +43,12 @@ function cleanup_vars() {
 }
 
 function load_script_tools() {
+  local dotfiles
+  dotfiles="${DOTFILES:-$(xdg-user-dir DOTFILES)}"
   # Source script-tools.bash
-  if [[ -f "${g_script_dir}/../bash/script-tools.bash" ]]; then
+  if [[ -f "${dotfiles}/bash/script-tools.bash" ]]; then
     # shellcheck source=/home/brennan/.dotfiles/bash/script-tools.bash
-    source "${g_script_dir}/../bash/script-tools.bash"
+    source "${dotfiles}/bash/script-tools.bash"
   fi
 }
 
@@ -76,7 +75,8 @@ function set_long_options() {
 function process_arguments() {
   local args
   set +o errexit # temporarily turn off error on exit
-  args=$(getopt --name "${g_script_name}" --options "${g_short_options}hv" --longoptions "${g_long_options},help,version" -- "$@")
+  args=$(getopt --name "${g_script_name}" --options "${g_short_options}hv" \
+    --longoptions "${g_long_options},help,version" -- "$@")
   # Handle if getopt returned an error
   # shellcheck disable=SC2181
   if [[ $? -gt 0 ]]; then
@@ -141,6 +141,7 @@ function validate_number_of_positional_arguments() {
 
 function main_handler() {
   load_script_tools
+  setup_script_vars
   setup_options
   process_arguments "$@"
   main "${g_positional_arguments[@]}"
@@ -148,7 +149,17 @@ function main_handler() {
 }
 
 ### END Script template bootstrap
-#################################
+###################################################################################################
+
+g_script_author="Brennan Fee"
+g_script_license="MIT License"
+g_script_version="0.4"
+g_script_date="2025-04-08"
+
+## USAGE: If you want any global variables, set them up here
+function setup_script_vars() {
+  noop
+}
 
 ## USAGE: If you add any global variables, clean them up in this method
 function cleanup_script_vars() {
@@ -198,35 +209,34 @@ function process_flags() {
 
 ## USAGE: Construct your help screen text here.
 function print_help() {
-  to_be_developed
+  print_out "  ${g_script_name} [options]"
+  print_blank_line
+  print_out "Utility to display the terminal colors."
+  print_blank_line
+  print_out "Options:"
+  print_blank_line
+  print_out "  -h or --help"
+  print_out "      Show this help screen."
+  print_blank_line
+  print_out "  -v or --version"
+  print_out "     Show the version number."
+  print_blank_line
 }
 
-## Your main implementation goes here.  All of the positional arguments have
-## been passed as an array to this function.
+## Your main implementation goes here.  All of the positional arguments have been passed as an array
+## to this function.
 function main() {
-  echo -e "\033[0mNormal\033[0m  \033[0;33mNormal Yellow\033[0m"
-  echo -e "\033[1mBold\033[0m    \033[1;33mBold Yellow\033[0m"
-  echo -e "\033[2mDark\033[0m    \033[2;33mDark Yellow\033[0m"
-  echo -e "\033[0;97mHigh Intensity\033[0m    \033[0;93mHigh Intensity Yellow\033[0m"
-  echo -e "\033[1;97mHigh Intensity Bold\033[0m   \033[1;93mHigh Intensity Bold Yellow\033[0m"
-  echo -e "\033[2;97mHigh Intensity Dark\033[0m    \033[2;93mHigh Intensity Dark Yellow\033[0m"
-  echo -e "\033[3mItalic\033[0m"
-  echo -e "\033[3;1mBold Italic\033[0m    \033[1;3mBold Italic Alt\033[0m"
-  echo -e "\033[3;2mDark Italic\033[0m"
-  echo -e "\033[3;97mHigh Intensity Italic\033[0m    \033[3;93mHigh Intensity Yellow Italic\033[0m"
-  echo -e "\033[9mStrikethrough\033[0m"
-  echo -e "\033[8mConceal\033[0m"
-  echo -e "\033[7mReverse\033[0m"
-  echo ""
-  echo -e "\033[53mOverline\033[0m   \033[4mUnderline\033[0m"
-  echo -e "\033[4:2mDouble Underline\033[0m"
-  echo -e "\033[4:4mDotted Underline\033[0m   \033[4:5mDashed Underline\033[0m"
-  echo -e "\033[4:3mUndercurl\033[0m"
-  echo -e "\033[4:3m\033[58;5;6mUndercurl Cyan\033[0m"
-  echo ""
-  echo "Ligatures: == === !== >= <= =>"
-  echo "Font icons:  契            勒  鈴  "
-  echo "Color emojis:  😄  💜  🎵  💾  💩  ⛔"
+  for fgbg in 38 48; do       # Foreground / Background
+    for color in {0..255}; do # Colors
+      # Display the color
+      printf "\e[${fgbg};5;%sm  %3s  \e[0m" "${color}" "${color}"
+      # Display 6 colors per lines
+      if [[ $(((color + 1) % 6)) == 4 ]]; then
+        echo # New line
+      fi
+    done
+    echo # New line
+  done
 }
 
 ## This must be the last line

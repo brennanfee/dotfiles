@@ -82,9 +82,9 @@ function custom_prompt() {
     git_part=$(__git_ps1 "${text_orange}[%s] ")
     export PS1
     # shellcheck disable=SC2154
-    PS1="${text_normal}\n${ssh_text}${text_green}\u@\h ${text_magenta}\w ${git_part}${curShell} ${exit_status} ${text_normal}\n\$ "
+    PS1="${text_reset}\n${ssh_text}${text_green}\u@\h ${text_magenta}\w ${git_part}${curShell} ${exit_status} ${text_reset}\n\$ "
   else
-    export PS1="${text_normal}\n${ssh_text}${text_green}\u@\h ${text_magenta}\w ${curShell} ${exit_status} ${text_normal}\n\$ "
+    export PS1="${text_reset}\n${ssh_text}${text_green}\u@\h ${text_magenta}\w ${curShell} ${exit_status} ${text_reset}\n\$ "
   fi
 }
 

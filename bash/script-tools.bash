@@ -255,26 +255,48 @@ function check_root_with_error() {
 
 ## Text effects
 
+text_reset="$(tput sgr0)"
+text_clear="$(tput sgr0)"
+
 text_bold="$(tput bold)"
-#text_bold_off="$(tput bold)"
 text_dim="$(tput dim)"
+text_bold_off="\033[22m"
+text_dim_off="\033[22m"
+text_normal="\033[22m"
 
-text_under="$(tput smul)"
-text_underscore="$(tput smul)"
-text_underscore_off="$(tput rmul)"
-text_under_off="$(tput rmul)"
+text_underline="$(tput smul)"
+text_underline_off="$(tput rmul)"
 
-text_standout="$(tput smso)"
-text_standout_off="$(tput rmso)"
+text_underline_double="\033[21m"
+text_underline_dotted="\033[4:4m"
+text_underline_dashed="\033[4:5m"
+text_undercurl="\033[4:3m"
+
+text_overline="\033[53m"
+text_overline_off="\033[55m"
+
+text_strikethrough="\033[9m"
+text_strike="\033[9m"
+text_strikethrough_off="\033[29m"
+text_strike_off="\033[29m"
+
+text_standout="$(tput bold)$(tput smso)"
+text_standout_off="$(tput rmso)\033[22m"
+
 text_italic="$(tput sitm)"
 text_italic_off="$(tput ritm)"
 
 text_reverse="$(tput rev)"
+text_reverse_off="\033[27m"
+
 text_secure="$(tput invis)"
 text_conceal="$(tput invis)"
-text_blink="$(tput blink)"
+text_secure_off="\033[28m"
+text_conceal_off="\033[28m"
 
-#: "$(tput sgr0)"
+text_blink="$(tput blink)"
+text_blink_off="\033[25m"
+text_blink_rapid="\033[6m"
 
 # text_subscript="$(tput ssubm)"       # Not many terminals support this
 # text_subscript_off="$(tput rsubm)"   # Not many terminals support this
@@ -282,6 +304,9 @@ text_blink="$(tput blink)"
 # text_superscript_off="$(tput rsupm)" # Not many terminals support this
 
 ## Text Colors
+
+text_default_color="\033[39m"
+text_reset_color="\033[39m"
 
 text_black="$(tput setaf 0)"
 text_red="$(tput setaf 1)"
@@ -301,15 +326,6 @@ text_bright_magenta="$(tput setaf 13)"
 text_bright_cyan="$(tput setaf 14)"
 text_bright_white="$(tput setaf 15)"
 
-text_dim_black="${text_dim}${text_black}"
-text_dim_red="${text_dim}${text_red}"
-text_dim_green="${text_dim}${text_green}"
-text_dim_yellow="${text_dim}${text_yellow}"
-text_dim_blue="${text_dim}${text_blue}"
-text_dim_magenta="${text_dim}${text_magenta}"
-text_dim_cyan="${text_dim}${text_cyan}"
-text_dim_white="${text_dim}${text_white}"
-
 ## Alternate color names for some of the colors
 
 text_pink="${text_magenta}"          # regular magenta
@@ -321,6 +337,9 @@ text_mid_gray="\033[38;2;169;169;169;02m"
 text_mid_grey="${text_mid_gray}"
 
 ## Background colors
+
+text_bg_default_color="\033[49m"
+text_bg_reset_color="\033[49m"
 
 text_bg_black="$(tput setab 0)"
 text_bg_red="$(tput setab 1)"
@@ -340,8 +359,6 @@ text_bg_bright_magenta="$(tput setab 13)"
 text_bg_bright_cyan="$(tput setab 14)"
 text_bg_bright_white="$(tput setab 15)"
 
-# Dim colors not supported for background
-
 # Alternate color names for some of the background colors
 
 text_bg_pink="${text_bg_magenta}"          # regular magenta
@@ -352,9 +369,27 @@ text_bg_grey="${text_bg_bright_black}"
 text_bg_mid_gray="\033[48;2;169;169;169;02m"
 text_bg_mid_grey="${text_bg_mid_gray}"
 
-text_reset="$(tput sgr0)"
-text_normal="$(tput sgr0)"
-text_clear="$(tput sgr0)"
+## Line colors
+
+text_line_black="\033[58;5;00m"
+text_line_red="\033[58;5;01m"
+text_line_green="\033[58;5;02m"
+text_line_yellow="\033[58;5;03m"
+text_line_blue="\033[58;5;04m"
+text_line_magenta="\033[58;5;05m"
+text_line_cyan="\033[58;5;06m"
+text_line_white="\033[58;5;07m"
+
+text_line_bright_black="\033[58;5;08m"
+text_line_bright_red="\033[58;5;09m"
+text_line_bright_green="\033[58;5;10m"
+text_line_bright_yellow="\033[58;5;11m"
+text_line_bright_blue="\033[58;5;12m"
+text_line_bright_magenta="\033[58;5;13m"
+text_line_bright_cyan="\033[58;5;14m"
+text_line_bright_white="\033[58;5;15m"
+
+text_line_reset="\033[59m"
 
 #### END: Terminal Text Manipulation And Color Variables
 

@@ -1,10 +1,13 @@
 #!/usr/bin/env bash
 #
-# This program is free software. It comes without any warranty, to
-# the extent permitted by applicable law. You can redistribute it
-# and/or modify it under the terms of the Do What The Fuck You Want
-# To Public License, Version 2, as published by Sam Hocevar. See
-# http://sam.zoy.org/wtfpl/COPYING for more details.
+# This file was originally taken from iterm2 https://github.com/gnachman/iTerm2/blob/master/tests/24-bit-color.sh
+#
+#   This file echoes a bunch of 24-bit color codes
+#   to the terminal to demonstrate its functionality.
+#   The foreground escape sequence is ^[38;2;<r>;<g>;<b>m
+#   The background escape sequence is ^[48;2;<r>;<g>;<b>m
+#   <r> <g> <b> range from 0 to 255 inclusive.
+#   The escape sequence ^[0m returns output to default
 #
 
 ### START Bash strict mode
@@ -24,14 +27,11 @@ if ! ${SOURCED}; then
 fi
 ### END Bash strict mode
 
+###################################################################################################
 ### START Script template bootstrap
 
 g_script_name=$(basename "${BASH_SOURCE[0]}")
 g_script_dir="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"
-g_script_author="Brennan Fee"
-g_script_license="MIT License"
-g_script_version="0.3"
-g_script_date="2024-10-07"
 
 g_short_options=""
 g_long_options=""
@@ -53,10 +53,12 @@ function cleanup_vars() {
 }
 
 function load_script_tools() {
+  local dotfiles
+  dotfiles="${DOTFILES:-$(xdg-user-dir DOTFILES)}"
   # Source script-tools.bash
-  if [[ -f "${g_script_dir}/../bash/script-tools.bash" ]]; then
+  if [[ -f "${dotfiles}/bash/script-tools.bash" ]]; then
     # shellcheck source=/home/brennan/.dotfiles/bash/script-tools.bash
-    source "${g_script_dir}/../bash/script-tools.bash"
+    source "${dotfiles}/bash/script-tools.bash"
   fi
 }
 
@@ -83,7 +85,8 @@ function set_long_options() {
 function process_arguments() {
   local args
   set +o errexit # temporarily turn off error on exit
-  args=$(getopt --name "${g_script_name}" --options "${g_short_options}hv" --longoptions "${g_long_options},help,version" -- "$@")
+  args=$(getopt --name "${g_script_name}" --options "${g_short_options}hv" \
+    --longoptions "${g_long_options},help,version" -- "$@")
   # Handle if getopt returned an error
   # shellcheck disable=SC2181
   if [[ $? -gt 0 ]]; then
@@ -148,6 +151,7 @@ function validate_number_of_positional_arguments() {
 
 function main_handler() {
   load_script_tools
+  setup_script_vars
   setup_options
   process_arguments "$@"
   main "${g_positional_arguments[@]}"
@@ -155,7 +159,17 @@ function main_handler() {
 }
 
 ### END Script template bootstrap
-#################################
+###################################################################################################
+
+g_script_author="Brennan Fee"
+g_script_license="MIT License"
+g_script_version="0.4"
+g_script_date="2025-04-08"
+
+## USAGE: If you want any global variables, set them up here
+function setup_script_vars() {
+  noop
+}
 
 ## USAGE: If you add any global variables, clean them up in this method
 function cleanup_script_vars() {
@@ -205,34 +219,56 @@ function process_flags() {
 
 ## USAGE: Construct your help screen text here.
 function print_help() {
-  print_out "  ${g_script_name} [options]"
-  print_blank_line
-  print_out "Utility to display the terminal colors."
-  print_blank_line
-  print_out "Options:"
-  print_blank_line
-  print_out "  -h or --help"
-  print_out "      Show this help screen."
-  print_blank_line
-  print_out "  -v or --version"
-  print_out "     Show the version number."
-  print_blank_line
+  to_be_developed
 }
 
-## Your main implementation goes here.  All of the positional arguments have
-## been passed as an array to this function.
+function setBackgroundColor() {
+  #printf '\x1bPtmux;\x1b\x1b[48;2;%s;%s;%sm' $1 $2 $3
+  printf '\x1b[48;2;%s;%s;%sm' "$1" "${2:-}" "${3:-}"
+}
+
+function resetOutput() {
+  echo -en "\x1b[0m\n"
+}
+
+## Your main implementation goes here.  All of the positional arguments have been passed as an array
+## to this function.
 function main() {
-  for fgbg in 38 48; do       # Foreground / Background
-    for color in {0..255}; do # Colors
-      # Display the color
-      printf "\e[${fgbg};5;%sm  %3s  \e[0m" "${color}" "${color}"
-      # Display 6 colors per lines
-      if [[ $(((color + 1) % 6)) == 4 ]]; then
-        echo # New line
-      fi
-    done
-    echo # New line
+  for i in $(seq 0 127); do
+    setBackgroundColor "${i}" 0 0
+    echo -en " "
   done
+  resetOutput
+
+  for i in $(seq 255 -1 128); do
+    setBackgroundColor "${i}" 0 0
+    echo -en " "
+  done
+  resetOutput
+
+  for i in $(seq 0 127); do
+    setBackgroundColor 0 "${i}" 0
+    echo -n " "
+  done
+  resetOutput
+
+  for i in $(seq 255 -1 128); do
+    setBackgroundColor 0 "${i}" 0
+    echo -n " "
+  done
+  resetOutput
+
+  for i in $(seq 0 127); do
+    setBackgroundColor 0 0 "${i}"
+    echo -n " "
+  done
+  resetOutput
+
+  for i in $(seq 255 -1 128); do
+    setBackgroundColor 0 0 "${i}"
+    echo -n " "
+  done
+  resetOutput
 }
 
 ## This must be the last line

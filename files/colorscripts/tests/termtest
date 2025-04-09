@@ -17,14 +17,11 @@ if ! ${SOURCED}; then
 fi
 ### END Bash strict mode
 
+###################################################################################################
 ### START Script template bootstrap
 
 g_script_name=$(basename "${BASH_SOURCE[0]}")
 g_script_dir="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"
-g_script_author="Brennan Fee"
-g_script_license="MIT License"
-g_script_version="0.3"
-g_script_date="2024-10-07"
 
 g_short_options=""
 g_long_options=""
@@ -46,10 +43,12 @@ function cleanup_vars() {
 }
 
 function load_script_tools() {
+  local dotfiles
+  dotfiles="${DOTFILES:-$(xdg-user-dir DOTFILES)}"
   # Source script-tools.bash
-  if [[ -f "${g_script_dir}/../bash/script-tools.bash" ]]; then
+  if [[ -f "${dotfiles}/bash/script-tools.bash" ]]; then
     # shellcheck source=/home/brennan/.dotfiles/bash/script-tools.bash
-    source "${g_script_dir}/../bash/script-tools.bash"
+    source "${dotfiles}/bash/script-tools.bash"
   fi
 }
 
@@ -76,7 +75,8 @@ function set_long_options() {
 function process_arguments() {
   local args
   set +o errexit # temporarily turn off error on exit
-  args=$(getopt --name "${g_script_name}" --options "${g_short_options}hv" --longoptions "${g_long_options},help,version" -- "$@")
+  args=$(getopt --name "${g_script_name}" --options "${g_short_options}hv" \
+    --longoptions "${g_long_options},help,version" -- "$@")
   # Handle if getopt returned an error
   # shellcheck disable=SC2181
   if [[ $? -gt 0 ]]; then
@@ -141,6 +141,7 @@ function validate_number_of_positional_arguments() {
 
 function main_handler() {
   load_script_tools
+  setup_script_vars
   setup_options
   process_arguments "$@"
   main "${g_positional_arguments[@]}"
@@ -148,7 +149,17 @@ function main_handler() {
 }
 
 ### END Script template bootstrap
-#################################
+###################################################################################################
+
+g_script_author="Brennan Fee"
+g_script_license="MIT License"
+g_script_version="0.4"
+g_script_date="2025-04-08"
+
+## USAGE: If you want any global variables, set them up here
+function setup_script_vars() {
+  noop
+}
 
 ## USAGE: If you add any global variables, clean them up in this method
 function cleanup_script_vars() {
@@ -198,61 +209,52 @@ function process_flags() {
 
 ## USAGE: Construct your help screen text here.
 function print_help() {
-  print_out "  ${g_script_name} [options]"
-  print_blank_line
-  print_out "Utility to evaluate color scheme use in the terminal."
-  print_blank_line
-  print_out "Options:"
-  print_blank_line
-  print_out "  -h or --help"
-  print_out "      Show this help screen."
-  print_blank_line
-  print_out "  -v or --version"
-  print_out "     Show the version number."
-  print_blank_line
+  to_be_developed
 }
 
-## Your main implementation goes here.  All of the positional arguments have
-## been passed as an array to this function.
+## Your main implementation goes here.  All of the positional arguments have been passed as an array
+## to this function.
 function main() {
+  local msg
+  echo "-- Normal, Bold, And Dim --"
   echo ""
-  echo "Console color map"
+  msg="${text_normal}Normal${text_normal}  ${text_yellow}Normal Yellow${text_normal}   ${text_bold}${text_white}Bold${text_normal}"
+  msg+="   ${text_bold}${text_yellow}Bold Yellow${text_normal}   ${text_dim}${text_white}Dim${text_normal}    ${text_dim}${text_yellow}Dim Yellow${text_normal}"
+  echo -e "${msg}"
+  msg="${text_bright_white}Bright${text_normal}    ${text_bright_yellow}Bright Yellow${text_normal}"
+  msg+="   ${text_bold}${text_bright_white}Bright Bold${text_normal}   ${text_bold}${text_bright_yellow}Bright Bold Yellow${text_normal}"
+  msg+="   ${text_dim}${text_bright_white}Bright Dim${text_normal}    ${text_dim}${text_bright_yellow}Bright Dim Yellow${text_reset}"
+  echo -e "${msg}"
   echo ""
-  echo -e "${text_black}████ ${text_normal} black"
-  echo -e "${text_red}████ ${text_normal} red"
-  echo -e "${text_green}████ ${text_normal} green"
-  echo -e "${text_yellow}████ ${text_normal} yellow"
-  echo -e "${text_blue}████ ${text_normal} blue"
-  echo -e "${text_magenta}████ ${text_normal} magenta"
-  echo -e "${text_cyan}████ ${text_normal} cyan"
-  echo -e "${text_white}████ ${text_normal} white"
+  echo "-- Text Effects --"
   echo ""
-  echo -e "${text_bright_black}████ ${text_normal} bright_black"
-  echo -e "${text_bright_red}████ ${text_normal} bright_red"
-  echo -e "${text_bright_green}████ ${text_normal} bright_green"
-  echo -e "${text_bright_yellow}████ ${text_normal} bright_yellow"
-  echo -e "${text_bright_blue}████ ${text_normal} bright_blue"
-  echo -e "${text_bright_magenta}████ ${text_normal} bright_magenta"
-  echo -e "${text_bright_cyan}████ ${text_normal} bright_cyan"
-  echo -e "${text_bright_white}████ ${text_normal} bright_white"
+  msg="${text_italic}Italic${text_normal}   ${text_bold}${text_italic}Bold Italic${text_normal}   ${text_dim}${text_italic}Dim Italic${text_normal}"
+  msg+="   ${text_italic}${text_bright_white}Bright Italic${text_normal}   ${text_bold}${text_italic}${text_bright_white}Bright Bold Italic${text_normal}"
+  echo -e "${msg}"
+  msg="${text_italic}${text_bright_yellow}Bright Yellow Italic${text_normal}   ${text_bold}${text_italic}${text_bright_yellow}Bright Yellow Bold Italic${text_normal}"
+  msg+="   ${text_dim}${text_italic}${text_bright_yellow}Bright Yellow Dim Italic${text_reset}"
+  echo -e "${msg}"
+  echo -e "${text_conceal}Conceal${text_conceal_off}   <-- Concealed (aka 'secure')"
+  echo -e "${text_reverse}Reverse${text_reverse_off}   ${text_standout}Standout${text_standout_off}   ${text_blink}Blink${text_blink_off}${text_reset}"
   echo ""
-  echo -e "${text_dim_black}████ ${text_normal} dim_black"
-  echo -e "${text_dim_red}████ ${text_normal} dim_red"
-  echo -e "${text_dim_green}████ ${text_normal} dim_green"
-  echo -e "${text_dim_yellow}████ ${text_normal} dim_yellow"
-  echo -e "${text_dim_blue}████ ${text_normal} dim_blue"
-  echo -e "${text_dim_magenta}████ ${text_normal} dim_magenta"
-  echo -e "${text_dim_cyan}████ ${text_normal} dim_cyan"
-  echo -e "${text_dim_white}████ ${text_normal} dim_white"
+  echo "-- Lines --"
   echo ""
-  echo -e "${text_pink}████ ${text_normal} pink = magenta"
-  echo -e "${text_purple}████ ${text_normal} purple = bright magenta"
-  echo -e "${text_orange}████ ${text_normal} orange = bright yellow"
-  echo -e "${text_gray}████ ${text_normal} gray = bright black"
-  echo -e "${text_grey}████ ${text_normal} grey = bright black"
-  echo -e "${text_mid_gray}████ ${text_normal} mid_gray, custom added color"
-  echo -e "${text_mid_grey}████ ${text_normal} mid_grey = mid_gray"
+  msg="${text_underline}Underline${text_underline_off}   ${text_underline_double}Double Underline${text_underline_off}"
+  msg+="   ${text_underline_dotted}Dotted Underline${text_underline_off}   ${text_underline_dashed}Dashed Underline${text_underline_off}"
+  msg+="   ${text_overline}Overline${text_overline_off}"
+  msg+="   ${text_underline}${text_overline}${text_line_bright_magenta}Overline And Underline${text_overline_off}${text_underline_off}${text_line_reset}"
+  echo -e "${msg}"
+  echo -e "${text_strikethrough}Strikethrough${text_strikethrough_off}   ${text_strikethrough}${text_line_bright_red}${text_bright_green}Strikethrough Red Line${text_reset}"
+  msg="${text_undercurl}Undercurl${text_reset}   ${text_undercurl}${text_line_bright_cyan}Undercurl Cyan${text_reset}"
+  msg+="   ${text_undercurl}${text_line_bright_red}Undercurl Red${text_reset}"
+  msg+="   ${text_underline_double}${text_line_bright_yellow}${text_blue}Double Underline Blue Text Yellow Line${text_reset}"
+  echo -e "${msg}"
   echo ""
+  echo "-- Other --"
+  echo ""
+  echo "Ligatures: == === !== >= <= =>"
+  echo "Font icons:  契            勒  鈴  "
+  echo "Color emojis:  😄  💜  🎵  💾  💩  ⛔"
 }
 
 ## This must be the last line
