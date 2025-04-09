@@ -26,8 +26,8 @@ function M.config()
     { "<leader>fn", "<cmd>enew<cr>", desc = "New File" },
 
     -- Diagnostics
-    { "<leader>x", group = "Diagnostics" },
-    { "<leader>xn", "<cmd>Telescope notify<cr>", desc = "Notification Messages" },
+    -- { "<leader>x", group = "Diagnostics" },
+    -- { "<leader>xn", "<cmd>Telescope notify<cr>", desc = "Notification Messages" },
   })
 
   local icons = require("core.icons")

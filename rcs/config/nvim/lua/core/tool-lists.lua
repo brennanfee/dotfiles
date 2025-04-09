@@ -23,7 +23,7 @@ M.lsp_servers = {
   "fortls",
   "gopls",
   "graphql",
-  "harper_ls",
+  -- "harper_ls",
   "html",
   "htmx",
   "jdtls", -- Java
@@ -116,7 +116,6 @@ M.linters = {
   "salt-lint",
   "selene", -- For Lua
   "semgrep",
-  "shellcheck",
   -- "snyk",
   "sqlfluff",
   "stylelint",
@@ -137,8 +136,6 @@ M.formatters = {
   "ast-grep",
   "autoflake",
   "biome",
-  "black",
-  "blackd-client",
   "buf",
   "cbfmt",
   "clang-format",

@@ -3,12 +3,13 @@ local M = {
   dependencies = {
     {
       "nvim-tree/nvim-web-devicons",
-      "echasnovski/mini.icons",
+      { "echasnovski/mini.nvim", version = false }, -- needs mini.icon
     },
   },
 }
 
 function M.config()
+  require("mini.icons").setup()
   local wk = require("which-key")
 
   wk.setup({

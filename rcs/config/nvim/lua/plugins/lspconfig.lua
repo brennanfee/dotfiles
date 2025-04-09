@@ -91,6 +91,9 @@ function M.config()
       },
     },
     virtual_text = false,
+    virtual_lines = {
+      current_line = true,
+    },
     update_in_insert = false,
     underline = true,
     severity_sort = true,
@@ -105,6 +108,11 @@ function M.config()
   }
 
   vim.diagnostic.config(default_diagnostic_config)
+
+  vim.keymap.set("n", "gK", function()
+    local new_config = not vim.diagnostic.config().virtual_lines
+    vim.diagnostic.config({ virtual_lines = new_config })
+  end, { desc = "Toggle diagnostic virtual_lines" })
 
   vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" })
   vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = "rounded" })

@@ -56,4 +56,6 @@ function historymerge {
 
 trap historymerge EXIT
 
-PROMPT_COMMAND="historyclean;${PROMPT_COMMAND}"
+if [[ ";${PROMPT_COMMAND:-}" != *";historyclean"* ]]; then
+  PROMPT_COMMAND="${PROMPT_COMMAND};historyclean"
+fi
