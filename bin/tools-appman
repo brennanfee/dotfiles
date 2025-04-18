@@ -150,8 +150,8 @@ function main_handler() {
 
 g_script_author="Brennan Fee"
 g_script_license="MIT License"
-g_script_version="0.5"
-g_script_date="2024-11-26"
+g_script_version="0.6"
+g_script_date="2025-04-16"
 
 ### END Script template bootstrap
 #################################
@@ -242,6 +242,7 @@ function install_if_needed() {
 
 function install_common_tools() {
   # install_if_needed espanso # Temporarily on hold
+  install_if_needed ghostty
   install_if_needed orcaslicer
   install_if_needed openaudible
 }

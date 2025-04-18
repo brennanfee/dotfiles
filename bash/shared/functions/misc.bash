@@ -18,8 +18,7 @@ fi
 # END Bash strict mode
 
 function reload_profile() {
-  # shellcheck source=/dev/null
-  source "${HOME}/.bash_profile"
+  source_or_error "${HOME}/.bash_profile"
 }
 
 function myip() {

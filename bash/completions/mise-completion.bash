@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-
+#                                                          -*- shell-script -*-
 #
 #   bash_completion - programmable completion functions for bash 4.2+
 #
@@ -152,7 +152,7 @@ _comp_sysvdirs() {
 _comp_have_command() {
   # Completions for system administrator commands are installed as well in
   # case completion is attempted via `sudo command ...'.
-  PATH=$PATH:/usr/sbin:/sbin:/usr/local/sbin type "$1" &> /dev/null
+  PATH=$PATH:/usr/sbin:/sbin:/usr/local/sbin type "$1" &>/dev/null
 }
 
 # This function checks whether a given readline variable
@@ -228,7 +228,7 @@ _comp_dequote__initialize
 _comp_dequote() {
   REPLY=() # fallback value for unsafe word and failglob
   [[ $1 =~ $_comp_dequote__regex_safe_word ]] || return 1
-  eval "REPLY=($1)" 2> /dev/null # may produce failglob
+  eval "REPLY=($1)" 2>/dev/null # may produce failglob
 }
 
 # Unset the given variables across a scope boundary. Useful for unshadowing
@@ -265,42 +265,42 @@ _comp_upvars() {
   fi
   while (($#)); do
     case $1 in
-      -a*)
-        # Error checking
-        [[ ${1#-a} ]] || {
-          echo "bash_completion: $FUNCNAME:" \
-            "\`$1': missing number specifier" >&2
-          return 1
-        }
-        printf %d "${1#-a}" &> /dev/null || {
-          echo bash_completion: \
-            "$FUNCNAME: \`$1': invalid number specifier" >&2
-          return 1
-        }
-        # Assign array of -aN elements
-        # shellcheck disable=SC2015,SC2140  # TODO
-        [[ $2 ]] && unset -v "$2" && eval "$2"=\(\"\$"{@:3:${1#-a}}"\"\) \
-          && shift $((${1#-a} + 2)) || {
-          echo bash_completion: \
-            "$FUNCNAME: \`$1${2+ }$2': missing argument(s)" \
-            >&2
-          return 1
-        }
-        ;;
-      -v)
-        # Assign single value
-        # shellcheck disable=SC2015  # TODO
-        [[ $2 ]] && unset -v "$2" && eval "$2"=\"\$3\" \
-          && shift 3 || {
-          echo "bash_completion: $FUNCNAME: $1:" \
-            "missing argument(s)" >&2
-          return 1
-        }
-        ;;
-      *)
-        echo "bash_completion: $FUNCNAME: $1: invalid option" >&2
+    -a*)
+      # Error checking
+      [[ ${1#-a} ]] || {
+        echo "bash_completion: $FUNCNAME:" \
+          "\`$1': missing number specifier" >&2
         return 1
-        ;;
+      }
+      printf %d "${1#-a}" &>/dev/null || {
+        echo bash_completion: \
+          "$FUNCNAME: \`$1': invalid number specifier" >&2
+        return 1
+      }
+      # Assign array of -aN elements
+      # shellcheck disable=SC2015,SC2140  # TODO
+      [[ $2 ]] && unset -v "$2" && eval "$2"=\(\"\$"{@:3:${1#-a}}"\"\) &&
+        shift $((${1#-a} + 2)) || {
+        echo bash_completion: \
+          "$FUNCNAME: \`$1${2+ }$2': missing argument(s)" \
+          >&2
+        return 1
+      }
+      ;;
+    -v)
+      # Assign single value
+      # shellcheck disable=SC2015  # TODO
+      [[ $2 ]] && unset -v "$2" && eval "$2"=\"\$3\" &&
+        shift 3 || {
+        echo "bash_completion: $FUNCNAME: $1:" \
+          "missing argument(s)" >&2
+        return 1
+      }
+      ;;
+    *)
+      echo "bash_completion: $FUNCNAME: $1: invalid option" >&2
+      return 1
+      ;;
     esac
   done
 }
@@ -386,13 +386,13 @@ _comp_split() {
   local OPTIND=1 OPTARG="" OPTERR=0 _opt
   while getopts ':alF:' _opt "$@"; do
     case $_opt in
-      a) _append=set ;;
-      l) IFS=$'\n' ;;
-      F) IFS=$OPTARG ;;
-      *)
-        echo "bash_completion: $FUNCNAME: usage error" >&2
-        return 2
-        ;;
+    a) _append=set ;;
+    l) IFS=$'\n' ;;
+    F) IFS=$OPTARG ;;
+    *)
+      echo "bash_completion: $FUNCNAME: usage error" >&2
+      return 2
+      ;;
     esac
   done
   shift "$((OPTIND - 1))"
@@ -560,53 +560,53 @@ _comp_compgen() {
   local OPTIND=1 OPTARG="" OPTERR=0 _opt
   while getopts ':av:U:Rc:C:lF:i:x:' _opt "$@"; do
     case $_opt in
-      a) _append=set ;;
-      v)
-        if [[ $OPTARG == @(*[^_a-zA-Z0-9]*|[0-9]*|''|_*|IFS|OPTIND|OPTARG|OPTERR|cur) ]]; then
-          printf 'bash_completion: %s: -v: invalid array name `%s'\''\n' "$FUNCNAME" "$OPTARG" >&2
-          return 2
-        fi
-        _var=$OPTARG
-        ;;
-      U)
-        if [[ $OPTARG == @(*[^_a-zA-Z0-9]*|[0-9]*|'') ]]; then
-          printf 'bash_completion: %s: -U: invalid variable name `%s'\''\n' "$FUNCNAME" "$OPTARG" >&2
-          return 2
-        elif [[ $OPTARG == @(_*|IFS|OPTIND|OPTARG|OPTERR|cur) ]]; then
-          printf 'bash_completion: %s: -U: unnecessary to mark `%s'\'' as upvar\n' "$FUNCNAME" "$OPTARG" >&2
-          return 2
-        fi
-        _upvars+=("$OPTARG")
-        ;;
-      c) _cur=$OPTARG ;;
-      R) _cur="" ;;
-      C)
-        if [[ ! $OPTARG ]]; then
-          printf 'bash_completion: %s: -C: invalid directory name `%s'\''\n' "$FUNCNAME" "$OPTARG" >&2
-          return 2
-        fi
-        _dir=$OPTARG
-        ;;
-      l) _has_ifs=set _ifs=$'\n' ;;
-      F) _has_ifs=set _ifs=$OPTARG ;;
-      [ix])
-        if [[ ! $OPTARG ]]; then
-          printf 'bash_completion: %s: -%s: invalid command name `%s'\''\n' "$FUNCNAME" "$_opt" "$OPTARG" >&2
-          return 2
-        elif [[ $_icmd ]]; then
-          printf 'bash_completion: %s: -%s: `-i %s'\'' is already specified\n' "$FUNCNAME" "$_opt" "$_icmd" >&2
-          return 2
-        elif [[ $_xcmd ]]; then
-          printf 'bash_completion: %s: -%s: `-x %s'\'' is already specified\n' "$FUNCNAME" "$_opt" "$_xcmd" >&2
-          return 2
-        fi
-        ;;&
-      i) _icmd=$OPTARG ;;
-      x) _xcmd=$OPTARG ;;
-      *)
-        printf 'bash_completion: %s: usage error\n' "$FUNCNAME" >&2
+    a) _append=set ;;
+    v)
+      if [[ $OPTARG == @(*[^_a-zA-Z0-9]*|[0-9]*|''|_*|IFS|OPTIND|OPTARG|OPTERR|cur) ]]; then
+        printf 'bash_completion: %s: -v: invalid array name `%s'\''\n' "$FUNCNAME" "$OPTARG" >&2
         return 2
-        ;;
+      fi
+      _var=$OPTARG
+      ;;
+    U)
+      if [[ $OPTARG == @(*[^_a-zA-Z0-9]*|[0-9]*|'') ]]; then
+        printf 'bash_completion: %s: -U: invalid variable name `%s'\''\n' "$FUNCNAME" "$OPTARG" >&2
+        return 2
+      elif [[ $OPTARG == @(_*|IFS|OPTIND|OPTARG|OPTERR|cur) ]]; then
+        printf 'bash_completion: %s: -U: unnecessary to mark `%s'\'' as upvar\n' "$FUNCNAME" "$OPTARG" >&2
+        return 2
+      fi
+      _upvars+=("$OPTARG")
+      ;;
+    c) _cur=$OPTARG ;;
+    R) _cur="" ;;
+    C)
+      if [[ ! $OPTARG ]]; then
+        printf 'bash_completion: %s: -C: invalid directory name `%s'\''\n' "$FUNCNAME" "$OPTARG" >&2
+        return 2
+      fi
+      _dir=$OPTARG
+      ;;
+    l) _has_ifs=set _ifs=$'\n' ;;
+    F) _has_ifs=set _ifs=$OPTARG ;;
+    [ix])
+      if [[ ! $OPTARG ]]; then
+        printf 'bash_completion: %s: -%s: invalid command name `%s'\''\n' "$FUNCNAME" "$_opt" "$OPTARG" >&2
+        return 2
+      elif [[ $_icmd ]]; then
+        printf 'bash_completion: %s: -%s: `-i %s'\'' is already specified\n' "$FUNCNAME" "$_opt" "$_icmd" >&2
+        return 2
+      elif [[ $_xcmd ]]; then
+        printf 'bash_completion: %s: -%s: `-x %s'\'' is already specified\n' "$FUNCNAME" "$_opt" "$_xcmd" >&2
+        return 2
+      fi
+      ;;&
+    i) _icmd=$OPTARG ;;
+    x) _xcmd=$OPTARG ;;
+    *)
+      printf 'bash_completion: %s: usage error\n' "$FUNCNAME" >&2
+      return 2
+      ;;
     esac
   done
   [[ $_old_nocasematch ]] && shopt -s nocasematch
@@ -637,7 +637,7 @@ _comp_compgen() {
     else
       _generator=("_comp_compgen_$1")
     fi
-    if ! declare -F -- "${_generator[0]}" &> /dev/null; then
+    if ! declare -F -- "${_generator[0]}" &>/dev/null; then
       printf 'bash_completion: %s: unrecognized generator `%s'\'' (function %s not found)\n' "$FUNCNAME" "$1" "${_generator[0]}" >&2
       return 2
     fi
@@ -686,8 +686,8 @@ _comp_compgen__call_generator() {
     local PWD=${PWD-} OLDPWD=${OLDPWD-}
     # Note: We also redirect stdout because `cd` may output the target
     # directory to stdout when CDPATH is set.
-    command cd -- "$_dir" &> /dev/null \
-      || {
+    command cd -- "$_dir" &>/dev/null ||
+      {
         _comp_compgen__error_fallback
         return
       }
@@ -728,7 +728,7 @@ if ((BASH_VERSINFO[0] > 5 || BASH_VERSINFO[0] == 5 && BASH_VERSINFO[1] >= 3)); t
       local PWD=${PWD-} OLDPWD=${OLDPWD-}
       # Note: We also redirect stdout because `cd` may output the target
       # directory to stdout when CDPATH is set.
-      command cd -- "$_dir" &> /dev/null || {
+      command cd -- "$_dir" &>/dev/null || {
         _comp_compgen__error_fallback
         return
       }
@@ -768,7 +768,7 @@ else
       if [[ $_dir ]]; then
         # Note: We also redirect stdout because `cd` may output the target
         # directory to stdout when CDPATH is set.
-        command cd -- "$_dir" &> /dev/null || return
+        command cd -- "$_dir" &>/dev/null || return
       fi
       IFS=$_ifs compgen "$@" ${_cur:+-- "$_cur"}
     ) || {
@@ -819,13 +819,13 @@ _comp_compgen_split() {
   local OPTIND=1 OPTARG="" OPTERR=0 _opt
   while getopts ':lF:X:S:P:o:' _opt "$@"; do
     case $_opt in
-      l) _ifs=$'\n' ;;
-      F) _ifs=$OPTARG ;;
-      [XSPo]) _compgen_options+=("-$_opt" "$OPTARG") ;;
-      *)
-        printf 'bash_completion: usage: %s [-l|-F sep] [--] str\n' "$FUNCNAME" >&2
-        return 2
-        ;;
+    l) _ifs=$'\n' ;;
+    F) _ifs=$OPTARG ;;
+    [XSPo]) _compgen_options+=("-$_opt" "$OPTARG") ;;
+    *)
+      printf 'bash_completion: usage: %s [-l|-F sep] [--] str\n' "$FUNCNAME" >&2
+      return 2
+      ;;
     esac
   done
   shift "$((OPTIND - 1))"
@@ -998,34 +998,34 @@ _comp_get_words() {
 
   while getopts "c:i:n:p:w:" flag "$@"; do
     case $flag in
-      [cipw])
-        if [[ $OPTARG != [a-zA-Z_]*([a-zA-Z_0-9])?(\[*\]) ]]; then
-          echo "bash_completion: $FUNCNAME: -$flag: invalid variable name \`$OPTARG'" >&2
-          return 1
-        fi
-        ;;&
-      c) vcur=$OPTARG ;;
-      i) vcword=$OPTARG ;;
-      n) exclude=$OPTARG ;;
-      p) vprev=$OPTARG ;;
-      w) vwords=$OPTARG ;;
-      *)
-        echo "bash_completion: $FUNCNAME: usage error" >&2
+    [cipw])
+      if [[ $OPTARG != [a-zA-Z_]*([a-zA-Z_0-9])?(\[*\]) ]]; then
+        echo "bash_completion: $FUNCNAME: -$flag: invalid variable name \`$OPTARG'" >&2
         return 1
-        ;;
+      fi
+      ;;&
+    c) vcur=$OPTARG ;;
+    i) vcword=$OPTARG ;;
+    n) exclude=$OPTARG ;;
+    p) vprev=$OPTARG ;;
+    w) vwords=$OPTARG ;;
+    *)
+      echo "bash_completion: $FUNCNAME: usage error" >&2
+      return 1
+      ;;
     esac
   done
   while [[ $# -ge $OPTIND ]]; do
     case ${!OPTIND} in
-      cur) vcur=cur ;;
-      prev) vprev=prev ;;
-      cword) vcword=cword ;;
-      words) vwords=words ;;
-      *)
-        echo "bash_completion: $FUNCNAME: \`${!OPTIND}':" \
-          "unknown argument" >&2
-        return 1
-        ;;
+    cur) vcur=cur ;;
+    prev) vprev=prev ;;
+    cword) vcword=cword ;;
+    words) vwords=words ;;
+    *)
+      echo "bash_completion: $FUNCNAME: \`${!OPTIND}':" \
+        "unknown argument" >&2
+      return 1
+      ;;
     esac
     ((OPTIND += 1))
   done
@@ -1174,15 +1174,15 @@ _comp_compgen_filedir() {
     # the fallback condition with the "plus" dirs.
     local _opts=(-f -X "$_xspec")
     [[ $_xspec ]] && _plusdirs=(-o plusdirs)
-    [[ ${BASH_COMPLETION_FILEDIR_FALLBACK-} || ! ${_plusdirs-} ]] \
-      || _opts+=("${_plusdirs[@]}")
+    [[ ${BASH_COMPLETION_FILEDIR_FALLBACK-} || ! ${_plusdirs-} ]] ||
+      _opts+=("${_plusdirs[@]}")
 
     _comp_compgen -v toks -c "$_quoted" -- "${_opts[@]}"
 
     # Try without filter if it failed to produce anything and configured to
     [[ ${BASH_COMPLETION_FILEDIR_FALLBACK-} &&
-      $_arg && ${#toks[@]} -lt 1 ]] \
-      && _comp_compgen -av toks -c "$_quoted" -- \
+      $_arg && ${#toks[@]} -lt 1 ]] &&
+      _comp_compgen -av toks -c "$_quoted" -- \
         -f ${_plusdirs+"${_plusdirs[@]}"}
   fi
 
@@ -1198,7 +1198,7 @@ _comp_compgen_filedir() {
   if ((${#toks[@]} != 0)); then
     # 2>/dev/null for direct invocation, e.g. in the _comp_compgen_filedir
     # unit test
-    compopt -o filenames 2> /dev/null
+    compopt -o filenames 2>/dev/null
   fi
 
   # Note: bash < 4.4 has a bug that all the elements are connected with
@@ -1308,8 +1308,8 @@ _comp_delimited() {
           fi
         done
       done
-      ((${#COMPREPLY[@]})) \
-        && _comp_compgen -c "${cur##*"$delimiter"}" -- -W '"${COMPREPLY[@]}"'
+      ((${#COMPREPLY[@]})) &&
+        _comp_compgen -c "${cur##*"$delimiter"}" -- -W '"${COMPREPLY[@]}"'
     fi
   else
     _comp_compgen -c "${cur##*"$delimiter"}" -- "$@"
@@ -1352,35 +1352,35 @@ _comp_variable_assignments() {
   fi
 
   case $prev in
-    TZ)
-      cur=/usr/share/zoneinfo/$cur
-      _comp_compgen_filedir
-      if ((${#COMPREPLY[@]})); then
-        for i in "${!COMPREPLY[@]}"; do
-          if [[ ${COMPREPLY[i]} == *.tab ]]; then
-            unset -v 'COMPREPLY[i]'
-            continue
-          elif [[ -d ${COMPREPLY[i]} ]]; then
-            COMPREPLY[i]+=/
-            compopt -o nospace
-          fi
-          COMPREPLY[i]=${COMPREPLY[i]#/usr/share/zoneinfo/}
-        done
-      fi
-      ;;
-    TERM)
-      _comp_compgen_terms
-      ;;
-    LANG | LC_*)
-      _comp_compgen_split -- "$(locale -a 2> /dev/null)"
-      ;;
-    LANGUAGE)
-      _comp_delimited : -W '$(locale -a 2>/dev/null)'
-      ;;
-    *)
-      _comp_compgen_variables && return 0
-      _comp_compgen -a filedir
-      ;;
+  TZ)
+    cur=/usr/share/zoneinfo/$cur
+    _comp_compgen_filedir
+    if ((${#COMPREPLY[@]})); then
+      for i in "${!COMPREPLY[@]}"; do
+        if [[ ${COMPREPLY[i]} == *.tab ]]; then
+          unset -v 'COMPREPLY[i]'
+          continue
+        elif [[ -d ${COMPREPLY[i]} ]]; then
+          COMPREPLY[i]+=/
+          compopt -o nospace
+        fi
+        COMPREPLY[i]=${COMPREPLY[i]#/usr/share/zoneinfo/}
+      done
+    fi
+    ;;
+  TERM)
+    _comp_compgen_terms
+    ;;
+  LANG | LC_*)
+    _comp_compgen_split -- "$(locale -a 2>/dev/null)"
+    ;;
+  LANGUAGE)
+    _comp_delimited : -W '$(locale -a 2>/dev/null)'
+    ;;
+  *)
+    _comp_compgen_variables && return 0
+    _comp_compgen -a filedir
+    ;;
   esac
 
   return 0
@@ -1425,19 +1425,19 @@ _comp_initialize() {
   local flag OPTIND=1 OPTARG="" OPTERR=0
   while getopts "n:e:o:i:s" flag "$@"; do
     case $flag in
-      n) exclude+=$OPTARG ;;
-      e) errx=$OPTARG ;;
-      o) outx=$OPTARG ;;
-      i) inx=$OPTARG ;;
-      s)
-        opt_split="set"
-        was_split=""
-        exclude+="="
-        ;;
-      *)
-        echo "bash_completion: $FUNCNAME: usage error" >&2
-        return 1
-        ;;
+    n) exclude+=$OPTARG ;;
+    e) errx=$OPTARG ;;
+    o) outx=$OPTARG ;;
+    i) inx=$OPTARG ;;
+    s)
+      opt_split="set"
+      was_split=""
+      exclude+="="
+      ;;
+    *)
+      echo "bash_completion: $FUNCNAME: usage error" >&2
+      return 1
+      ;;
     esac
   done
   shift "$((OPTIND - 1))"
@@ -1456,16 +1456,16 @@ _comp_initialize() {
   if [[ $cur == $redir* || ${prev-} == $redir ]]; then
     local xspec
     case $cur in
+    2'>'*) xspec=${errx-} ;;
+    *'>'*) xspec=${outx-} ;;
+    *'<'*) xspec=${inx-} ;;
+    *)
+      case $prev in
       2'>'*) xspec=${errx-} ;;
       *'>'*) xspec=${outx-} ;;
       *'<'*) xspec=${inx-} ;;
-      *)
-        case $prev in
-          2'>'*) xspec=${errx-} ;;
-          *'>'*) xspec=${outx-} ;;
-          *'<'*) xspec=${inx-} ;;
-        esac
-        ;;
+      esac
+      ;;
     esac
     # shellcheck disable=SC2295 # redir is a pattern
     cur=${cur##$redir}
@@ -1503,37 +1503,37 @@ _comp_initialize() {
 _comp_compgen_help__get_help_lines() {
   local -a help_cmd
   case ${1-} in
-    -)
-      if (($# > 1)); then
-        printf 'bash_completion: %s -: extra arguments for -\n' "${FUNCNAME[1]}" >&2
-        printf 'usage: %s -\n' "${FUNCNAME[1]}" >&2
-        printf 'usage: %s -c cmd args...\n' "${FUNCNAME[1]}" >&2
-        printf 'usage: %s [-- args...]\n' "${FUNCNAME[1]}" >&2
-        return 2
-      fi
-      help_cmd=(exec cat)
-      ;;
-    -c)
-      if (($# < 2)); then
-        printf 'bash_completion: %s -c: no command is specified\n' "${FUNCNAME[1]}" >&2
-        printf 'usage: %s -\n' "${FUNCNAME[1]}" >&2
-        printf 'usage: %s -c cmd args...\n' "${FUNCNAME[1]}" >&2
-        printf 'usage: %s [-- args...]\n' "${FUNCNAME[1]}" >&2
-        return 2
-      fi
-      help_cmd=("${@:2}")
-      ;;
-    --) shift 1 ;&
-    *)
-      local REPLY
-      _comp_dequote "${comp_args[0]-}" || REPLY=${comp_args[0]-}
-      help_cmd=("${REPLY:-false}" "$@")
-      ;;
+  -)
+    if (($# > 1)); then
+      printf 'bash_completion: %s -: extra arguments for -\n' "${FUNCNAME[1]}" >&2
+      printf 'usage: %s -\n' "${FUNCNAME[1]}" >&2
+      printf 'usage: %s -c cmd args...\n' "${FUNCNAME[1]}" >&2
+      printf 'usage: %s [-- args...]\n' "${FUNCNAME[1]}" >&2
+      return 2
+    fi
+    help_cmd=(exec cat)
+    ;;
+  -c)
+    if (($# < 2)); then
+      printf 'bash_completion: %s -c: no command is specified\n' "${FUNCNAME[1]}" >&2
+      printf 'usage: %s -\n' "${FUNCNAME[1]}" >&2
+      printf 'usage: %s -c cmd args...\n' "${FUNCNAME[1]}" >&2
+      printf 'usage: %s [-- args...]\n' "${FUNCNAME[1]}" >&2
+      return 2
+    fi
+    help_cmd=("${@:2}")
+    ;;
+  --) shift 1 ;&
+  *)
+    local REPLY
+    _comp_dequote "${comp_args[0]-}" || REPLY=${comp_args[0]-}
+    help_cmd=("${REPLY:-false}" "$@")
+    ;;
   esac
 
   local REPLY
-  _comp_split -l REPLY "$(LC_ALL=C "${help_cmd[@]}" 2>&1)" \
-    && _lines=("${REPLY[@]}")
+  _comp_split -l REPLY "$(LC_ALL=C "${help_cmd[@]}" 2>&1)" &&
+    _lines=("${REPLY[@]}")
 }
 
 # Helper function for _comp_compgen_help and _comp_compgen_usage.
@@ -1548,13 +1548,13 @@ _comp_compgen_help__parse() {
   if _comp_split -F $' \t\n,/|' array "$1"; then
     for i in "${array[@]}"; do
       case "$i" in
-        ---*) break ;;
-        --?*)
-          option=$i
-          break
-          ;;
-        -?*) [[ $option ]] || option=$i ;;
-        *) break ;;
+      ---*) break ;;
+      --?*)
+        option=$i
+        break
+        ;;
+      -?*) [[ $option ]] || option=$i ;;
+      *) break ;;
       esac
     done
   fi
@@ -1568,8 +1568,8 @@ _comp_compgen_help__parse() {
     option=${option/"${BASH_REMATCH[1]}"/"${BASH_REMATCH[2]}"}
   fi
 
-  [[ $option =~ ^([^=<{().[]|\.[A-Za-z0-9])+=? ]] \
-    && options+=("$BASH_REMATCH")
+  [[ $option =~ ^([^=<{().[]|\.[A-Za-z0-9])+=? ]] &&
+    options+=("$BASH_REMATCH")
 }
 
 # Parse GNU style help output of the given command and generate and store
@@ -1626,16 +1626,16 @@ _comp_compgen_usage() {
       _match=${BASH_REMATCH[0]}
       _option=${BASH_REMATCH[1]}
       case $_option in
-        -?(\[)+([a-zA-Z0-9?]))
-          # Treat as bundled short options
-          for ((_i = 1; _i < ${#_option}; _i++)); do
-            _char=${_option:_i:1}
-            [[ $_char != '[' ]] && options+=("-$_char")
-          done
-          ;;
-        *)
-          _comp_compgen_help__parse "$_option"
-          ;;
+      -?(\[)+([a-zA-Z0-9?]))
+        # Treat as bundled short options
+        for ((_i = 1; _i < ${#_option}; _i++)); do
+          _char=${_option:_i:1}
+          [[ $_char != '[' ]] && options+=("-$_char")
+        done
+        ;;
+      *)
+        _comp_compgen_help__parse "$_option"
+        ;;
       esac
       _line=${_line#*"$_match"}
     done
@@ -1652,8 +1652,8 @@ _comp_compgen_usage() {
 # @since 2.12
 _comp_compgen_signals() {
   local -a sigs
-  _comp_compgen -v sigs -c "SIG${cur#"${1-}"}" -- -A signal \
-    && _comp_compgen -RU sigs -- -P "${1-}" -W '"${sigs[@]#SIG}"'
+  _comp_compgen -v sigs -c "SIG${cur#"${1-}"}" -- -A signal &&
+    _comp_compgen -RU sigs -- -P "${1-}" -W '"${sigs[@]#SIG}"'
 }
 
 # This function completes on known mac addresses
@@ -1671,7 +1671,7 @@ _comp_compgen_mac_addresses() {
   _comp_compgen -v addresses split -- "$(
     {
       ip -c=never link show || ip link show || LC_ALL=C ifconfig -a
-    } 2> /dev/null | command sed -ne \
+    } 2>/dev/null | command sed -ne \
       "s/.*[[:space:]]HWaddr[[:space:]]\{1,\}\($_re\)[[:space:]].*/\1/p" -ne \
       "s/.*[[:space:]]HWaddr[[:space:]]\{1,\}\($_re\)[[:space:]]*$/\1/p" -ne \
       "s|.*[[:space:]]\(link/\)\{0,1\}ether[[:space:]]\{1,\}\($_re\)[[:space:]].*|\2|p" -ne \
@@ -1682,14 +1682,14 @@ _comp_compgen_mac_addresses() {
   _comp_compgen -av addresses split -- "$(
     {
       arp -an || ip -c=never neigh show || ip neigh show
-    } 2> /dev/null | command sed -ne \
+    } 2>/dev/null | command sed -ne \
       "s/.*[[:space:]]\($_re\)[[:space:]].*/\1/p" -ne \
       "s/.*[[:space:]]\($_re\)[[:space:]]*$/\1/p"
   )"
 
   # /etc/ethers
   _comp_compgen -av addresses split -- "$(command sed -ne \
-    "s/^[[:space:]]*\($_re\)[[:space:]].*/\1/p" /etc/ethers 2> /dev/null)"
+    "s/^[[:space:]]*\($_re\)[[:space:]].*/\1/p" /etc/ethers 2>/dev/null)"
 
   _comp_compgen -U addresses ltrim_colon "${addresses[@]}"
 }
@@ -1703,21 +1703,21 @@ _comp_compgen_configured_interfaces() {
     # Debian system
     _comp_expand_glob files '/etc/network/interfaces /etc/network/interfaces.d/*' || return 0
     _comp_compgen -U files split -- "$(command sed -ne \
-      's|^iface \([^ ]\{1,\}\).*$|\1|p' "${files[@]}" 2> /dev/null)"
+      's|^iface \([^ ]\{1,\}\).*$|\1|p' "${files[@]}" 2>/dev/null)"
   elif [[ -f /etc/SuSE-release ]]; then
     # SuSE system
     _comp_expand_glob files '/etc/sysconfig/network/ifcfg-*' || return 0
-    _comp_compgen -U files split -- "$(printf '%s\n' "${files[@]}" \
-      | command sed -ne 's|.*ifcfg-\([^*].*\)$|\1|p')"
+    _comp_compgen -U files split -- "$(printf '%s\n' "${files[@]}" |
+      command sed -ne 's|.*ifcfg-\([^*].*\)$|\1|p')"
   elif [[ -f /etc/pld-release ]]; then
     # PLD Linux
-    _comp_compgen -U files split -- "$(command ls -B /etc/sysconfig/interfaces \
-      | command sed -ne 's|.*ifcfg-\([^*].*\)$|\1|p')"
+    _comp_compgen -U files split -- "$(command ls -B /etc/sysconfig/interfaces |
+      command sed -ne 's|.*ifcfg-\([^*].*\)$|\1|p')"
   else
     # Assume Red Hat
     _comp_expand_glob files '/etc/sysconfig/network-scripts/ifcfg-*' || return 0
-    _comp_compgen -U files split -- "$(printf '%s\n' "${files[@]}" \
-      | command sed -ne 's|.*ifcfg-\([^*].*\)$|\1|p')"
+    _comp_compgen -U files split -- "$(printf '%s\n' "${files[@]}" |
+      command sed -ne 's|.*ifcfg-\([^*].*\)$|\1|p')"
   fi
 }
 
@@ -1732,18 +1732,18 @@ _comp_compgen_configured_interfaces() {
 _comp_compgen_ip_addresses() {
   local _n
   case ${1-} in
-    -a) _n='6\{0,1\}' ;;
-    -6) _n='6' ;;
-    *) _n= ;;
+  -a) _n='6\{0,1\}' ;;
+  -6) _n='6' ;;
+  *) _n= ;;
   esac
   local PATH=$PATH:/sbin
   local addrs
   _comp_compgen -v addrs split -- "$({
     ip -c=never addr show || ip addr show || LC_ALL=C ifconfig -a
-  } 2> /dev/null \
-    | command sed -e 's/[[:space:]]addr:/ /' -ne \
-      "s|.*inet${_n}[[:space:]]\{1,\}\([^[:space:]/]*\).*|\1|p")" \
-    || return
+  } 2>/dev/null |
+    command sed -e 's/[[:space:]]addr:/ /' -ne \
+      "s|.*inet${_n}[[:space:]]\{1,\}\([^[:space:]/]*\).*|\1|p")" ||
+    return
 
   if [[ ! $_n ]]; then
     _comp_compgen -U addrs set "${addrs[@]}"
@@ -1778,9 +1778,9 @@ _comp_compgen_available_interfaces() {
     else
       ip -c=never link show || ip link show || ifconfig -a
     fi
-  } 2> /dev/null | _comp_awk \
-    '/^[^ \t]/ { if ($1 ~ /^[0-9]+:/) { print $2 } else { print $1 } }')" \
-    && _comp_compgen -U generated set "${generated[@]%:}"
+  } 2>/dev/null | _comp_awk \
+    '/^[^ \t]/ { if ($1 ~ /^[0-9]+:/) { print $2 } else { print $1 } }')" &&
+    _comp_compgen -U generated set "${generated[@]%:}"
 }
 
 # Echo number of CPUs, falling back to 1 on failure.
@@ -1790,7 +1790,7 @@ _comp_compgen_available_interfaces() {
 _comp_get_ncpus() {
   local var=NPROCESSORS_ONLN
   [[ $OSTYPE == *@(linux|msys|cygwin)* ]] && var=_$var
-  if REPLY=$(getconf $var 2> /dev/null) && ((REPLY >= 1)); then
+  if REPLY=$(getconf $var 2>/dev/null) && ((REPLY >= 1)); then
     return 0
   else
     REPLY=1
@@ -1809,7 +1809,7 @@ _comp_compgen_tilde() {
     if _comp_compgen -c "${cur#\~}" -- -P '~' -u; then
       # 2>/dev/null for direct invocation, e.g. in the
       # _comp_compgen_tilde unit test
-      compopt -o filenames 2> /dev/null
+      compopt -o filenames 2>/dev/null
       return 0
     fi
   fi
@@ -1857,16 +1857,16 @@ _comp_expand() {
   # a tilde is fed to commands and ending up quoted instead of expanded.
 
   case ${cur-} in
-    ~*/*)
-      local REPLY
-      _comp_expand_tilde "$cur"
-      cur=$REPLY
-      ;;
-    ~*)
-      _comp_compgen -v COMPREPLY tilde \
-        && eval "COMPREPLY[0]=$(printf ~%q "${COMPREPLY[0]#\~}")" \
-        && return 1
-      ;;
+  ~*/*)
+    local REPLY
+    _comp_expand_tilde "$cur"
+    cur=$REPLY
+    ;;
+  ~*)
+    _comp_compgen -v COMPREPLY tilde &&
+      eval "COMPREPLY[0]=$(printf ~%q "${COMPREPLY[0]#\~}")" &&
+      return 1
+    ;;
   esac
   return 0
 }
@@ -1885,8 +1885,8 @@ if [[ $OSTYPE == *@(solaris|aix)* ]]; then
     _comp_compgen_split -- "$(command ps -efo pgid | command sed 1d)"
   }
   _comp_compgen_pnames() {
-    _comp_compgen_split -X '<defunct>' -- "$(command ps -efo comm \
-      | command sed -e 1d -e 's:.*/::' -e 's/^-//' | sort -u)"
+    _comp_compgen_split -X '<defunct>' -- "$(command ps -efo comm |
+      command sed -e 1d -e 's:.*/::' -e 's/^-//' | sort -u)"
   }
 else
   _comp_compgen_pids() {
@@ -1906,7 +1906,7 @@ else
       local -a psout
       _comp_split -l psout "$({
         command ps ax -o command= || command ps ax -o comm=
-      } 2> /dev/null)"
+      } 2>/dev/null)"
       local line i=-1
       for line in "${psout[@]}"; do
         if ((i == -1)); then
@@ -1940,8 +1940,8 @@ else
         done
       fi
     fi
-    ((${#procs[@]})) \
-      && _comp_compgen -U procs -- -X "<defunct>" -W '"${procs[@]}"'
+    ((${#procs[@]})) &&
+      _comp_compgen -U procs -- -X "<defunct>" -W '"${procs[@]}"'
   }
 fi
 
@@ -1949,9 +1949,9 @@ fi
 #
 # @since 2.12
 _comp_compgen_uids() {
-  if type getent &> /dev/null; then
+  if type getent &>/dev/null; then
     _comp_compgen_split -- "$(getent passwd | cut -d: -f3)"
-  elif type perl &> /dev/null; then
+  elif type perl &>/dev/null; then
     _comp_compgen_split -- "$(perl -e 'while (($uid) = (getpwent)[2]) { print $uid . "\n" }')"
   else
     # make do with /etc/passwd
@@ -1963,9 +1963,9 @@ _comp_compgen_uids() {
 #
 # @since 2.12
 _comp_compgen_gids() {
-  if type getent &> /dev/null; then
+  if type getent &>/dev/null; then
     _comp_compgen_split -- "$(getent group | cut -d: -f3)"
-  elif type perl &> /dev/null; then
+  elif type perl &>/dev/null; then
     _comp_compgen_split -- "$(perl -e 'while (($gid) = (getgrent)[2]) { print $gid . "\n" }')"
   else
     # make do with /etc/group
@@ -2001,14 +2001,14 @@ _comp_compgen_services() {
   _comp_expand_glob services '${sysvdirs[0]}/!($_comp_backup_glob|functions|README)'
 
   local _generated=$({
-    systemctl list-units --full --all \
-      || systemctl list-unit-files
-  } 2> /dev/null \
-    | _comp_awk '$1 ~ /\.service$/ { sub("\\.service$", "", $1); print $1 }')
+    systemctl list-units --full --all ||
+      systemctl list-unit-files
+  } 2>/dev/null |
+    _comp_awk '$1 ~ /\.service$/ { sub("\\.service$", "", $1); print $1 }')
   _comp_split -la services "$_generated"
 
   if [[ -x /sbin/upstart-udev-bridge ]]; then
-    _comp_split -la services "$(initctl list 2> /dev/null | cut -d' ' -f1)"
+    _comp_split -la services "$(initctl list 2>/dev/null | cut -d' ' -f1)"
   fi
 
   ((${#services[@]})) || return 1
@@ -2038,15 +2038,15 @@ _comp_complete_service() {
     _comp_sysvdirs || return 1
     _comp_compgen_split -l -- "$(command sed -e 'y/|/ /' \
       -ne 's/^.*\(U\|msg_u\)sage.*{\(.*\)}.*$/\2/p' \
-      "${sysvdirs[0]}/${prev##*/}" 2> /dev/null) start stop"
+      "${sysvdirs[0]}/${prev##*/}" 2>/dev/null) start stop"
   fi
-} \
-  && complete -F _comp_complete_service service
+} &&
+  complete -F _comp_complete_service service
 
 _comp__init_set_up_service_completions() {
   local sysvdirs svc svcdir svcs
-  _comp_sysvdirs \
-    && for svcdir in "${sysvdirs[@]}"; do
+  _comp_sysvdirs &&
+    for svcdir in "${sysvdirs[@]}"; do
       if _comp_expand_glob svcs '"$svcdir"/!($_comp_backup_glob)'; then
         for svc in "${svcs[@]}"; do
           [[ -x $svc ]] && complete -F _comp_complete_service "$svc"
@@ -2063,8 +2063,8 @@ _comp__init_set_up_service_completions
 # @since 2.12
 _comp_compgen_kernel_modules() {
   local _modpath=/lib/modules/$1
-  _comp_compgen_split -- "$(command ls -RL "$_modpath" 2> /dev/null \
-    | command sed -ne 's/^\(.*\)\.k\{0,1\}o\(\.[gx]z\)\{0,1\}$/\1/p' \
+  _comp_compgen_split -- "$(command ls -RL "$_modpath" 2>/dev/null |
+    command sed -ne 's/^\(.*\)\.k\{0,1\}o\(\.[gx]z\)\{0,1\}$/\1/p' \
       -e 's/^\(.*\)\.ko\.zst$/\1/p')"
 }
 
@@ -2073,8 +2073,8 @@ _comp_compgen_kernel_modules() {
 #
 # @since 2.12
 _comp_compgen_inserted_kernel_modules() {
-  _comp_compgen -c "${1:-$cur}" split -- "$(PATH="$PATH:/sbin" lsmod \
-    | _comp_awk '{if (NR != 1) print $1}')"
+  _comp_compgen -c "${1:-$cur}" split -- "$(PATH="$PATH:/sbin" lsmod |
+    _comp_awk '{if (NR != 1) print $1}')"
 }
 
 # This function completes on user or user:group format; as for chown and cpio.
@@ -2134,7 +2134,7 @@ _comp_compgen_allowed_users() {
   if _comp_as_root; then
     _comp_compgen -- -u
   else
-    _comp_compgen_split -- "$(id -un 2> /dev/null || whoami 2> /dev/null)"
+    _comp_compgen_split -- "$(id -un 2>/dev/null || whoami 2>/dev/null)"
   fi
 }
 
@@ -2143,14 +2143,14 @@ _comp_compgen_allowed_groups() {
   if _comp_as_root; then
     _comp_compgen -- -g
   else
-    _comp_compgen_split -- "$(id -Gn 2> /dev/null || groups 2> /dev/null)"
+    _comp_compgen_split -- "$(id -Gn 2>/dev/null || groups 2>/dev/null)"
   fi
 }
 
 # @since 2.12
 _comp_compgen_selinux_users() {
-  _comp_compgen_split -- "$(semanage user -nl 2> /dev/null \
-    | _comp_awk '{ print $1 }')"
+  _comp_compgen_split -- "$(semanage user -nl 2>/dev/null |
+    _comp_awk '{ print $1 }')"
 }
 
 # This function completes on valid shells
@@ -2162,7 +2162,7 @@ _comp_compgen_shells() {
   local _shell _rest
   while read -r _shell _rest; do
     [[ $_shell == /* ]] && shells+=("$_shell")
-  done 2> /dev/null < "${1-}"/etc/shells
+  done 2>/dev/null <"${1-}"/etc/shells
   _comp_compgen -U shells -- -W '"${shells[@]}"'
 }
 
@@ -2175,14 +2175,14 @@ _comp_compgen_fstypes() {
   if [[ -e /proc/filesystems ]]; then
     # Linux
     _fss="$(cut -d$'\t' -f2 /proc/filesystems)
-             $(_comp_awk '! /\*/ { print $NF }' /etc/filesystems 2> /dev/null)"
+             $(_comp_awk '! /\*/ { print $NF }' /etc/filesystems 2>/dev/null)"
   else
     # Generic
-    _fss="$(_comp_awk '/^[ \t]*[^#]/ { print $3 }' /etc/fstab 2> /dev/null)
-             $(_comp_awk '/^[ \t]*[^#]/ { print $3 }' /etc/mnttab 2> /dev/null)
-             $(_comp_awk '/^[ \t]*[^#]/ { print $4 }' /etc/vfstab 2> /dev/null)
-             $(_comp_awk '{ print $1 }' /etc/dfs/fstypes 2> /dev/null)
-             $(lsvfs 2> /dev/null | _comp_awk '$1 !~ /^(Filesystem|[^a-zA-Z])/ { print $1 }')
+    _fss="$(_comp_awk '/^[ \t]*[^#]/ { print $3 }' /etc/fstab 2>/dev/null)
+             $(_comp_awk '/^[ \t]*[^#]/ { print $3 }' /etc/mnttab 2>/dev/null)
+             $(_comp_awk '/^[ \t]*[^#]/ { print $4 }' /etc/vfstab 2>/dev/null)
+             $(_comp_awk '{ print $1 }' /etc/dfs/fstypes 2>/dev/null)
+             $(lsvfs 2>/dev/null | _comp_awk '$1 !~ /^(Filesystem|[^a-zA-Z])/ { print $1 }')
              $([[ -d /etc/fs ]] && command ls /etc/fs)"
   fi
 
@@ -2204,12 +2204,12 @@ _comp_abspath() {
     # "/*/../" one by one. "/.."  at the beginning is ignored. Then, /*/../
     # in the middle is processed.  Finally, /*/.. at the end is removed.
     case $REPLY in
-      */./*) REPLY=${REPLY//\/.\//\/} ;;
-      */.) REPLY=${REPLY%/.} ;;
-      /..?(/*)) REPLY=${REPLY#/..} ;;
-      */+([^/])/../*) REPLY=${REPLY/\/+([^\/])\/..\//\/} ;;
-      */+([^/])/..) REPLY=${REPLY%/+([^/])/..} ;;
-      *) break ;;
+    */./*) REPLY=${REPLY//\/.\//\/} ;;
+    */.) REPLY=${REPLY%/.} ;;
+    /..?(/*)) REPLY=${REPLY#/..} ;;
+    */+([^/])/../*) REPLY=${REPLY/\/+([^\/])\/..\//\/} ;;
+    */+([^/])/..) REPLY=${REPLY%/+([^/])/..} ;;
+    *) break ;;
     esac
   done
   [[ $REPLY ]] || REPLY=/
@@ -2226,11 +2226,11 @@ _comp_realcommand() {
   REPLY=""
   local file
   file=$(type -P -- "$1") || return $?
-  if type -p realpath > /dev/null; then
+  if type -p realpath >/dev/null; then
     REPLY=$(realpath "$file")
-  elif type -p greadlink > /dev/null; then
+  elif type -p greadlink >/dev/null; then
     REPLY=$(greadlink -f "$file")
-  elif type -p readlink > /dev/null; then
+  elif type -p readlink >/dev/null; then
     REPLY=$(readlink -f "$file")
   else
     _comp_abspath "$file"
@@ -2251,11 +2251,11 @@ _comp_locate_first_arg() {
   local OPTIND=1 OPTARG="" OPTERR=0 _opt
   while getopts ':a:' _opt "$@"; do
     case $_opt in
-      a) has_optarg=$OPTARG ;;
-      *)
-        echo "bash_completion: $FUNCNAME: usage error" >&2
-        return 2
-        ;;
+    a) has_optarg=$OPTARG ;;
+    *)
+      echo "bash_completion: $FUNCNAME: usage error" >&2
+      return 2
+      ;;
     esac
   done
   shift "$((OPTIND - 1))"
@@ -2306,13 +2306,13 @@ _comp_count_args() {
   local OPTIND=1 OPTARG="" OPTERR=0 _opt
   while getopts ':a:n:i:' _opt "$@"; do
     case $_opt in
-      a) has_optarg=$OPTARG ;;
-      n) has_exclude=set exclude+=$OPTARG ;;
-      i) glob_include=$OPTARG ;;
-      *)
-        echo "bash_completion: $FUNCNAME: usage error" >&2
-        return 2
-        ;;
+    a) has_optarg=$OPTARG ;;
+    n) has_exclude=set exclude+=$OPTARG ;;
+    i) glob_include=$OPTARG ;;
+    *)
+      echo "bash_completion: $FUNCNAME: usage error" >&2
+      return 2
+      ;;
     esac
   done
   shift "$((OPTIND - 1))"
@@ -2374,15 +2374,15 @@ _comp_compgen_terms() {
     {
       toe -a || toe
     } | _comp_awk '{ print $1 }'
-    _comp_expand_glob dirs '/{etc,lib,usr/lib,usr/share}/terminfo/?' \
-      && find "${dirs[@]}" -type f -maxdepth 1 \
-      | _comp_awk -F / '{ print $NF }'
-  } 2> /dev/null)"
+    _comp_expand_glob dirs '/{etc,lib,usr/lib,usr/share}/terminfo/?' &&
+      find "${dirs[@]}" -type f -maxdepth 1 |
+      _comp_awk -F / '{ print $NF }'
+  } 2>/dev/null)"
 }
 
 # @since 2.12
 _comp_try_faketty() {
-  if type unbuffer &> /dev/null; then
+  if type unbuffer &>/dev/null; then
     unbuffer -p "$@"
   elif script --version 2>&1 | command grep -qF util-linux; then
     # BSD and Solaris "script" do not seem to have required features
@@ -2434,8 +2434,8 @@ _comp_complete_known_hosts() {
 # This function looks for the "Include" keyword in ssh config files and
 # includes them recursively, adding each result to the config variable.
 _comp__included_ssh_config_files() {
-  (($# < 1)) \
-    && echo "bash_completion: $FUNCNAME: missing mandatory argument CONFIG" >&2
+  (($# < 1)) &&
+    echo "bash_completion: $FUNCNAME: missing mandatory argument CONFIG" >&2
   local configfile i files f REPLY
   configfile=$1
 
@@ -2517,22 +2517,22 @@ _comp_compgen_known_hosts__impl() {
   local OPTIND=1
   while getopts "ac46F:p:" flag "$@"; do
     case $flag in
-      a) aliases=set ;;
-      c) suffix=':' ;;
-      F)
-        if [[ ! $OPTARG ]]; then
-          echo "bash_completion: $FUNCNAME: -F: an empty filename is specified" >&2
-          return 2
-        fi
-        configfile=$OPTARG
-        ;;
-      p) prefix=$OPTARG ;;
-      4) ipv4=set ;;
-      6) ipv6=set ;;
-      *)
-        echo "bash_completion: $FUNCNAME: usage error" >&2
+    a) aliases=set ;;
+    c) suffix=':' ;;
+    F)
+      if [[ ! $OPTARG ]]; then
+        echo "bash_completion: $FUNCNAME: -F: an empty filename is specified" >&2
         return 2
-        ;;
+      fi
+      configfile=$OPTARG
+      ;;
+    p) prefix=$OPTARG ;;
+    4) ipv4=set ;;
+    6) ipv6=set ;;
+    *)
+      echo "bash_completion: $FUNCNAME: usage error" >&2
+      return 2
+      ;;
     esac
   done
   if (($# < OPTIND)); then
@@ -2633,7 +2633,7 @@ _comp_compgen_known_hosts__impl() {
               [[ $host ]] && known_hosts+=("$host")
             done
           fi
-        done < "$i"
+        done <"$i"
       done
     fi
     if ((${#khd[@]} > 0)); then
@@ -2651,8 +2651,8 @@ _comp_compgen_known_hosts__impl() {
     fi
 
     # apply suffix and prefix
-    ((${#known_hosts[@]})) \
-      && _comp_compgen -v known_hosts -- -W '"${known_hosts[@]}"' -P "$prefix" -S "$suffix"
+    ((${#known_hosts[@]})) &&
+      _comp_compgen -v known_hosts -- -W '"${known_hosts[@]}"' -P "$prefix" -S "$suffix"
   fi
 
   # append any available aliases from ssh config files
@@ -2665,19 +2665,19 @@ _comp_compgen_known_hosts__impl() {
   fi
 
   # Add hosts reported by avahi-browse, if desired and it's available.
-  if [[ ${BASH_COMPLETION_KNOWN_HOSTS_WITH_AVAHI-} ]] \
-    && type avahi-browse &> /dev/null; then
+  if [[ ${BASH_COMPLETION_KNOWN_HOSTS_WITH_AVAHI-} ]] &&
+    type avahi-browse &>/dev/null; then
     # Some old versions of avahi-browse reportedly didn't have -k
     # (even if mentioned in the manpage); those we do not support any more.
-    local generated=$(avahi-browse -cprak 2> /dev/null | _comp_awk -F ';' \
-      '/^=/ && $5 ~ /^_(ssh|workstation)\._tcp$/ { print $7 }' \
-      | sort -u)
+    local generated=$(avahi-browse -cprak 2>/dev/null | _comp_awk -F ';' \
+      '/^=/ && $5 ~ /^_(ssh|workstation)\._tcp$/ { print $7 }' |
+      sort -u)
     _comp_compgen -av known_hosts -- -P "$prefix" -S "$suffix" -W '$generated'
   fi
 
   # Add hosts reported by ruptime.
-  if type ruptime &> /dev/null; then
-    local generated=$(ruptime 2> /dev/null | _comp_awk '!/^ruptime:/ { print $1 }')
+  if type ruptime &>/dev/null; then
+    local generated=$(ruptime 2>/dev/null | _comp_awk '!/^ruptime:/ { print $1 }')
     _comp_compgen -av known_hosts -- -W '$generated'
   fi
 
@@ -2773,18 +2773,18 @@ _comp_command_offset() {
   else
     _comp_dequote "${COMP_WORDS[0]}" || REPLY=${COMP_WORDS[0]}
     local cmd=$REPLY compcmd=$REPLY
-    local cspec=$(complete -p -- "$cmd" 2> /dev/null)
+    local cspec=$(complete -p -- "$cmd" 2>/dev/null)
 
     # If we have no completion for $cmd yet, see if we have for basename
     if [[ ! $cspec && $cmd == */* ]]; then
-      cspec=$(complete -p -- "${cmd##*/}" 2> /dev/null)
+      cspec=$(complete -p -- "${cmd##*/}" 2>/dev/null)
       [[ $cspec ]] && compcmd=${cmd##*/}
     fi
     # If still nothing, just load it for the basename
     if [[ ! $cspec ]]; then
       compcmd=${cmd##*/}
       _comp_load -D -- "$compcmd"
-      cspec=$(complete -p -- "$compcmd" 2> /dev/null)
+      cspec=$(complete -p -- "$compcmd" 2>/dev/null)
     fi
 
     local retry_count=0
@@ -2817,7 +2817,7 @@ _comp_command_offset() {
             # state of COMPREPLY is discarded.
             COMPREPLY=()
 
-            cspec=$(complete -p -- "$compcmd" 2> /dev/null)
+            cspec=$(complete -p -- "$compcmd" 2>/dev/null)
 
             # Note: When completion spec is removed after 124, we
             # do not generate any completions including the default
@@ -2948,40 +2948,40 @@ _comp_complete_longopt() {
   _comp_initialize -s -- "$@" || return
 
   case "${prev,,}" in
-    --help | --usage | --version)
-      return
-      ;;
-    --!(no-*)dir*)
+  --help | --usage | --version)
+    return
+    ;;
+  --!(no-*)dir*)
+    _comp_compgen -a filedir -d
+    return
+    ;;
+  --!(no-*)@(file|path)*)
+    _comp_compgen -a filedir
+    return
+    ;;
+  --+([-a-z0-9_]))
+    local argtype=$(LC_ALL=C $1 --help 2>&1 | command sed -ne \
+      "s|.*$prev\[\{0,1\}=[<[]\{0,1\}\([-A-Za-z0-9_]\{1,\}\).*|\1|p")
+    case ${argtype,,} in
+    *dir*)
       _comp_compgen -a filedir -d
       return
       ;;
-    --!(no-*)@(file|path)*)
+    *file* | *path*)
       _comp_compgen -a filedir
       return
       ;;
-    --+([-a-z0-9_]))
-      local argtype=$(LC_ALL=C $1 --help 2>&1 | command sed -ne \
-        "s|.*$prev\[\{0,1\}=[<[]\{0,1\}\([-A-Za-z0-9_]\{1,\}\).*|\1|p")
-      case ${argtype,,} in
-        *dir*)
-          _comp_compgen -a filedir -d
-          return
-          ;;
-        *file* | *path*)
-          _comp_compgen -a filedir
-          return
-          ;;
-      esac
-      ;;
+    esac
+    ;;
   esac
 
   [[ $was_split ]] && return
 
   if [[ $cur == -* ]]; then
-    _comp_compgen_split -- "$(LC_ALL=C $1 --help 2>&1 \
-      | while read -r line; do
-        [[ $line =~ --[A-Za-z0-9]+([-_][A-Za-z0-9]+)*=? ]] \
-          && printf '%s\n' "${BASH_REMATCH[0]}"
+    _comp_compgen_split -- "$(LC_ALL=C $1 --help 2>&1 |
+      while read -r line; do
+        [[ $line =~ --[A-Za-z0-9]+([-_][A-Za-z0-9]+)*=? ]] &&
+          printf '%s\n' "${BASH_REMATCH[0]}"
       done)"
     [[ ${COMPREPLY-} == *= ]] && compopt -o nospace
   elif [[ $1 == *@(rmdir|chroot) ]]; then
@@ -3036,8 +3036,8 @@ _comp_compgen_filedir_xspec() {
   _comp_compgen -av toks -c "$quoted" -- -f -X "@(|!($xspec))"
 
   # Try without filter if it failed to produce anything and configured to
-  [[ ${BASH_COMPLETION_FILEDIR_FALLBACK-} && ${#toks[@]} -lt 1 ]] \
-    && _comp_compgen -av toks -c "$quoted" -- -f
+  [[ ${BASH_COMPLETION_FILEDIR_FALLBACK-} && ${#toks[@]} -lt 1 ]] &&
+    _comp_compgen -av toks -c "$quoted" -- -f
 
   ((${#toks[@]})) || return 1
 
@@ -3146,11 +3146,11 @@ _comp_load() {
   local OPTIND=1 OPTARG="" OPTERR=0 opt
   while getopts ':D' opt "$@"; do
     case $opt in
-      D) flag_fallback_default=set ;;
-      *)
-        echo "bash_completion: $FUNCNAME: usage error" >&2
-        return 2
-        ;;
+    D) flag_fallback_default=set ;;
+    *)
+      echo "bash_completion: $FUNCNAME: usage error" >&2
+      return 2
+      ;;
     esac
   done
   shift "$((OPTIND - 1))"
@@ -3163,7 +3163,7 @@ _comp_load() {
   if [[ $cmd == \\* ]]; then
     cmd=${cmd:1}
     # If we already have a completion for the "real" command, use it
-    $(complete -p -- "$cmd" 2> /dev/null || echo false) "\\$cmd" && return 0
+    $(complete -p -- "$cmd" 2>/dev/null || echo false) "\\$cmd" && return 0
     backslash=\\
   fi
 
@@ -3180,8 +3180,8 @@ _comp_load() {
   # 1) From BASH_COMPLETION_USER_DIR (e.g. ~/.local/share/bash-completion):
   # User installed completions.
   if [[ ${BASH_COMPLETION_USER_DIR-} ]]; then
-    _comp_split -F : paths "$BASH_COMPLETION_USER_DIR" \
-      && dirs+=("${paths[@]/%//completions}")
+    _comp_split -F : paths "$BASH_COMPLETION_USER_DIR" &&
+      dirs+=("${paths[@]/%//completions}")
   else
     dirs=("${XDG_DATA_HOME:-$HOME/.local/share}/bash-completion/completions")
   fi
@@ -3200,14 +3200,14 @@ _comp_load() {
   _comp_realcommand "$cmd" && paths+=("${REPLY%/*}")
   _comp_split -aF : paths "$PATH"
   for dir in "${paths[@]%/}"; do
-    [[ $dir == ?*/@(bin|sbin) ]] \
-      && dirs+=("${dir%/*}/share/bash-completion/completions")
+    [[ $dir == ?*/@(bin|sbin) ]] &&
+      dirs+=("${dir%/*}/share/bash-completion/completions")
   done
 
   # 4) From XDG_DATA_DIRS or system dirs (e.g. /usr/share, /usr/local/share):
   # Completions in the system data dirs.
-  _comp_split -F : paths "${XDG_DATA_DIRS:-/usr/local/share:/usr/share}" \
-    && dirs+=("${paths[@]/%//bash-completion/completions}")
+  _comp_split -F : paths "${XDG_DATA_DIRS:-/usr/local/share:/usr/share}" &&
+    dirs+=("${paths[@]/%//bash-completion/completions}")
 
   # Set up default $IFS in case loaded completions depend on it,
   # as well as for $compspec invocation below.
@@ -3229,23 +3229,23 @@ _comp_load() {
         # to avoid an fd leak; https://bugzilla.redhat.com/903540
         if [[ -d $compfile ]]; then
           # Do not warn with . or .. (especially the former is common)
-          [[ $compfile == */.?(.) ]] \
-            || echo "bash_completion: $compfile: is a directory" >&2
+          [[ $compfile == */.?(.) ]] ||
+            echo "bash_completion: $compfile: is a directory" >&2
         elif [[ -e $compfile ]] && . "$compfile" "$cmd" "$@"; then
           # At least $cmd is expected to have a completion set when
           # we return successfully; see if it already does
-          if compspec=$(complete -p -- "$cmd" 2> /dev/null); then
+          if compspec=$(complete -p -- "$cmd" 2>/dev/null); then
             # $cmd is the case in which we do backslash processing
             [[ $backslash ]] && eval "$compspec \"\$backslash\$cmd\""
             # If invoked without path, that one should be set, too
             # ...but let's not overwrite an existing one, if any
-            [[ $origcmd != */* ]] \
-              && ! complete -p -- "$origcmd" &> /dev/null \
-              && eval "$compspec \"\$origcmd\""
+            [[ $origcmd != */* ]] &&
+              ! complete -p -- "$origcmd" &>/dev/null &&
+              eval "$compspec \"\$origcmd\""
             return 0
           fi
           # If not, see if we got one for $cmdname
-          if [[ $cmdname != "$cmd" ]] && compspec=$(complete -p -- "$cmdname" 2> /dev/null); then
+          if [[ $cmdname != "$cmd" ]] && compspec=$(complete -p -- "$cmdname" 2>/dev/null); then
             # Use that for $cmd too, if we have a full path to it
             [[ $cmd == /* ]] && eval "$compspec \"\$cmd\""
             return 0
@@ -3257,8 +3257,8 @@ _comp_load() {
   done
 
   # Look up simple "xspec" completions
-  [[ -v _comp_xspecs[$cmdname] || -v _xspecs[$cmdname] ]] \
-    && complete -F _comp_complete_filedir_xspec "$cmdname" "$backslash$cmdname" && return 0
+  [[ -v _comp_xspecs[$cmdname] || -v _xspecs[$cmdname] ]] &&
+    complete -F _comp_complete_filedir_xspec "$cmdname" "$backslash$cmdname" && return 0
 
   if [[ $flag_fallback_default ]]; then
     complete -F _comp_complete_minimal -- "$origcmd" && return 0
@@ -3276,8 +3276,8 @@ _comp_complete_load() {
   # Pass -D to define *something*, or otherwise there will be no completion
   # at all.
   _comp_load -D -- "$cmd" && return 124
-} \
-  && complete -D -F _comp_complete_load
+} &&
+  complete -D -F _comp_complete_load
 
 # Function for loading and calling functions from dynamically loaded
 # completion files that may not have been sourced yet.
@@ -3289,9 +3289,9 @@ _comp_complete_load() {
 # @since 2.12
 _comp_xfunc() {
   local xfunc_name=$2
-  [[ $xfunc_name == _* ]] \
-    || xfunc_name=_comp_xfunc_${1//[^a-zA-Z0-9_]/_}_$xfunc_name
-  declare -F -- "$xfunc_name" &> /dev/null || _comp_load -- "$1"
+  [[ $xfunc_name == _* ]] ||
+    xfunc_name=_comp_xfunc_${1//[^a-zA-Z0-9_]/_}_$xfunc_name
+  declare -F -- "$xfunc_name" &>/dev/null || _comp_load -- "$1"
   "$xfunc_name" "${@:3}"
 }
 
@@ -3333,8 +3333,8 @@ _comp__init_collect_startup_configs() {
     else
       compat_dir=$_comp__base_directory/bash_completion.d
     fi
-    [[ ${compat_dirs[0]} == "$compat_dir" ]] \
-      || compat_dirs+=("$compat_dir")
+    [[ ${compat_dirs[0]} == "$compat_dir" ]] ||
+      compat_dirs+=("$compat_dir")
   fi
   for compat_dir in "${compat_dirs[@]}"; do
     [[ -d $compat_dir && -r $compat_dir && -x $compat_dir ]] || continue
@@ -3343,8 +3343,8 @@ _comp__init_collect_startup_configs() {
     local compat_file
     for compat_file in "${compat_files[@]}"; do
       [[ ${compat_file##*/} != @($_comp_backup_glob|Makefile*|${BASH_COMPLETION_COMPAT_IGNORE-}) &&
-        -f $compat_file && -r $compat_file ]] \
-        && _comp__init_startup_configs+=("$compat_file")
+        -f $compat_file && -r $compat_file ]] &&
+        _comp__init_startup_configs+=("$compat_file")
     done
   done
 
@@ -3354,8 +3354,8 @@ _comp__init_collect_startup_configs() {
   #   since /dev/null may be a regular file in broken systems and can contain
   #   arbitrary garbages of suppressed command outputs.
   local user_file=${BASH_COMPLETION_USER_FILE:-~/.bash_completion}
-  [[ $user_file != "$base_path" && $user_file != /dev/null && -r $user_file && -f $user_file ]] \
-    && _comp__init_startup_configs+=("$user_file")
+  [[ $user_file != "$base_path" && $user_file != /dev/null && -r $user_file && -f $user_file ]] &&
+    _comp__init_startup_configs+=("$user_file")
 
   unset -f "$FUNCNAME"
 }
@@ -3374,21 +3374,21 @@ unset -v _comp__init_original_set_v
 # ex: filetype=sh
 
 _mise() {
-  if ! command -v usage &> /dev/null; then
+  if ! command -v usage &>/dev/null; then
     echo >&2
     echo "Error: usage CLI not found. This is required for completions to work in mise." >&2
     echo "See https://usage.jdx.dev for more information." >&2
     return 1
   fi
 
-  if [[ -z ${_usage_spec_mise_2025_3_11:-} ]]; then
-    _usage_spec_mise_2025_3_11="$(mise usage)"
+  if [[ -z ${_usage_spec_mise_2025_4_2:-} ]]; then
+    _usage_spec_mise_2025_4_2="$(mise usage)"
   fi
 
   local cur prev words cword was_split comp_args
   _comp_initialize -n : -- "$@" || return
   # shellcheck disable=SC2207
-  _comp_compgen -- -W "$(usage complete-word --shell bash -s "${_usage_spec_mise_2025_3_11}" --cword="$cword" -- "${words[@]}")"
+  _comp_compgen -- -W "$(usage complete-word --shell bash -s "${_usage_spec_mise_2025_4_2}" --cword="$cword" -- "${words[@]}")"
   _comp_ltrim_colon_completions "$cur"
   # shellcheck disable=SC2181
   if [[ $? -ne 0 ]]; then

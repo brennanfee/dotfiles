@@ -98,12 +98,12 @@ config.color_schemes = {
     cursor_bg = "#696969",
     cursor_border = "#696969",
     selection_fg = "#696969",
-    selection_bg = "#da70d6",
+    selection_bg = "#f5f5f5",
     --selection_bg = "#414858",
   },
   ["OnceLight"] = {
     ansi = {
-      "#6a6a6a", -- black
+      "#414858", -- black
       "#e05661", -- red
       "#1da912", -- green (lime)
       "#eea825", -- yellow
@@ -113,7 +113,7 @@ config.color_schemes = {
       "#fafafa", -- white
     },
     brights = {
-      "#bebebe", -- black (grey)
+      "#7a7a7a", -- black (grey)
       "#e88189", -- red (maroon)
       "#25d717", -- green (olive)
       "#f2bb54", -- yellow (orange)
@@ -122,13 +122,13 @@ config.color_schemes = {
       "#7bc6d0", -- cyan (teal)
       "#ffffff", -- white (silver)
     },
-    foreground = "#6a6a6a",
+    foreground = "#414858",
     background = "#fafafa",
-    cursor_fg = "#dcdfe4",
-    cursor_bg = "#a3b3cc",
-    cursor_border = "#a3b3cc",
-    selection_fg = "#fafafa",
-    selection_bg = "#9a77cf",
+    cursor_fg = "#7a7a7a",
+    cursor_bg = "#ffffff",
+    cursor_border = "#7a7a7a",
+    selection_fg = "#7a7a7a",
+    selection_bg = "#ffffff",
   },
 }
 
@@ -145,12 +145,7 @@ config.colors = { visual_bell = "#202020" }
 -- Initial state
 config.initial_rows = 36 -- Leaves a few lines of screen space above/below the window
 config.initial_cols = 140 -- Wide enough for 100 Neovim columns plus 30 for tree view
-config.default_prog = {
-  "tmux",
-  "new-session",
-  "-c",
-  wezterm.home_dir .. "/profile",
-}
+config.default_prog = { wezterm.home_dir .. "/.dotfiles/bash/assets/init-tmux.bash" }
 
 -- Turn off the tab bar, as I use tmux
 config.enable_tab_bar = false

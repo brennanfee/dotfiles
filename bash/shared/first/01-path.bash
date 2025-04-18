@@ -20,7 +20,7 @@ fi
 # Set PATH so it includes user's home bin folders (if they exist) and some
 # infrastructural paths (flatpak, mason).
 
-log "path before: ${PATH}"
+log "Path before customizations: ${PATH}"
 
 base_data_dir=$(xdg_base_dir DATA)
 base_bin_dir=$(xdg_base_dir BIN)
@@ -32,7 +32,8 @@ base_cloud_dir=$(xdg_base_dir CLOUD)
 ### NOTE: Order is important
 
 # Build up the path from SCRATCH, ignore any system provided path
-export PATH=""
+system_path="${PATH}"
+PATH=""
 
 # Home (local override), should always be the "first" to override everything else
 path_append "${base_homebin_dir}"
@@ -66,17 +67,12 @@ path_append "${base_data_dir}/cargo/bin"
 
 # # Nix Support
 # if [[ -f /nix/var/nix/profiles/default/etc/profile.d/nix.sh ]]; then
-#   source /nix/var/nix/profiles/default/etc/profile.d/nix.sh
+#   builtin source /nix/var/nix/profiles/default/etc/profile.d/nix.sh
 #   export NIX_REMOTE=daemon
 # fi
 
 # Main system paths
-path_append "/usr/local/bin"
-path_append "/usr/bin"
-path_append "/bin"
-path_append "/usr/local/games"
-path_append "/usr/games"
-path_append "/snap/bin"
+PATH="${PATH}:${system_path}"
 
 unset base_data_dir
 unset base_bin_dir
@@ -85,4 +81,7 @@ unset base_dotfiles_dir
 unset base_dotfilesprivate_dir
 unset base_cloud_dir
 
-log "path after: ${PATH}"
+unset system_path
+export PATH
+
+log "Path after customizations: ${PATH}"

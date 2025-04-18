@@ -18,6 +18,4 @@ fi
 # END Bash strict mode
 
 # Bash Completion
-if [[ -f "/usr/share/bash-completion/bash_completion" ]]; then
-  source "/usr/share/bash-completion/bash_completion"
-fi
+source_if "/usr/share/bash-completion/bash_completion"

@@ -19,10 +19,10 @@ fi
 
 export INSTALLER_NO_MODIFY_PATH=1
 
-export UV_TOOL_BIN_DIR="${HOME}/.local/uv/bin"
-path_prepend "${UV_TOOL_BIN_DIR}"
-
 if command -v uv &> /dev/null; then
+  export UV_TOOL_BIN_DIR="${HOME}/.local/uv/bin"
+  path_prepend "${UV_TOOL_BIN_DIR}"
+
   eval "$(uv generate-shell-completion bash)"
 
   path_append "$(uv tool dir)"

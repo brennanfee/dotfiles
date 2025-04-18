@@ -25,7 +25,7 @@ g_script_dir="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"
 # Source base-profile.bash
 if [[ -f "${g_script_dir}/base-profile.bash" ]]; then
   # shellcheck source=/home/brennan/.dotfiles/bash/base-profile.bash
-  source "${g_script_dir}/base-profile.bash"
+  builtin source "${g_script_dir}/base-profile.bash"
 fi
 unset g_script_dir
 
@@ -49,9 +49,22 @@ function command_exists() {
 
 # function to make sourcing an optional item easier
 function source_if() {
-  if [[ -f $1 ]]; then
+  if [[ -f "$1" ]]; then
     # shellcheck source=/dev/null
-    source "$1"
+    log "Sourcing: '$1'"
+    builtin source "$1"
+  else
+    log "File '$1' does not exist, skipping sourcing it."
+  fi
+}
+
+function source_or_error() {
+  if [[ -f "$1" ]]; then
+    # shellcheck source=/dev/null
+    log "Sourcing: '$1'"
+    builtin source "$1"
+  else
+    throw_error_msg "File '$1' does not exist, unable to source."
   fi
 }
 
@@ -233,19 +246,7 @@ function check_root_with_error() {
     fi
     local error_code="${2:-"1"}"
 
-    local T_COLS
-    T_COLS=$(tput cols)
-    T_COLS=$((T_COLS - 1))
-
-    # Only here for portability, this method can be copy/pasted from here to anywhere else
-    local RED
-    local RESET
-    RED="$(tput setaf 1)"
-    RESET="$(tput sgr0)"
-
-    # shellcheck disable=2154
-    echo -e "${RED}${error_message}${RESET}\n" | fold -sw "${T_COLS}"
-    exit "${error_code}"
+    throw_error_msg "${error_message}" "${error_code}"
   fi
 }
 
@@ -402,6 +403,7 @@ function _print_folded() {
     cols="${COLUMNS:-100}"
   fi
 
+  log "Printing: $1"
   echo -e "$1" | fold -s --width "${cols}"
 }
 
@@ -438,6 +440,7 @@ function print_blank_line() {
 }
 
 function pause_output() {
+  log "Pausing output"
   print_line
   read -re -sn 1 -p "Press enter to continue..."
 }
@@ -655,18 +658,22 @@ function print_output() {
 }
 
 function print_info() {
+  log "Printing info: '$@'"
   print_normal_bold "$@"
 }
 
 function print_status() {
+  log "Printing status: '$@'"
   print_normal_bold "$@"
 }
 
 function print_success() {
+  log "Printing success: '$@'"
   print_green "$@"
 }
 
 function print_warning() {
+  log "Printing warning: '$@'"
   print_yellow "$@"
 }
 
@@ -675,11 +682,14 @@ function print_heading {
 }
 
 function print_error() {
+  log "Printing error: '$@'"
   >&2 print_red "$@"
 }
 
 function throw_error_msg() {
+  log "Throwing error: '$@'"
   print_error "$1"
+  # pause_output
   if [[ ${2:-} != "" ]]; then
     exit "$2"
   else

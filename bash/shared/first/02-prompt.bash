@@ -24,17 +24,17 @@ export PROMPT_DIRTRIM=4
 GIT_PS1_USEGIT=0
 
 if [[ -e /usr/lib/git-core/git-sh-prompt ]]; then
-  source '/usr/lib/git-core/git-sh-prompt'
+  builtin source '/usr/lib/git-core/git-sh-prompt'
   GIT_PS1_USEGIT=1
 fi
 
 if [[ -e /usr/lib/git/git-core/git-sh-prompt ]]; then
-  source '/usr/lib/git/git-core/git-sh-prompt'
+  builtin source '/usr/lib/git/git-core/git-sh-prompt'
   GIT_PS1_USEGIT=1
 fi
 
 if [[ -e /usr/share/git/git-prompt.sh ]]; then
-  source '/usr/share/git/git-prompt.sh'
+  builtin source '/usr/share/git/git-prompt.sh'
   GIT_PS1_USEGIT=1
 fi
 
@@ -47,6 +47,7 @@ if [[ ${GIT_PS1_USEGIT} -eq 1 ]]; then
 fi
 
 function custom_prompt() {
+  log "calling custom_prompt"
   local last_exit=$?
   if [[ ${last_exit} -eq 0 ]]; then
     # shellcheck disable=SC2154
@@ -88,11 +89,18 @@ function custom_prompt() {
   fi
 }
 
-PROMPT_COMMAND=custom_prompt
-
-if command_exists mise; then
-  if [[ ";${PROMPT_COMMAND:-};" != *";_mise_hook;"* ]]; then
-    PROMPT_COMMAND="_mise_hook${PROMPT_COMMAND:+;$PROMPT_COMMAND}"
+log "Checking if we need to add custom_prompt to shell hook"
+if declare -p precmd_functions >/dev/null 2>&1; then
+  log "precmd_functions exists, adding custom_prompt, if needed"
+  if [[ "${precmd_functions[*]:-}" != *"custom_prompt"* ]]; then
+    log "Adding custom_prompt to precmd."
+    precmd_functions+=(custom_prompt)
+  fi
+else
+  log "precmd_functions does not exist, adding custom_prompt to PROMPT_COMMAND, if needed"
+  if [[ "${PROMPT_COMMAND[*]:-}" != *"custom_prompt"* ]]; then
+    log "Adding custom_prompt to PROMPT_COMMAND."
+    PROMPT_COMMAND+=(custom_prompt)
   fi
 fi
 

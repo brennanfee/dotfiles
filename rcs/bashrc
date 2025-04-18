@@ -23,8 +23,7 @@ if [[ $- != *i* ]]; then
   return
 fi
 
-export BASHRC_LOGS=1
-# rm -f "${HOME}/profile/bashrc.log"
+export BASHRC_LOGS=0
 
 function log_early() {
   if [[ ${BASHRC_LOGS} == "1" ]]; then
@@ -48,15 +47,15 @@ log_early "In bashrc"
 dotfiles="${DOTFILES:-$(xdg-user-dir DOTFILES)}"
 dotfiles="${dotfiles:-${HOME}/.dotfiles}"
 
-log_early "sourcing: ${dotfiles}/bash/base-profile.bash"
+log_early "Sourcing: ${dotfiles}/bash/base-profile.bash"
 # shellcheck source=/home/brennan/.dotfiles/bash/base-profile.bash
-source "${dotfiles}/bash/base-profile.bash"
+builtin source "${dotfiles}/bash/base-profile.bash"
 
-log_early "sourcing: ${dotfiles}/bash/script-tools.bash"
+log_early "Sourcing: ${dotfiles}/bash/script-tools.bash"
 # shellcheck source=/home/brennan/.dotfiles/bash/script-tools.bash
-source "${dotfiles}/bash/script-tools.bash"
+builtin source "${dotfiles}/bash/script-tools.bash"
 
-log "After script sourcing"
+log "After profile script sourcing."
 
 # Reload them, now with the benefit of base-profile
 dotfiles=$(xdg_base_dir DOTFILES)
@@ -66,6 +65,8 @@ dotfiles_private=$(xdg_base_dir DOTFILESPRIVATE)
 os_primary="${OS_PRIMARY:-linux}"      # Assume linux
 os_secondary="${OS_SECONDARY:-debian}" # Assume debian
 
+log "Starting main script loop."
+
 # We want to walk "outside" in... which is to say run all options files first, then all
 # exports, then all functions, etc.
 for folder in "first" "options" "exports" "aliases" "third-party" "functions" "other"; do
@@ -73,14 +74,14 @@ for folder in "first" "options" "exports" "aliases" "third-party" "functions" "o
     for root in "${dotfiles}/bash" "${dotfiles_private}/bash"; do
       if [[ -d "${root}/${base}/${folder}" ]]; then
         for file in "${root}/${base}/${folder}"/*.bash; do
-          log "sourcing: ${file}"
-          # shellcheck source=/dev/null
-          source "${file}"
+          source_if "${file}"
         done
       fi
     done
   done
 done
+
+log "Starting Windows WSL script loop."
 
 # On Windows shells running in WSL run some overrides
 if is_wsl; then
@@ -88,39 +89,51 @@ if is_wsl; then
     for root in "${dotfiles}/bash" "${dotfiles_private}/bash"; do
       if [[ -d "${root}/windows-wsl/${folder}" ]]; then
         for file in "${root}"/windows-wsl/"${folder}"/*.bash; do
-          log "sourcing: ${file}"
-          # shellcheck source=/dev/null
-          source "${file}"
+          source_if "${file}"
         done
       fi
     done
   done
 fi
 
+log "Starting bash completions loop."
+
 # Load bash completions
 for file in "${dotfiles}"/bash/completions/*.bash; do
-  log "sourcing: ${file}"
-  # shellcheck source=/dev/null
-  source "${file}"
+  source_if "${file}"
 done
 
-if ! mountpoint -q "${HOME}/mounts/files"; then
-  if [[ -x "${dotfiles}/bin/moose-mount-shares" ]]; then
-    log "mounting shares"
+if [[ -x "${dotfiles}/bin/moose-mount-shares" ]]; then
+  log "Checking if we need to mount shares."
+  if ! mountpoint -q "${HOME}/mounts/files"; then
+    log "Mounting shares"
     "${dotfiles}/bin/moose-mount-shares"
   fi
 fi
 
 # Local config, this should be last and never checked into source control (or if it is it should be host specific)
 # shellcheck source=/dev/null
-if [[ -f "${HOME}/.bashrc.local" ]]; then
-  log "sourcing: ${HOME}/.bashrc.local"
-  source "${HOME}/.bashrc.local"
-fi
+log "Sourcing local bashrc, if it exists."
+source_if "${HOME}/.bashrc.local"
 
 if command_exists colorscript; then
+  log "Running colorscripts"
   colorscript banners random
 fi
+
+log "Final PROMPT_COMMAND: ${PROMPT_COMMAND[*]}"
+if declare -p precmd_functions >/dev/null 2>&1; then
+  log "Final precmd_functions: ${precmd_functions[*]}"
+else
+  log "precmd_functions not declared."
+fi
+if declare -p preexec_functions >/dev/null 2>&1; then
+  log "Final preexec_functions: ${preexec_functions[*]}"
+else
+  log "preexec_functions not declared."
+fi
+
+log "Final path: ${PATH}"
 
 unset root
 unset base
@@ -131,4 +144,3 @@ unset dotfiles
 unset dotfiles_private
 unset os_primary
 unset os_secondary
-unset BASHRC_LOGS
