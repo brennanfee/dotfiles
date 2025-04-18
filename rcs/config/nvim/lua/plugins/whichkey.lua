@@ -2,7 +2,6 @@ local M = {
   "folke/which-key.nvim",
   dependencies = {
     {
-      "nvim-tree/nvim-web-devicons",
       { "echasnovski/mini.nvim", version = false }, -- needs mini.icon
     },
   },
@@ -14,6 +13,7 @@ function M.config()
 
   wk.setup({
     preset = "modern",
+    notify = true,
     plugins = {
       marks = true,
       registers = true,
@@ -39,22 +39,53 @@ function M.config()
     },
     win = {
       no_overlap = false,
+      wo = {
+        winblend = 25,
+      },
     },
     debug = false,
   })
 
   -- Mappings
   wk.add({
+    -- Direct Mappings
     { "<leader>q", "<cmd>confirm q<CR>", desc = "Quit" },
     { "<leader>v", "<cmd>vsplit<CR>", desc = "Split" },
     { "<leader>;", "<cmd>tabnew | terminal<CR>", desc = "Term" },
-    -- Tab handling
+    -- Tab section
     { "<leader>a", group = "Tab" },
     { "<leader>aN", "<cmd>tabnew %<cr>", desc = "New Tab" },
     { "<leader>ah", "<cmd>-tabmove<cr>", desc = "Move Left" },
     { "<leader>al", "<cmd>+tabmove<cr>", desc = "Move Right" },
     { "<leader>an", "<cmd>$tabnew<cr>", desc = "New Empty Tab" },
     { "<leader>ao", "<cmd>tabonly<cr>", desc = "Only" },
+    -- Buffer Section
+    {
+      "<leader>b",
+      group = "Buffers",
+      expand = function()
+        return require("which-key.extras").expand.buf()
+      end,
+    },
+    -- Key Mappings
+    { "<leader>?", group = "Key Mappings" },
+    {
+      "<leader>?b",
+      function()
+        require("which-key").show({ global = false, loop = true })
+      end,
+      desc = "Buffer Local Keymaps",
+    },
+    {
+      "<leader>?g",
+      function()
+        require("which-key").show({ global = true, loop = true })
+      end,
+      desc = "Global Keymaps",
+    },
+    -- Find Section
+    { "<leader>f", group = "Find/File/Search" },
+    { "<leader>fn", "<cmd>enew<cr>", desc = "New File" }, -- spellchecker:disable-line
   })
 end
 

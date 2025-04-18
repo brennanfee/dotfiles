@@ -7,10 +7,8 @@ function M.config()
   local wk = require("which-key")
   wk.add({
     -- Buffers
-    { "<leader>b", group = "Buffers" },
     { "<leader>bb", "<cmd>Telescope buffers previewer=false<cr>", desc = "Find" },
     -- Find
-    { "<leader>f", group = "Find/File" },
     { "<leader>fb", "<cmd>Telescope git_branches<cr>", desc = "Checkout branch" },
     { "<leader>fc", "<cmd>Telescope colorscheme<cr>", desc = "Colorscheme" },
     { "<leader>ff", "<cmd>Telescope find_files<cr>", desc = "Find files" },
@@ -23,7 +21,9 @@ function M.config()
     { "<leader>fh", "<cmd>Telescope help_tags<cr>", desc = "Help" },
     { "<leader>fl", "<cmd>Telescope resume<cr>", desc = "Last Search" },
     { "<leader>fr", "<cmd>Telescope oldfiles<cr>", desc = "Recent File" },
-    { "<leader>fn", "<cmd>enew<cr>", desc = "New File" },
+    -- Keymaps
+    { "<leader>?s", "<cmd>Telescope keymaps<cr>", desc = "Search Keymaps" },
+    { "<leader>?t", "<cmd>Telescope builtin<cr>", desc = "Telescope Pickers" },
 
     -- Diagnostics
     -- { "<leader>x", group = "Diagnostics" },

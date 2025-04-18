@@ -29,8 +29,13 @@ function M.config()
     max_concurrent_installers = 5,
   })
 
+  local lsp_servers = {}
+  for _, server in pairs(tool_lists.lsp_servers) do
+    table.insert(lsp_servers, server.name)
+  end
+
   require("mason-lspconfig").setup({
-    ensure_installed = tool_lists.lsp_servers,
+    ensure_installed = lsp_servers,
   })
 
   require("mason-tool-installer").setup({

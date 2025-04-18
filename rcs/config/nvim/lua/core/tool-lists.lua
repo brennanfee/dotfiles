@@ -1,66 +1,71 @@
 local M = {}
 
 M.lsp_servers = {
-  "ansiblels",
-  "autotools_ls",
-  "awk_ls",
-  -- "bacon-ls", -- For Rust, not in lspconfig yet
-  -- "bacon_ls", -- For Rust, not in lspconfig yet
-  "basedpyright", -- Pyright replacement
-  "bashls",
-  "biome",
-  "clangd",
-  "cmake",
-  "cobol_ls",
-  "csharp_ls",
-  "css_variables",
-  "cssls",
-  "cssmodules_ls",
-  "cucumber_language_server",
-  "docker_compose_language_service",
-  "dockerls",
-  -- "eslint", -- Use Biome instead
-  "fortls",
-  "gopls",
-  "graphql",
-  -- "harper_ls",
-  "html",
-  "htmx",
-  "jdtls", -- Java
-  "jinja_lsp",
-  "jsonls",
-  "kotlin_language_server",
-  "lemminx", -- Xml language server
-  "ltex",
-  "lua_ls",
-  "markdown_oxide",
-  "marksman",
-  -- "nginx_language_server",
-  -- "nil_ls", -- Fails to install
-  "perlnavigator",
-  "phpactor",
-  "powershell_es",
-  "rubocop",
-  "ruby_lsp",
-  "ruff", -- Python
-  "rust_analyzer", -- Switch to bacon_ls
-  -- "salt_ls", -- Seems to be broken
-  -- "snyk_ls", -- Security scanning
-  "sqlls",
-  "stylelint_lsp",
-  "svelte",
-  "tailwindcss",
-  "taplo", -- TOML language server
-  "terraformls",
-  "tflint",
-  "tinymist", -- Typst
-  "ts_ls",
-  "typos_lsp",
-  "vacuum", -- OpenAPI/Swagger
-  "vimls",
-  "vuels",
-  "yamlls",
+  { name = "ansiblels", config = {} },
+  { name = "autotools_ls", config = {} },
+  { name = "awk_ls", config = {} },
 }
+
+-- M.lsp_servers = {
+--   { name = "ansiblels", config = {} },
+--   { name = "autotools_ls", config = {} },
+--   { name = "awk_ls", config = {} },
+--   -- { name = "bacon-ls", config = {} }, -- For Rust (not in lspconfig yet)
+--   { name = "basedpyright", config = {} }, -- Pyright replacement
+--   { name = "bashls", config = {} },
+--   { name = "biome", config = {} },
+--   { name = "clangd", config = {} },
+--   { name = "cmake", config = {} },
+--   { name = "cobol_ls", config = {} },
+--   { name = "csharp_ls", config = {} },
+--   { name = "css_variables", config = {} },
+--   { name = "cssls", config = {} },
+--   { name = "cssmodules_ls", config = {} },
+--   { name = "cucumber_language_server", config = {} },
+--   { name = "docker_compose_language_service", config = {} },
+--   { name = "dockerls", config = {} },
+--   -- { name = "eslint", config = {} }, -- Use Biome instead
+--   { name = "fortls", config = {} },
+--   { name = "gopls", config = {} },
+--   { name = "graphql", config = {} },
+--   -- { name = "harper_ls", config = {} },
+--   { name = "html", config = {} },
+--   { name = "htmx", config = {} },
+--   { name = "jdtls", config = {} }, -- Java
+--   { name = "jinja_lsp", config = {} },
+--   { name = "jsonls", config = {} },
+--   { name = "kotlin_language_server", config = {} },
+--   { name = "lemminx", config = {} }, -- Xml language server
+--   -- { name = "ltex", config = {} },
+--   { name = "lua_ls", config = {} },
+--   { name = "markdown_oxide", config = {} },
+--   { name = "marksman", config = {} },
+--   -- { name = "nginx_language_server", config = {} },
+--   -- { name = "nil_ls", config = {} }, -- Fails to install
+--   { name = "perlnavigator", config = {} },
+--   { name = "phpactor", config = {} },
+--   { name = "powershell_es", config = {} },
+--   { name = "rubocop", config = {} },
+--   { name = "ruby_lsp", config = {} },
+--   { name = "ruff", config = {} }, -- Python
+--   { name = "rust_analyzer", config = {} }, -- Switch to bacon_ls
+--   -- { name = "salt_ls", config = {} }, -- Seems to be broken
+--   -- { name = "snyk_ls", config = {} }, -- Security scanning
+--   { name = "sqlls", config = {} },
+--   { name = "stylelint_lsp", config = {} },
+--   { name = "svelte", config = {} },
+--   { name = "tailwindcss", config = {} },
+--   { name = "taplo", config = {} }, -- TOML language server
+--   { name = "terraformls", config = {} },
+--   { name = "tflint", config = {} },
+--   { name = "tinymist", config = {} }, -- Typst
+--   { name = "ts_ls", config = {} },
+--   { name = "typos_lsp", config = {} },
+--   { name = "vacuum", config = {} }, -- OpenAPI/Swagger
+--   { name = "vimls", config = {} },
+--   { name = "vuels", config = {} },
+--   { name = "yamlls", config = {} },
+-- }
 
 M.debug_adapters = {
   "bash-debug-adapter",
@@ -191,12 +196,14 @@ M.all_except_lsps = {}
 M.all_tools = {}
 
 local utils = require("core/utils")
-utils.tableAppend(M.all_except_lsps, M.debug_adapters)
-utils.tableAppend(M.all_except_lsps, M.linters)
-utils.tableAppend(M.all_except_lsps, M.formatters)
-utils.tableAppend(M.all_except_lsps, M.misc_tools)
+utils.tableAppendList(M.all_except_lsps, M.debug_adapters)
+utils.tableAppendList(M.all_except_lsps, M.linters)
+utils.tableAppendList(M.all_except_lsps, M.formatters)
+utils.tableAppendList(M.all_except_lsps, M.misc_tools)
 
-utils.tableAppend(M.all_tools, M.lsp_servers)
-utils.tableAppend(M.all_tools, M.all_except_lsps)
+for _, server in pairs(M.lsp_servers) do
+  table.insert(M.all_tools, server.name)
+end
+utils.tableAppendList(M.all_tools, M.all_except_lsps)
 
 return M

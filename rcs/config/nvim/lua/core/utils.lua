@@ -47,7 +47,7 @@ M.tableMerge = function(t1, t2)
   return t1
 end
 
-M.tableAppend = function(t1, t2)
+M.tableAppendList = function(t1, t2)
   for _, v in pairs(t2) do
     table.insert(t1, v)
   end

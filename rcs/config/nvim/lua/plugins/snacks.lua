@@ -34,7 +34,7 @@ function M.config()
   end
 
   -- get a text art banner
-  handle = io.popen("colorscript neovim debian-neovim")
+  handle = io.popen("colorscript neovim random")
   local banner
   if handle ~= nil then
     banner = handle:read("*a")
@@ -101,29 +101,31 @@ function M.config()
     },
   }
 
+  local indent_settings = {
+    enabled = true,
+    indent = {
+      char = icons.ui.LineMiddle,
+      hl = highlightGroups,
+      only_scope = true,
+    },
+    animate = {
+      enabled = true,
+    },
+    scope = {
+      char = icons.ui.LineMiddle,
+      hl = highlightGroups,
+    },
+  }
+
   require("snacks").setup({
     animate = { enabeld = true },
     bigfile = { enabled = true },
     bufdelete = { enabled = true },
     dashboard = dashboard_settings,
     debug = { enabled = false },
-    explorer = { enabled = false },
-    indent = {
-      enabled = true,
-      indent = {
-        char = icons.ui.LineMiddle,
-        hl = highlightGroups,
-        only_scope = true,
-      },
-      animate = {
-        enabled = true,
-      },
-      scope = {
-        char = icons.ui.LineMiddle,
-        hl = highlightGroups,
-      },
-    },
-    input = { enabled = false },
+    explorer = { enabled = true },
+    indent = indent_settings,
+    input = { enabled = true },
     notifier = {
       enabled = true,
       timeout = 3000,
@@ -131,9 +133,14 @@ function M.config()
     picker = { enabled = false },
     quickfile = { enabled = true },
     scope = { enabled = true },
-    scroll = { enabled = false },
-    statuscolumn = { enabled = false },
-    words = { enabled = false },
+    scroll = { enabled = true },
+    statuscolumn = {
+      enabled = true,
+      folds = {
+        open = true,
+      },
+    },
+    words = { enabled = true },
     styles = {
       notification = {
         -- wo = { wrap = true } -- Wrap notifications
@@ -156,8 +163,11 @@ function M.config()
   -- TODO: Make pcall
   local wk = require("which-key")
   wk.add({
+    -- Scratch Buffer
+    { "<leader>n", "<cmd>lua Snacks.scratch()<CR>", desc = "Scratch Notepad" },
+    -- Navigation
+    { "<leader>e", "<cmd>lua Snacks.explorer()<CR>", desc = "Explorer" },
     -- Buffers
-    { "<leader>b", group = "Buffers" },
     { "<leader>bd", "<cmd>lua Snacks.bufdelete()<cr>", desc = "Buffer delete" },
     {
       "<leader>ba", -- spellchecker:disable-line
@@ -169,6 +179,8 @@ function M.config()
     -- Diagnostics
     { "<leader>x", group = "Diagnostics" },
     { "<leader>xn", "<cmd>lua Snacks.notifier.show_history()<cr>", desc = "Notification Messages" },
+    -- LazyGit
+    { "<leader>gg", "<cmd>lua Snacks.lazygit()<cr>", desc = "Open LazyGit" },
   })
 
   -- LSP Progress notification
