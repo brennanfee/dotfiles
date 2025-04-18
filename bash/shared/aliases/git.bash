@@ -45,6 +45,8 @@ alias gdtc="git difftool -y --cached"
 alias gmt="git mergetool -y"
 alias gsw="git-switch-alias"
 alias gr="git restore"
+alias grs="git restore --staged"
+alias gu="git restore --staged" # git unstage
 
 # Since I use main and develop branches so much, add specific aliases to switch
 # to those branches

@@ -128,7 +128,7 @@ function git-switch-alias() {
   if [[ -n $1 ]]; then
     git switch "$@"
   else
-    git switch master
+    git switch main
   fi
 }
 
