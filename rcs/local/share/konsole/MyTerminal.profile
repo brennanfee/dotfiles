@@ -1,18 +1,18 @@
 [Appearance]
 BoldIntense=true
-ColorScheme=onedarkpro
-Font=JetBrainsMono Nerd Font,16,-1,5,50,0,0,0,0,0
+ColorScheme=oncedark
+Font=JetBrainsMono Nerd Font Mono,18,-1,5,50,0,0,0,0,0
 UseFontLineChararacters=true
 
 [General]
-Command=tmux
+Command=~/.dotfiles/bash/assets/init-tmux.bash
 Directory=~/profile
 Name=MyTerminal
 Parent=FALLBACK/
 TerminalCenter=true
 TerminalColumns=130
 TerminalMargin=5
-TerminalRows=30
+TerminalRows=38
 
 [Interaction Options]
 MiddleClickPasteMode=1
