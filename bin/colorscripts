@@ -157,6 +157,8 @@ g_script_date="2025-04-04"
 
 ## USAGE: If you want any global variables, set them up here
 function setup_script_vars() {
+  g_clear_before_display=0
+
   g_script_path="${XDG_DATA_HOME:-$HOME/.local/share}/colorscripts"
 
   # Override with environment variable
@@ -164,12 +166,13 @@ function setup_script_vars() {
     g_script_path="${DIR_COLORSCRIPTS}"
   fi
 
-  g_script_list=""
-  g_script_count="0"
+  g_script_list=()
+  g_script_count=0
 }
 
 ## USAGE: If you add any global variables, clean them up in this method
 function cleanup_script_vars() {
+  unset g_clear_before_display
   unset g_script_path
   unset g_script_list
   unset g_script_count
@@ -180,8 +183,8 @@ function cleanup_script_vars() {
 ## set_long_options.  They accept a string with syntax that is the same for
 ## the getopt program.  See it's help for more information.
 function setup_options() {
-  set_short_options "s:"
-  set_long_options "scriptsdir:"
+  set_short_options "cs:"
+  set_long_options "clear,scriptsdir:"
 }
 
 ## Usage: If you added command-line flags or options using setup_options,
@@ -191,6 +194,10 @@ function setup_options() {
 function process_flags() {
   while [[ $# -gt 0 ]]; do
     case "$1" in
+    '-c')
+      g_clear_before_display=1
+      shift
+      ;;
     '-s')
       g_script_path="$2"
       shift 2
@@ -221,8 +228,11 @@ function print_help() {
   print_out "  -v or --version"
   print_out "     Show the version number."
   print_blank_line
-  print_out "  -s or --scriptsdir"
+  print_out "  -s or --scriptsdir <path>"
   print_out "     Override the location where the colorscripts are stored."
+  print_blank_line
+  print_out "  -c or --clear"
+  print_out "     Whether to clear the screen before running, default is not to clear as it effects buffer history."
   print_blank_line
   print_out "This program takes two arguments. The first is always a 'set name', which corresponds to a named set"
   print_out "of colorscript files. The second is either an action to perform on the scripts, a name of a script file,"
@@ -242,8 +252,19 @@ function _calculate_set_info() {
     ls_cmd+=("$(command -v ls)" "${script_set_path}")
   fi
 
-  g_script_list="$("${ls_cmd[@]}" 2>/dev/null | xargs -I $ basename $ | cut -d ' ' -f 1 | nl || true)"
-  g_script_count="$("${ls_cmd[@]}" | wc -l || 0)"
+  local file_list
+  file_list=($("${ls_cmd[@]}" 2>/dev/null | xargs -I $ basename $))
+
+  # Strip out "hidden" files (aka dotfiles)
+  local file
+  g_script_list=()
+  for file in "${file_list[@]}"; do
+    if [[ ! "${file}" =~ \..* ]]; then
+      g_script_list+=("${file}")
+    fi
+  done
+
+  g_script_count=${#g_script_list[@]}
 }
 
 function _if_has_color_script() {
@@ -254,19 +275,30 @@ function _if_has_color_script() {
   [[ -f "${script_file_path}" ]] && echo "Has this color script."
 }
 
+function _clear_if_requested() {
+  if [[ "${g_clear_before_display}" -eq 1 ]]; then
+    clear
+  fi
+}
+
 function _show_by_index() {
   local script_set="$1"
   local script_index="$2"
 
   if [[ "${script_index}" -gt 0 && "${script_index}" -le "${g_script_count}" ]]; then
-    local script_file
-    script_file="$(echo "${g_script_list}" | sed -n "${script_index}p" |
-      tr -d ' ' | tr '\t' ' ' | cut -d ' ' -f 2)"
+    script_index=$(( script_index - 1 ))
+    local script_file="${g_script_list[${script_index}]}"
 
-    exec "${g_script_path}/${script_set}/${script_file}"
+    _clear_if_requested
+    "${g_script_path}/${script_set}/${script_file}" || true
   else
-    local msg="Input error.  Don't have a script numbered '${script_index}'. "
-    msg+="Max value available is '${g_script_count}'."
+    local msg=""
+    if [[ "${script_index}" -eq 0 ]]; then
+      msg="Input error.  Zero is an invalid index, the files should be referenced starting with 1."
+    else
+      msg="Input error.  Don't have a script numbered '${script_index}'. "
+      msg+="Max value available is '${g_script_count}'."
+    fi
     throw_error_msg "${msg}"
   fi
 }
@@ -276,7 +308,8 @@ function _show_by_name() {
   local script_file="$2"
 
   if [[ -n "$(_if_has_color_script "${script_set}" "${script_file}")" ]]; then
-    exec "${g_script_path}/${script_set}/${script_file}"
+    _clear_if_requested
+    "${g_script_path}/${script_set}/${script_file}" || true
   else
     local msg="Input error.  No script with name '${script_file}' exists in the '${script_set}' set."
     throw_error_msg "${msg}"
@@ -286,21 +319,22 @@ function _show_by_name() {
 function _list() {
   local script_set="$1"
 
+  _clear_if_requested
+
   print_blank_line
   print_out "There are ${g_script_count} color scripts in the '${script_set}' set:"
   print_blank_line
-  print_out "${g_script_list}"
+  print_out "$(echo "${g_script_list[*]}" | cut -d' ' -f 1 | nl)"
 }
 
 function _random() {
   local script_set="$1"
-  declare -i random_index=$RANDOM%${g_script_count}
+  local random_index=$(( 1 + $RANDOM%(g_script_count - 1) ))
 
-  local script_file
-  script_file="$(echo "${g_script_list}" | sed -n "${random_index}p" |
-    tr -d ' ' | tr '\t' ' ' | cut -d ' ' -f 2)"
+  local script_file="${g_script_list[${random_index}]}"
 
-  exec "${g_script_path}/${script_set}/${script_file}"
+  _clear_if_requested
+  "${g_script_path}/${script_set}/${script_file}" || true
 }
 
 function _show_all() {
@@ -308,7 +342,8 @@ function _show_all() {
   local script_set_path="${g_script_path}/${script_set}"
 
   for s in "${script_set_path}"/*; do
-    print_out "$(echo "$s" | awk -F '/' '{print $NF}')"
+    print_out "----------"
+    print_out "Script: $(echo "$s" | awk -F '/' '{print $NF}')"
     print_out "----------"
     "${s}" || true
     print_blank_line
@@ -355,225 +390,7 @@ function main() {
       ;;
     esac
   fi
-
-  # echo "script path: ${g_script_path}"
-  # echo "set: ${script_set}"
-  # echo "action: ${action}"
-  # echo ""
-  # # echo "scripts: ${g_script_list}"
-  # echo "length_scripts: ${g_script_count}"
 }
 
 ## This must be the last line
 main_handler "$@"
-
-# #!/usr/bin/env bash
-
-# # Simple CLI for shell-color-scripts
-
-# if [[ "$DEV" -gt 0 ]]; then
-#   DIR_COLORSCRIPTS="./colorscripts"
-# else
-#   dotfiles="${DOTFILES:-$(xdg-user-dir DOTFILES)}"
-#   DIR_COLORSCRIPTS="${dotfiles}/files/colorscripts"
-# fi
-
-# if command -v find &>/dev/null; then
-#   LS_CMD="$(command -v find) ${DIR_COLORSCRIPTS} -maxdepth 1 -type f"
-#   LS_CMD_T="$(command -v find) ${DIR_COLORSCRIPTS}/tests -maxdepth 1 -type f"
-#   LS_CMD_B="$(command -v find) ${DIR_COLORSCRIPTS}/blacklisted -maxdepth 1 -type f"
-# else
-#   LS_CMD="$(command -v ls) ${DIR_COLORSCRIPTS}"
-#   LS_CMD_T="$(command -v ls) ${DIR_COLORSCRIPTS}/tests"
-#   LS_CMD_B="$(command -v ls) ${DIR_COLORSCRIPTS}/blacklisted"
-# fi
-
-# list_colorscripts="$($LS_CMD 2>/dev/null | xargs -I $ basename $ | cut -d ' ' -f 1 | nl || true)"
-# length_colorscripts="$($LS_CMD 2>/dev/null | wc -l || 0)"
-# list_testscripts="$($LS_CMD_T 2>/dev/null | xargs -I $ basename $ | cut -d ' ' -f 1 | nl || true)"
-# length_testscripts="$($LS_CMD_T 2>/dev/null | wc -l || 0)"
-# list_blacklist="$($LS_CMD_B 2>/dev/null | xargs -I $ basename $ | cut -d ' ' -f 1 | nl || true)"
-# length_blacklist="$($LS_CMD_B 2>/dev/null | wc -l || 0)"
-
-# function _help() {
-#   echo "Description: A collection of terminal color scripts."
-#   echo ""
-#   echo "Usage: colorscript [OPTION OR SET] [SCRIPT NAME/INDEX/COMMAND]"
-#   printf "  %-20s\t%-54s\n" \
-#     "OPTION -h, --help, help" "Print this help." \
-#     "SET" "Any sub-directory in the colorscripts location serves as a set of scripts." \
-#     "SCRIPT NAME" "The file name of a script within the set directory." \
-#     "INDEX" "The index number of a script within the set directory." \
-#     "COMMAND list" "List all the scripts in the set." \
-#     "COMMAND random" "Run a random script from the set." \
-#     "COMMAND all" "Show the outputs of all scripts in the set along with their SCRIPT NAME."
-# }
-
-# function _list() {
-#   echo "There are ${length_colorscripts} installed color scripts:"
-#   echo "${list_colorscripts}"
-# }
-
-# function _list_tests() {
-#   echo "There are ${length_testscripts} test color scripts:"
-#   echo "${list_testscripts}"
-# }
-
-# function _list_blacklist() {
-#   echo "There are ${length_blacklist} blacklisted color scripts:"
-#   echo "${list_blacklist}"
-# }
-
-# function _random() {
-#   declare -i random_index=$RANDOM%$length_colorscripts
-#   [[ $random_index -eq 0 ]] && random_index=1
-
-#   random_colorscript="$(echo "${list_colorscripts}" | sed -n ${random_index}p |
-#     tr -d ' ' | tr '\t' ' ' | cut -d ' ' -f 2)"
-#   # echo "${random_colorscript}"
-#   exec "${DIR_COLORSCRIPTS}/${random_colorscript}"
-# }
-
-# function _random_test() {
-#   declare -i random_index=$RANDOM%$length_testscripts
-#   [[ $random_index -eq 0 ]] && random_index=1
-
-#   random_testscript="$(echo "${list_testscripts}" | sed -n ${random_index}p |
-#     tr -d ' ' | tr '\t' ' ' | cut -d ' ' -f 2)"
-#   # echo "${random_testscript}"
-#   exec "${DIR_COLORSCRIPTS}/tests/${random_testscript}"
-# }
-
-# function ifhascolorscipt() {
-#   [[ -e "${DIR_COLORSCRIPTS}/$1" ]] && echo "Has this color script."
-# }
-
-# function ifhascolorscipt_test() {
-#   [[ -e "${DIR_COLORSCRIPTS}/tests/$1" ]] && echo "Has this test script."
-# }
-
-# function _run_by_name() {
-#   if [[ "$1" == "random" ]]; then
-#     _random
-#   elif [[ -n "$(ifhascolorscipt "$1")" ]]; then
-#     exec "${DIR_COLORSCRIPTS}/$1"
-#   else
-#     echo "Input error, Don't have color script named $1."
-#     exit 1
-#   fi
-# }
-
-# function _run_by_name_test() {
-#   if [[ "$1" == "random" ]]; then
-#     _random_test
-#   elif [[ -n "$(ifhascolorscipt_test "$1")" ]]; then
-#     exec "${DIR_COLORSCRIPTS}/tests/$1"
-#   else
-#     echo "Input error, Don't have test script named $1."
-#     exit 1
-#   fi
-# }
-
-# function _run_by_index() {
-#   if [[ "$1" -gt 0 && "$1" -le "${length_colorscripts}" ]]; then
-
-#     colorscript="$(echo "${list_colorscripts}" | sed -n "${1}p" |
-#       tr -d ' ' | tr '\t' ' ' | cut -d ' ' -f 2)"
-#     exec "${DIR_COLORSCRIPTS}/${colorscript}"
-#   else
-#     echo "Input error, Don't have color script indexed $1."
-#     exit 1
-#   fi
-# }
-
-# function _run_by_index_test() {
-#   if [[ "$1" -gt 0 && "$1" -le "${length_testscripts}" ]]; then
-
-#     testscript="$(echo "${list_testscripts}" | sed -n "${1}p" |
-#       tr -d ' ' | tr '\t' ' ' | cut -d ' ' -f 2)"
-#     exec "${DIR_COLORSCRIPTS}/tests/${testscript}"
-#   else
-#     echo "Input error, Don't have test script indexed $1."
-#     exit 1
-#   fi
-# }
-
-# function _run_colorscript() {
-#   if [[ "$1" =~ ^[0-9]+$ ]]; then
-#     _run_by_index "$1"
-#   else
-#     _run_by_name "$1"
-#   fi
-# }
-
-# function _run_testscript() {
-#   if [[ "$1" =~ ^[0-9]+$ ]]; then
-#     _run_by_index_test "$1"
-#   else
-#     _run_by_name_test "$1"
-#   fi
-# }
-
-# function _run_all() {
-#   for s in "${DIR_COLORSCRIPTS}"/*; do
-#     echo "$(echo "$s" | awk -F '/' '{print $NF}'):"
-#     echo "$("${s}")"
-#     echo
-#   done
-# }
-
-# function _run_all_test() {
-#   for s in "${DIR_COLORSCRIPTS}"/tests/*; do
-#     echo "$(echo "$s" | awk -F '/' '{print $NF}'):"
-#     echo "$("${s}")"
-#     echo
-#   done
-# }
-
-# set="headers"
-# command="random"
-
-# case "$#" in
-# 0)
-#   _help
-#   ;;
-# 1)
-#   case "$1" in
-#   -h | --help | help)
-#     _help
-#     ;;
-#   -l | --list | list)
-#     _list
-#     ;;
-#   -b | --blacklist | blacklist)
-#     _list_blacklist
-#     ;;
-#   -r | --random | random)
-#     _random
-#     ;;
-#   -a | --all | all)
-#     _run_all
-#     ;;
-#   *)
-#     echo "Input error."
-#     exit 1
-#     ;;
-#   esac
-#   ;;
-# 2)
-#   if [[ "$1" == "-e" || "$1" == "--exec" || "$1" == "exec" ]]; then
-#     _run_colorscript "$2"
-#   elif [[ "$1" == "-b" || "$1" == "--blacklist" || "$1" == "blacklist" ]]; then
-#     _blacklist_colorscript "$2"
-#   elif [[ "$1" == "-u" || "$1" == "--unblacklist" || "$1" == "unblacklist" ]]; then
-#     _unblacklist_colorscript "$2"
-#   else
-#     echo "Input error."
-#     exit 1
-#   fi
-#   ;;
-# *)
-#   echo "Input error, too many arguments."
-#   exit 1
-#   ;;
-# esac

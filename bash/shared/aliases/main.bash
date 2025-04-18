@@ -112,3 +112,7 @@ fi
 if command_exists ansible-community; then
   alias ansible="ansible-community"
 fi
+
+if command_exists colorscripts; then
+  alias colortest="colorscripts tests"
+fi

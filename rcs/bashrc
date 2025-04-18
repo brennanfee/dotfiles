@@ -116,9 +116,9 @@ fi
 log "Sourcing local bashrc, if it exists."
 source_if "${HOME}/.bashrc.local"
 
-if command_exists colorscript; then
+if command_exists colorscripts; then
   log "Running colorscripts"
-  colorscript banners random
+  colorscripts banners random
 fi
 
 log "Final PROMPT_COMMAND: ${PROMPT_COMMAND[*]}"
