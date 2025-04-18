@@ -18,7 +18,8 @@ fi
 # END Bash strict mode
 
 function dummy() {
-  return 0
+  local previous_exit_status=$?
+  return ${previous_exit_status}
 }
 
 log "Checking if we are running in Ghostty."

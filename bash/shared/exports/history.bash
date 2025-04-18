@@ -35,6 +35,7 @@ HISTSIZE=10000
 HISTFILE="$(xdg_base_dir STATE)/bash_history"
 
 function historyclean {
+  local previous_exit_status=$?
   log "calling historyclean"
   if [[ -e "${HISTFILE}" ]]; then
     local history_lock
@@ -46,6 +47,7 @@ function historyclean {
     history -r
     flock -u ${history_lock}
   fi
+  return $previous_exit_status
 }
 
 function historymerge {

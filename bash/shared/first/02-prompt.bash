@@ -47,8 +47,8 @@ if [[ ${GIT_PS1_USEGIT} -eq 1 ]]; then
 fi
 
 function custom_prompt() {
-  log "calling custom_prompt"
   local last_exit=$?
+  log "calling custom_prompt"
   if [[ ${last_exit} -eq 0 ]]; then
     # shellcheck disable=SC2154
     local exit_status="${text_green}${i_fa_check}"
@@ -87,6 +87,8 @@ function custom_prompt() {
   else
     export PS1="${text_reset}\n${ssh_text}${text_green}\u@\h ${text_magenta}\w ${curShell} ${exit_status} ${text_reset}\n\$ "
   fi
+
+  return ${last_exit}
 }
 
 log "Checking if we need to add custom_prompt to shell hook"
