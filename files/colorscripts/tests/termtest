@@ -259,7 +259,7 @@ function main() {
   echo ""
   msg="${text_overline}Overline${text_overline_off}"
   msg+="   ${text_overline}${text_line_blue}Overline Blue${text_overline_off}${text_line_reset}"
-  msg+="   ${text_underline}${text_overline}${text_line_magenta}Overline And Underline"
+  msg+="   ${text_underline}${text_overline}${text_line_magenta}Overline And Underline "
   msg+="Magenta${text_overline_off}${text_underline_off}${text_line_reset}"
   echo -e "${msg}"
   echo ""
