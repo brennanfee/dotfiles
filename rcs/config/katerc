@@ -1,11 +1,18 @@
 [General]
 Allow Tab Scrolling=false
+Auto Hide Tabs=false
 Close After Last=false
+Close documents with window=true
 Config Revision=10
 Days Meta Infos=30
+Diff Show Style=0
 Elide Tab Text=false
 Expand Tabs=true
+Icon size for left and right sidebar buttons=32
 Modified Notification=false
+Mouse back button action=0
+Mouse forward button action=0
+Output History Limit=100
 Quickopen Filter Mode=0
 Quickopen List Mode=true
 Recent File List Entry Count=10
@@ -14,20 +21,24 @@ Save Meta Infos=true
 Show Full Path in Title=false
 Show Menu Bar=true
 Show Status Bar=true
+Show Symbol In Navigation Bar=true
 Show Tab Bar=true
 Show Tabs Close Button=true
 Show Url Nav Bar=true
 Show output view for message type=1
+Show text for left and right sidebar=false
+Show welcome view for new window=true
 Startup Session=manual
 Stash new unsaved files=true
 Stash unsaved file changes=false
+Sync section size with tab positions=false
 Tab Double Click New Document=true
 Tab Middle Click Close Document=true
 Tabbar Tab Limit=0
 
 [KFileDialog Settings]
-Recent Files[$e]=file:$HOME/profile/monitor-modes.txt,file:$HOME/profile/monitor-modes.txt
-Recent URLs[$e]=file:$HOME/profile/
+Recent Files[$e]=file:$HOME/profile/mise-cleanup.txt,file:$HOME/profile/pictures/_other/links/current.txt
+Recent URLs[$e]=file:$HOME/profile/,file:$HOME/,file:$HOME/profile/pictures/_other/links/
 detailViewIconSize=16
 
 [KTextEditor Document]
@@ -120,20 +131,20 @@ Scroll Bar Mini Map Width=60
 Scroll Bar MiniMap=true
 Scroll Bar Preview=true
 Scroll Past End=false
-Search/Replace Flags=140
+Search/Replace Flags=141
 Shoe Line Ending Type in Statusbar=false
 Show Documentation With Completion=true
 Show File Encoding=true
 Show Focus Frame Around Editor=true
 Show Folding Icons On Hover Only=true
-Show Line Count=false
+Show Line Count=true
 Show Scrollbars=0
 Show Statusbar Dictionary=true
 Show Statusbar Highlighting Mode=true
 Show Statusbar Input Mode=true
 Show Statusbar Line Column=true
 Show Statusbar Tab Settings=true
-Show Word Count=false
+Show Word Count=true
 Smart Copy Cut=true
 Statusbar Line Column Compact Mode=true
 Text Drag And Drop=true
@@ -145,7 +156,8 @@ Word Completion Minimal Word Length=3
 Word Completion Remove Tail=true
 
 [KTextEditor::Search]
-Search History=dnspython,gY,user_opts
+Replace History=31\\,31\\,40,${text_normal}
+Search History=40\\,44\\,52,_mise_hook,historyclean,calling,blink,\\\\033[0m,bold,Part ,virgin,name,teacher,https://www.literotica.com/s/kyle-and-my-wife,https://www.literotica.com/s/bullies-raped-me-and-my-boyfriend,https://www.literotica.com/s/boyfriend-betrayal,https://www.literotica.com/s/girlfriend-taken-by-bigger-cock,https://www.literotica.com/s/my-roommate-takes-my-girlfriend,https://www.literotica.com/s/cheating-with-boyfriends-bully,https://www.literotica.com/s/bet-with-roommate-leads-to-cuckold,https://www.literotica.com/s/cheerleader-spoils,dnspython,gY,user_opts
 
 [Konsole]
 AutoSyncronize=true
@@ -156,12 +168,25 @@ RunPrefix=
 SetEditor=false
 
 [MainWindow]
-3840x1080 screen: Height=955
-3840x1080 screen: Width=1466
+2 screens: Height=1037
+2 screens: Width=1843
+2 screens: XPosition=194
+2 screens: YPosition=195
+3840x1080 screen: Height=999
+3840x1080 screen: Width=1636
+DisplayPort-0 HDMI-A-0=HDMI-A-0
 DisplayPort-0 Height 3840x1080=976
 DisplayPort-0 Height 3840x1080 DisplayPort-0=886
 DisplayPort-0 Width 3840x1080=1526
 DisplayPort-0 Width 3840x1080 DisplayPort-0=1562
+State=AAAA/wAAAAD9AAAAAAAABrAAAARLAAAABAAAAAQAAAAIAAAACPwAAAABAAAAAgAAAAIAAAAWAG0AYQBpAG4AVABvAG8AbABCAGEAcgEAAAAA/////wAAAAAAAAAAAAAAGABoAGEAbQBiAHUAcgBnAGUAcgBCAGEAcgEAAAJi/////wAAAAAAAAAA
+ToolBarsMovable=Disabled
+
+[PluginTextFilter]
+Completion list=sort
+Copy result=false
+Merge output=true
+New Document=false
 
 [UiSettings]
 ColorScheme=
