@@ -16,7 +16,7 @@ function M.config()
     },
   })
 
-  vim.cmd("colorscheme oncedark")
+  -- vim.cmd("colorscheme oncedark")
 end
 
 return M

@@ -1,6 +1,6 @@
 [Appearance]
 BoldIntense=true
-ColorScheme=oncedark
+ColorScheme=kanagawa-wave
 Font=JetBrainsMono Nerd Font Mono,18,-1,5,50,0,0,0,0,0
 UseFontLineChararacters=true
 

@@ -57,4 +57,5 @@ shell-integration-features = no-cursor,sudo,title
 
 # Theme
 # theme = dark:OnceDark,light:OnceLight
-theme = OnceDark
+theme = kanagawa-wave
+# theme = catppuccin-macchiato
