@@ -65,7 +65,9 @@ end
 M.theme_colors = function()
   local theme = M.themePackage
   local themeColors
-  if theme == "oncedark" then
+  if theme == "catppuccin" then
+    themeColors = require("catppuccin.palettes").get_palette("macchiato")
+  elseif theme == "oncedark" then
     themeColors = require("oncedark.helpers").get_colors()
   elseif theme == "onedark" then
     themeColors = require("onedark.colors")

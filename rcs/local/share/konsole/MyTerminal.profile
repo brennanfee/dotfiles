@@ -1,6 +1,6 @@
 [Appearance]
 BoldIntense=true
-ColorScheme=kanagawa-wave
+ColorScheme=catppuccin-macchiato
 Font=JetBrainsMono Nerd Font Mono,18,-1,5,50,0,0,0,0,0
 UseFontLineChararacters=true
 

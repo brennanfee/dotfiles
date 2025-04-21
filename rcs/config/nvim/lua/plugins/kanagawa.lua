@@ -15,7 +15,7 @@ function M.config()
     },
   })
 
-  vim.cmd("colorscheme kanagawa")
+  -- vim.cmd("colorscheme kanagawa")
 end
 
 return M

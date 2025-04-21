@@ -1,6 +1,7 @@
 local utils = require("core.utils")
 
 utils.plugin("plugins.breadcrumbs")
+utils.plugin("plugins.catppuccin")
 utils.plugin("plugins.cmp")
 utils.plugin("plugins.comment")
 utils.plugin("plugins.copy-file-path")
