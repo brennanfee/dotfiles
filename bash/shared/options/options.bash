@@ -39,13 +39,6 @@ shopt -s nocaseglob
 # Turn on globstar **
 shopt -s globstar
 
-### History ###
-# Make bash append rather than overwrite the history on disk
-shopt -s histappend
-
-# Show a history substituion line rather than directly executing it
-shopt -s histverify
-
 # When changing directory small typos can be ignored by bash
 # for example, cd /vr/lgo/apaache would find /var/log/apache
 shopt -s cdspell
@@ -55,9 +48,6 @@ shopt -s cdable_vars
 
 # Check the window size after each command and update LINES/COLUMNS
 shopt -s checkwinsize
-
-# Store multi-line commands in a single history entry
-shopt -s cmdhist
 
 # Turn off shell mail handling
 shopt -u mailwarn
