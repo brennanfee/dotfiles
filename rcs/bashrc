@@ -23,7 +23,7 @@ if [[ $- != *i* ]]; then
   return
 fi
 
-export BASHRC_LOGS=0
+export BASHRC_LOGS=1
 
 function log_early() {
   if [[ ${BASHRC_LOGS} == "1" ]]; then
@@ -103,12 +103,21 @@ for file in "${dotfiles}"/bash/completions/*.bash; do
   source_if "${file}"
 done
 
-if [[ -x "${dotfiles}/bin/moose-mount-shares" ]]; then
-  log "Checking if we need to mount shares."
-  if ! mountpoint -q "${HOME}/mounts/files"; then
-    log "Mounting shares"
-    "${dotfiles}/bin/moose-mount-shares"
+# Skip entirely if moose client isn't even installed
+if command_exists mfsmount; then
+  log "Checking connectivity to moosefs server."
+  r=$(bash -c 'exec 3<> /dev/tcp/moose.bfee.casa/9421;echo $?' 2>/dev/null)
+  if [[ "${r}" == "0" ]]; then
+    log "Moosefs server is reachable, checking if we need to mount the shares."
+    if ! mountpoint -q "${HOME}/mounts/files"; then
+      log "Mounting shares"
+      "${dotfiles}/bin/moose-mount-shares"
+    fi
+  else
+    log "moosefs server seems to be unreachable, skipping mount check."
   fi
+else
+  log "Moosefs bootstrapping skipped, moosefs client not installed."
 fi
 
 # Local config, this should be last and never checked into source control (or if it is it should be host specific)
