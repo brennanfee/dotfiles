@@ -23,7 +23,7 @@ if [[ $- != *i* ]]; then
   return
 fi
 
-export BASHRC_LOGS=1
+export BASHRC_LOGS=0
 
 function log_early() {
   if [[ ${BASHRC_LOGS} == "1" ]]; then
@@ -36,120 +36,161 @@ function log_early() {
   fi
 }
 
-log_early "-------------------------------------------------------------"
-log_early "In bashrc"
+function load_script_tools {
+  local dotfiles
 
-# Most other places need to ONLY use the xdg-user-dir or my custom xdg_base_dir
-# functions, but this directory is so critical and may not be loaded until after
-# the base-profile.bash script has been run.  So I am being overly cautious with
-# defaults on top of defaults here.  AFTER the base-profile is loaded the xdg
-# functions should work and ALWAYS return valid paths.
-dotfiles="${DOTFILES:-$(xdg-user-dir DOTFILES)}"
-dotfiles="${dotfiles:-${HOME}/.dotfiles}"
+  # Most other places need to ONLY use the xdg-user-dir or my custom xdg_base_dir
+  # functions, but this directory is so critical and may not be loaded until after
+  # the base-profile.bash script has been run.  So I am being overly cautious with
+  # defaults on top of defaults here.  AFTER the base-profile is loaded the xdg
+  # functions should work and ALWAYS return valid paths.
+  dotfiles="${DOTFILES:-$(xdg-user-dir DOTFILES)}"
+  dotfiles="${dotfiles:-${HOME}/.dotfiles}"
 
-log_early "Sourcing: ${dotfiles}/bash/base-profile.bash"
-# shellcheck source=/home/brennan/.dotfiles/bash/base-profile.bash
-builtin source "${dotfiles}/bash/base-profile.bash"
+  log_early "Sourcing: ${dotfiles}/bash/base-profile.bash"
+  # shellcheck source=/home/brennan/.dotfiles/bash/base-profile.bash
+  builtin source "${dotfiles}/bash/base-profile.bash"
 
-log_early "Sourcing: ${dotfiles}/bash/script-tools.bash"
-# shellcheck source=/home/brennan/.dotfiles/bash/script-tools.bash
-builtin source "${dotfiles}/bash/script-tools.bash"
+  log_early "Sourcing: ${dotfiles}/bash/script-tools.bash"
+  # shellcheck source=/home/brennan/.dotfiles/bash/script-tools.bash
+  builtin source "${dotfiles}/bash/script-tools.bash"
 
-log "After profile script sourcing."
+  log "After profile script sourcing."
+}
 
-# Reload them, now with the benefit of base-profile
-dotfiles=$(xdg_base_dir DOTFILES)
-dotfiles_private=$(xdg_base_dir DOTFILESPRIVATE)
+function loop_primary_bash_scripts {
+  log "Starting main script loop."
+  local dotfiles dotfiles_private os_primary os_secondary
+  local folder base root file
+  # Should now be set up by base-profile
+  dotfiles=$(xdg_base_dir DOTFILES)
+  dotfiles_private=$(xdg_base_dir DOTFILESPRIVATE)
 
-# Again, defaults here just to be overly cautious
-os_primary="${OS_PRIMARY:-linux}"      # Assume linux
-os_secondary="${OS_SECONDARY:-debian}" # Assume debian
+  # Again, defaults here just to be overly cautious, also should be set by base-profile
+  os_primary="${OS_PRIMARY:-linux}"      # Assume linux
+  os_secondary="${OS_SECONDARY:-debian}" # Assume debian
 
-log "Starting main script loop."
-
-# We want to walk "outside" in... which is to say run all options files first, then all
-# exports, then all functions, etc.
-for folder in "first" "options" "exports" "aliases" "third-party" "functions" "other"; do
-  for base in "shared" "${os_primary}" "distros/${os_secondary}"; do
-    for root in "${dotfiles}/bash" "${dotfiles_private}/bash"; do
-      if [[ -d "${root}/${base}/${folder}" ]]; then
-        for file in "${root}/${base}/${folder}"/*.bash; do
-          source_if "${file}"
-        done
-      fi
-    done
-  done
-done
-
-log "Starting Windows WSL script loop."
-
-# On Windows shells running in WSL run some overrides
-if is_wsl; then
+  # We want to walk "outside" in... which is to say run all options files first, then all
+  # exports, then all functions, etc.
   for folder in "first" "options" "exports" "aliases" "third-party" "functions" "other"; do
-    for root in "${dotfiles}/bash" "${dotfiles_private}/bash"; do
-      if [[ -d "${root}/windows-wsl/${folder}" ]]; then
-        for file in "${root}"/windows-wsl/"${folder}"/*.bash; do
-          source_if "${file}"
-        done
-      fi
+    for base in "shared" "${os_primary}" "distros/${os_secondary}"; do
+      for root in "${dotfiles}/bash" "${dotfiles_private}/bash"; do
+        if [[ -d "${root}/${base}/${folder}" ]]; then
+          for file in "${root}/${base}/${folder}"/*.bash; do
+            source_if "${file}"
+          done
+        fi
+      done
     done
   done
-fi
+}
 
-log "Starting bash completions loop."
+function loop_windows_wsl_bash_scripts {
+  log "Starting Windows WSL script loop."
+  local dotfiles dotfiles_private
+  local folder root file
+  dotfiles=$(xdg_base_dir DOTFILES)
+  dotfiles_private=$(xdg_base_dir DOTFILESPRIVATE)
 
-# Load bash completions
-for file in "${dotfiles}"/bash/completions/*.bash; do
-  source_if "${file}"
-done
+  # On Windows shells running in WSL run some overrides
+  if is_wsl; then
+    for folder in "first" "options" "exports" "aliases" "third-party" "functions" "other"; do
+      for root in "${dotfiles}/bash" "${dotfiles_private}/bash"; do
+        if [[ -d "${root}/windows-wsl/${folder}" ]]; then
+          for file in "${root}"/windows-wsl/"${folder}"/*.bash; do
+            source_if "${file}"
+          done
+        fi
+      done
+    done
+  fi
+}
 
-# Skip entirely if moose client isn't even installed
-if command_exists mfsmount; then
-  log "Checking connectivity to moosefs server."
-  r=$(bash -c 'exec 3<> /dev/tcp/moose.bfee.casa/9421;echo $?' 2>/dev/null)
-  if [[ "${r}" == "0" ]]; then
-    log "Moosefs server is reachable, checking if we need to mount the shares."
-    if ! mountpoint -q "${HOME}/mounts/files"; then
-      log "Mounting shares"
-      "${dotfiles}/bin/moose-mount-shares"
+function load_bash_completions {
+  log "Starting bash completions loop."
+  local dotfiles file
+  dotfiles=$(xdg_base_dir DOTFILES)
+
+  # Load bash completions
+  for file in "${dotfiles}"/bash/completions/*.bash; do
+    source_if "${file}"
+  done
+}
+
+function source_local_bashrc {
+  # Local config, this should be last and never checked into source control (or if it is it should be host specific)
+  log "Sourcing local bashrc, if it exists."
+  source_if "${HOME}/.bashrc.local"
+}
+
+function mount_moose {
+  # Skip entirely if moose client isn't even installed
+  if command_exists mfsmount; then
+    log "Checking connectivity to moosefs server."
+    local conn_result
+    conn_result=$(bash -c 'exec 3<> /dev/tcp/moose.bfee.casa/9421;echo $?' 2>/dev/null)
+    if [[ "${conn_result}" == "0" ]]; then
+      log "Moosefs server is reachable, checking if we need to mount the shares."
+      if ! mountpoint -q "${HOME}/mounts/files"; then
+        log "Mounting shares"
+        "${dotfiles}/bin/moose-mount-shares"
+      fi
+    else
+      log "moosefs server seems to be unreachable, skipping mount check."
     fi
   else
-    log "moosefs server seems to be unreachable, skipping mount check."
+    log "Moosefs bootstrapping skipped, moosefs client not installed."
   fi
-else
-  log "Moosefs bootstrapping skipped, moosefs client not installed."
-fi
+}
 
-# Local config, this should be last and never checked into source control (or if it is it should be host specific)
-# shellcheck source=/dev/null
-log "Sourcing local bashrc, if it exists."
-source_if "${HOME}/.bashrc.local"
+function run_colorscripts {
+  if command_exists colorscripts; then
+    log "Running colorscripts"
+    colorscripts banners random
+  fi
+}
 
-if command_exists colorscripts; then
-  log "Running colorscripts"
-  colorscripts banners random
-fi
+function log_startup_results {
+  log "Final PROMPT_COMMAND: ${PROMPT_COMMAND[*]}"
+  if declare -p precmd_functions >/dev/null 2>&1; then
+    log "Final precmd_functions: ${precmd_functions[*]}"
+  else
+    log "precmd_functions not declared."
+  fi
+  if declare -p preexec_functions >/dev/null 2>&1; then
+    log "Final preexec_functions: ${preexec_functions[*]}"
+  else
+    log "preexec_functions not declared."
+  fi
 
-log "Final PROMPT_COMMAND: ${PROMPT_COMMAND[*]}"
-if declare -p precmd_functions >/dev/null 2>&1; then
-  log "Final precmd_functions: ${precmd_functions[*]}"
-else
-  log "precmd_functions not declared."
-fi
-if declare -p preexec_functions >/dev/null 2>&1; then
-  log "Final preexec_functions: ${preexec_functions[*]}"
-else
-  log "preexec_functions not declared."
-fi
+  log "Final path: ${PATH}"
 
-log "Final path: ${PATH}"
+  if command_exists bc; then
+    local end runtime
+    end=$(date +%s.%N)
+    runtime=$( echo "${end} - ${1}" | bc -l )
 
-unset root
-unset base
-unset folder
-unset file
+    log "Bashrc duration: ${runtime} seconds"
+  fi
+}
 
-unset dotfiles
-unset dotfiles_private
-unset os_primary
-unset os_secondary
+function main {
+  local start=$(date +%s.%N)
+  log_early "------------------------------ START ------------------------------"
+  log_early "In bashrc"
+
+  load_script_tools
+
+  loop_primary_bash_scripts
+  loop_windows_wsl_bash_scripts
+  load_bash_completions
+  source_local_bashrc
+
+  mount_moose
+  run_colorscripts
+
+  log_startup_results "${start}"
+  log "------------------------------ FINISH ------------------------------"
+}
+
+main "$@"
