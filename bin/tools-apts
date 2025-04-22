@@ -146,7 +146,7 @@ function main_handler() {
 
 g_script_author="Brennan Fee"
 g_script_license="MIT License"
-g_script_version="0.4"
+g_script_version="0.5"
 g_script_date="2025-04-21"
 
 ### END Script template bootstrap
@@ -218,7 +218,8 @@ function install_common_tools() {
   # Some of my preferred command-line tools
   DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q install dtrx inxi \
     tmux git atool rcm wget curl gnutls-bin ffmpeg mediainfo rename locate \
-    build-essential dkms clang zsync luarocks gawk handbrake-cli iperf3 playerctl
+    build-essential dkms clang zsync luarocks gawk handbrake-cli iperf3 playerctl \
+    urlview
 
   # For python builds (for mise & uv)
   # Reference: https://github.com/pyenv/pyenv/wiki#suggested-build-environment
