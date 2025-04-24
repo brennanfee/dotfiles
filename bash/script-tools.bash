@@ -304,6 +304,10 @@ function os_notification {
 
 function os_notify_and_speak {
   os_notification "$@"
+  speech_notification "$@"
+}
+
+function speech_notification {
   if command_exists festival; then
     local message="${1}"
 
@@ -315,6 +319,12 @@ function os_notify_and_speak {
 
 function remote_notification {
   to_be_developed
+}
+
+function all_notifications {
+  os_notification "$@"
+  speech_notification "$@"
+  remote_notification "$@"
 }
 
 #### END: OS and Global Notifications
