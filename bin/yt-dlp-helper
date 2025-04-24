@@ -385,6 +385,8 @@ function yt_helper() {
   # echo "Params: ${yt_dlp_params[*]}"
 
   yt-dlp "${yt_dlp_params[@]}" "$@"
+
+  os_notify_and_speak "Download Complete From ${domain}" "Source: ${url}"
 }
 
 ## Your main implementation goes here.  All of the positional arguments have

@@ -252,6 +252,73 @@ function check_root_with_error() {
 
 #### END: Check Root Functions
 
+#### START: OS and Global Notifications
+
+function os_notification {
+  if command_exists notify-send; then
+    local title=""
+    local message=""
+    local notify_options=("-a" "bash")
+    local notify_params=()
+
+    if [[ -n "${2:-}" ]]; then
+      title="$1"
+      message="$2"
+      shift 2
+    else
+      message="$1"
+      shift 1
+    fi
+
+    if [[ -n "${3:-}" ]]; then
+      local priority=$(echo "${3}" | tr "[:upper:]" "[:lower:]")
+      case "${priority}" in
+        "l" | "low" | "1")
+          notify_options+=("-u" "low")
+          ;;
+        "m" | "med" | "medium" | "2")
+          notify_options+=("-u" "normal")
+          ;;
+        "c" | "crit" | "critical" | "h" | "high" | "high" | "3")
+          notify_options+=("-u" "critical")
+          ;;
+        "*")
+          log "Unknown notification priority: ${prority}"
+          ;;
+      esac
+      shift 1
+    else
+      notify_options+=("-u" "normal")
+    fi
+
+    if [[ -n "${title}" ]]; then
+      notify_params+=("${title}")
+    fi
+    notify_params+=("${message}")
+
+    notify-send "${notify_options[@]}" "$@" "${notify_params[@]}"
+  else
+    log "Notify-send is not installed, skipping notification"
+  fi
+}
+
+function os_notify_and_speak {
+  os_notification "$@"
+  if command_exists festival; then
+    local message="${1}"
+
+    festival -b '(voice_cmu_us_slt_arctic_hts)' "(SayText \"${message}\")"
+  else
+    log "Festival is not installed, skipping speech announcement."
+  fi
+}
+
+function remote_notification {
+  to_be_developed
+}
+
+#### END: OS and Global Notifications
+
 #### START: Terminal Text Manipulation And Color Variables
 
 ## Text effects

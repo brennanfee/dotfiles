@@ -219,7 +219,11 @@ function install_common_tools() {
   DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q install dtrx inxi \
     tmux git atool rcm wget curl gnutls-bin ffmpeg mediainfo rename locate \
     build-essential dkms clang zsync luarocks gawk handbrake-cli iperf3 playerctl \
-    urlview
+    urlview libnotify-bin
+
+  # Text To Speech Support
+  DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q install \
+    festival festvox-us-slt-hts festvox-us1 festvox-us2 festvox-us3 speech-dispatcher-festival
 
   # For python builds (for mise & uv)
   # Reference: https://github.com/pyenv/pyenv/wiki#suggested-build-environment
