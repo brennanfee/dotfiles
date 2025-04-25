@@ -46,6 +46,9 @@
 font-family = JetBrainsMono Nerd Font Mono
 font-size = 18
 
+# Window appearance
+window-decoration = server
+
 # Initial startup
 window-width = 180
 window-height = 50
@@ -58,4 +61,4 @@ shell-integration-features = no-cursor,sudo,title
 # Theme
 # theme = dark:OnceDark,light:OnceLight
 # theme = kanagawa-wave
-theme = catppuccin-macchiato
+theme = catppuccin-mocha
