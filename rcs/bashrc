@@ -124,6 +124,9 @@ function source_local_bashrc {
 }
 
 function mount_moose {
+  local dotfiles
+  dotfiles=$(xdg_base_dir DOTFILES)
+
   # Skip entirely if moose client isn't even installed
   if command_exists mfsmount; then
     log "Checking connectivity to moosefs server."
