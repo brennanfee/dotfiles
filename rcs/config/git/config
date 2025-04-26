@@ -41,6 +41,7 @@
   hunk-header-style = file line-number syntax
   file-decoration-style = yellow ul ol
   file-style = yellow
+  features = catppuccin-mocha
 [fetch]
   prune = true
   pruneTags = true
@@ -66,11 +67,6 @@
   last = 'log -1 HEAD'
   patch = !git --no-pager diff --no-color
   clone = clone --recurse-submodules
-[include]
-  path = ~/.config/git/gitconfig.os
-  path = ~/.config/git/gitconfig.user
-  path = ~/.config/git/gitconfig.wsl
-  path = ~/.config/git/gitconfig.local
 [pull]
   rebase = false
   ff = only
@@ -88,3 +84,9 @@
   gpgsign = true
 [tag]
   gpgsign = true
+[include]
+  path = ~/.dotfiles/files/delta-themes/catppuccin.gitconfig
+  path = ~/.config/git/gitconfig.os
+  path = ~/.config/git/gitconfig.user
+  path = ~/.config/git/gitconfig.wsl
+  path = ~/.config/git/gitconfig.local
