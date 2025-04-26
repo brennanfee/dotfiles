@@ -10,7 +10,7 @@ function M.config()
     flavour = "auto",
     background = {
       light = "latte",
-      dark = "macchiato",
+      dark = "mocha",
     },
     term_colors = true,
     default_integrations = true,

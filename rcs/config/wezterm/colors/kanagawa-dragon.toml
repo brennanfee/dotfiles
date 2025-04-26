@@ -1,29 +1,29 @@
 [colors]
 ansi = [
-  "#090618",
-  "#c34043",
-  "#76946a",
-  "#c0a36e",
-  "#7e9cd8",
-  "#957fb8",
-  "#6a9589",
+  "#0d0c0c",
+  "#c4746e",
+  "#8a9a7b",
+  "#c4b28a",
+  "#8ba4b0",
+  "#a292a3",
+  "#8ea4a2",
   "#c8c093",
 ]
 brights = [
-  "#727169",
-  "#e82424",
-  "#98bb6c",
+  "#a6a69c",
+  "#e46876",
+  "#87a987",
   "#e6c384",
   "#7fb4ca",
   "#938aa9",
   "#7aa89f",
-  "#dcd7ba",
+  "#181616",
 ]
-background = "#1f1f28"
-foreground = "#dcd7ba"
-cursor_bg = "#dcd7ba"
-cursor_fg = "#1f1f28"
-cursor_border = "#dcd7ba"
+background = "#181616"
+foreground = "#c5c9c5"
+cursor_bg = "#c8c093"
+cursor_fg = "#181616"
+cursor_border = "#c8c093"
 selection_fg = "#c8c093"
 selection_bg = "#2d4f67"
 scrollbar_thumb = "#16161d"
@@ -34,5 +34,5 @@ split = "#16161d"
 17 = "#ff5d6c"
 
 [metadata]
-name = "Kanagawa-Wave"
+name = "Kanagawa-Dragon"
 wezterm_version = "20230320-124340-559cb7b0"

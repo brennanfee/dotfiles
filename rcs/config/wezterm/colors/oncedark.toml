@@ -1,0 +1,33 @@
+[colors]
+ansi = [
+  "#282c34",
+  "#cd5c5c",
+  "#71936e",
+  "#f0e68c",
+  "#4682b4",
+  "#da70d6",
+  "#00ced1",
+  "#d3d3d3",
+]
+brights = [
+  "#696969",
+  "#a52a2a",
+  "#3cb371",
+  "#f4a460",
+  "#b0c4de",
+  "#9932cc",
+  "#ffb6c1",
+  "#f5f5f5",
+]
+foreground = "#d3d3d3"
+background = "#282c34"
+cursor_fg = "#f5f5f5"
+cursor_bg = "#696969"
+cursor_border = "#696969"
+selection_fg = "#696969"
+selection_bg = "#f5f5f5"
+visual_bell = "#202020"
+
+[metadata]
+name = "OnceDark"
+wezterm_version = "20230320-124340-559cb7b0"

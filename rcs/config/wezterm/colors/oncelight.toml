@@ -1,0 +1,33 @@
+[colors]
+ansi = [
+  "#414858",
+  "#e05661",
+  "#1da912",
+  "#eea825",
+  "#118dc3",
+  "#9a77cf",
+  "#56b6c2",
+  "#fafafa",
+]
+brights = [
+  "#7a7a7a",
+  "#e88189",
+  "#25d717",
+  "#f2bb54",
+  "#1caceb",
+  "#b69ddc",
+  "#7bc6d0",
+  "#ffffff",
+]
+foreground = "#414858"
+background = "#fafafa"
+cursor_fg = "#7a7a7a"
+cursor_bg = "#ffffff"
+cursor_border = "#7a7a7a"
+selection_fg = "#7a7a7a"
+selection_bg = "#ffffff"
+visual_bell = "#202020"
+
+[metadata]
+name = "OnceLight"
+wezterm_version = "20230320-124340-559cb7b0"
