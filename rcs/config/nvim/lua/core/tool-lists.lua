@@ -72,7 +72,7 @@ M.debug_adapters = {
   -- "chrome-debug-adapter", -- doesn't seem to work
   "cpptools",
   "debugpy",
-  "delve", -- Go debugger
+  -- "delve", -- Go debugger -- part of go now
   "firefox-debug-adapter",
   "java-debug-adapter",
   "js-debug-adapter",
@@ -151,8 +151,8 @@ M.formatters = {
   "fixjson",
   "fprettify",
   "gci",
-  "gofumpt",
-  "goimports",
+  -- "gofumpt", -- part of go now
+  -- "goimports", -- part of go now
   "google-java-format",
   "hclfmt",
   "isort",
@@ -165,7 +165,7 @@ M.formatters = {
   "mdsf",
   "nixpkgs-fmt",
   "php-cs-fixer",
-  "pint",
+  -- "pint", -- Temporarily disabled PHP
   "prettier",
   "prettierd",
   "pretty-php",
