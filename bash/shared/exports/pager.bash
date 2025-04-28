@@ -41,7 +41,6 @@ if [[ "${BAT_BIN}" == "bat" || "${BAT_BIN}" == "batcat" ]]; then
 
   if [[ -x "${DOTFILES}/bin/batpipe" ]]; then
     eval "$("${DOTFILES}/bin/batpipe")"
-    export BATPIPE_TERM_WIDTH=-5
     export MANPAGER="less -R --use-color -Dd+r -Du+b"
   else
     export MANPAGER="sh -c 'col -bx | batcat -l man'"
