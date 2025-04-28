@@ -226,7 +226,7 @@ function install_common_tools() {
   DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q install kwalletcli \
     papirus-icon-theme gitk git-gui meld vim-gtk3 gnome-icon-theme \
     conky-all xclip xsel mediainfo-gui flatpak-xdg-utils qml-module-qtquick-layouts \
-    qml-module-qtquick-controls2 libqt6svg6
+    qml-module-qtquick-controls2 libqt6svg6 wl-clipboard
 }
 
 function install_dev_tools() {
