@@ -62,3 +62,8 @@ shell-integration-features = no-cursor,sudo,title
 # theme = dark:OnceDark,light:OnceLight
 # theme = kanagawa-wave
 theme = catppuccin-mocha
+
+## Other Configs / Overrides
+config-file = ?~/.config/ghostty/config.tag
+config-file = ?~/.config/ghostty/config.host
+config-file = ?~/.config/ghostty/config.local
