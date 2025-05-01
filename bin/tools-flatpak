@@ -250,6 +250,12 @@ function check_prerequisites() {
 
   # Setup flathub repo
   flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+
+  # Setup theme access
+  sudo flatpak override --system --filesystem=xdg-config/gtk-3.0:ro
+  sudo flatpak override --system --filesystem=xdg-config/gtk-4.0:ro
+  sudo flatpak override --system --filesystem=xdg-config/gtkrc-2.0:ro
+  sudo flatpak override --system --filesystem=xdg-config/gtkrc:ro
 }
 
 function install_if_needed() {
@@ -259,6 +265,11 @@ function install_if_needed() {
 }
 
 function install_common_tools() {
+  # Theme support
+  install_if_needed org.gtk.Gtk3theme.Breeze
+  # install_if_needed org.gtk.Gtk3theme.Breeze-Dark
+
+  # Apps
   install_if_needed com.bambulab.BambuStudio
   install_if_needed com.bitwarden.desktop
   install_if_needed com.brave.Browser
@@ -273,7 +284,7 @@ function install_common_tools() {
   install_if_needed io.github.Qalculate.qalculate-qt
   install_if_needed md.obsidian.Obsidian
   install_if_needed org.bleachbit.BleachBit
-  install_if_needed org.gnome.boabab
+  install_if_needed org.gnome.baobab
   install_if_needed org.kde.okular
   install_if_needed org.libreoffice.LibreOffice
   install_if_needed org.localsend.localsend_app
