@@ -17,6 +17,7 @@ if ! ${SOURCED}; then
 fi
 ### END Bash strict mode
 
+###################################################################################################
 ### START Script template bootstrap
 
 g_script_name=$(basename "${BASH_SOURCE[0]}")
@@ -42,10 +43,12 @@ function cleanup_vars() {
 }
 
 function load_script_tools() {
+  local dotfiles
+  dotfiles="${DOTFILES:-$(xdg-user-dir DOTFILES)}"
   # Source script-tools.bash
-  if [[ -f "${g_script_dir}/../bash/script-tools.bash" ]]; then
+  if [[ -f "${dotfiles}/bash/script-tools.bash" ]]; then
     # shellcheck source=/home/brennan/.dotfiles/bash/script-tools.bash
-    source "${g_script_dir}/../bash/script-tools.bash"
+    source "${dotfiles}/bash/script-tools.bash"
   fi
 }
 
@@ -72,7 +75,8 @@ function set_long_options() {
 function process_arguments() {
   local args
   set +o errexit # temporarily turn off error on exit
-  args=$(getopt --name "${g_script_name}" --options "${g_short_options}hv" --longoptions "${g_long_options},help,version" -- "$@")
+  args=$(getopt --name "${g_script_name}" --options "${g_short_options}hv" \
+    --longoptions "${g_long_options},help,version" -- "$@")
   # Handle if getopt returned an error
   # shellcheck disable=SC2181
   if [[ $? -gt 0 ]]; then
@@ -147,24 +151,22 @@ function main_handler() {
   cleanup_vars
 }
 
+### END Script template bootstrap
+###################################################################################################
+
 g_script_author="Brennan Fee"
 g_script_license="MIT License"
-g_script_version="0.5"
-g_script_date="2025-02-22"
-
-### END Script template bootstrap
-#################################
+g_script_version="0.6"
+g_script_date="2025-05-04"
 
 ## USAGE: If you want any global variables, set them up here
 function setup_script_vars() {
-  noop
+  g_quiet="false"
 }
 
 ## USAGE: If you add any global variables, clean them up in this method
 function cleanup_script_vars() {
-  # unset abc
-
-  noop
+  unset g_quiet
 }
 
 ## USAGE: If you need to add any command-line flags or options, do it here.
@@ -172,10 +174,8 @@ function cleanup_script_vars() {
 ## set_long_options.  They accept a string with syntax that is the same for
 ## the getopt program.  See it's help for more information.
 function setup_options() {
-  # set_short_options "abc:"
-  # set_long_options "beta,charlie:"
-
-  noop
+  set_short_options "q"
+  set_long_options "quiet"
 }
 
 ## Usage: If you added command-line flags or options using setup_options,
@@ -183,27 +183,21 @@ function setup_options() {
 ## directly into this method so you can process them however you wish,
 ## including using 'shift' as you loop.
 function process_flags() {
-  # while [[ $# -gt 0 ]]; do
-  #   case "$1" in
-  #   '-a')
-  #     alpha=1 # or "yes"
-  #     shift
-  #     ;;
-  #   '-c' | '--charlie')
-  #     charlie="$2"
-  #     shift 2
-  #     ;;
-  #   '--')
-  #     shift
-  #     break
-  #     ;;
-  #   *)
-  #     throw_error_msg "Unknown option: $1"
-  #     ;;
-  #   esac
-  # done
-
-  noop
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+    '-q' | '--quiet')
+      g_quiet='true'
+      shift
+      ;;
+    '--')
+      shift
+      break
+      ;;
+    *)
+      throw_error_msg "Unknown option: $1"
+      ;;
+    esac
+  done
 }
 
 ## USAGE: Construct your help screen text here.
@@ -220,6 +214,9 @@ function print_help() {
   print_blank_line
   print_out "  -v or --version"
   print_out "     Show the version number."
+  print_blank_line
+  print_out "  -q or --quiet"
+  print_out "     Don't audibly announce completion of download."
   print_blank_line
   print_out "Sub-Commands:"
   print_blank_line
@@ -281,9 +278,9 @@ function yt_helper() {
   fi
 
   ## FOR DEBUGGING
-  # echo "Type: ${type}"
-  # echo "Playlist Flag: ${playlist_flag}"
-  # echo "Alternate Location: ${alternate_location}"
+  # print_diag "Type: ${type}"
+  # print_diag "Playlist Flag: ${playlist_flag}"
+  # print_diag "Alternate Location: ${alternate_location}"
 
   ## END Process command flags
 
@@ -356,8 +353,8 @@ function yt_helper() {
   full_domain=$(echo "${url}" | cut -d'/' -f1,2,3 | sed -e 's/[^/]*\/\/\([^@]*@\)\?\([^:/]*\).*/\2/' | tr '[:upper:]' '[:lower:]')
   # Now strip off sub-domains
   domain=$(echo "${full_domain}" | awk -F. '{print $(NF-1) "." $NF}')
-  echo "Full Domain: ${full_domain}"
-  echo "Domain: ${domain}"
+  print_diag "Full Domain: ${full_domain}"
+  print_diag "Domain: ${domain}"
 
   # Youtube has started throttling, so we need to add some delays.  I am using
   # different delays for a single file versus a playlist.
@@ -379,14 +376,19 @@ function yt_helper() {
   # Lastly, add the url
   yt_dlp_params+=("${url}")
 
-  echo "Downloading ${url}"
+  print_status "Downloading ${url}"
 
   ## FOR DEBUGGING
-  # echo "Params: ${yt_dlp_params[*]}"
+  # print_diag "Params: ${yt_dlp_params[*]}"
 
   yt-dlp "${yt_dlp_params[@]}" "$@"
 
-  os_notify_and_speak "Download Complete From ${domain}" "Source: ${url}"
+  print_success "Download Complete From ${domain} - Source: ${url}"
+  if [[ "${g_quiet}" == "true" ]]; then
+    os_notify "Download Complete From ${domain}" "Source: ${url}"
+  else
+    os_notify_and_speak "Download Complete From ${domain}" "Source: ${url}"
+  fi
 }
 
 ## Your main implementation goes here.  All of the positional arguments have

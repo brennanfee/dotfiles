@@ -302,11 +302,6 @@ function os_notification {
   fi
 }
 
-function os_notify_and_speak {
-  os_notification "$@"
-  speech_notification "$@"
-}
-
 function speech_notification {
   if command_exists festival; then
     local message="${1}"
@@ -321,10 +316,28 @@ function remote_notification {
   to_be_developed
 }
 
+function os_notify {
+  os_notification "$@"
+}
+
+function os_notify_and_speak {
+  os_notification "$@"
+  speech_notification "$@"
+}
+
+function user_notify {
+  os_notification "$@"
+  remote_notification "$@"
+}
+
 function all_notifications {
   os_notification "$@"
   speech_notification "$@"
   remote_notification "$@"
+}
+
+function full_notify {
+  all_notifications "$@"
 }
 
 #### END: OS and Global Notifications
@@ -508,7 +521,11 @@ function print_line() {
       line="${line}${word}"
     done
 
-    echo -e "${line:0:$cols}"
+    if [[ "${2:-}" == "heading" ]]; then
+      echo -e "${text_purple}${line:0:$cols}${text_reset}"
+    else
+      echo -e "${line:0:$cols}"
+    fi
   fi
 }
 
@@ -727,6 +744,7 @@ function print_mid_grey_bold() {
 ## Context based print methods
 
 function print_out() {
+  log "Printing output: '$@'"
   print_normal "$@"
 }
 
@@ -734,33 +752,56 @@ function print_output() {
   print_out "$@"
 }
 
+function print_diag() {
+  log "Printing diag: '$@'"
+  print_grey "$@"
+}
+
+function print_diagnostics() {
+  print_diag "$@"
+}
+
 function print_info() {
   log "Printing info: '$@'"
-  print_normal_bold "$@"
+  print_cyan "$@"
+}
+
+function print_important() {
+  log "Printing important: '$@'"
+  print_orange "$@"
 }
 
 function print_status() {
   log "Printing status: '$@'"
-  print_normal_bold "$@"
+  print_blue "$@"
 }
 
 function print_success() {
   log "Printing success: '$@'"
-  print_green "$@"
+  print_green_bold "$@"
 }
 
 function print_warning() {
   log "Printing warning: '$@'"
-  print_yellow "$@"
+  print_yellow_bold "$@"
 }
 
 function print_heading {
-  print_magenta "$@"
+  log "Printing heading: '$@'"
+  print_purple "$@"
+}
+
+function print_heading_separator() {
+  print_line "${@:--}" "heading"
+}
+
+function print_heading_sep() {
+  print_line "${@:--}" "heading"
 }
 
 function print_error() {
   log "Printing error: '$@'"
-  >&2 print_red "$@"
+  >&2 print_red_bold "$@"
 }
 
 function throw_error_msg() {
