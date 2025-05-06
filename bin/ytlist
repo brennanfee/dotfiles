@@ -237,7 +237,10 @@ function main() {
   print_status "Reading from list: ${the_file}"
 
   while read -r url; do
-    if [[ "${url}" =~ "^#.*" || "${url}" =~ "^--.*" ]]; then
+    print_diag "Url: ${url}"
+    if [[ -z "${url}" ]]; then
+      print_info "Skipping empty line"
+    elif [[ "${url}" =~ ^#.* || "${url}" =~ ^--.* ]]; then
       print_info "Skipping comment line"
     else
       print_status "Downloading: ${url}"
