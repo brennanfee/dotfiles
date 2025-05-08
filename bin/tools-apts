@@ -246,6 +246,9 @@ function install_common_tools() {
     libpq-dev libreadline-dev libsqlite3-dev libssl-dev libxml2-dev libxslt-dev \
     libzip-dev openssl pkg-config re2c zlib1g-dev
 
+  # Cargo (rust) builds
+  DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q install libgraphite2-dev
+
   # Other (explore trimming these)
   DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q install llvm libmpfr-dev \
     dns-root-data libhidapi-libusb0 libxcb-xinerama0 make

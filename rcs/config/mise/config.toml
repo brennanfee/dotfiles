@@ -28,6 +28,7 @@ usage = "latest"
 uv = "latest"
 # Alpha sorted packages
 "asdf:dotnet" = "latest"
+"ubi:tectonic-typesetting/tectonic" = { version = "tectonic@0.15.0", exe = "tectonic" }
 "vfox:cmake" = "latest"
 "vfox:kotlin" = "latest"
 bat = "latest"

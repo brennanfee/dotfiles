@@ -19,3 +19,4 @@ husky
 commitlint-format-json
 license-report
 npm-check-updates
+@mermaid-js/mermaid-cli
