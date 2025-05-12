@@ -250,7 +250,10 @@ function main() {
       yt_dlp_params+=("--cookies-from-browser" "firefox")
       yt_dlp_params+=("--extractor-args" "generic:impersonate")
 
-      "${DOTFILES}/bin/yt-dlp-helper" "${yt_dlp_params[@]}"
+      get_exit_code "${DOTFILES}/bin/yt-dlp-helper" "${yt_dlp_params[@]}"
+      if [[ ${EXIT_CODE} -ne 0 ]]; then
+        print_warning "Download failed: ${url}"
+      fi
     fi
   done <"${the_file}"
 
