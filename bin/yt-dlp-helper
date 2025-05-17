@@ -339,12 +339,17 @@ function yt_helper() {
 
   yt_dlp_params+=("--output" "${name_template}")
 
+  yt_dlp_params+=("--extractor-args" "generic:impersonate")
+
   # Cookies, default to firefox, but for the alternate location, chrome
-  if [[ "${alternate_location}" == "false" ]]; then
-    yt_dlp_params+=("--cookies-from-browser" "firefox")
-  else
-    yt_dlp_params+=("--cookies-from-browser" "chrome")
-  fi
+  # if [[ "${alternate_location}" == "false" ]]; then
+  #   yt_dlp_params+=("--cookies-from-browser" "firefox")
+  # else
+  #   yt_dlp_params+=("--cookies-from-browser" "chrome")
+  # fi
+
+  # Cookies, default to firefox
+  yt_dlp_params+=("--cookies-from-browser" "firefox")
 
   #### Site specific customizations
   local full_domain
