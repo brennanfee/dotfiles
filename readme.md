@@ -20,9 +20,9 @@ found [here](https://robots.thoughtbot.com/rcm-for-rc-files-in-dotfiles-repos).
 
 To set up or reinstall a machine to use the dotfiles you must first install RCM and curl. At this
 point you should also install any needed SSH keys to perform the following clone. Once configured,
-clone this repo into the ~/.dotfiles directory and follow the steps below.
+clone this repo into the ~/.dotfiles-rc directory and follow the steps below.
 
-1. Execute ~/.dotfiles/setup.bash
+1. Execute ~/.dotfiles-rc/setup.bash
 1. Edit ~/.rcrc as needed for the machine you are on. Tags may need to be changed, etc.
 1. Then run `rcup`
 

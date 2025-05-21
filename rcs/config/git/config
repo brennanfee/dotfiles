@@ -85,7 +85,7 @@
 [tag]
   gpgsign = true
 [include]
-  path = ~/.dotfiles/files/delta-themes/catppuccin.gitconfig
+  path = ~/.dotfiles-rc/files/delta-themes/catppuccin.gitconfig
   path = ~/.config/git/gitconfig.os
   path = ~/.config/git/gitconfig.user
   path = ~/.config/git/gitconfig.wsl

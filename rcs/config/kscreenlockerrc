@@ -6,6 +6,6 @@ LockGrace=30
 Timeout=15
 
 [Greeter][Wallpaper][org.kde.image][General]
-Image=/home/brennan/.dotfiles/wallpapers/1920x1080/darkest-hour.jpg
-PreviewImage=/home/brennan/.dotfiles/wallpapers/1920x1080/darkest-hour.jpg
+Image=/home/brennan/.dotfiles-rc/wallpapers/1920x1080/darkest-hour.jpg
+PreviewImage=/home/brennan/.dotfiles-rc/wallpapers/1920x1080/darkest-hour.jpg
 SlidePaths=/usr/share/wallpapers/

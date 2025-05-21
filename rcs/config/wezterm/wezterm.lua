@@ -82,7 +82,7 @@ config.visual_bell = {
 -- Initial state
 config.initial_rows = 36 -- Leaves a few lines of screen space above/below the window
 config.initial_cols = 140 -- Wide enough for 100 Neovim columns plus 30 for tree view
-config.default_prog = { wezterm.home_dir .. "/.dotfiles/bash/assets/init-tmux.bash" }
+config.default_prog = { wezterm.home_dir .. "/.dotfiles-rc/bash/assets/init-tmux.bash" }
 
 -- Turn off the tab bar, as I use tmux
 config.enable_tab_bar = false

@@ -140,7 +140,7 @@ function cdi() {
 
 # Dotfiles folder
 function cdt() {
-  xdg-go-to-dir "DOTFILES" "${HOME}/.dotfiles" "${1:-}"
+  xdg-go-to-dir "DOTFILES" "${HOME}/.dotfiles-rc" "${1:-}"
 }
 
 # Private dotfiles folder
@@ -150,7 +150,7 @@ function cdtp() {
 
 # Dotfiles bin
 function cdtb() {
-  xdg-cd-sub "DOTFILES" "${HOME}/.dotfiles" "bin" "bin" "${1:-}"
+  xdg-cd-sub "DOTFILES" "${HOME}/.dotfiles-rc" "bin" "bin" "${1:-}"
 }
 
 # User Bin folder

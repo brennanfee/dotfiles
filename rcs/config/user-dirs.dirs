@@ -25,9 +25,9 @@ XDG_VIDEOS_DIR="${PROFILEPATH:-$HOME/profile}/videos"
 
 # Custom directories
 XDG_BIN_DIR="${XDG_BIN_DIR:-${HOME}/.local/bin}"
-XDG_DOTFILES_DIR="${DOTFILES:-$HOME/.dotfiles}"
+XDG_DOTFILES_DIR="${DOTFILES:-$HOME/.dotfiles-rc}"
 XDG_DOTFILESPRIVATE_DIR="${DOTFILES_PRIVATE:-$HOME/.dotfiles-private}"
-XDG_DOTFILESBIN_DIR="${DOTFILES:-$HOME/.dotfiles}/bin"
+XDG_DOTFILESBIN_DIR="${DOTFILES:-$HOME/.dotfiles-rc}/bin"
 XDG_PROFILE_DIR="${PROFILEPATH:-$HOME/profile}"
 XDG_CLOUD_DIR="${PROFILEPATH:-$HOME/profile}/cloud/files"
 XDG_CLOUDBIN_DIR="${PROFILEPATH:-$HOME/profile}/cloud/files/bin"

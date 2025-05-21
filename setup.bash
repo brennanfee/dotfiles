@@ -30,7 +30,7 @@ source "${dotfiles}/bash/script-tools.bash"
 # the bash environment being setup either.  So we can't use xdg-user-dir or expect the
 # environment variables to be there.  These are where I should be putting my dotfiles
 # paths anyway, so hard code them here.
-dotfiles=${dotfiles:-${HOME}/.dotfiles}
+dotfiles=${dotfiles:-${HOME}/.dotfiles-rc}
 dotfiles_private=${dotfiles_private:-${HOME}/.dotfiles-private}
 
 echo ""

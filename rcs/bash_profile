@@ -42,7 +42,7 @@
 if [[ -f "${HOME}/.bashrc" ]]; then
   # log_profile "sourcing bashrc"
 
-  # shellcheck source=/home/brennan/.dotfiles/rcs/bashrc
+  # shellcheck source=/home/brennan/.dotfiles-rc/rcs/bashrc
   source "${HOME}/.bashrc"
 fi
 

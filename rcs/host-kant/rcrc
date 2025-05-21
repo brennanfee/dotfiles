@@ -1,2 +1,2 @@
-DOTFILES_DIRS="$HOME/.dotfiles/rcs $HOME/.dotfiles-private/rcs"
+DOTFILES_DIRS="$HOME/.dotfiles-rc/rcs $HOME/.dotfiles-private/rcs"
 TAGS="linux ubuntu home"

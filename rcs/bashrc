@@ -45,14 +45,14 @@ function load_script_tools {
   # defaults on top of defaults here.  AFTER the base-profile is loaded the xdg
   # functions should work and ALWAYS return valid paths.
   dotfiles="${DOTFILES:-$(xdg-user-dir DOTFILES)}"
-  dotfiles="${dotfiles:-${HOME}/.dotfiles}"
+  dotfiles="${dotfiles:-${HOME}/.dotfiles-rc}"
 
   log_early "Sourcing: ${dotfiles}/bash/base-profile.bash"
-  # shellcheck source=/home/brennan/.dotfiles/bash/base-profile.bash
+  # shellcheck source=/home/brennan/.dotfiles-rc/bash/base-profile.bash
   builtin source "${dotfiles}/bash/base-profile.bash"
 
   log_early "Sourcing: ${dotfiles}/bash/script-tools.bash"
-  # shellcheck source=/home/brennan/.dotfiles/bash/script-tools.bash
+  # shellcheck source=/home/brennan/.dotfiles-rc/bash/script-tools.bash
   builtin source "${dotfiles}/bash/script-tools.bash"
 
   log "After profile script sourcing."

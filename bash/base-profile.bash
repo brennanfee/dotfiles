@@ -57,7 +57,7 @@ export WIN_HOME
 # locations should be set and xdg_base_dir can be used to resolve their locations.
 
 DOTFILES="${DOTFILES:-$(xdg-user-dir DOTFILES)}"
-DOTFILES="${DOTFILES:-${HOME}/.dotfiles}"
+DOTFILES="${DOTFILES:-${HOME}/.dotfiles-rc}"
 
 DOTFILES_PRIVATE="${DOTFILES_PRIVATE:-$(xdg-user-dir DOTFILESPRIVATE)}"
 DOTFILES_PRIVATE="${DOTFILES_PRIVATE:-${HOME}/.dotfiles-private}"
