@@ -15,7 +15,9 @@ utils.plugin("plugins.hop")
 utils.plugin("plugins.illuminate")
 utils.plugin("plugins.kanagawa")
 utils.plugin("plugins.linting")
-utils.plugin("plugins.lspconfig")
+-- utils.plugin("plugins.lspconfig")
+utils.plugin("plugins.lsp")
+utils.plugin("plugins.lazydev") -- Must be after lsp
 utils.plugin("plugins.lualine")
 utils.plugin("plugins.markdown-preview")
 utils.plugin("plugins.mason")
@@ -56,4 +58,4 @@ utils.plugin("plugins.extras.tabby")
 
 -- Vim: These are old (non-Lua) vim plugins, if native alternatives can be found
 -- I should switch to those
-utils.plugin("plugins.vim.repeat")
+-- utils.plugin("plugins.vim.repeat")

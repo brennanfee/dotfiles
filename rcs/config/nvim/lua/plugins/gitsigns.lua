@@ -3,6 +3,7 @@ local M = {
   event = "BufEnter",
   cmd = "Gitsigns",
 }
+
 M.config = function()
   local icons = require("core.icons")
 

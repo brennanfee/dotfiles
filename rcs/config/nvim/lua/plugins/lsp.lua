@@ -1,12 +1,27 @@
 local M = {
   "neovim/nvim-lspconfig",
+  event = { "BufReadPre", "BufNewFile" },
 }
 
-function M.config()
+M.config = function()
   local tool_lists = require("core.tool-lists")
+
+  -- Default
+  vim.lsp.config("*", {
+    capabilities = {
+      textDocument = {
+        semanticTokens = {
+          multilineTokenSupport = true,
+        },
+      },
+    },
+    root_markers = { ".git" },
+  })
+
+  -- Loop the LSP servers and configure and enable them
   for _, server in pairs(tool_lists.lsp_servers) do
-    vim.lsp.config(server.name, server.config)
-    vim.lsp.enable(server.name)
+    vim.lsp.config(server.lsp_name, server.config)
+    vim.lsp.enable(server.lsp_name)
   end
 end
 

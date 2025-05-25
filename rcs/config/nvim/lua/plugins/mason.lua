@@ -1,7 +1,6 @@
 local M = {
   "williamboman/mason.nvim",
   dependencies = {
-    "williamboman/mason-lspconfig.nvim",
     "WhoIsSethDaniel/mason-tool-installer.nvim",
   },
   build = ":MasonUpdate", -- :MasonUpdate updates registry contents
@@ -12,7 +11,7 @@ function M.config()
   local tool_lists = require("core.tool-lists")
 
   mason.setup({
-    ensure_installed = tool_lists.all_tools,
+    ensure_installed = tool_lists.all_mason_tools,
     PATH = "skip",
     pip = {
       upgrade_pip = true,
@@ -29,17 +28,8 @@ function M.config()
     max_concurrent_installers = 5,
   })
 
-  local lsp_servers = {}
-  for _, server in pairs(tool_lists.lsp_servers) do
-    table.insert(lsp_servers, server.name)
-  end
-
-  require("mason-lspconfig").setup({
-    ensure_installed = lsp_servers,
-  })
-
   require("mason-tool-installer").setup({
-    ensure_installed = tool_lists.all_tools,
+    ensure_installed = tool_lists.all_mason_tools,
     run_on_start = true,
     -- auto_update = true,
     auto_update = false,
@@ -50,21 +40,12 @@ function M.config()
     },
   })
 
-  vim.api.nvim_create_user_command("AutoUpdate", function()
+  vim.api.nvim_create_user_command("MasonDoUpdate", function()
     require("lazy").sync({ wait = true, show = false })
     vim.cmd("MasonUpdate")
     vim.cmd("MasonToolsUpdateSync")
     vim.cmd("MasonToolsClean")
   end, {})
-
-  vim.api.nvim_create_user_command("DoUpdate", function()
-    require("lazy").sync({ wait = true, show = false })
-    vim.cmd("MasonUpdate")
-    vim.cmd("MasonToolsUpdateSync")
-    vim.cmd("MasonToolsClean")
-  end, {})
-
-  -- vim.g.mason_binaries_list = tool_lists.all_tools
 end
 
 return M

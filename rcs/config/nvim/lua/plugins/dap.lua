@@ -5,8 +5,8 @@ local M = {
     "rcarriga/nvim-dap-ui",
 
     -- Installs the debug adapters for you
-    "williamboman/mason.nvim",
-    "jay-babu/mason-nvim-dap.nvim",
+    -- "williamboman/mason.nvim",
+    -- "jay-babu/mason-nvim-dap.nvim",
 
     -- Show debug values in virtual text
     "theHamsta/nvim-dap-virtual-text",
@@ -21,33 +21,21 @@ local M = {
 function M.config()
   local dap = require("dap")
   local dapui = require("dapui")
+  local tool_lists = require("core.tool-lists")
 
-  require("mason-nvim-dap").setup({
-    ensure_installed = {
-      "bash",
-      --        "coreclr", -- not supported on Linux, what a joke
-      "cppdbg",
-      --        "chrome", -- this one seems to be broken
-      "delve", -- this one is for go
-      "firefox",
-      "javadbg",
-      "js",
-      "kotlin",
-      "node2",
-      "php",
-      "python",
-    },
+  -- require("mason-nvim-dap").setup({
+  --   ensure_installed = tool_lists.mason_debug_adapters,
 
-    automatic_installation = false,
+  --   automatic_installation = false,
 
-    -- Makes a best effort to setup the various debuggers with
-    -- reasonable debug configurations
-    automatic_setup = true,
+  --   -- Makes a best effort to setup the various debuggers with
+  --   -- reasonable debug configurations
+  --   automatic_setup = true,
 
-    -- You can provide additional configuration to the handlers,
-    -- see mason-nvim-dap README for more information
-    handlers = {},
-  })
+  --   -- You can provide additional configuration to the handlers,
+  --   -- see mason-nvim-dap README for more information
+  --   handlers = {},
+  -- })
 
   -- Mappings
   local wk = require("which-key")

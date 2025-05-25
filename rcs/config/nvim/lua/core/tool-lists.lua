@@ -1,9 +1,114 @@
 local M = {}
 
+M.treesitter_languages = {
+  "bash",
+  "bibtex",
+  "c",
+  "c_sharp",
+  "caddy",
+  "cmake",
+  "comment",
+  "commonlisp",
+  "cooklang",
+  "cpp",
+  "css",
+  "csv",
+  "desktop",
+  "diff",
+  "dockerfile",
+  "editorconfig",
+  "fortran",
+  "fsharp",
+  "git_config",
+  "git_rebase",
+  "gitattributes",
+  "gitcommit",
+  "gitignore",
+  "gnuplot",
+  "go",
+  "goctl",
+  "gomod",
+  "gosum",
+  "gotmpl",
+  "gowork",
+  "gpg",
+  "graphql",
+  "groovy",
+  "hcl",
+  "helm",
+  "html",
+  "ini",
+  "java",
+  "javadoc",
+  "javascript",
+  "jinja",
+  "jinja_inline",
+  "jq",
+  "jsdoc",
+  "json",
+  "json5",
+  "jsonc",
+  "julia",
+  "kotlin",
+  "latex",
+  "ledger",
+  "lua",
+  "luadoc",
+  "make",
+  "markdown",
+  "markdown_inline",
+  "mermaid",
+  "nginx",
+  "ninja",
+  "nix",
+  "norg",
+  "pascal",
+  "passwd",
+  "perl",
+  "php",
+  "phpdoc",
+  "powershell",
+  "printf",
+  "properties",
+  "python",
+  "query",
+  "r",
+  "readline",
+  "regex",
+  "requirements",
+  "robots",
+  "rst",
+  "ruby",
+  "rust",
+  "scss",
+  "sql",
+  "ssh_config",
+  "svelte",
+  "swift",
+  "terraform",
+  "tmux",
+  "todotxt",
+  "toml",
+  "tsv",
+  "tsx",
+  "typescript",
+  "typst",
+  "vim",
+  "vimdoc",
+  "vue",
+  "xml",
+  "xresources",
+  "yaml",
+  "zig",
+}
+
 M.lsp_servers = {
-  { name = "ansiblels", config = {} },
-  { name = "autotools_ls", config = {} },
-  { name = "awk_ls", config = {} },
+  -- { name = "ansiblels", config = {} },
+  -- { name = "autotools_ls", config = {} },
+  -- { name = "awk_ls", config = {} },
+  { lsp_name = "lua_ls", mason_name = "lua-language-server", config = {} },
+  { lsp_name = "selene3p_ls", mason_name = "", config = {} },
+  { lsp_name = "stylua3p_ls", mason_name = "", config = {} },
 }
 
 -- M.lsp_servers = {
@@ -68,142 +173,186 @@ M.lsp_servers = {
 -- }
 
 M.debug_adapters = {
-  "bash-debug-adapter",
-  -- "chrome-debug-adapter", -- doesn't seem to work
-  "cpptools",
-  "debugpy",
-  -- "delve", -- Go debugger -- part of go now
-  "firefox-debug-adapter",
-  "java-debug-adapter",
-  "js-debug-adapter",
-  "kotlin-debug-adapter",
-  "node-debug2-adapter",
-  "perl-debug-adapter",
-  "php-debug-adapter",
+  { dap_name = "bash", mason_name = "bash-debug-adapter" },
 }
+
+-- M.debug_adapters = {
+--   "bash-debug-adapter",
+--   -- "chrome-debug-adapter", -- doesn't seem to work
+--   "cpptools",
+--   "debugpy",
+--   -- "delve", -- Go debugger -- part of go now
+--   "firefox-debug-adapter",
+--   "java-debug-adapter",
+--   "js-debug-adapter",
+--   "kotlin-debug-adapter",
+--   "node-debug2-adapter",
+--   "perl-debug-adapter",
+--   "php-debug-adapter",
+-- }
+
+-- M.mason_debug_adapters = {
+--   "bash",
+--   --        "coreclr", -- not supported on Linux, what a joke
+--   "cppdbg",
+--   --        "chrome", -- this one seems to be broken
+--   "delve", -- this one is for go
+--   "firefox",
+--   "javadbg",
+--   "js",
+--   "kotlin",
+--   "node2",
+--   "php",
+--   "python",
+-- }
 
 M.linters = {
-  "actionlint",
-  "alex",
-  "ansible-lint",
-  "ast-grep",
-  "bacon", -- For Rust
-  "bacon-ls", -- For Rust
-  "biome",
-  "buf",
-  "cfn-lint",
-  "checkmake",
-  "checkstyle",
-  "cmakelang",
-  "cmakelint",
-  "commitlint",
-  "cpplint",
-  "curlylint",
-  "editorconfig-checker",
-  "eslint_d",
-  "flake8",
-  "gitleaks",
-  "gitlint",
-  "hadolint", -- Dockerfile linter
-  "htmlhint",
-  "jsonlint",
-  "ktlint",
-  "luacheck",
-  "markdownlint",
-  "misspell",
-  "oxlint",
-  "phpstan",
-  "proselint",
-  "pydocstyle",
-  "pylint",
-  "rubocop",
-  "ruff",
-  "salt-lint",
-  "selene", -- For Lua
-  "semgrep",
-  -- "snyk",
-  "sqlfluff",
-  "stylelint",
-  "systemdlint",
-  "textlint",
-  "tflint",
-  "tfsec",
-  "typos",
-  "vacuum",
-  "vint",
-  "vulture",
-  "woke",
-  "write-good",
-  "yamllint",
+  { mason_name = "selene" },
+  { mason_name = "shellcheck" },
 }
+
+-- M.linters = {
+--   "actionlint",
+--   "alex",
+--   "ansible-lint",
+--   "ast-grep",
+--   "bacon", -- For Rust
+--   "bacon-ls", -- For Rust
+--   "biome",
+--   "buf",
+--   "cfn-lint",
+--   "checkmake",
+--   "checkstyle",
+--   "cmakelang",
+--   "cmakelint",
+--   "commitlint",
+--   "cpplint",
+--   "curlylint",
+--   "editorconfig-checker",
+--   "eslint_d",
+--   "flake8",
+--   "gitleaks",
+--   "gitlint",
+--   "hadolint", -- Dockerfile linter
+--   "htmlhint",
+--   "jsonlint",
+--   "ktlint",
+--   "luacheck",
+--   "markdownlint",
+--   "misspell",
+--   "oxlint",
+--   "phpstan",
+--   "proselint",
+--   "pydocstyle",
+--   "pylint",
+--   "rubocop",
+--   "ruff",
+--   "salt-lint",
+--   "selene", -- For Lua
+--   "semgrep",
+--   -- "snyk",
+--   "sqlfluff",
+--   "stylelint",
+--   "systemdlint",
+--   "textlint",
+--   "tflint",
+--   "tfsec",
+--   "typos",
+--   "vacuum",
+--   "vint",
+--   "vulture",
+--   "woke",
+--   "write-good",
+--   "yamllint",
+-- }
 
 M.formatters = {
-  "ast-grep",
-  "autoflake",
-  "biome",
-  "buf",
-  "cbfmt",
-  "clang-format",
-  "cmakelang",
-  "csharpier",
-  "docformatter",
-  "doctoc",
-  "fixjson",
-  "fprettify",
-  "gci",
-  -- "gofumpt", -- part of go now
-  -- "goimports", -- part of go now
-  "google-java-format",
-  "hclfmt",
-  "isort",
-  "ktfmt",
-  "ktlint",
-  "luaformatter",
-  "markdown-toc",
-  "markdownlint",
-  "mdformat",
-  "mdsf",
-  "nixpkgs-fmt",
-  "php-cs-fixer",
-  -- "pint", -- Temporarily disabled PHP
-  "prettier",
-  "prettierd",
-  "pretty-php",
-  "pyment",
-  "reformat-gherkin",
-  "rubocop",
-  "rubyfmt",
-  "ruff",
-  "rufo",
-  "rustywind", -- For Tailwind
-  "shfmt",
-  "sqlfmt",
-  "stylua",
-  "typstfmt",
-  "xmlformatter",
-  "yamlfmt",
+  { mason_name = "stylua" },
 }
 
+-- M.formatters = {
+--   "ast-grep",
+--   "autoflake",
+--   "biome",
+--   "buf",
+--   "cbfmt",
+--   "clang-format",
+--   "cmakelang",
+--   "csharpier",
+--   "docformatter",
+--   "doctoc",
+--   "fixjson",
+--   "fprettify",
+--   "gci",
+--   -- "gofumpt", -- part of go now
+--   -- "goimports", -- part of go now
+--   "google-java-format",
+--   "hclfmt",
+--   "isort",
+--   "ktfmt",
+--   "ktlint",
+--   "luaformatter",
+--   "markdown-toc",
+--   "markdownlint",
+--   "mdformat",
+--   "mdsf",
+--   "nixpkgs-fmt",
+--   "php-cs-fixer",
+--   -- "pint", -- Temporarily disabled PHP
+--   "prettier",
+--   "prettierd",
+--   "pretty-php",
+--   "pyment",
+--   "reformat-gherkin",
+--   "rubocop",
+--   "rubyfmt",
+--   "ruff",
+--   "rufo",
+--   "rustywind", -- For Tailwind
+--   "shfmt",
+--   "sqlfmt",
+--   "stylua",
+--   "typstfmt",
+--   "xmlformatter",
+--   "yamlfmt",
+-- }
+
+-- Only mason installed
 M.misc_tools = {
   "gh",
-  "gitui",
   "glow",
   "jq",
   "yq",
 }
 
-M.all_except_lsps = {}
-M.all_tools = {}
+M.all_mason_tools = {}
 
 local utils = require("core/utils")
-utils.tableAppendList(M.all_except_lsps, M.debug_adapters)
-utils.tableAppendList(M.all_except_lsps, M.linters)
-utils.tableAppendList(M.all_except_lsps, M.formatters)
-utils.tableAppendList(M.all_except_lsps, M.misc_tools)
 
-for _, server in pairs(M.lsp_servers) do
-  table.insert(M.all_tools, server.name)
+for _, lsp in pairs(M.lsp_servers) do
+  if utils.isNotEmpty(lsp.mason_name) then
+    table.insert(M.all_mason_tools, lsp.mason_name)
+  end
 end
-utils.tableAppendList(M.all_tools, M.all_except_lsps)
+
+for _, linter in pairs(M.linters) do
+  if utils.isNotEmpty(linter.mason_name) then
+    table.insert(M.all_mason_tools, linter.mason_name)
+  end
+end
+
+for _, formatter in pairs(M.formatters) do
+  if utils.isNotEmpty(formatter.mason_name) then
+    table.insert(M.all_mason_tools, formatter.mason_name)
+  end
+end
+
+for _, adapter in pairs(M.debug_adapters) do
+  if utils.isNotEmpty(adapter.mason_name) then
+    table.insert(M.all_mason_tools, adapter.mason_name)
+  end
+end
+
+utils.tableAppendList(M.all_mason_tools, M.misc_tools)
 
 return M
