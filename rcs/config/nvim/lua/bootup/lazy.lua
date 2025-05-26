@@ -11,15 +11,15 @@ require("lazy").setup({
   -- spec = utils.lazyPluginSpecs,
   spec = {
     { import = "plugins" },
-    -- TODO: Remove the extras folder and merge plugins into main area, use 'enabled = false' to turn on experimental
-    -- plugins
-    { import = "plugins.extras" },
   },
   install = {
     colorscheme = { utils.theme, "default" },
   },
   ui = {
     border = "rounded",
+  },
+  checker = {
+    enabled = true,
   },
   change_detection = {
     enabled = true,
