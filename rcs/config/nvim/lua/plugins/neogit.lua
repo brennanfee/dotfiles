@@ -4,7 +4,7 @@ local M = {
 }
 
 function M.config()
-  local icons = require("core.icons")
+  local icons = require("tools.icons")
   local wk = require("which-key")
   wk.add({
     { "<leader>s", group = "Source/Git" },

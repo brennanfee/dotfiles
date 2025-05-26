@@ -93,7 +93,7 @@ function M.config()
     return col == 0 or vim.fn.getline("."):sub(col, col):match("%s")
   end
 
-  local icons = require("core.icons")
+  local icons = require("tools.icons")
 
   cmp.setup({
     snippet = {

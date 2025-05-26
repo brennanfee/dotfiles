@@ -1,4 +1,5 @@
 local M = {
+  enabled = false,
   "nvimtools/none-ls.nvim",
   dependencies = {
     "nvim-lua/plenary.nvim",

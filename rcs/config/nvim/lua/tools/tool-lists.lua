@@ -1,3 +1,5 @@
+local utils = require("tools.utils")
+
 local M = {}
 
 M.treesitter_languages = {
@@ -209,6 +211,8 @@ M.debug_adapters = {
 M.linters = {
   { mason_name = "selene" },
   { mason_name = "shellcheck" },
+  { mason_name = "dotenv-linter" },
+  { mason_name = "editorconfig-checker" },
 }
 
 -- M.linters = {
@@ -326,8 +330,6 @@ M.misc_tools = {
 }
 
 M.all_mason_tools = {}
-
-local utils = require("core/utils")
 
 for _, lsp in pairs(M.lsp_servers) do
   if utils.isNotEmpty(lsp.mason_name) then

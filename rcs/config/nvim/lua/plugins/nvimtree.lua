@@ -1,4 +1,5 @@
 local M = {
+  enabled = false,
   "nvim-tree/nvim-tree.lua",
   dependencies = "nvim-tree/nvim-web-devicons",
   cmd = { "NvimTreeToggle", "NvimTreeFocus" },
@@ -11,7 +12,7 @@ local M = {
 }
 
 function M.config()
-  local icons = require("core.icons")
+  local icons = require("tools.icons")
 
   require("nvim-tree").setup({
     hijack_netrw = false,

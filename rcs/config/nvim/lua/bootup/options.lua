@@ -1,3 +1,9 @@
+-- Leader key configuration
+-- Not in keymaps, as these need to be set before loading plugins
+vim.keymap.set({ "n", "v" }, "<Space>", "", { noremap = true, silent = true })
+vim.g.mapleader = " "
+vim.g.maplocalleader = "\\"
+
 -- Directories for backup files, swaps, and undo files
 vim.o.backupdir = vim.fn.stdpath("cache") .. "/backup//"
 vim.o.directory = vim.fn.stdpath("cache") .. "/swap//"
@@ -73,6 +79,7 @@ vim.opt.visualbell = true
 vim.opt.mouse = "a" -- Enable mouse mode
 
 vim.opt.foldenable = false -- Disable folding; enable with 'zi'
+-- TODO: Move to nvim-treesitter plugin setup
 local status_ok, _ = pcall(require, "nvim-treesitter")
 if not status_ok then
   vim.opt.foldmethod = "indent"
@@ -139,9 +146,9 @@ vim.g.loaded_netrwPlugin = 1
 -- Prepend Mise Shim directory and mason bin directories, if needed (note, order is important,
 -- mason should override Mise
 local is_windows = vim.loop.os_uname().sysname == "Windows_NT"
-if not string.find(vim.env.PATH, "/mise/shims", 1, true) then
-  vim.env.PATH = vim.env.XDG_DATA_HOME .. "/mise/shims" .. (is_windows and ";" or ":") .. vim.env.PATH
-end
+-- if not string.find(vim.env.PATH, "/mise/shims", 1, true) then
+--   vim.env.PATH = vim.env.XDG_DATA_HOME .. "/mise/shims" .. (is_windows and ";" or ":") .. vim.env.PATH
+-- end
 if not string.find(vim.env.PATH, "/mason/bin", 1, true) then
   vim.env.PATH = vim.fn.stdpath("data") .. "/mason/bin" .. (is_windows and ";" or ":") .. vim.env.PATH
 end

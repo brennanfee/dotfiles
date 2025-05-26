@@ -21,7 +21,7 @@ local M = {
 function M.config()
   local dap = require("dap")
   local dapui = require("dapui")
-  local tool_lists = require("core.tool-lists")
+  local tool_lists = require("tools.tool-lists")
 
   -- require("mason-nvim-dap").setup({
   --   ensure_installed = tool_lists.mason_debug_adapters,

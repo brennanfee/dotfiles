@@ -2,16 +2,11 @@
 -- should be found in the plugins setup script. This way those mappings
 -- turn off when the plugin is disabled or removed.
 
-local utils = require("core.utils")
 local opts = { noremap = true, silent = true }
 
 -- TODO: Convert all to new method and remove this local variable
 -- Shorten function name
 local keymap = vim.keymap.set
-
-keymap({ "n", "v" }, "<Space>", "", opts)
-vim.g.mapleader = " "
-vim.g.maplocalleader = " "
 
 keymap("n", "<C-i>", "<C-i>", opts)
 
@@ -75,11 +70,11 @@ keymap("n", "[<Space>", "i<Space><Esc>l", opts)
 -- keymap("n", "gs", "^", opts)
 
 -- Toggle spelling
-utils.keymap("n", "<leader>z", function()
+keymap("n", "<leader>z", function()
   vim.opt_local.spell = not vim.opt_local.spell:get()
-end, { desc = "Toggle Spell Checking" })
+end, { noremap = true, desc = "Toggle Spell Checking" })
 
-utils.keymap("n", "zy", "1z=e", { desc = "Fix spelling with first word" })
+keymap("n", "zy", "1z=e", { noremap = true, desc = "Fix spelling with first word" })
 
 -- Toggle wrapping
 keymap("n", "<leader>w", ":lua vim.wo.wrap = not vim.wo.wrap<CR>", opts)

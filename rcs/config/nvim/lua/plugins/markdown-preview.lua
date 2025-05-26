@@ -8,8 +8,6 @@ local M = {
 }
 
 function M.config()
-  local utils = require("core.utils")
-
   vim.g.mkdp_refresh_slow = 1
   vim.g.mkdp_page_title = "File: ${name} "
   vim.g.mkdp_preview_options = {
@@ -24,9 +22,9 @@ function M.config()
     disable_filename = true,
   }
 
-  utils.keymap("n", "<leader>pv", function()
+  vim.keymap.set("n", "<leader>pv", function()
     vim.cmd("MarkdownPreviewToggle")
-  end, { desc = "MD: [P]re[v]iew Markdown" })
+  end, { noremap = true, desc = "MD: [P]re[v]iew Markdown" })
 end
 
 return M

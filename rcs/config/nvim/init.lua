@@ -1,9 +1,9 @@
-require("core.asdf-support")
-require("core.options")
-require("core.options-gui")
-require("core.keymaps")
-require("core.autocmds")
+require("bootup.providers")
+require("bootup.options")
+require("bootup.options-gui")
 
-require("plugin-loader")
+-- And now, the plugin manager and plugins
+require("bootup.lazy")
 
-require("core.lazy")
+require("bootup.keymaps")
+require("bootup.autocmds")

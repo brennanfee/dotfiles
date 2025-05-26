@@ -30,7 +30,7 @@ function M.config()
     -- { "<leader>xn", "<cmd>Telescope notify<cr>", desc = "Notification Messages" },
   })
 
-  local icons = require("core.icons")
+  local icons = require("tools.icons")
   local actions = require("telescope.actions")
 
   require("telescope").setup({

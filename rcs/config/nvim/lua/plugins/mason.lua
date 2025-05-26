@@ -8,7 +8,7 @@ local M = {
 
 function M.config()
   local mason = require("mason")
-  local tool_lists = require("core.tool-lists")
+  local tool_lists = require("tools.tool-lists")
 
   mason.setup({
     ensure_installed = tool_lists.all_mason_tools,

@@ -5,7 +5,7 @@ local M = {
 }
 
 function M.config()
-  local icons = require("core.icons")
+  local icons = require("tools.icons")
 
   -- Rainbow delimiters integration
   local highlightGroups = { "SnacksIndent" }

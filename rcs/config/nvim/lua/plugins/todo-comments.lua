@@ -5,18 +5,18 @@ local M = {
 }
 
 function M.config()
-  local utils = require("core.utils")
+  local colors = require("tools.colors")
 
   require("todo-comments").setup({
     -- list of named colors where we try to extract the guifg from the
     -- list of hilight groups or use the hex color if hl not found as a fallback
     colors = {
-      error = { "DiagnosticError", "ErrorMsg", utils.theme_colors().red },
-      warning = { "DiagnosticWarn", "WarningMsg", utils.theme_colors().yellow },
-      info = { "DiagnosticInfo", utils.theme_colors().blue },
-      hint = { "DiagnosticHint", utils.theme_colors().green },
-      default = { "Identifier", utils.theme_colors().dark_purple },
-      test = { "Identifier", utils.theme_colors().purple },
+      error = { "DiagnosticError", "ErrorMsg", colors.theme().red },
+      warning = { "DiagnosticWarn", "WarningMsg", colors.theme().yellow },
+      info = { "DiagnosticInfo", colors.theme().blue },
+      hint = { "DiagnosticHint", colors.theme().green },
+      default = { "Identifier", colors.theme().dark_purple },
+      test = { "Identifier", colors.theme().purple },
     },
     search = {
       command = "rg",

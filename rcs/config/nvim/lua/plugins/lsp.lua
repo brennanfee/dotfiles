@@ -4,7 +4,7 @@ local M = {
 }
 
 M.config = function()
-  local tool_lists = require("core.tool-lists")
+  local tool_lists = require("tools.tool-lists")
 
   -- Default
   vim.lsp.config("*", {
