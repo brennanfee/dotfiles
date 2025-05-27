@@ -322,7 +322,7 @@ function updateAm() {
 function updateTmux() {
   if command_exists tmux; then
     print_info "Updating tmux plugins"
-    local tmux_plugin_manager_path="${XDG_CONFIG_HOME:-$HOME/.config}/tmux/plugins"
+    local tmux_plugin_manager_path="$(tmux start-server\; show-environment -g TMUX_PLUGIN_MANAGER_PATH | cut -f2 -d=)"
 
     # Download the tmux plugin manager if it isn't already there
     if [[ ! -d "${tmux_plugin_manager_path}/tpm" ]]; then
