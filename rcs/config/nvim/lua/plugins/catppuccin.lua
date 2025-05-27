@@ -22,8 +22,6 @@ function M.config()
       },
     },
   })
-
-  vim.cmd("colorscheme catppuccin")
 end
 
 return M

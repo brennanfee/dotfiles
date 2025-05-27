@@ -7,3 +7,6 @@ require("bootup.lazy")
 
 require("bootup.keymaps")
 require("bootup.autocmds")
+
+vim.o.background = "dark"
+vim.cmd.colorscheme("catppuccin-mocha")
