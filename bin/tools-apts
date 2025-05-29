@@ -219,7 +219,7 @@ function install_common_tools() {
   DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q install dtrx inxi \
     tmux git atool rcm wget curl gnutls-bin ffmpeg mediainfo rename locate \
     build-essential dkms clang zsync luarocks gawk handbrake-cli iperf3 playerctl \
-    urlview libnotify-bin yq acpi ansifilter
+    urlview libnotify-bin yq acpi ansifilter python3-pynvim
 
   # Text To Speech Support
   DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q install \
