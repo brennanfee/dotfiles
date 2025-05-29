@@ -32,7 +32,7 @@ base_cloud_dir=$(xdg_base_dir CLOUD)
 ### NOTE: Order is important
 
 # Build up the path from SCRATCH, ignore any system provided path
-system_path="${PATH}"
+export PATH_SYSTEM_ORIGINAL="${PATH}"
 PATH=""
 
 # Home (local override), should always be the "first" to override everything else
@@ -71,8 +71,11 @@ path_append "${base_data_dir}/flatpak/exports/bin"
 #   export NIX_REMOTE=daemon
 # fi
 
+export PATH_BASHRC_AUGMENTED="${PATH}"
+export PATH_SYSTEM_AUGMENTED="${PATH_BASHRC_AUGMENTED}:${PATH_SYSTEM_ORIGINAL}"
+
 # Main system paths
-PATH="${PATH}:${system_path}"
+PATH="${PATH_SYSTEM_AUGMENTED}"
 
 unset base_data_dir
 unset base_bin_dir
