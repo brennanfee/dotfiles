@@ -51,19 +51,19 @@ path_append "${base_bin_dir}"
 # WSL (Windows)
 path_append "${WIN_HOME:-${HOME}}/winfiles/bin"
 
-# Flatpak
-#    Global packages
-path_append "/var/lib/flatpak/exports/bin"
-
-#    User packages
-path_append "${base_data_dir}/flatpak/exports/bin"
-
 # Neovim Mason bin path (for all the linters and other dev tools)
 # I want this to be "first" among the dev language tooling so it takes precedence
 path_append "${base_data_dir}/nvim/mason/bin"
 
 # Rust installed packages
 path_append "${base_data_dir}/cargo/bin"
+
+# Flatpak
+#    Global packages
+path_append "/var/lib/flatpak/exports/bin"
+
+#    User packages
+path_append "${base_data_dir}/flatpak/exports/bin"
 
 # # Nix Support
 # if [[ -f /nix/var/nix/profiles/default/etc/profile.d/nix.sh ]]; then
