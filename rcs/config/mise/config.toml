@@ -1,14 +1,12 @@
 [settings]
 cargo.binstall = true
-go_default_packages_file = "~/.config/mise/default-golang-packages"
 node.compile = false
-node.gpg_verify = false
+node.gpg_verify = true
 npm.bun = true
 pipx.uvx = true
 python.default_packages_file = "~/.config/mise/default-python-packages"
 python.uv_venv_auto = true
-ruby.default_packages_file = "~/.config/mise/default-ruby-packages"
-# disable_backends = ["asdf"]
+disable_backends = ["asdf"]
 
 [alias.node.versions]
 lts = "22"
@@ -26,23 +24,24 @@ rolling = "corretto-24"
 cosign = "latest"
 usage = "latest"
 uv = "latest"
-"asdf:dotnet" = "latest"
-"ubi:tectonic-typesetting/tectonic" = { version = "tectonic@0.15.0", exe = "tectonic" }
-"vfox:cmake" = "latest"
-"vfox:kotlin" = "latest"
+# Packages
+aws-cli = "latest"
 bat = "latest"
 bitwarden = "latest"
 bottom = "latest"
 bun = "latest"
 delta = "latest"
 deno = "latest"
+dotnet = "latest"
 eza = "latest"
 fd = "latest"
 fzf = "latest"
+glab = "latest"
 go = "latest"
 java = "lts"
 julia = "latest"
 lazygit = "latest"
+neovim = "stable"
 node = "lts"
 openbao = "latest"
 opentofu = "latest"
@@ -52,12 +51,10 @@ ripgrep = "latest"
 ruby = "latest"
 rust = "latest"
 terraform = "latest"
+tmux = "latest"
+tree-sitter = "latest"
 typst = "latest"
 zig = "latest"
-neovim = "stable"
-tmux = "latest"
-aws-cli = "latest"
-tree-sitter = "latest"
 "npm:@commitlint/cli" = "latest"
 "npm:@commitlint/config-conventional" = "latest"
 "npm:@mermaid-js/mermaid-cli" = "latest"
@@ -67,10 +64,13 @@ tree-sitter = "latest"
 "npm:eslint-config-prettier" = "latest"
 "npm:eslint-plugin-prettier" = "latest"
 "npm:license-report" = "latest"
+"npm:lua-3p-language-servers" = "latest"
 "npm:prettier" = "latest"
 "npm:stylelint" = "latest"
 "npm:stylelint-prettier" = "latest"
 "npm:typescript" = "latest"
 "npm:wsl-open" = "latest"
-"npm:lua-3p-language-servers" = "latest"
+"ubi:tectonic-typesetting/tectonic" = { version = "tectonic@0.15.0", exe = "tectonic" }
+"vfox:cmake" = "latest"
+"vfox:kotlin" = "latest"
 "vfox:php" = "latest"
