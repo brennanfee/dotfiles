@@ -3,7 +3,7 @@ local M = {
 }
 
 function M.config()
-  local icons = require("tools.icons")
+  local icons = require("data.icons")
   require("nvim-navic").setup({
     icons = icons.kind,
     highlight = true,

@@ -5,7 +5,7 @@ local M = {
 }
 
 function M.config()
-  local tool_lists = require("tools.tool-lists")
+  local tool_lists = require("data.tool-lists")
 
   require("nvim-treesitter.configs").setup({
     ensure_installed = tool_lists.treesitter_languages,

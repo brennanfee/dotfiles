@@ -5,7 +5,7 @@ local M = {
 }
 
 M.config = function()
-  local icons = require("tools.icons")
+  local icons = require("data.icons")
 
   local wk = require("which-key")
   wk.add({

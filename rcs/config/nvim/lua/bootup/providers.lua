@@ -1,4 +1,4 @@
-local utils = require("tools.utils")
+local utils = require("utils")
 
 vim.loader.enable()
 

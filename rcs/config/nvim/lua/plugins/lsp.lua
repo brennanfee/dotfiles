@@ -4,7 +4,12 @@ local M = {
 }
 
 M.config = function()
-  local tool_lists = require("tools.tool-lists")
+  local tool_lists = require("data.tool-lists")
+
+  -- local lspconfig_defaults = require("lspconfig").util.default_config
+  -- lspconfig_defaults.capabilities = vim.tbl_deep_extend(
+  --   'force',
+  --   lspconfig_def .capabilities,
 
   -- Default
   vim.lsp.config("*", {
@@ -22,6 +27,32 @@ M.config = function()
   for _, server in pairs(tool_lists.lsp_servers) do
     vim.lsp.config(server.lsp_name, server.config)
     vim.lsp.enable(server.lsp_name)
+  end
+
+  -- Key Mappings
+  local wk_installed, wk = pcall(require, "which-key")
+  if wk_installed then
+    wk.add({ { "<leader>l", group = "LSP" } })
+  end
+
+  vim.keymap.set("n", "<leader>lj", "<cmd>lua vim.diagnostic.goto_next()<cr>", { desc = "Next Diagnostic" })
+end
+
+-- local function lsp_keymaps(bufnr)
+--   local opts = { noremap = true, silent = true }
+--   local keymap = vim.api.nvim_buf_set_keymap
+--   keymap(bufnr, "n", "gD", "<cmd>lua vim.lsp.buf.declaration()<CR>", opts)
+--   keymap(bufnr, "n", "gd", "<cmd>lua vim.lsp.buf.definition()<CR>", opts)
+--   keymap(bufnr, "n", "K", "<cmd>lua vim.lsp.buf.hover()<CR>", opts)
+--   keymap(bufnr, "n", "gI", "<cmd>lua vim.lsp.buf.implementation()<CR>", opts)
+--   keymap(bufnr, "n", "gl", "<cmd>lua vim.diagnostic.open_float()<CR>", opts)
+-- end
+
+M.on_attach = function(client, bufnr)
+  -- lsp_keymaps(bufnr)
+
+  if client.server_capabilities.inlayHintProvider then
+    vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
   end
 end
 

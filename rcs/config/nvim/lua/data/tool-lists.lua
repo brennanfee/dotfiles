@@ -1,4 +1,4 @@
-local utils = require("tools.utils")
+local utils = require("utils")
 
 local M = {}
 
@@ -272,6 +272,7 @@ M.linters = {
 
 M.formatters = {
   { mason_name = "stylua" },
+  { mason_name = "shfmt" },
 }
 
 -- M.formatters = {

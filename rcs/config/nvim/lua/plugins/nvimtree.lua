@@ -12,7 +12,7 @@ local M = {
 }
 
 function M.config()
-  local icons = require("tools.icons")
+  local icons = require("data.icons")
 
   require("nvim-tree").setup({
     hijack_netrw = false,

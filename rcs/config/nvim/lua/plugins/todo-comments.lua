@@ -5,7 +5,7 @@ local M = {
 }
 
 function M.config()
-  local colors = require("tools.colors")
+  local colors = require("data.colors")
 
   require("todo-comments").setup({
     -- list of named colors where we try to extract the guifg from the
