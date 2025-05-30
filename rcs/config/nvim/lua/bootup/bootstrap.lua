@@ -1,7 +1,3 @@
-local utils = require("tools.utils")
-local api = vim.api
-local opt_local = vim.opt_local
-
 local M = {}
 
 M.echo = function(str)
@@ -15,30 +11,17 @@ M.lazy = function(install_path)
 
   M.echo("  Installing lazy.nvim & plugins ...")
 
-  vim.fn.system({
-    "git",
-    "clone",
-    "--filter=blob:none",
-    "--branch=stable", -- latest stable release
-    "https://github.com/folke/lazy.nvim.git",
-    install_path,
-  })
-
-  vim.opt.rtp:prepend(install_path)
-
-  require("lazy").setup({
-    spec = utils.lazyPluginSpecs,
-    install = {
-      colorscheme = { utils.theme, "default" },
-    },
-    ui = {
-      border = "rounded",
-    },
-    change_detection = {
-      enabled = true,
-      notify = false,
-    },
-  })
+  local lazyrepo = "https://github.com/folke/lazy.nvim.git"
+  local out = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, install_path })
+  if vim.v.shell_error ~= 0 then
+    vim.api.nvim_echo({
+      { "Failed to clone lazy.nvim:\n", "ErrorMsg" },
+      { out, "WarningMsg" },
+      { "\nPress any key to exit..." },
+    }, true, {})
+    vim.fn.getchar()
+    os.exit(1)
+  end
 
   M.post_bootstrap()
 end
@@ -46,7 +29,7 @@ end
 M.post_bootstrap = function()
   -- install mason pkgs & show notes\reminder to restart NeoVim on screen
 
-  api.nvim_buf_delete(0, { force = true }) -- close previously opened lazy window
+  vim.api.nvim_buf_delete(0, { force = true }) -- close previously opened lazy window
   vim.cmd("echo '' | redraw") -- clear cmdline
   M.screen()
 
@@ -62,7 +45,7 @@ M.post_bootstrap = function()
   --     -- run screen func after all pkgs are installed
   --     if packages:match("%S") == nil then
   --       vim.schedule(function()
-  --         api.nvim_buf_delete(0, { force = true }) -- Close Mason screen
+  --         vim.api.nvim_buf_delete(0, { force = true }) -- Close Mason screen
   --         vim.cmd("echo '' | redraw") -- clear cmdline
   --         M.screen()
   --       end)
@@ -84,26 +67,23 @@ M.screen = function()
     "",
   }
 
-  local buf = api.nvim_create_buf(false, true)
+  local buf = vim.api.nvim_create_buf(false, true)
   vim.opt_local.filetype = "baf_postbootstrap_window"
-  api.nvim_buf_set_lines(buf, 0, -1, false, text_on_screen)
+  vim.api.nvim_buf_set_lines(buf, 0, -1, false, text_on_screen)
 
-  local bafpostscreen = api.nvim_create_namespace("bafpostscreen")
+  local bafpostscreen = vim.api.nvim_create_namespace("bafpostscreen")
 
-  for i = 1, #text_on_screen do
-    api.nvim_buf_add_highlight(buf, bafpostscreen, "LazyCommit", i, 0, -1)
-  end
-
-  api.nvim_win_set_buf(0, buf)
+  vim.hl.range(buf, bafpostscreen, "LazyCommit", 1, #text_on_screen, {})
+  vim.api.nvim_win_set_buf(0, buf)
 
   -- buf only options
-  opt_local.buflisted = false
-  opt_local.modifiable = false
-  opt_local.number = false
-  opt_local.list = false
-  opt_local.relativenumber = false
-  opt_local.wrap = false
-  opt_local.cul = false
+  vim.opt_local.buflisted = false
+  vim.opt_local.modifiable = false
+  vim.opt_local.number = false
+  vim.opt_local.list = false
+  vim.opt_local.relativenumber = false
+  vim.opt_local.wrap = false
+  vim.opt_local.cul = false
 end
 
 return M
