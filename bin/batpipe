@@ -93,16 +93,16 @@ print_error() {
   printc "%{RED}[%s error]%{CLEAR}: $1%{CLEAR}\n" "batpipe" "${@:2}" 1>&2
 }
 printc_init "[DEFINE]" <<END
-	CLEAR	\x1B[0m
-	RED		\x1B[31m
-	GREEN	\x1B[32m
-	YELLOW	\x1B[33m
-	BLUE	\x1B[34m
-	MAGENTA	\x1B[35m
-	CYAN	\x1B[36m
+  CLEAR \x1B[0m
+  RED   \x1B[31m
+  GREEN \x1B[32m
+  YELLOW  \x1B[33m
+  BLUE  \x1B[34m
+  MAGENTA \x1B[35m
+  CYAN  \x1B[36m
 
-	DEFAULT \x1B[39m
-	DIM		\x1B[2m
+  DEFAULT \x1B[39m
+  DIM   \x1B[2m
 END
 # --- END LIBRARY FILE ---
 # --- BEGIN LIBRARY FILE: path.sh ---
@@ -694,11 +694,11 @@ bat() {
 # -----------------------------------------------------------------------------
 
 printc_init "[DEFINE]" <<END
-	C			\x1B[0m
-	SUBPATH		\x1B[2;35m
-	PATH		\x1B[0;35m
-	HEADER		\x1B[0;36m
-	SUBHEADER	\x1B[2;36m
+  C     \x1B[0m
+  SUBPATH   \x1B[2;35m
+  PATH    \x1B[0;35m
+  HEADER    \x1B[0;36m
+  SUBHEADER \x1B[2;36m
 END
 
 # Enable color output if:

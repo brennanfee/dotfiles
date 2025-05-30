@@ -160,16 +160,16 @@ print_error() {
   printc "%{RED}[%s error]%{CLEAR}: $1%{CLEAR}\n" "prettybat" "${@:2}" 1>&2
 }
 printc_init "[DEFINE]" <<END
-	CLEAR	\x1B[0m
-	RED		\x1B[31m
-	GREEN	\x1B[32m
-	YELLOW	\x1B[33m
-	BLUE	\x1B[34m
-	MAGENTA	\x1B[35m
-	CYAN	\x1B[36m
+  CLEAR \x1B[0m
+  RED   \x1B[31m
+  GREEN \x1B[32m
+  YELLOW  \x1B[33m
+  BLUE  \x1B[34m
+  MAGENTA \x1B[35m
+  CYAN  \x1B[36m
 
-	DEFAULT \x1B[39m
-	DIM		\x1B[2m
+  DEFAULT \x1B[39m
+  DIM   \x1B[2m
 END
 # --- END LIBRARY FILE ---
 # --- BEGIN LIBRARY FILE: version.sh ---
