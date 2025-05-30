@@ -4,6 +4,18 @@ local M = {
   cmd = { "ConformInfo" },
 }
 
+M.init = function()
+  local conform = require("conform")
+
+  vim.keymap.set({ "n", "v" }, "<leader>lf", function()
+    conform.format({
+      lsp_fallback = true,
+      async = true,
+      timeout_ms = 1000,
+    })
+  end, { desc = "Format" })
+end
+
 M.config = function()
   local conform = require("conform")
 
@@ -64,14 +76,6 @@ M.config = function()
       timeout_ms = 1000,
     },
   })
-
-  vim.keymap.set({ "n", "v" }, "<leader>lf", function()
-    conform.format({
-      lsp_fallback = true,
-      async = true,
-      timeout_ms = 1000,
-    })
-  end, { desc = "Format" })
 end
 
 return M

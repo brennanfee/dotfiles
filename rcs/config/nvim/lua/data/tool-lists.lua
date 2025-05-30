@@ -213,6 +213,7 @@ M.linters = {
   { mason_name = "shellcheck" },
   { mason_name = "dotenv-linter" },
   { mason_name = "editorconfig-checker" },
+  { mason_name = "yamllint" },
 }
 
 -- M.linters = {
