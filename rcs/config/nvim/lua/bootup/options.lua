@@ -143,6 +143,18 @@ vim.g.netrw_mouse = 2
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
+-- TODO: Use icons from the icon lists I have
+vim.diagnostic.config({
+  signs = {
+    text = {
+      [vim.diagnostic.severity.ERROR] = "✘",
+      [vim.diagnostic.severity.WARN] = "▲",
+      [vim.diagnostic.severity.HINT] = "⚑",
+      [vim.diagnostic.severity.INFO] = "»",
+    },
+  },
+})
+
 -- Prepend Mise Shim directory and mason bin directories, if needed (note, order is important,
 -- mason should override Mise
 local is_windows = vim.loop.os_uname().sysname == "Windows_NT"
