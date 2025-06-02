@@ -47,7 +47,7 @@ function cleanup_vars() {
 function load_script_tools() {
   # Source script-tools.bash
   if [[ -f "${g_script_dir}/../bash/script-tools.bash" ]]; then
-    # shellcheck source=/home/brennan/.dotfiles/bash/script-tools.bash
+    # shellcheck source=/home/brennan/.dotfiles-rc/bash/script-tools.bash
     source "${g_script_dir}/../bash/script-tools.bash"
   fi
 }
@@ -75,7 +75,8 @@ function set_long_options() {
 function process_arguments() {
   local args
   set +o errexit # temporarily turn off error on exit
-  args=$(getopt --name "${g_script_name}" --options "${g_short_options}hv" --longoptions "${g_long_options},help,version" -- "$@")
+  args=$(getopt --name "${g_script_name}" --options "${g_short_options}hv" \
+    --longoptions "${g_long_options},help,version" -- "$@")
   # Handle if getopt returned an error
   # shellcheck disable=SC2181
   if [[ $? -gt 0 ]]; then
