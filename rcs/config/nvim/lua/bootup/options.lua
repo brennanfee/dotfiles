@@ -78,6 +78,8 @@ vim.opt.visualbell = true
 
 vim.opt.mouse = "a" -- Enable mouse mode
 
+-- :set winborder=rounded
+
 vim.opt.foldenable = false -- Disable folding; enable with 'zi'
 -- TODO: Move to nvim-treesitter plugin setup
 local status_ok, _ = pcall(require, "nvim-treesitter")

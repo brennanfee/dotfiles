@@ -105,9 +105,7 @@ M.treesitter_languages = {
 }
 
 M.lsp_servers = {
-  -- { name = "ansiblels", config = {} },
-  -- { name = "autotools_ls", config = {} },
-  -- { name = "awk_ls", config = {} },
+  { lsp_name = "bashls", mason_name = "bash-language-server", config = {} },
   { lsp_name = "lua_ls", mason_name = "lua-language-server", config = {} },
   { lsp_name = "selene3p_ls", mason_name = "", config = {} },
   { lsp_name = "stylua3p_ls", mason_name = "", config = {} },
@@ -209,10 +207,10 @@ M.debug_adapters = {
 -- }
 
 M.linters = {
-  { mason_name = "selene" },
-  { mason_name = "shellcheck" },
   { mason_name = "dotenv-linter" },
   { mason_name = "editorconfig-checker" },
+  { mason_name = "selene" },
+  { mason_name = "shellcheck" },
   { mason_name = "yamllint" },
 }
 
