@@ -1,6 +1,0 @@
----
-lua_versions:
-  - luajit
-globals:
-  vim:
-    any: true

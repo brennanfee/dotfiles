@@ -1,15 +1,37 @@
 local M = {
   "neovim/nvim-lspconfig",
+  dependencies = {
+    "creativenull/efmls-configs-nvim",
+    "onsails/lspkind.nvim",
+  },
   event = { "BufReadPre", "BufNewFile" },
 }
+
+M.init = function()
+  -- Key Mappings
+  local wk_installed, wk = pcall(require, "which-key")
+  if wk_installed then
+    wk.add({ { "<leader>l", group = "LSP" } })
+  end
+
+  vim.keymap.set("n", "<leader>lj", "<cmd>lua vim.diagnostic.goto_next()<cr>", { desc = "Next Diagnostic" })
+  vim.keymap.set({ "n", "v" }, "<leader>lf", function()
+    vim.lsp.buf.format({
+      async = true,
+      -- filter = function(client)
+      --   return client.name ~= 'typescript-tools'
+      -- end,
+    })
+  end, { desc = "Format" })
+end
 
 M.config = function()
   local tool_lists = require("data.tool-lists")
 
-  -- local lspconfig_defaults = require("lspconfig").util.default_config
-  -- lspconfig_defaults.capabilities = vim.tbl_deep_extend(
-  --   'force',
-  --   lspconfig_def .capabilities,
+  -- LspKind
+  require("lspkind").setup({
+    mode = "symbol_text",
+  })
 
   -- Default
   vim.lsp.config("*", {
@@ -20,22 +42,27 @@ M.config = function()
         },
       },
     },
-    root_markers = { ".git" },
+    root_markers = { ".git/" },
   })
 
   -- Loop the LSP servers and configure and enable them
   for _, server in pairs(tool_lists.lsp_servers) do
-    vim.lsp.config(server.lsp_name, server.config)
+    local server_config = {}
+    local lsp_has_config, lsp_config = pcall(require, "lspconfigs." .. server.lsp_name)
+    if lsp_has_config then
+      if type(lsp_config) == "function" then
+        server_config = lsp_config()
+      else
+        server_config = lsp_config
+      end
+    end
+
+    vim.lsp.config(server.lsp_name, server_config)
     vim.lsp.enable(server.lsp_name)
   end
 
-  -- Key Mappings
-  local wk_installed, wk = pcall(require, "which-key")
-  if wk_installed then
-    wk.add({ { "<leader>l", group = "LSP" } })
-  end
-
-  vim.keymap.set("n", "<leader>lj", "<cmd>lua vim.diagnostic.goto_next()<cr>", { desc = "Next Diagnostic" })
+  -- Set up an LspAttach handler
+  vim.api.nvim_create_autocmd("LspAttach", { callback = M.on_attach })
 end
 
 -- local function lsp_keymaps(bufnr)
@@ -48,11 +75,34 @@ end
 --   keymap(bufnr, "n", "gl", "<cmd>lua vim.diagnostic.open_float()<CR>", opts)
 -- end
 
-M.on_attach = function(client, bufnr)
+M.on_attach = function(args)
+  local client = assert(vim.lsp.get_client_by_id(args.data.client_id))
+  local bufnr = args.buf
+
   -- lsp_keymaps(bufnr)
 
   if client.server_capabilities.inlayHintProvider then
     vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+  end
+
+  -- Auto format on save
+  local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
+  if client.supports_method("textDocument/formatting") then
+    vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
+    vim.api.nvim_create_autocmd("BufWritePre", {
+      group = augroup,
+      buffer = bufnr,
+      callback = function(callback_args)
+        -- Must be sync (async = false) because if doing an "x" or "wq", Neovim quits without finishing
+        -- the format (and without the second write when needed)
+        vim.lsp.buf.format({ async = false, id = args.data.client_id })
+        -- Need to check to see if format modified the buffer and if so write a second time
+        local buf_modified = vim.api.nvim_buf_get_option(callback_args.buf, "modified")
+        if buf_modified then
+          vim.api.nvim_command("write")
+        end
+      end,
+    })
   end
 end
 
@@ -102,6 +152,7 @@ return M
 
 -- function M.config()
 --   -- TODO: Make pcall
+
 --   local wk = require("which-key")
 --   wk.add({
 --     { "<leader>l", group = "LSP" },
@@ -109,7 +160,8 @@ return M
 --     { "<leader>la", "<cmd>lua vim.lsp.buf.code_action()<cr>", desc = "Code Action", mode = "v" },
 --     -- {
 --     --   "<leader>lf",
---     --   "<cmd>lua vim.lsp.buf.format({async = true, filter = function(client) return client.name ~= 'typescript-tools' end})<cr>",
+--     --   "<cmd>lua vim.lsp.buf.format({async = true,
+--               filter = function(client) return client.name ~= 'typescript-tools' end})<cr>",
 --     --   desc = "Format",
 --     -- },
 --     { "<leader>li", "<cmd>LspInfo<cr>", desc = "Info" },
@@ -175,7 +227,8 @@ return M
 --   end, { desc = "Toggle diagnostic virtual_lines" })
 
 --   vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" })
---   vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = "rounded" })
+--   vim.lsp.handlers["textDocument/signatureHelp"] =
+--       vim.lsp.with(vim.lsp.handlers.signature_help, { border = "rounded" })
 --   require("lspconfig.ui.windows").default_options.border = "rounded"
 
 --   for _, server in pairs(tool_lists.lsp_servers) do

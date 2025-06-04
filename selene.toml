@@ -1,4 +1,0 @@
-std = ".selene-neovim.yml"
-
-[lints]
-mixed_table = "allow"
