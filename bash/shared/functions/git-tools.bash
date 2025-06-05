@@ -29,7 +29,8 @@ function git-branch-name() {
 }
 
 function in-a-git-repo() {
-  if [[ $(git rev-parse --is-inside-work-tree 2> /dev/null || true) == 'true' ]]; then
+  get_exit_code git rev-parse --is-inside-work-tree > /dev/null 2>&1
+  if [[ ${EXIT_CODE} -eq 0 ]]; then
     return 0
   else
     return 1

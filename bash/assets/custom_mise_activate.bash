@@ -15,7 +15,7 @@ mise() {
   case "$command" in
     deactivate | shell | sh)
       # if argv doesn't contains -h,--help
-      if [[ ! " $@ " =~ " --help " ]] && [[ ! " $@ " =~ " -h " ]]; then
+      if [[ ! " $* " =~ " --help " ]] && [[ ! " $* " =~ " -h " ]]; then
         eval "$(command mise "$command" "$@")"
         return $?
       fi
@@ -30,13 +30,19 @@ _mise_hook() {
   eval "$(mise hook-env -s bash)"
   return $previous_exit_status
 }
-if declare -p precmd_functions >/dev/null 2>&1; then
+if [[ -n "${bash_preexec_imported:-}" ]]; then
   if [[ "${precmd_functions[*]:-}" != *"_mise_hook"* ]]; then
     precmd_functions+=(_mise_hook)
   fi
 else
-  if [[ ${PROMPT_COMMAND[*]:-} != *"_mise_hook"* ]]; then
-    PROMPT_COMMAND+=(_mise_hook)
+  if [[ "$(declare -p PROMPT_COMMAND)" =~ "declare -a" ]]; then
+    if [[ ${PROMPT_COMMAND[*]:-} != *"_mise_hook"* ]]; then
+      PROMPT_COMMAND+=(_mise_hook)
+    fi
+  else
+    if [[ ";${PROMPT_COMMAND:-};" != *";_mise_hook;"* ]]; then
+      PROMPT_COMMAND="_mise_hook${PROMPT_COMMAND:+;$PROMPT_COMMAND}"
+    fi
   fi
 fi
 # shellcheck shell=bash
@@ -47,7 +53,7 @@ function __zsh_like_cd() {
     builtin "$@"
   then
     for __zsh_like_cd_hook in chpwd "${chpwd_functions[@]}"; do
-      if \typeset -f "$__zsh_like_cd_hook" >/dev/null 2>&1; then
+      if \typeset -f "$__zsh_like_cd_hook" > /dev/null 2>&1; then
         "$__zsh_like_cd_hook" || break # finish on first failed hook
       fi
     done
@@ -58,8 +64,8 @@ function __zsh_like_cd() {
 }
 
 # shellcheck shell=bash
-[[ -n ${ZSH_VERSION:-} ]] ||
-  {
+[[ -n ${ZSH_VERSION:-} ]] \
+  || {
     function cd() { __zsh_like_cd cd "$@"; }
     function popd() { __zsh_like_cd popd "$@"; }
     function pushd() { __zsh_like_cd pushd "$@"; }

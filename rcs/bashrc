@@ -155,15 +155,11 @@ function run_colorscripts {
 
 function log_startup_results {
   log "Final PROMPT_COMMAND: ${PROMPT_COMMAND[*]}"
-  if declare -p precmd_functions >/dev/null 2>&1; then
+  if [[ -n "${bash_preexec_imported:-}" ]]; then
     log "Final precmd_functions: ${precmd_functions[*]}"
-  else
-    log "precmd_functions not declared."
-  fi
-  if declare -p preexec_functions >/dev/null 2>&1; then
     log "Final preexec_functions: ${preexec_functions[*]}"
   else
-    log "preexec_functions not declared."
+    log "preexec framework not loaded."
   fi
 
   log "Final path: ${PATH}"
@@ -171,7 +167,7 @@ function log_startup_results {
   if command_exists bc; then
     local end runtime
     end=$(date +%s.%N)
-    runtime=$( echo "${end} - ${1}" | bc -l )
+    runtime=$(echo "${end} - ${1}" | bc -l)
 
     log "Bashrc duration: ${runtime} seconds"
   fi
