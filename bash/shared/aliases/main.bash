@@ -18,10 +18,10 @@ fi
 # END Bash strict mode
 
 # Turn on colors
-alias ls='ls $LS_OPTIONS'
-alias lss='ls -1'
-alias dir='ls -CA'
-alias vdir='ls -lA'
+alias ls='ls $LS_OPTIONS --classify=always'
+alias lss='ls -1 --classify=never'
+alias dir='ls -CA  --classify=always'
+alias vdir='ls -lA --classify=always'
 alias tree="tree -C"
 alias as-tree="tree -C --fromfile"
 

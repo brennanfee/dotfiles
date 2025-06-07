@@ -23,14 +23,17 @@ if command_exists bat; then
   export BAT_BIN="bat"
   alias cat="bat"
   alias batcat="bat"
+  alias catp="cat -P"
 elif command_exists batcat; then
   export BAT_BIN="batcat"
   alias cat="batcat"
   alias bat="batcat"
+  alias catp="cat -P"
 else
   export BAT_BIN="cat"
   alias bat="cat"
   alias batcat="cat"
+  alias catp="cat"
 fi
 
 if [[ "${BAT_BIN}" == "bat" || "${BAT_BIN}" == "batcat" ]]; then
