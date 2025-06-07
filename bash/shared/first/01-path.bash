@@ -33,6 +33,7 @@ base_cloud_dir=$(xdg_base_dir CLOUD)
 
 # Build up the path from SCRATCH, ignore any system provided path
 export PATH_SYSTEM_ORIGINAL="${PATH}"
+# shellcheck disable=SC2123
 PATH=""
 
 # Home (local override), should always be the "first" to override everything else

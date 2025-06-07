@@ -41,6 +41,7 @@ else
     fi
   else
     if [[ ";${PROMPT_COMMAND:-};" != *";_mise_hook;"* ]]; then
+      # shellcheck disable=SC2128,SC2178
       PROMPT_COMMAND="_mise_hook${PROMPT_COMMAND:+;$PROMPT_COMMAND}"
     fi
   fi

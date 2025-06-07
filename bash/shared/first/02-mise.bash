@@ -27,24 +27,20 @@ log "Path before mise activate: ${PATH}"
 if command_exists mise; then
   log "Mise found, calling CUSTOM activate."
   source_or_error "${dotfiles_dir}/bash/assets/custom_mise_activate.bash"
-  # if [[ -n "${GHOSTTY_RESOURCES_DIR}" && -x "${dotfiles_dir}/bash/assets/custom_mise_activate.bash" ]]; then
-  #   log "Loading CUSTOM Mise activate."
-  #   source_or_error "${dotfiles_dir}/bash/assets/custom_mise_activate.bash"
-  # else
-  #   log "Loading traditional Mise activate."
-  #   eval "$(mise activate bash)"
-  # fi
-
   log "Path after mise activate: ${PATH}"
 
   # Some mise aliases
-  alias mx="mise x --"
-  alias mr="mise r --"
+  alias ms="mise"
+  alias msx="mise x --"
+  alias misex="mise x --"
+  alias msr="mise r --"
+  alias miser="mise r --"
+
+  # Completion
+  eval "$(mise completion bash)"
 
   export RUSTUP_INIT_SKIP_PATH_CHECK="yes"
-  export RUSTUP_HOME="${base_state_dir}/rustup"
   export MISE_RUSTUP_HOME="${base_state_dir}/rustup"
-  export CARGO_HOME="${base_data_dir}/cargo"
   export MISE_CARGO_HOME="${base_data_dir}/cargo"
 
   export MISE_NODE_DEFAULT_PACKAGES_FILE="${base_config_dir}/mise/default-node-packages"
@@ -53,6 +49,7 @@ else
   log "Mise not found, skipping Mise activate."
 fi
 
+unset dotfiles_dir
 unset base_data_dir
 unset base_state_dir
 unset base_config_dir

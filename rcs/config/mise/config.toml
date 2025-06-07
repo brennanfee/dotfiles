@@ -6,7 +6,7 @@ npm.bun = true
 pipx.uvx = true
 python.default_packages_file = "~/.config/mise/default-python-packages"
 python.uv_venv_auto = true
-disable_backends = ["asdf"]
+# disable_backends = ["asdf"]
 
 [alias.node.versions]
 lts = "22"
@@ -21,6 +21,7 @@ rolling = "corretto-24"
 
 [tools]
 # Pre-reqs
+cargo-binstall = "latest"
 cosign = "latest"
 usage = "latest"
 uv = "latest"
@@ -30,9 +31,9 @@ bat = "latest"
 bitwarden = "latest"
 bottom = "latest"
 bun = "latest"
+coreutils = "latest"
 delta = "latest"
 deno = "latest"
-dotnet = "latest"
 eza = "latest"
 fd = "latest"
 fzf = "latest"
@@ -56,6 +57,8 @@ tmux = "latest"
 tree-sitter = "latest"
 typst = "latest"
 zig = "latest"
+"asdf:dotnet" = "latest"
+"cargo:dysk" = "latest"
 "npm:@commitlint/cli" = "latest"
 "npm:@commitlint/config-conventional" = "latest"
 "npm:@mermaid-js/mermaid-cli" = "latest"
