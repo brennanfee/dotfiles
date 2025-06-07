@@ -267,9 +267,11 @@ function updateUv() {
 function updateMise() {
   if command_exists mise; then
     print_info "Updating mise"
+    local dotfiles
+    dotfiles="$(xdg_base_dir DOTFILES)"
 
     # Trust the config file
-    mise -y trust "$(xdg_base_dir DOTFILES)/rcs/config/mise/config.toml"
+    mise -y trust "${dotfiles}/rcs/config/mise/config.toml"
     mise -y trust "$(xdg_base_dir CONFIG)/mise/config.toml"
 
     # Update mise itself
@@ -282,6 +284,9 @@ function updateMise() {
     mise -y reshim # may not be necessary
     mise -y prune
     mise -y cache prune
+
+    # Re-create any mise-related symlinks
+    "${dotfiles}/bash/assets/create-coreutils-links.bash"
   fi
 }
 

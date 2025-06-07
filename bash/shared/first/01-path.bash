@@ -126,16 +126,16 @@ function set_path() {
     path_append "${uv_tool_dir}"
   fi
 
-  if [[ has_coreutils -eq 1 ]]; then
-    path_prepend "${base_dotfiles_dir}/bin/coreutils"
+  if [[ has_coreutils -eq 1 && -d "${base_bin_dir}/coreutils" ]]; then
+    path_prepend "${base_bin_dir}/coreutils"
   fi
 
-  if [[ has_findutils -eq 1 ]]; then
-    path_prepend "${base_dotfiles_dir}/bin/findutils"
+  if [[ has_findutils -eq 1 && -d "${base_bin_dir}/findutils" ]]; then
+    path_prepend "${base_bin_dir}/findutils"
   fi
 
-  if [[ has_diffutils -eq 1 ]]; then
-    path_prepend "${base_dotfiles_dir}/bin/diffutils"
+  if [[ has_diffutils -eq 1 && -d "${base_bin_dir}/diffutils" ]]; then
+    path_prepend "${base_bin_dir}/diffutils"
   fi
 
   PATH="${PATH}:${path_system_original}"

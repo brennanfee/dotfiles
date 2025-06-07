@@ -13,7 +13,7 @@ lts = "22"
 lts-jod = "22"
 lts-iron = "20"
 lts-hydrogen = "18"
-rolling = "23"
+rolling = "24"
 
 [alias.java.versions]
 lts = "corretto-21"
