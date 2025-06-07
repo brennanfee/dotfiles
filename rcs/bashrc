@@ -154,7 +154,7 @@ function run_colorscripts {
 }
 
 function log_startup_results {
-  log "Final PROMPT_COMMAND: ${PROMPT_COMMAND[*]}"
+  # log "Final PROMPT_COMMAND: ${PROMPT_COMMAND[*]}"
   if [[ -n "${bash_preexec_imported:-}" ]]; then
     log "Final precmd_functions: ${precmd_functions[*]}"
     log "Final preexec_functions: ${preexec_functions[*]}"

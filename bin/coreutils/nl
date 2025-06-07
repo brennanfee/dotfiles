@@ -1,0 +1,13 @@
+#!/usr/bin/env sh
+
+main() {
+  script_name=$(basename "$0")
+
+  if command -v "coreutils" >/dev/null 2>&1; then
+    coreutils "${script_name}" "$@"
+  else
+    "${script_name}" "$@"
+  fi
+}
+
+main "$@"
