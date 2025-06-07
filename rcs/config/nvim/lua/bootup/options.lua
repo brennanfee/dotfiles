@@ -38,7 +38,7 @@ vim.g.cursorhold_updatetime = 300 -- Faster completion
 
 -- Line numbers
 vim.opt.number = true
-vim.opt.relativenumber = false
+vim.opt.relativenumber = true
 vim.opt.numberwidth = 5 -- Set number column width {default 4}
 vim.opt.ruler = false
 vim.opt.signcolumn = "yes:2" -- Always show sign column
