@@ -270,15 +270,10 @@ function updateMise() {
 
     # Trust the config file
     mise -y trust "$(xdg_base_dir DOTFILES)/rcs/config/mise/config.toml"
+    mise -y trust "$(xdg_base_dir CONFIG)/mise/config.toml"
 
     # Update mise itself
     mise -y self-update
-
-    # Update the bash completions file
-    if [[ -f "$(xdg_base_dir DOTFILES)/bash/completions/mise-completion.bash" ]]; then
-      mise -y completion --include-bash-completion-lib bash > \
-        "$(xdg_base_dir DOTFILES)/bash/completions/mise-completion.bash"
-    fi
 
     # Install and upgrade tools
     mise -y install

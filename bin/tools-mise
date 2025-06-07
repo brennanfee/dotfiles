@@ -217,15 +217,10 @@ function main() {
 
   # Trust the config file
   "${g_mise_bin}" -y trust "$(xdg_base_dir DOTFILES)/rcs/config/mise/config.toml"
+  "${g_mise_bin}" -y trust "$(xdg_base_dir CONFIG)/mise/config.toml"
 
   # Update mise itself
   "${g_mise_bin}" -y self-update
-
-  # Update the bash completions file
-  if [[ -f "$(xdg_base_dir DOTFILES)/bash/completions/mise-completion.bash" ]]; then
-    "${g_mise_bin}" -y completion --include-bash-completion-lib bash > \
-      "$(xdg_base_dir DOTFILES)/bash/completions/mise-completion.bash"
-  fi
 
   # Install and upgrade tools
   "${g_mise_bin}" -y install
