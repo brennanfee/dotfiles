@@ -413,9 +413,9 @@ function extractSubtitles() {
 
   if [[ -d "${fileOrPath}" ]]; then
     if [[ "${g_recursive}" == "true" ]]; then
-      files=("${fileOrPath}"/*.mkv "${fileOrPath}"/**/*.mkv)
+      files=("${fileOrPath}"/*.{mkv,mp4} "${fileOrPath}"/**/*.{mkv,mp4})
     else
-      files=("${fileOrPath}"/*.mkv)
+      files=("${fileOrPath}"/*.{mkv,mp4})
     fi
 
     for file in "${files[@]}"; do
