@@ -107,6 +107,7 @@ function M.config()
       char = icons.ui.LineMiddle,
       hl = highlightGroups,
       only_scope = true,
+      only_current = true,
     },
     animate = {
       enabled = true,
@@ -114,6 +115,7 @@ function M.config()
     scope = {
       char = icons.ui.LineMiddle,
       hl = highlightGroups,
+      only_current = true,
     },
   }
 
