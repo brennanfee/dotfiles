@@ -20,35 +20,41 @@ if ! ${SOURCED}; then
 fi
 ### END Bash strict mode
 
+###################################################################################################
 ### START Script template bootstrap
 
-g_script_name=$(basename "${BASH_SOURCE[0]}")
-g_script_dir="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"
+function initialize() {
+  g_script_name=$(basename "${BASH_SOURCE[0]}")
+  g_script_dir="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"
 
-g_short_options=""
-g_long_options=""
-g_positional_arguments=""
+  g_short_options=""
+  g_long_options=""
+  g_positional_arguments=""
+}
 
 function cleanup_vars() {
   unset g_script_name
   unset g_script_dir
-  unset g_script_author
-  unset g_script_license
-  unset g_script_version
-  unset g_script_date
 
   unset g_short_options
   unset g_long_options
   unset g_positional_arguments
 
+  unset g_script_author
+  unset g_script_license
+  unset g_script_version
+  unset g_script_date
+
   cleanup_script_vars
 }
 
 function load_script_tools() {
+  local dotfiles
+  dotfiles="${DOTFILES:-$(xdg-user-dir DOTFILES)}"
   # Source script-tools.bash
-  if [[ -f "${g_script_dir}/../bash/script-tools.bash" ]]; then
+  if [[ -f "${dotfiles}/bash/script-tools.bash" ]]; then
     # shellcheck source=/home/brennan/.dotfiles-rc/bash/script-tools.bash
-    source "${g_script_dir}/../bash/script-tools.bash"
+    source "${dotfiles}/bash/script-tools.bash"
   fi
 }
 
@@ -140,6 +146,7 @@ function validate_number_of_positional_arguments() {
 }
 
 function main_handler() {
+  initialize
   load_script_tools
   setup_script_vars
   setup_options
@@ -148,18 +155,20 @@ function main_handler() {
   cleanup_vars
 }
 
-g_script_author="Brennan Fee"
-g_script_license="MIT License"
-g_script_version="0.6"
-g_script_date="2025-03-13"
-
 ### END Script template bootstrap
-#################################
+###################################################################################################
 
 ## USAGE: If you want any global variables, set them up here
 function setup_script_vars() {
+  # Must be set here
+  g_script_author="Brennan Fee"
+  g_script_license="MIT License"
+  g_script_version="0.7"
+  g_script_date="2025-06-10"
+
+  # Add others here
   g_include_dev_tools="false"
-  g_desktop_environment="kde"
+  g_desktop_environment="none"
 }
 
 ## USAGE: If you add any global variables, clean them up in this method
@@ -221,33 +230,39 @@ function print_help() {
   print_out "     Also install the tools for a development environment."
   print_blank_line
   print_out "  -e or --desktop-environment"
-  print_out "     The desktop Flatpak should integrate with (default is KDE)."
-  print_out "     KDE and Gnome are supported."
+  print_out "     The desktop Flatpak should integrate with (default is none)."
+  print_out "     The supported values are 'none', 'KDE', 'Gnome', 'Mate', and 'Tiling'."
   print_blank_line
 }
 
-function check_prerequisites() {
-  # Check for flatpak itself, if needed install it
-  if ! command -v flatpak &>/dev/null; then
-    DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q update
-    DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q install \
-      flatpak flatpak-xdg-utils xdg-desktop-portal
+function install_prerequisites() {
+  DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q update
+  DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q install \
+    flatpak flatpak-xdg-utils
 
-    case "${g_desktop_environment}" in
-    "kde")
-      DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q install \
-        xdg-desktop-portal-kde plasma-discover-backend-flatpak \
-        qt5-xdgdesktopportal-platformtheme qt6-xdgdesktopportal-platformtheme
-      ;;
-    "gnome")
-      DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q install \
-        xdg-desktop-portal-gnome gnome-software-plugin-flatpak
-      ;;
-    *)
-      print_warning "Unknown desktop environment requested."
-      ;;
-    esac
-  fi
+  case "${g_desktop_environment}" in
+  "none" | "server")
+    true ## noop
+    ;;
+  "kde")
+    DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q install \
+      xdg-desktop-portal xdg-desktop-portal-kde plasma-discover-backend-flatpak \
+      qt5-xdgdesktopportal-platformtheme qt6-xdgdesktopportal-platformtheme \
+      xdg-desktop-portal-wlr
+    ;;
+  "gnome")
+    DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q install \
+      xdg-desktop-portal xdg-desktop-portal-gnome gnome-software-plugin-flatpak \
+      xdg-desktop-portal-wlr
+    ;;
+  "mate" | "tiling")
+    DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q install \
+      xdg-desktop-portal xdg-desktop-portal-gtk xdg-desktop-portal-wlr
+    ;;
+  *)
+    print_warning "Unknown desktop environment requested."
+    ;;
+  esac
 
   # Setup flathub repo
   flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
@@ -311,7 +326,7 @@ function install_dev_tools() {
 ## Your main implementation goes here.  All of the positional arguments have
 ## been passed as an array to this function.
 function main() {
-  check_prerequisites
+  install_prerequisites
 
   install_common_tools
   install_dev_tools

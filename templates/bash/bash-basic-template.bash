@@ -20,24 +20,27 @@ fi
 ###################################################################################################
 ### START Script template bootstrap
 
-g_script_name=$(basename "${BASH_SOURCE[0]}")
-g_script_dir="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"
+function initialize() {
+  g_script_name=$(basename "${BASH_SOURCE[0]}")
+  g_script_dir="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"
 
-g_short_options=""
-g_long_options=""
-g_positional_arguments=""
+  g_short_options=""
+  g_long_options=""
+  g_positional_arguments=""
+}
 
 function cleanup_vars() {
   unset g_script_name
   unset g_script_dir
-  unset g_script_author
-  unset g_script_license
-  unset g_script_version
-  unset g_script_date
 
   unset g_short_options
   unset g_long_options
   unset g_positional_arguments
+
+  unset g_script_author
+  unset g_script_license
+  unset g_script_version
+  unset g_script_date
 
   cleanup_script_vars
 }
@@ -140,6 +143,7 @@ function validate_number_of_positional_arguments() {
 }
 
 function main_handler() {
+  initialize
   load_script_tools
   setup_script_vars
   setup_options
@@ -151,14 +155,15 @@ function main_handler() {
 ### END Script template bootstrap
 ###################################################################################################
 
-g_script_author="Brennan Fee"
-g_script_license="MIT License"
-g_script_version="0.0"
-g_script_date="2025-04-03"
-
 ## USAGE: If you want any global variables, set them up here
 function setup_script_vars() {
-  noop
+  # Must be set here
+  g_script_author="Brennan Fee"
+  g_script_license="MIT License"
+  g_script_version="0.0"
+  g_script_date="2025-06-10"
+
+  # Add others here
 }
 
 ## USAGE: If you add any global variables, clean them up in this method

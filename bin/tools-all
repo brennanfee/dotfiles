@@ -17,35 +17,41 @@ if ! ${SOURCED}; then
 fi
 ### END Bash strict mode
 
+###################################################################################################
 ### START Script template bootstrap
 
-g_script_name=$(basename "${BASH_SOURCE[0]}")
-g_script_dir="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"
+function initialize() {
+  g_script_name=$(basename "${BASH_SOURCE[0]}")
+  g_script_dir="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"
 
-g_short_options=""
-g_long_options=""
-g_positional_arguments=""
+  g_short_options=""
+  g_long_options=""
+  g_positional_arguments=""
+}
 
 function cleanup_vars() {
   unset g_script_name
   unset g_script_dir
-  unset g_script_author
-  unset g_script_license
-  unset g_script_version
-  unset g_script_date
 
   unset g_short_options
   unset g_long_options
   unset g_positional_arguments
 
+  unset g_script_author
+  unset g_script_license
+  unset g_script_version
+  unset g_script_date
+
   cleanup_script_vars
 }
 
 function load_script_tools() {
+  local dotfiles
+  dotfiles="${DOTFILES:-$(xdg-user-dir DOTFILES)}"
   # Source script-tools.bash
-  if [[ -f "${g_script_dir}/../bash/script-tools.bash" ]]; then
-    # shellcheck source=/home/brennan/.dotfiles/bash/script-tools.bash
-    source "${g_script_dir}/../bash/script-tools.bash"
+  if [[ -f "${dotfiles}/bash/script-tools.bash" ]]; then
+    # shellcheck source=/home/brennan/.dotfiles-rc/bash/script-tools.bash
+    source "${dotfiles}/bash/script-tools.bash"
   fi
 }
 
@@ -72,7 +78,8 @@ function set_long_options() {
 function process_arguments() {
   local args
   set +o errexit # temporarily turn off error on exit
-  args=$(getopt --name "${g_script_name}" --options "${g_short_options}hv" --longoptions "${g_long_options},help,version" -- "$@")
+  args=$(getopt --name "${g_script_name}" --options "${g_short_options}hv" \
+    --longoptions "${g_long_options},help,version" -- "$@")
   # Handle if getopt returned an error
   # shellcheck disable=SC2181
   if [[ $? -gt 0 ]]; then
@@ -136,6 +143,7 @@ function validate_number_of_positional_arguments() {
 }
 
 function main_handler() {
+  initialize
   load_script_tools
   setup_script_vars
   setup_options
@@ -144,22 +152,26 @@ function main_handler() {
   cleanup_vars
 }
 
-g_script_author="Brennan Fee"
-g_script_license="MIT License"
-g_script_version="0.1"
-g_script_date="2024-11-26"
-
 ### END Script template bootstrap
-#################################
+###################################################################################################
 
 ## USAGE: If you want any global variables, set them up here
 function setup_script_vars() {
+  # Must be set here
+  g_script_author="Brennan Fee"
+  g_script_license="MIT License"
+  g_script_version="0.2"
+  g_script_date="2025-06-10"
+
+  # Add others here
   g_include_dev_tools="false"
+  g_desktop_environment="none"
 }
 
 ## USAGE: If you add any global variables, clean them up in this method
 function cleanup_script_vars() {
   unset g_include_dev_tools
+  unset g_desktop_environment
 }
 
 ## USAGE: If you need to add any command-line flags or options, do it here.
@@ -167,8 +179,8 @@ function cleanup_script_vars() {
 ## set_long_options.  They accept a string with syntax that is the same for
 ## the getopt program.  See it's help for more information.
 function setup_options() {
-  set_short_options "d"
-  set_long_options "include-dev"
+  set_short_options "de:"
+  set_long_options "include-dev,desktop-environment:"
 }
 
 ## Usage: If you added command-line flags or options using setup_options,
@@ -181,6 +193,10 @@ function process_flags() {
     '-d' | '--include-dev')
       g_include_dev_tools="true"
       shift
+      ;;
+    '-e' | '--desktop-environment')
+      g_desktop_environment=$(echo "$2" | tr "[:upper:]" "[:lower:]")
+      shift 2
       ;;
     '--')
       shift
@@ -211,6 +227,10 @@ function print_help() {
   print_out "  -d or --include-dev"
   print_out "     Also install the tools for a development environment."
   print_blank_line
+  print_out "  -e or --desktop-environment"
+  print_out "     The desktop environment.  Defaults to 'none'.  Available options are 'none', "
+  print_out "     'server' (the same as 'none'), 'KDE', 'Gnome', 'Mate', and 'Tiling'."
+  print_blank_line
 }
 
 ## Your main implementation goes here.  All of the positional arguments have
@@ -231,22 +251,31 @@ function main() {
   "${dotfilesBin}/tools-repos" "${options}"
   print_status "Running 'apts'"
   "${dotfilesBin}/tools-apts" "${options}"
+
+  ## We only want to call the desktop apts file if we are actually on a desktop
+  if [[ "${g_desktop_environment}" == "kde" || "${g_desktop_environment}" == "gnome" ||
+    "${g_desktop_environment}" == "mate" || "${g_desktop_environment}" == "tiling" ]]; then
+
+    print_status "Running 'desktop-apts'"
+    "${dotfilesBin}/tools-desktop-apts" "${options}" "--desktop-environment=${g_desktop_environment}"
+  fi
+
   print_status "Running 'tools-mise'"
-  "${dotfilesBin}/tools-mise"
+  "${dotfilesBin}/tools-mise" "${options}"
 
   print_status "Activating Mise"
   eval "$("${miseExe}" activate bash)"
   eval "$("${miseExe}" hook-env -s bash)"
 
   print_status "Running 'tools-tmux'"
-  "${dotfilesBin}/tools-tmux"
+  "${dotfilesBin}/tools-tmux" "${options}"
   print_status "Running 'tools-vim'"
-  "${dotfilesBin}/tools-vim"
+  "${dotfilesBin}/tools-vim" "${options}"
 
   print_status "Running 'tools-appman'"
   "${dotfilesBin}/tools-appman" "${options}"
   print_status "Running 'tools-flatpak'"
-  "${dotfilesBin}/tools-flatpak" "${options}"
+  "${dotfilesBin}/tools-flatpak" "${options}" "--desktop-environment=${g_desktop_environment}"
   print_status "Running 'tools-uv'"
   "${dotfilesBin}/tools-uv" "${options}"
 }

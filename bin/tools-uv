@@ -17,35 +17,41 @@ if ! ${SOURCED}; then
 fi
 ### END Bash strict mode
 
+###################################################################################################
 ### START Script template bootstrap
 
-g_script_name=$(basename "${BASH_SOURCE[0]}")
-g_script_dir="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"
+function initialize() {
+  g_script_name=$(basename "${BASH_SOURCE[0]}")
+  g_script_dir="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"
 
-g_short_options=""
-g_long_options=""
-g_positional_arguments=""
+  g_short_options=""
+  g_long_options=""
+  g_positional_arguments=""
+}
 
 function cleanup_vars() {
   unset g_script_name
   unset g_script_dir
-  unset g_script_author
-  unset g_script_license
-  unset g_script_version
-  unset g_script_date
 
   unset g_short_options
   unset g_long_options
   unset g_positional_arguments
 
+  unset g_script_author
+  unset g_script_license
+  unset g_script_version
+  unset g_script_date
+
   cleanup_script_vars
 }
 
 function load_script_tools() {
+  local dotfiles
+  dotfiles="${DOTFILES:-$(xdg-user-dir DOTFILES)}"
   # Source script-tools.bash
-  if [[ -f "${g_script_dir}/../bash/script-tools.bash" ]]; then
-    # shellcheck source=/home/brennan/.dotfiles/bash/script-tools.bash
-    source "${g_script_dir}/../bash/script-tools.bash"
+  if [[ -f "${dotfiles}/bash/script-tools.bash" ]]; then
+    # shellcheck source=/home/brennan/.dotfiles-rc/bash/script-tools.bash
+    source "${dotfiles}/bash/script-tools.bash"
   fi
 }
 
@@ -72,7 +78,8 @@ function set_long_options() {
 function process_arguments() {
   local args
   set +o errexit # temporarily turn off error on exit
-  args=$(getopt --name "${g_script_name}" --options "${g_short_options}hv" --longoptions "${g_long_options},help,version" -- "$@")
+  args=$(getopt --name "${g_script_name}" --options "${g_short_options}hv" \
+    --longoptions "${g_long_options},help,version" -- "$@")
   # Handle if getopt returned an error
   # shellcheck disable=SC2181
   if [[ $? -gt 0 ]]; then
@@ -136,6 +143,7 @@ function validate_number_of_positional_arguments() {
 }
 
 function main_handler() {
+  initialize
   load_script_tools
   setup_script_vars
   setup_options
@@ -144,16 +152,18 @@ function main_handler() {
   cleanup_vars
 }
 
-g_script_author="Brennan Fee"
-g_script_license="MIT License"
-g_script_version="0.3"
-g_script_date="2024-11-27"
-
 ### END Script template bootstrap
-#################################
+###################################################################################################
 
 ## USAGE: If you want any global variables, set them up here
 function setup_script_vars() {
+  # Must be set here
+  g_script_author="Brennan Fee"
+  g_script_license="MIT License"
+  g_script_version="0.4"
+  g_script_date="2025-06-10"
+
+  # Add others here
   g_include_dev_tools="false"
 }
 

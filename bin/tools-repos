@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-#
 
 ### START Bash strict mode
 # shellcheck disable=SC2154
@@ -18,35 +17,41 @@ if ! ${SOURCED}; then
 fi
 ### END Bash strict mode
 
+###################################################################################################
 ### START Script template bootstrap
 
-g_script_name=$(basename "${BASH_SOURCE[0]}")
-g_script_dir="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"
+function initialize() {
+  g_script_name=$(basename "${BASH_SOURCE[0]}")
+  g_script_dir="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"
 
-g_short_options=""
-g_long_options=""
-g_positional_arguments=""
+  g_short_options=""
+  g_long_options=""
+  g_positional_arguments=""
+}
 
 function cleanup_vars() {
   unset g_script_name
   unset g_script_dir
-  unset g_script_author
-  unset g_script_license
-  unset g_script_version
-  unset g_script_date
 
   unset g_short_options
   unset g_long_options
   unset g_positional_arguments
 
+  unset g_script_author
+  unset g_script_license
+  unset g_script_version
+  unset g_script_date
+
   cleanup_script_vars
 }
 
 function load_script_tools() {
+  local dotfiles
+  dotfiles="${DOTFILES:-$(xdg-user-dir DOTFILES)}"
   # Source script-tools.bash
-  if [[ -f "${g_script_dir}/../bash/script-tools.bash" ]]; then
-    # shellcheck source=/home/brennan/.dotfiles/bash/script-tools.bash
-    source "${g_script_dir}/../bash/script-tools.bash"
+  if [[ -f "${dotfiles}/bash/script-tools.bash" ]]; then
+    # shellcheck source=/home/brennan/.dotfiles-rc/bash/script-tools.bash
+    source "${dotfiles}/bash/script-tools.bash"
   fi
 }
 
@@ -73,7 +78,8 @@ function set_long_options() {
 function process_arguments() {
   local args
   set +o errexit # temporarily turn off error on exit
-  args=$(getopt --name "${g_script_name}" --options "${g_short_options}hv" --longoptions "${g_long_options},help,version" -- "$@")
+  args=$(getopt --name "${g_script_name}" --options "${g_short_options}hv" \
+    --longoptions "${g_long_options},help,version" -- "$@")
   # Handle if getopt returned an error
   # shellcheck disable=SC2181
   if [[ $? -gt 0 ]]; then
@@ -137,6 +143,7 @@ function validate_number_of_positional_arguments() {
 }
 
 function main_handler() {
+  initialize
   load_script_tools
   setup_script_vars
   setup_options
@@ -145,22 +152,34 @@ function main_handler() {
   cleanup_vars
 }
 
-g_script_author="Brennan Fee"
-g_script_license="MIT License"
-g_script_version="0.1"
-g_script_date="2024-11-26"
-
 ### END Script template bootstrap
-#################################
+###################################################################################################
 
 ## USAGE: If you want any global variables, set them up here
 function setup_script_vars() {
+  # Must be set here
+  g_script_author="Brennan Fee"
+  g_script_license="MIT License"
+  g_script_version="0.2"
+  g_script_date="2025-06-10"
+
+  # Add others here
+  g_distro="$(lsb_release -is 2>/dev/null | tr "[:upper:]" "[:lower:]")"
+  g_distro_codename="$(lsb_release -cs 2>/dev/null)"
+
+  g_force="false"
   g_include_dev_tools="false"
+  g_desktop_environment="none"
 }
 
 ## USAGE: If you add any global variables, clean them up in this method
 function cleanup_script_vars() {
+  unset g_distro
+  unset g_distro_codename
+
+  unset g_force
   unset g_include_dev_tools
+  unset g_desktop_environment
 }
 
 ## USAGE: If you need to add any command-line flags or options, do it here.
@@ -168,8 +187,8 @@ function cleanup_script_vars() {
 ## set_long_options.  They accept a string with syntax that is the same for
 ## the getopt program.  See it's help for more information.
 function setup_options() {
-  set_short_options "d"
-  set_long_options "include-dev"
+  set_short_options "dfe:"
+  set_long_options "include-dev,force,desktop-environment:"
 }
 
 ## Usage: If you added command-line flags or options using setup_options,
@@ -182,6 +201,14 @@ function process_flags() {
     '-d' | '--include-dev')
       g_include_dev_tools="true"
       shift
+      ;;
+    '-f' | '--force')
+      g_force="true"
+      shift
+      ;;
+    '-e' | '--desktop-environment')
+      g_desktop_environment=$(echo "$2" | tr "[:upper:]" "[:lower:]")
+      shift 2
       ;;
     '--')
       shift
@@ -212,14 +239,45 @@ function print_help() {
   print_out "  -d or --include-dev"
   print_out "     Also install the tools for a development environment."
   print_blank_line
+  print_out "  -e or --desktop-environment"
+  print_out "     The desktop environment being installed to. This might produce differences in the packages"
+  print_out "     beign installed.  Valid values are 'none', 'kde', 'gnome', 'mate', and 'tiling'."
+  print_blank_line
+  print_out "  -f or --force"
+  print_out "     Removes all current repos, keys, and re-installs all the repos."
+  print_blank_line
+}
+
+function is_a_desktop() {
+  if [[ "${g_desktop_environment}" == 'none' && "${g_desktop_environment}" == 'server' ]]; then
+    return 1
+  else
+    return 0
+  fi
 }
 
 function prepare() {
   sudo mkdir -p /etc/apt/keyrings
 
-  if ! command_exists curl || ! command_exists gpg; then
-    DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q install \
-      ca-certificates curl gnupg
+  DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q update
+
+  DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q install ca-certificates curl gnupg
+}
+
+function clean_if_forced() {
+  sudo rm -f /etc/apt/sources.list.d/*.list
+  sudo rm -f /etc/apt/keyrings/*.gpg
+  sudo rm -f /etc/apt/keyrings/*.asc
+}
+
+function install_debian_backports_repo() {
+  local listFile="/etc/apt/sources.list.d/debian-backports.list"
+  local repoStatement="https://deb.debian.org/debian ${g_distro_codename}-backports "
+  repoStatement+="main contrib non-free non-free-firmware"
+
+  if [[ ! -f "${listFile}" ]]; then
+    print_out "  Installing debian backports repo"
+    echo "deb ${repoStatement}" | sudo tee "${listFile}" >/dev/null
   fi
 }
 
@@ -235,12 +293,12 @@ function install_if_needed() {
     print_out "  Installing ${product} repo"
     # key file
     if [[ "${dearmorKey}" == "true" ]]; then
-      curl -fsSL "${keyUrl}" | sudo gpg --dearmor -o "${keyFile}"
+      curl -fsSL "${keyUrl}" | sudo gpg --dearmor --yes --output "${keyFile}"
     else
       sudo curl -fsSLo "${keyFile}" "${keyUrl}"
     fi
     # list file
-    echo "deb [signed-by=${keyFile} arch=$(dpkg --print-architecture)] ${repoStatement}" |
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=${keyFile}] ${repoStatement}" |
       sudo tee "${listFile}" >/dev/null
   fi
 }
@@ -249,17 +307,16 @@ function install_mullvad_repo() {
   local listFile="/etc/apt/sources.list.d/mullvad.list"
   local keyFile="/etc/apt/keyrings/mullvad-keyring.asc"
   local keyUrl="https://repository.mullvad.net/deb/mullvad-keyring.asc"
-  local repoStatement
-  repoStatement="https://repository.mullvad.net/deb/stable $(lsb_release -cs) main"
+  local repoStatement="https://repository.mullvad.net/deb/stable ${g_distro_codename} main"
 
-  install_if_needed "Mullvad" "${listFile}" "${keyFile}" "${keyUrl}" "${repoStatement}"
+  install_if_needed "Mullvad" "${listFile}" "${keyFile}" "${keyUrl}" "${repoStatement}" false
 }
 
 function install_netbird_repo() {
   local listFile="/etc/apt/sources.list.d/netbird.list"
   local keyFile="/etc/apt/keyrings/netbird-archive-keyring.gpg"
   local keyUrl="https://pkgs.netbird.io/debian/public.key"
-  local repoStatement="https://pkgs.netbird.io/debian stable main"
+  local repoStatement="https://pkgs.netbird.io/${g_distro} stable main"
 
   install_if_needed "Netbird" "${listFile}" "${keyFile}" "${keyUrl}" "${repoStatement}" true
 }
@@ -268,29 +325,20 @@ function install_beyondCompare_repo() {
   local listFile="/etc/apt/sources.list.d/scootersoftware.list"
   local keyFile="/etc/apt/keyrings/scootersoftware.asc"
   local keyUrl="https://www.scootersoftware.com/DEB-GPG-KEY-scootersoftware.asc"
-  local repoStatement="https://www.scootersoftware.com/debian bcompare5 non-free"
+  local repoStatement="https://www.scootersoftware.com/${g_distro} bcompare5 non-free"
 
-  if [[ ! -f "${listFile}" ]]; then
-    # Prevent installs from trying to install this repo again
-    sudo touch /etc/default/bcompare
-  fi
+  sudo touch /etc/default/bcompare
 
-  install_if_needed "Beyond Compare" "${listFile}" "${keyFile}" "${keyUrl}" "${repoStatement}"
+  install_if_needed "Beyond Compare" "${listFile}" "${keyFile}" "${keyUrl}" "${repoStatement}" false
 }
 
 function install_insync_repo() {
   local listFile="/etc/apt/sources.list.d/insync.list"
   local keyFile="/etc/apt/keyrings/insync.gpg"
+  local keyUrl="https://apt.insync.io/insynchq.gpg"
+  local repoStatement="http://apt.insync.io/${g_distro} ${g_distro_codename} non-free contrib"
 
-  if [[ ! -f "${listFile}" ]]; then
-    print_out "  Installing Insync repo"
-    # key file
-    sudo gpg --keyserver hkps://keyserver.ubuntu.com --recv-keys ACCAF35C
-    sudo gpg --export ACCAF35C | sudo tee "${keyFile}" >/dev/null
-    sudo gpg --batch --yes --delete-keys ACCAF35C
-    # list file
-    echo "deb [signed-by=${keyFile} arch=$(dpkg --print-architecture)] http://apt.insync.io/$(lsb_release -is | tr "[:upper:]" "[:lower:]") $(lsb_release -cs) non-free contrib" | sudo tee "${listFile}"
-  fi
+  install_if_needed "Insync" "${listFile}" "${keyFile}" "${keyUrl}" "${repoStatement}" true
 }
 
 function install_vsCode_repo() {
@@ -299,69 +347,89 @@ function install_vsCode_repo() {
   local keyUrl="https://packages.microsoft.com/keys/microsoft.asc"
   local repoStatement="https://packages.microsoft.com/repos/code stable main"
 
-  if [[ ! -f "${listFile}" ]]; then
-    # Prevent installs from trying to install this repo again
-    echo "code code/add-microsoft-repo boolean false" | sudo debconf-set-selections
-  fi
+  echo "code code/add-microsoft-repo boolean false" | sudo debconf-set-selections
 
-  install_if_needed "VS Code" "${listFile}" "${keyFile}" "${keyUrl}" "${repoStatement}"
+  install_if_needed "VS Code" "${listFile}" "${keyFile}" "${keyUrl}" "${repoStatement}" false
 }
 
-function install_chrome_repo() {
-  local listFile="/etc/apt/sources.list.d/google-chrome.list"
-  local keyFile="/etc/apt/keyrings/google.asc"
-  local keyUrl="https://dl.google.com/linux/linux_signing_key.pub"
-  local repoStatement="https://dl.google.com/linux/chrome/deb stable main"
+function install_virtualbox_repo() {
+  local listFile="/etc/apt/sources.list.d/virtualbox.list"
+  local keyFile="/etc/apt/keyrings/oracle-virtualbox-2016.gpg"
+  local keyUrl="https://www.virtualbox.org/download/oracle_vbox_2016.asc"
+  local repoStatement="https://download.virtualbox.org/virtualbox/${g_distro} ${g_distro_codename} contrib"
 
-  install_if_needed "Google Chrome" "${listFile}" "${keyFile}" "${keyUrl}" "${repoStatement}"
+  # sudo apt-key remove 5CDFA2F683C52980AECF
+  # sudo apt-key remove D9C954422A4B98AB5139
+
+  echo "virtualbox virtualbox/module-compilation-allowed boolean true" | sudo debconf-set-selections
+  echo "virtualbox virtualbox/delete-old-modules boolean true" | sudo debconf-set-selections
+
+  install_if_needed "Virtualbox" "${listFile}" "${keyFile}" "${keyUrl}" "${repoStatement}" true
 }
 
 function install_common_repos() {
+  # For all machines
+  install_debian_backports_repo
   install_mullvad_repo
   install_netbird_repo
-  install_beyondCompare_repo
   install_insync_repo
-  install_vsCode_repo
-  # install_chrome_repo # deprecated, use Flatpak instead
+
+  # Only for desktops...
+  if is_a_desktop; then
+    install_beyondCompare_repo
+    install_vsCode_repo
+  fi
 }
 
 function install_dev_repos() {
   if [[ ! "${g_include_dev_tools}" == "true" ]]; then
     return
   fi
+
+  if is_a_desktop; then
+    install_virtualbox_repo
+  fi
 }
 
 function install_common_tools() {
-  DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q install \
-    mullvad-vpn netbird bcompare insync code
-  ##mullvad-vpn bcompare insync code google-chrome-stable
+  DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q install mullvad-vpn netbird
 
-  # Are we running on a desktop (with a GUI installed)?
-  if [[ -n "$XDG_CURRENT_DESKTOP" ]]; then
-    DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q install netbird-ui
-
-    ## Insync file manager integrations
-    if command_exists dolphin; then
-      DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q install insync-dolphin
-    fi
-
-    if command_exists caja; then
-      DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q install insync-caja
-    fi
-
-    if command_exists nautilus; then
-      DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q install insync-nautilus
-    fi
-
-    if command_exists thunar; then
-      DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q install insync-nautilus
-    fi
+  if is_a_desktop; then
+    # Common to all desktops
+    DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q install netbird-ui bcompare code
   fi
+
+  # For specific desktops
+  case "${g_desktop_environment}" in
+  "none" | "server")
+    DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q install insync-headless
+    ;;
+  "kde")
+    DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q install insync-dolphin
+    ;;
+  "gnome")
+    DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q install insync-nautilus
+    ;;
+  "mate")
+    DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q install insync-caja
+    ;;
+  "tiling")
+    ## Don't know which gui file manager I would use, do nothing for now
+    true
+    ;;
+  *)
+    print_warning "Unknown desktop environment requested."
+    ;;
+  esac
 }
 
 function install_dev_tools() {
   if [[ ! "${g_include_dev_tools}" == "true" ]]; then
     return
+  fi
+
+  if is_a_desktop; then
+    DEBIAN_FRONTEND=noninteractive sudo apt-get -y -q install virtualbox-7.1
   fi
 }
 
@@ -369,6 +437,7 @@ function install_dev_tools() {
 ## been passed as an array to this function.
 function main() {
   prepare
+  clean_if_forced
 
   install_common_repos
   install_dev_repos
