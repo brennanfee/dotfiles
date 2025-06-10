@@ -42,8 +42,8 @@ if [[ "${BAT_BIN}" == "bat" || "${BAT_BIN}" == "batcat" ]]; then
 
   export MANROFFOPT="-c"
 
-  if [[ -x "${DOTFILES}/bin/batpipe" ]]; then
-    eval "$("${DOTFILES}/bin/batpipe")"
+  if [[ -x "${DOTFILES}/scripts/batpipe" ]]; then
+    eval "$("${DOTFILES}/scripts/batpipe")"
     export MANPAGER="less -R --use-color -Dd+r -Du+b"
   else
     export MANPAGER="sh -c 'col -bx | batcat -l man'"
