@@ -138,11 +138,14 @@ function xdg_base_dir() {
       ;;
 
     *)
-      xdg-user-dir "$1"
+      xdg-user-dir "${query}"
       ;;
 
   esac
 }
+
+# Bash functions cannot use dashes in their names, use an alias instead to accomplish the same thing
+alias xdg-base-dir="xdg_base_dir"
 
 #### START: Virtualization Detection Functions - if we are virtual, what type
 
