@@ -18,12 +18,7 @@ if ! ${SOURCED}; then
 fi
 # END Bash strict mode
 
-# If not running interactively, don't do anything
-if [[ $- != *i* ]]; then
-  return
-fi
-
-export BASHRC_LOGS=0
+export BASHRC_LOGS=1
 
 function log_early() {
   if [[ ${BASHRC_LOGS} == "1" ]]; then
@@ -33,6 +28,19 @@ function log_early() {
     fi
 
     echo -e "$(/usr/bin/date --rfc-3339=ns):\n  $1" >>"${logPath}/bashrc.log"
+  fi
+}
+
+function check_launch_tmux() {
+  log_early "Checking if we need to launch tmux. TERM: '${TERM}'"
+  if command -v tmux &>/dev/null && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] &&
+    [[ ! "$TERM" =~ dumb ]] && [ -z "$TMUX" ]; then
+
+    log_early "Launching tmux"
+    exec tmux
+    # exec tmux new-session -A -s main
+  else
+    log_early "Skipping launch of tmux, already launched."
   fi
 }
 
@@ -179,6 +187,21 @@ function main {
   start=$(date +%s.%N)
   log_early "------------------------------ START ------------------------------"
   log_early "In bashrc"
+  if [[ "$(shopt login_shell | cut -f2)" == "on" ]]; then
+    log_early "Login shell"
+  else
+    log_early "Non-login shell"
+  fi
+
+  # If not running interactively, don't do anything
+  if [[ $- != *i* ]]; then
+    log_early "In an non-interactive shell, exiting."
+    return
+  else
+    log_early "In an interactive shell, continuing."
+  fi
+
+  check_launch_tmux
 
   load_script_tools
 

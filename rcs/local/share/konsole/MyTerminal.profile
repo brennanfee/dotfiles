@@ -5,7 +5,7 @@ Font=JetBrainsMono Nerd Font Mono,18,-1,5,50,0,0,0,0,0
 UseFontLineChararacters=true
 
 [General]
-Command=~/.dotfiles-rc/bash/assets/init-tmux.bash
+Command=
 Directory=~/profile
 Name=MyTerminal
 Parent=FALLBACK/
