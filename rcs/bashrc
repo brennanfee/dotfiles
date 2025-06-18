@@ -187,11 +187,8 @@ function main {
   start=$(date +%s.%N)
   log_early "------------------------------ START ------------------------------"
   log_early "In bashrc"
-  if [[ "$(shopt login_shell | cut -f2)" == "on" ]]; then
-    log_early "Login shell"
-  else
-    log_early "Non-login shell"
-  fi
+
+  shopt -q login_shell && log_early 'Login shell' || log_early 'Non-login shell'
 
   # If not running interactively, don't do anything
   if [[ $- != *i* ]]; then
