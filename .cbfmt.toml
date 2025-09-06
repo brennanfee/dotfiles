@@ -1,0 +1,8 @@
+[languages]
+rust = ["rustfmt"]
+go = ["gofmt"]
+lua = ["stylua -s -"]
+python = ["ruff format"]
+sh = ["shfmt"]
+bash = ["shfmt"]
+nix = ["nixfmt"]
